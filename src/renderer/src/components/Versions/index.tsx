@@ -1,6 +1,11 @@
 import { useState } from 'react'
 
 function Versions(): JSX.Element {
+
+  if (!window.electron) {
+    return null;
+  }
+
   const [versions] = useState(window.electron.process.versions)
 
   return (
