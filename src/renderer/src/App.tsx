@@ -7,7 +7,7 @@ function App() {
 
   return <div className='revenote-app-container'>
     <Layout>
-      <Editor></Editor>
+      <Editor />
     </Layout>
   </div>;
 }

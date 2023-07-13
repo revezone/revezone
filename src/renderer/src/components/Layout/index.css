@@ -17,14 +17,10 @@
 
 
     .tool-buttons {
-      margin: 16px 20px 20px 0;
+      display: flex;
+      justify-content: space-between;
+      margin: 16px 10px 20px 0;
       -webkit-app-region: no-drag;
-
-      .anticon {
-        font-size: 20px;
-        cursor: pointer;
-        margin-left: 20px;
-      }
     }
   }
 
@@ -35,7 +31,7 @@
     .uncollapse-icon{
       position: absolute;
       color: #333;
-      top: 30px;
+      top: 20px;
       left: 10px;
       z-index: 1001;
       font-size: 20px;

@@ -1,6 +1,7 @@
-import React, { ReactNode, useCallback, useState } from 'react';
-import { FolderAddOutlined, FolderOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { ReactNode, useCallback, useState } from 'react';
 import { Layout, Menu } from 'antd';
+import { FolderIcon, FolderPlusIcon, ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline'
+import { SiderTheme } from 'antd/es/layout/Sider';
 
 import './index.css';
 
@@ -13,6 +14,7 @@ type Props = {
 const RevenoteLayout = ({ children }: Props) => {
 
     const [collapsed, setCollapsed] = useState(false);
+    const [theme, setTheme] = useState<SiderTheme>('light');
 
     const switchCollapse = useCallback(() => {
         setCollapsed(!collapsed);
@@ -25,9 +27,10 @@ const RevenoteLayout = ({ children }: Props) => {
                 <Sider
                     breakpoint="lg"
                     collapsedWidth="0"
-                    theme='light'
+                    theme={theme}
                     trigger={null}
                     collapsed={collapsed}
+                    width={260}
                     onBreakpoint={(broken) => {
                         console.log(broken);
                     }}
@@ -37,26 +40,28 @@ const RevenoteLayout = ({ children }: Props) => {
                 >
                     <div className='revenote-topleft-toolbar'>
                         <span className='tool-buttons'>
-                            <FolderAddOutlined />
-                            <MenuFoldOutlined onClick={switchCollapse} />
+                            <FolderPlusIcon className='h-5 w-5 text-current cursor-pointer mr-5' />
+                            <ArrowLeftOnRectangleIcon className='h-5 w-5 text-current cursor-pointer'
+                                onClick={switchCollapse} />
                         </span>
                     </div>
                     <Menu
                         theme="light"
                         mode="vertical"
                         defaultSelectedKeys={['4']}
+                        style={{ border: 'none' }}
                         items={[1, 2, 3, 4].map(
                             (icon, index) => ({
                                 key: String(index + 1),
-                                icon: <FolderOutlined />,
+                                icon: <FolderIcon className='h-4 w-4' />,
                                 label: `nav ${index + 1}`,
                             }),
                         )}
                     />
                 </Sider>
                 <Layout>
-                    <Content>
-                        {collapsed && <MenuUnfoldOutlined onClick={switchCollapse} className='uncollapse-icon' />}
+                    <Content className='font-sans'>
+                        {collapsed && <ArrowRightOnRectangleIcon onClick={switchCollapse} className='h-5 w-5 text-current cursor-pointer mt-3 ml-5 absolute z-50' />}
                         {children}
                     </Content>
                 </Layout>

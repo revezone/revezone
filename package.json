@@ -27,6 +27,8 @@
     "@blocksuite/store": "^0.6.0",
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^1.0.2",
+    "@headlessui/react": "^1.7.15",
+    "@heroicons/react": "^2.0.18",
     "antd": "^5.6.4",
     "electron-window-state": "^5.0.3",
     "lit": "^2.7.6"
