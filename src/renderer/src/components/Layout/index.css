@@ -1,0 +1,28 @@
+.revenote-layout {
+
+  .revenote-topleft-toolbar {
+    display: flex;
+    position: relative;
+    flex-direction: row-reverse;
+    height: 50px;
+    font-size: 16px;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+
+
+    .tool-buttons {
+      padding: 16px 10px 20px;
+      -webkit-app-region: no-drag;
+
+      .anticon {
+        font-size: 16px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .ant-layout-content {
+    border: 1px solid #e2e2e2;
+  }
+}

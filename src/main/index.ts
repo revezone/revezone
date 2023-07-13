@@ -1,16 +1,21 @@
 import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import { isMacOS, isWindows } from './utils'
 
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    titleBarStyle: isMacOS()
+    ? 'hiddenInset'
+    : isWindows()
+    ? 'hidden'
+    : 'default',
     width: 900,
     height: 670,
     show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    frame: false,
+    trafficLightPosition: { x: 24, y: 18 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false

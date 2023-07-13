@@ -20,12 +20,16 @@
     "build:linux": "electron-vite build && electron-builder --linux --config"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.1.4",
     "@blocksuite/blocks": "^0.6.0",
     "@blocksuite/editor": "^0.6.0",
     "@blocksuite/lit": "^0.6.0",
     "@blocksuite/store": "^0.6.0",
     "@electron-toolkit/preload": "^2.0.0",
-    "@electron-toolkit/utils": "^1.0.2"
+    "@electron-toolkit/utils": "^1.0.2",
+    "antd": "^5.6.4",
+    "electron-window-state": "^5.0.3",
+    "lit": "^2.7.6"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
