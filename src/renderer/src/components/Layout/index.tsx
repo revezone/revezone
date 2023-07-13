@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { FolderAddOutlined, FolderOutlined, MenuFoldOutlined } from '@ant-design/icons';
+import React, { ReactNode, useCallback, useState } from 'react';
+import { FolderAddOutlined, FolderOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 
 import './index.css';
@@ -10,8 +10,14 @@ type Props = {
     children: ReactNode;
 }
 
-
 const RevenoteLayout = ({ children }: Props) => {
+
+    const [collapsed, setCollapsed] = useState(false);
+
+    const switchCollapse = useCallback(() => {
+        setCollapsed(!collapsed);
+        window.api.toggleTrafficLight(collapsed);
+    }, [collapsed]);
 
     return (
         <div className="revenote-layout">
@@ -20,6 +26,8 @@ const RevenoteLayout = ({ children }: Props) => {
                     breakpoint="lg"
                     collapsedWidth="0"
                     theme='light'
+                    trigger={null}
+                    collapsed={collapsed}
                     onBreakpoint={(broken) => {
                         console.log(broken);
                     }}
@@ -30,12 +38,12 @@ const RevenoteLayout = ({ children }: Props) => {
                     <div className='revenote-topleft-toolbar'>
                         <span className='tool-buttons'>
                             <FolderAddOutlined />
-                            <MenuFoldOutlined />
+                            <MenuFoldOutlined onClick={switchCollapse} />
                         </span>
                     </div>
                     <Menu
                         theme="light"
-                        mode="inline"
+                        mode="vertical"
                         defaultSelectedKeys={['4']}
                         items={[1, 2, 3, 4].map(
                             (icon, index) => ({
@@ -48,6 +56,7 @@ const RevenoteLayout = ({ children }: Props) => {
                 </Sider>
                 <Layout>
                     <Content>
+                        {collapsed && <MenuUnfoldOutlined onClick={switchCollapse} className='uncollapse-icon' />}
                         {children}
                     </Content>
                 </Layout>

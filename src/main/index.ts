@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { isMacOS, isWindows } from './utils'
@@ -38,6 +38,10 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  ipcMain.on('toggle-traffic-light', (event, isShow) => {
+      mainWindow.setWindowButtonVisibility(isShow);
+  })
 }
 
 // This method will be called when Electron has finished
