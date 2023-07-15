@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 // tailwind.config.js
-const defaultTheme = require('tailwindcss/defaultTheme')
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   content: ['./src/renderer/index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -13,4 +13,4 @@ module.exports = {
     }
   },
   plugins: []
-}
+};

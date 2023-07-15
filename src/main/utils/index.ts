@@ -1,7 +1,7 @@
-export const isMacOS = () => {
-    return process.platform === 'darwin';
+export const isMacOS = (): boolean => {
+  return process.platform === 'darwin';
 };
 
-export const isWindows = () => {
-    return process.platform === 'win32';
+export const isWindows = (): boolean => {
+  return process.platform === 'win32';
 };

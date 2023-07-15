@@ -32,15 +32,27 @@ dependencies:
   '@heroicons/react':
     specifier: ^2.0.18
     version: 2.0.18(react@18.2.0)
+  '@toeverything/y-indexeddb':
+    specifier: 0.7.0-canary.44
+    version: 0.7.0-canary.44(yjs@13.6.6)
   antd:
     specifier: ^5.6.4
     version: 5.6.4(react-dom@18.2.0)(react@18.2.0)
   electron-window-state:
     specifier: ^5.0.3
     version: 5.0.3
+  idb:
+    specifier: ^7.1.1
+    version: 7.1.1
+  jotai:
+    specifier: ^2.2.2
+    version: 2.2.2(react@18.2.0)
   lit:
     specifier: ^2.7.6
     version: 2.7.6
+  uuid:
+    specifier: ^9.0.0
+    version: 9.0.0
 
 devDependencies:
   '@electron-toolkit/tsconfig':
@@ -1120,6 +1132,15 @@ packages:
 
   /@toeverything/theme@0.0.0-20230530064828-8cd3bf6:
     resolution: {integrity: sha512-eDI/Q7YzeALD7kOsFSoJhR6+p7C/vWCvc2RbTz98H714qnBJWwWQZbT/LZpXJOF/cfQ6ZI+QoFJg8CyZPyu8ew==}
+    dev: false
+
+  /@toeverything/y-indexeddb@0.7.0-canary.44(yjs@13.6.6):
+    resolution: {integrity: sha512-g1MoKYS9NOlrw/nFia12cm9U9CNAi9TlpS3ylT08mzclMELtyp7gtKp/kUj7Y+WCZnxgJLWSdBbuSbbxszD75Q==}
+    peerDependencies:
+      yjs: ^13.5.51
+    dependencies:
+      idb: 7.1.1
+      yjs: 13.6.6
     dev: false
 
   /@tootallnate/once@2.0.0:
@@ -3053,6 +3074,10 @@ packages:
     resolution: {integrity: sha512-8Sb3veuYCyrZL+VBt9LJfZjLUPWVvqn8tG28VqYNFCo43KHcKuq+b4EiXGeuaLAQWL2YmyDgMp2aSpH9JHsEQg==}
     dev: false
 
+  /idb@7.1.1:
+    resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
+    dev: false
+
   /ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
 
@@ -3274,6 +3299,18 @@ packages:
     resolution: {integrity: sha512-oVhqoRDaBXf7sjkll95LHVS6Myyyb1zaunVwk4Z0+WPSW4gjS0pl01zYKHScTuyEhQsFxV5L4DR5r+YqSyqyyg==}
     hasBin: true
     dev: true
+
+  /jotai@2.2.2(react@18.2.0):
+    resolution: {integrity: sha512-Cn8hnBg1sc5ppFwEgVGTfMR5WSM0hbAasd/bdAwIwTaum0j3OUPqBSC4tyk3jtB95vicML+RRWgKFOn6gtfN0A==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      react: '>=17.0.0'
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -5128,6 +5165,11 @@ packages:
 
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+
+  /uuid@9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+    dev: false
 
   /verror@1.10.1:
     resolution: {integrity: sha512-veufcmxri4e3XSrT0xwfUR7kguIkaxBeosDg00yDWhk49wdwkSUrvvsm7nc75e1PUyvIeZj6nS8VQRYz2/S4Xg==}

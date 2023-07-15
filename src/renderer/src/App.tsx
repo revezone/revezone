@@ -3,13 +3,14 @@ import Editor from './components/Editor/index';
 
 import './App.css';
 
-function App() {
-
-  return <div className='revenote-app-container'>
-    <Layout>
-      <Editor />
-    </Layout>
-  </div>;
+function App(): JSX.Element {
+  return (
+    <div className="revenote-app-container">
+      <Layout>
+        <Editor />
+      </Layout>
+    </div>
+  );
 }
 
-export default App
+export default App;

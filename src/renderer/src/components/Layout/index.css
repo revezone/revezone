@@ -24,11 +24,15 @@
     }
   }
 
+  .ant-menu-title-content {
+    flex: auto;
+  }
+
   .ant-layout-content {
     position: relative;
     border-left: 1px solid #e2e2e2;
 
-    .uncollapse-icon{
+    .uncollapse-icon {
       position: absolute;
       color: #333;
       top: 20px;

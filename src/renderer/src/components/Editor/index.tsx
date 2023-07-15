@@ -1,8 +1,6 @@
 import { useEffect, useRef } from 'react';
-import "@blocksuite/editor";
-import "@blocksuite/editor/themes/affine.css";
-
-
+import '@blocksuite/editor';
+import '@blocksuite/editor/themes/affine.css';
 
 import { AffineSchemas } from '@blocksuite/blocks/models';
 import type { Page } from '@blocksuite/store';
@@ -23,20 +21,18 @@ export class SimpleAffineEditor extends LitElement {
     this.page = this.workspace.createPage({ init: true });
   }
 
-  override connectedCallback() {
+  override connectedCallback(): void {
     const editor = new EditorContainer();
     editor.page = this.page;
     this.appendChild(editor);
   }
 
-  override disconnectedCallback() {
+  override disconnectedCallback(): void {
     this.removeChild(this.children[0]);
   }
 }
 
-
-function Editor() {
-
+function Editor(): JSX.Element {
   const editorRef = useRef<HTMLDivElement>(null);
   const editorMountRef = useRef(false);
 
@@ -44,15 +40,14 @@ function Editor() {
     if (!editorMountRef.current) {
       editorMountRef.current = true;
 
-      const editor = document.createElement("simple-affine-editor");
+      const editor = document.createElement('simple-affine-editor');
       // const editor = new SimpleAffineEditor
       editorRef.current?.appendChild(editor);
 
-      // @ts-ignore
+      // @ts-ignore TEST
       window.editor = editor;
 
       editor.page.slots.historyUpdated.on((history) => {
-
         console.log('--- history ---', history);
 
         const jsx = editor.workspace.exportJSX();
@@ -60,13 +55,11 @@ function Editor() {
 
         console.log('--- jsx ---', jsx);
         console.log('--- snapshot ---', snapshot);
-      })
-
+      });
     }
-
   }, []);
 
-  return <div className='blocksuite-editor-container' ref={editorRef}></div>;
+  return <div className="blocksuite-editor-container" ref={editorRef}></div>;
 }
 
-export default Editor
+export default Editor;

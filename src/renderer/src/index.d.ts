@@ -1,3 +1,3 @@
 declare interface Window {
-    api: { [key: string]: Function }
+  api: { [key: string]: (data) => void };
 }
