@@ -25,39 +25,56 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
   const [currentFolder, setCurrentFolder] = useState<RevenoteFolder>();
   const [filesInFolder, setFilesInFolder] = useState<RevenoteFile[]>();
   const [currentFile, setCurrentFile] = useState<RevenoteFile>();
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
   const switchCollapse = useCallback(() => {
     setCollapsed(!collapsed);
     window.api.toggleTrafficLight(collapsed);
   }, [collapsed]);
 
-  // const folderList = indexeddbStorage.db.get('folder');
-
-  console.log('--- indexeddbStorage ---', indexeddbStorage);
-
   const getFolders = useCallback(async () => {
     const folders = await indexeddbStorage.getFolders();
-    folders?.[0] && setCurrentFolder(folders[0]);
     setFolderList(folders);
+
+    const currentFolder = folders?.[0];
+
+    if (!currentFolder) {
+      return;
+    }
+
+    setCurrentFolder(currentFolder);
+
+    setOpenKeys([currentFolder.id]);
+
+    getFilesInFolder(currentFolder);
   }, [indexeddbStorage]);
 
-  const getFilesInFolder = useCallback(async () => {
-    if (currentFolder && indexeddbStorage) {
-      const filesInFolder = await indexeddbStorage.getFilesInFolder(currentFolder?.id);
-
-      setCurrentFile(filesInFolder?.[0]);
-
-      setFilesInFolder(filesInFolder);
+  const getFilesInFolder = useCallback(async (currentFolder) => {
+    if (!currentFolder) {
+      return;
     }
-  }, [indexeddbStorage, currentFolder]);
+
+    const filesInFolder = currentFolder?.id
+      ? await indexeddbStorage.getFilesInFolder(currentFolder.id)
+      : undefined;
+
+    const currentFile = filesInFolder?.[0];
+
+    setCurrentFile(currentFile);
+
+    if (!currentFile) {
+      return;
+    }
+
+    setSelectedKeys([currentFile.id]);
+
+    setFilesInFolder(filesInFolder);
+  }, []);
 
   useEffect(() => {
     getFolders();
-    getFilesInFolder();
   }, [indexeddbStorage]);
-
-  console.log('--- folderList ---', folderList);
-  console.log('--- filesInFolder ---', filesInFolder);
 
   return (
     <div className="revenote-layout">
@@ -88,16 +105,18 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
           <Menu
             theme="light"
             mode="inline"
-            defaultSelectedKeys={[currentFile?.id || '']}
-            defaultOpenKeys={[currentFolder?.id || '']}
+            selectedKeys={selectedKeys}
+            openKeys={openKeys}
+            onOpenChange={(keys) => setOpenKeys(keys)}
+            onSelect={({ key }) => setSelectedKeys([key])}
             style={{ border: 'none' }}
             items={folderList?.map((folder, index) => ({
-              key: String(index + 1),
+              key: folder.id,
               icon: <FolderIcon className="h-4 w-4" />,
               label: (
                 <div className="flex items-center justify-between">
                   <span>{folder.name}</span>
-                  <DocumentPlusIcon className="h-5 w-5 text-current cursor-pointer" />
+                  <DocumentPlusIcon className="h-4 w-4 text-current cursor-pointer" />
                 </div>
               ),
               children: filesInFolder?.map((file) => {

@@ -38,6 +38,8 @@ export interface RevenoteDBSchema extends DBSchema {
 const INDEXEDDB_FOLDER_KEY = 'folder';
 const INDEXEDDB_FILE_KEY = 'file';
 const INDEXEDDB_FOLD_FILE_MAPPING_KEY = 'folder_file_mapping';
+const LOCALSTORAGE_FIRST_FOLDER_KEY = 'first_forlder_id';
+const LOCALSTORAGE_FIRST_FILE_KEY = 'first_file_id';
 
 const INITIAL_ATOM = {
   folders: [
@@ -53,8 +55,6 @@ export const revenoteAtom = atom(INITIAL_ATOM);
 
 class IndexeddbStorage {
   constructor() {
-    console.log('--- constructor ---', IndexeddbStorage.instance);
-
     if (IndexeddbStorage.instance) {
       return IndexeddbStorage.instance;
     }
@@ -68,8 +68,6 @@ class IndexeddbStorage {
 
   static instance: IndexeddbStorage;
   db: IDBPDatabase<RevenoteDBSchema> | undefined;
-  firstFolderId: string | undefined;
-  firstFileId: string | undefined;
 
   async initDB(): Promise<IDBPDatabase<RevenoteDBSchema>> {
     if (this.db) {
@@ -78,8 +76,6 @@ class IndexeddbStorage {
 
     const db = await openDB<RevenoteDBSchema>('revenote-indexeddb', 1, {
       upgrade: async (db) => {
-        console.log('--- init indexed db ---');
-
         await this.initFolderStore(db);
         await this.initFileStore(db);
         await this.initFolderFileMappingStore(db);
@@ -100,7 +96,7 @@ class IndexeddbStorage {
 
     const id = uuidv4();
 
-    this.firstFolderId = id;
+    localStorage.setItem(LOCALSTORAGE_FIRST_FOLDER_KEY, id);
 
     await folderStore.add({ id, name: 'default' });
 
@@ -117,15 +113,12 @@ class IndexeddbStorage {
 
     await folderFileMappingStore.createIndex('folderId', 'folderId', { unique: false });
 
-    console.log('--- add ---', {
-      folderId: this.firstFolderId,
-      fileId: this.firstFileId
-    });
+    const mapping = {
+      folderId: localStorage.getItem(LOCALSTORAGE_FIRST_FOLDER_KEY),
+      fileId: localStorage.getItem(LOCALSTORAGE_FIRST_FILE_KEY)
+    };
 
-    await folderFileMappingStore.add({
-      folderId: this.firstFolderId,
-      fileId: this.firstFileId
-    });
+    await folderFileMappingStore.add(mapping);
 
     return folderFileMappingStore;
   }
@@ -140,7 +133,7 @@ class IndexeddbStorage {
 
     const firstFileId = uuidv4();
 
-    this.firstFileId = firstFileId;
+    localStorage.setItem(LOCALSTORAGE_FIRST_FILE_KEY, firstFileId);
 
     await fileStore.add({ id: firstFileId, name: 'default' });
 
@@ -176,15 +169,11 @@ class IndexeddbStorage {
       folderId
     );
 
-    console.log('--- mapping ---', mappings);
-
     const promises = mappings
       ?.map(async (item) => this.getFile(item.fileId))
       .filter((item) => !!item);
 
     const files = mappings && promises && (await Promise.all(promises)).filter((item) => !!item);
-
-    console.log('--- files ---', files);
 
     // @ts-ignore
     return files;
