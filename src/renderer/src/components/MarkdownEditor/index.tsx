@@ -28,9 +28,7 @@ function MarkdownEditor(): JSX.Element {
 
       editorRef.current.innerHTML = '';
 
-      setTimeout(() => {
-        editorRef.current?.appendChild(editor);
-      }, 0);
+      editorRef.current?.appendChild(editor);
 
       // @ts-ignore TEST
       window.editor = editor;
