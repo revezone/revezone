@@ -1,29 +1,42 @@
-import { Menu } from 'antd';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Menu, Dropdown } from 'antd';
+import type { MenuProps } from 'antd';
 import { FolderIcon, DocumentPlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { indexeddbStorage, RevenoteFolder, RevenoteFile } from '@renderer/store/indexeddb';
+import {
+  getOpenKeysFromLocal,
+  getSelectedKeysFromLocal,
+  setOpenKeysToLocal,
+  setSelectedKeysToLocal
+} from '@renderer/store/localstorage';
 
 import './index.css';
+interface Props {
+  collapsed: boolean;
+}
 
-export default function CustomMenu() {
+export default function CustomMenu({ collapsed }: Props) {
   const [folderList, setFolderList] = useState<RevenoteFolder[] | undefined>([]);
   const [filesInFolder, setFilesInFolder] = useState<RevenoteFile[]>();
-  const [openKeys, setOpenKeys] = useState<string[]>([]);
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
+  const [selectedKeys, setSelectedKeys] = useState<string[]>(getSelectedKeysFromLocal());
 
   const getFolders = useCallback(async () => {
     const folders = await indexeddbStorage.getFolders();
     setFolderList(folders);
 
-    const currentFolder = folders?.[0];
+    console.log('--- getFolders ---', folders);
 
-    if (!currentFolder) {
-      return;
+    let currentFolderId: string | undefined = openKeys?.[0];
+
+    if (!currentFolderId) {
+      currentFolderId = folders?.[0].id;
     }
 
-    setOpenKeys([currentFolder.id]);
-
-    getFilesInFolder(currentFolder.id);
+    if (currentFolderId) {
+      getFilesInFolder(currentFolderId);
+      setOpenKeys([currentFolderId]);
+    }
   }, [indexeddbStorage]);
 
   const getFilesInFolder = useCallback(async (folderId: string) => {
@@ -45,8 +58,8 @@ export default function CustomMenu() {
   }, []);
 
   useEffect(() => {
-    getFolders();
-  }, [indexeddbStorage]);
+    !collapsed && getFolders();
+  }, [indexeddbStorage, collapsed]);
 
   const addFile = useCallback(
     async (folderId: string) => {
@@ -65,8 +78,61 @@ export default function CustomMenu() {
     [indexeddbStorage]
   );
 
-  // @ts-ignore
-  window.filesInFolder = filesInFolder;
+  const onOpenChange = useCallback((keys) => {
+    setOpenKeys(keys);
+    setOpenKeysToLocal(keys);
+  }, []);
+
+  const onSelect = useCallback(({ key }) => {
+    setSelectedKeys([key]);
+    setSelectedKeysToLocal([key]);
+  }, []);
+
+  const folderMenu: MenuProps['items'] = useMemo(
+    () => [
+      {
+        key: 'rename',
+        label: 'rename',
+        onClick: () => {
+          console.log('rename');
+        }
+      },
+      {
+        key: 'delete',
+        label: 'delete',
+        onClick: () => {
+          console.log('delete');
+        }
+      }
+    ],
+    []
+  );
+
+  const getFileMenu = useCallback(
+    (file, folder) => [
+      {
+        key: 'rename',
+        label: 'rename',
+        onClick: () => {
+          console.log('rename');
+        }
+      },
+      {
+        key: 'delete',
+        label: (
+          <div className="flex items-center justify-between">
+            <TrashIcon className="h-4 w-4" />
+            <span className="ml-2">Delete</span>
+          </div>
+        ),
+        onClick: () => {
+          console.log('delete');
+          deleteFile(file.id, folder.id);
+        }
+      }
+    ],
+    []
+  );
 
   return (
     <div className="revenote-menu-container">
@@ -75,38 +141,35 @@ export default function CustomMenu() {
         mode="inline"
         selectedKeys={selectedKeys}
         openKeys={openKeys}
-        onOpenChange={(keys) => setOpenKeys(keys)}
-        onSelect={({ key }) => setSelectedKeys([key])}
+        onOpenChange={onOpenChange}
+        onSelect={onSelect}
         style={{ border: 'none' }}
         items={folderList?.map((folder) => ({
           key: folder.id,
           icon: <FolderIcon className="h-4 w-4" />,
           label: (
-            <div className="flex items-center justify-between">
-              <span>{folder.name}</span>
-              <DocumentPlusIcon
-                className="h-4 w-4 text-current cursor-pointer mr-4 menu-icon"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addFile(folder.id);
-                }}
-              />
-            </div>
+            <Dropdown menu={{ items: folderMenu }} trigger={['contextMenu']}>
+              <div className="flex items-center justify-between">
+                <span>{folder.name}</span>
+                <DocumentPlusIcon
+                  className="h-4 w-4 text-current cursor-pointer mr-4 menu-icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addFile(folder.id);
+                  }}
+                />
+              </div>
+            </Dropdown>
           ),
           children: filesInFolder?.map((file) => {
             return {
               key: file.id,
               label: (
-                <div className="flex items-center justify-between">
-                  <span>{file.name}</span>
-                  <TrashIcon
-                    className="h-4 w-4"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteFile(file.id, folder.id);
-                    }}
-                  />
-                </div>
+                <Dropdown menu={{ items: getFileMenu(file, folder) }} trigger={['contextMenu']}>
+                  <div className="flex items-center justify-between">
+                    <span>{file.name}</span>
+                  </div>
+                </Dropdown>
               )
             };
           })

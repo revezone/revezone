@@ -109,7 +109,7 @@ class IndexeddbStorage {
 
     await folderStore.add({
       id,
-      name: 'default',
+      name: 'Default Folder',
       gmtCreate: moment().toLocaleString(),
       gmtModified: moment().toLocaleString()
     });
@@ -152,7 +152,7 @@ class IndexeddbStorage {
 
     await fileStore.add({
       id: firstFileId,
-      name: 'default',
+      name: 'Default File',
       gmtCreate: moment().toLocaleString(),
       gmtModified: moment().toLocaleString()
     });

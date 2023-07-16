@@ -22,7 +22,7 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
 
   const switchCollapse = useCallback(() => {
     setCollapsed(!collapsed);
-    window.api.toggleTrafficLight(collapsed);
+    window.api?.toggleTrafficLight(collapsed);
   }, [collapsed]);
 
   return (
@@ -51,7 +51,7 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
               />
             </span>
           </div>
-          <CustomMenu />
+          <CustomMenu collapsed={collapsed} />
         </Sider>
         <Layout>
           <Content className="font-sans">
