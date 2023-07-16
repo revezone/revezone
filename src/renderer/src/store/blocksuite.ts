@@ -33,19 +33,14 @@ class BlocksuiteStorage {
     // @ts-ignore
     window.persistence = indexeddbPersistence;
 
-    indexeddbPersistence.on('synced', async (persistence) => {
-      console.log('content from the database is loaded', persistence);
-
-      //   const binary = await persistence.get(REVENOTE_WORKSPACE_KEY);
-      //   Y.applyUpdate(this.workspace.doc, binary);
-
+    indexeddbPersistence.on('synced', async () => {
+      console.log('content from the database is loaded');
       emmiter.emit('workspace_loaded');
     });
   }
 
-  async updateIndexeddbPersistence() {
-    const binary = Y.encodeStateAsUpdate(this.workspace.doc);
-    await this.indexeddbPersistence.set(REVENOTE_WORKSPACE_KEY, binary);
+  async updatePageTitle(title: string, pageId: string) {
+    (await this.workspace.getPage(pageId)).title = title;
   }
 }
 

@@ -12,6 +12,8 @@ import {
 } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
 import { currentFileIdAtom } from '@renderer/store/jotai';
+import EditableText from '../EditableText';
+import { blocksuiteStorage } from '@renderer/store/blocksuite';
 
 import './index.css';
 
@@ -152,6 +154,10 @@ export default function CustomMenu({ collapsed }: Props) {
     []
   );
 
+  const onFileNameChange = useCallback((text, fileId) => {
+    blocksuiteStorage.updatePageTitle(text, fileId);
+  }, []);
+
   return (
     <div className="revenote-menu-container">
       <Menu
@@ -185,7 +191,10 @@ export default function CustomMenu({ collapsed }: Props) {
               label: (
                 <Dropdown menu={{ items: getFileMenu(file, folder) }} trigger={['contextMenu']}>
                   <div className="flex items-center justify-between">
-                    <span>{file.name}</span>
+                    <EditableText
+                      text={file.name}
+                      onChange={(text) => onFileNameChange(text, file.id)}
+                    />
                   </div>
                 </Dropdown>
               )
