@@ -1,5 +1,3 @@
-import { Workspace } from '@blocksuite/store';
-import { createIndexedDBProvider } from '@toeverything/y-indexeddb';
 import { atom, useAtom } from 'jotai';
 import { openDB, DBSchema, IDBPDatabase, IDBPTransaction } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
@@ -181,29 +179,3 @@ class IndexeddbStorage {
 }
 
 export const indexeddbStorage = new IndexeddbStorage();
-
-class BlocksuiteStorage {
-  constructor() {
-    if (BlocksuiteStorage.instance) {
-      return BlocksuiteStorage.instance;
-    }
-    BlocksuiteStorage.instance = this;
-    this.connect2indexeddb();
-  }
-
-  workspace = new Workspace({
-    id: 'revenote-workspace'
-  });
-
-  static instance: BlocksuiteStorage;
-
-  connect2indexeddb = async (): Promise<void> => {
-    const persistence = createIndexedDBProvider(this.workspace.doc);
-    persistence.connect();
-    await persistence.whenSynced.then(() => {
-      persistence.disconnect();
-    });
-  };
-}
-
-export const blocksuiteStorage = new BlocksuiteStorage();

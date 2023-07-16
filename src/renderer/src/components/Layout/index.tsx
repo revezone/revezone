@@ -8,7 +8,7 @@ import {
   DocumentPlusIcon
 } from '@heroicons/react/24/outline';
 import { SiderTheme } from 'antd/es/layout/Sider';
-import { indexeddbStorage, RevenoteFolder, RevenoteFile } from '@renderer/store';
+import { indexeddbStorage, RevenoteFolder, RevenoteFile } from '@renderer/store/indexeddb';
 
 import './index.css';
 
