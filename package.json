@@ -35,6 +35,8 @@
     "idb": "^7.1.1",
     "jotai": "^2.2.2",
     "lit": "^2.7.6",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

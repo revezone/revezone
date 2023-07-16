@@ -1,0 +1,9 @@
+.revenote-menu-container {
+  .ant-menu-submenu-title:hover .menu-icon {
+    visibility: visible;
+  }
+
+  .menu-icon {
+    visibility: hidden;
+  }
+}
