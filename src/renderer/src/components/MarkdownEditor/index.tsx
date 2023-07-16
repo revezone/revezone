@@ -13,33 +13,32 @@ function MarkdownEditor(): JSX.Element {
   const [currentFileId] = useAtom(currentFileIdAtom);
 
   useEffect(() => {
-    editorMountRef.current = true;
-
-    if (!currentFileId) {
+    if (!currentFileId || editorMountRef.current) {
       return;
     }
+
+    editorMountRef.current = true;
 
     console.log('currentFileId', currentFileId);
 
     if (editorRef.current) {
-      const editor = new RevenoteBlockSuiteEditor({ pageId: currentFileId });
+      const editor = new RevenoteBlockSuiteEditor({
+        pageId: currentFileId
+      });
 
       editorRef.current.innerHTML = '';
-      editorRef.current?.appendChild(editor);
+
+      setTimeout(() => {
+        editorRef.current?.appendChild(editor);
+      }, 0);
+
+      // @ts-ignore TEST
+      window.editor = editor;
     }
+  }, [currentFileId, editorMountRef.current]);
 
-    // @ts-ignore TEST
-    window.editor = editor;
-
-    // editor.page.slots.historyUpdated.on((history) => {
-    //   console.log('--- history ---', history);
-
-    //   const jsx = editor.workspace.exportJSX();
-    //   const snapshot = editor.workspace.exportSnapshot();
-
-    //   console.log('--- jsx ---', jsx);
-    //   console.log('--- snapshot ---', snapshot);
-    // });
+  useEffect(() => {
+    editorMountRef.current = !editorMountRef.current;
   }, [currentFileId]);
 
   return <div className="blocksuite-editor-container" ref={editorRef}></div>;

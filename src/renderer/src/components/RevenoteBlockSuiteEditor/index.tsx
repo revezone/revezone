@@ -21,28 +21,18 @@ export default class RevenoteBlockSuiteEditor extends LitElement {
     this.page =
       this.workspace.getPage(pageId) || this.workspace.createPage({ id: pageId, init: true });
 
-    console.log('--- this.page ---', this.page);
-
     // @ts-ignore
     window.workspace = RevenoteBlockSuiteEditor.workspace;
 
     // @ts-ignore
     window.editor = this;
-
-    // this.init();
   }
 
-  // async init() {
-  //   const { doc } = RevenoteBlockSuiteEditor.workspace;
+  bindEvents(onChange) {
+    const model = this.page.root;
 
-  //   const provider = new IndexeddbPersistence(REVENOTE_EDITOR_KEY, doc);
-
-  //   console.log('--- provider ---', provider);
-
-  //   provider.on('synced', () => {
-  //     console.log('content from the database is loaded');
-  //   });
-  // }
+    model?.propsUpdated?.on(onChange);
+  }
 
   override connectedCallback(): void {
     const editor = new EditorContainer();
