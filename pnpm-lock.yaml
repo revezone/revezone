@@ -59,6 +59,9 @@ dependencies:
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
+  y-indexeddb:
+    specifier: ^9.0.11
+    version: 9.0.11(yjs@13.6.6)
 
 devDependencies:
   '@electron-toolkit/tsconfig':
@@ -5300,6 +5303,15 @@ packages:
     resolution: {integrity: sha512-yMqGBqtXyeN1e3TGYvgNgDVZ3j84W4cwkOXQswghol6APgZWaff9lnbvN7MHYJOiXsvGPXtjTYJEiC9J2wv9Eg==}
     engines: {node: '>=8.0'}
     dev: true
+
+  /y-indexeddb@9.0.11(yjs@13.6.6):
+    resolution: {integrity: sha512-HOKQ70qW1h2WJGtOKu9rE8fbX86ExVZedecndMuhwax3yM4DQsQzCTGHt/jvTrFZr/9Ahvd8neD6aZ4dMMjtdg==}
+    peerDependencies:
+      yjs: ^13.0.0
+    dependencies:
+      lib0: 0.2.78
+      yjs: 13.6.6
+    dev: false
 
   /y-protocols@1.0.5:
     resolution: {integrity: sha512-Wil92b7cGk712lRHDqS4T90IczF6RkcvCwAD0A2OPg+adKmOe+nOiT/N2hvpQIWS3zfjmtL4CPaH5sIW1Hkm/A==}

@@ -25,9 +25,9 @@ export default function CustomMenu({ collapsed }: Props) {
     const folders = await indexeddbStorage.getFolders();
     setFolderList(folders);
 
-    console.log('--- getFolders ---', folders);
-
-    let currentFolderId: string | undefined = openKeys?.[0];
+    let currentFolderId: string | undefined = openKeys?.filter(
+      (key) => !!folders?.find((folder) => folder.id === key)
+    )?.[0];
 
     if (!currentFolderId) {
       currentFolderId = folders?.[0].id;
@@ -45,6 +45,8 @@ export default function CustomMenu({ collapsed }: Props) {
     }
 
     const filesInFolder = await indexeddbStorage.getFilesInFolder(folderId);
+
+    console.log('--- getFilesInFolder ---', filesInFolder);
 
     setFilesInFolder(filesInFolder);
 

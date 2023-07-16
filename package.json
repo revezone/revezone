@@ -37,7 +37,8 @@
     "lit": "^2.7.6",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "y-indexeddb": "^9.0.11"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
