@@ -6,6 +6,7 @@ import { indexeddbStorage, RevenoteFolder, RevenoteFile } from '@renderer/store/
 import {
   getOpenKeysFromLocal,
   getSelectedKeysFromLocal,
+  setCurrentFileIdToLocal,
   setOpenKeysToLocal,
   setSelectedKeysToLocal
 } from '@renderer/store/localstorage';
@@ -21,10 +22,7 @@ export default function CustomMenu({ collapsed }: Props) {
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>(getSelectedKeysFromLocal());
 
-  const getFolders = useCallback(async () => {
-    const folders = await indexeddbStorage.getFolders();
-    setFolderList(folders);
-
+  const getCurrentFolderId = useCallback((folders) => {
     let currentFolderId: string | undefined = openKeys?.filter(
       (key) => !!folders?.find((folder) => folder.id === key)
     )?.[0];
@@ -32,6 +30,15 @@ export default function CustomMenu({ collapsed }: Props) {
     if (!currentFolderId) {
       currentFolderId = folders?.[0].id;
     }
+
+    return currentFolderId;
+  }, []);
+
+  const getFolders = useCallback(async () => {
+    const folders = await indexeddbStorage.getFolders();
+    setFolderList(folders);
+
+    const currentFolderId = getCurrentFolderId(folders);
 
     if (currentFolderId) {
       getFilesInFolder(currentFolderId);
@@ -62,6 +69,10 @@ export default function CustomMenu({ collapsed }: Props) {
   useEffect(() => {
     !collapsed && getFolders();
   }, [indexeddbStorage, collapsed]);
+
+  useEffect(() => {
+    setCurrentFileIdToLocal(selectedKeys?.[0]);
+  }, [selectedKeys]);
 
   const addFile = useCallback(
     async (folderId: string) => {

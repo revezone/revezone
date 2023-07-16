@@ -1,38 +1,48 @@
-import { AffineSchemas } from '@blocksuite/blocks/models';
 import type { Page } from '@blocksuite/store';
 import { Workspace } from '@blocksuite/store';
 import { LitElement } from 'lit';
 import { EditorContainer } from '@blocksuite/editor';
-import { IndexeddbPersistence } from 'y-indexeddb';
+import { blocksuiteStorage } from '../../store/blocksuite';
 
-const REVENOTE_EDITOR_KEY = 'revenote-editor';
-
+interface Props {
+  pageId: string;
+}
 export default class RevenoteBlockSuiteEditor extends LitElement {
-  static workspace: Workspace;
+  readonly workspace: Workspace = blocksuiteStorage.workspace;
   readonly page: Page;
 
-  constructor() {
+  constructor({ pageId }: Props) {
     super();
 
-    RevenoteBlockSuiteEditor.workspace = new Workspace({ id: REVENOTE_EDITOR_KEY }).register(
-      AffineSchemas
-    );
-    this.page = RevenoteBlockSuiteEditor.workspace.createPage({ init: true });
+    console.log('--- pageId ---', pageId);
 
-    this.init();
+    console.log('--- get page ---', this.workspace.getPage(pageId));
+
+    this.page =
+      this.workspace.getPage(pageId) || this.workspace.createPage({ id: pageId, init: true });
+
+    console.log('--- this.page ---', this.page);
+
+    // @ts-ignore
+    window.workspace = RevenoteBlockSuiteEditor.workspace;
+
+    // @ts-ignore
+    window.editor = this;
+
+    // this.init();
   }
 
-  async init() {
-    const { doc } = RevenoteBlockSuiteEditor.workspace;
+  // async init() {
+  //   const { doc } = RevenoteBlockSuiteEditor.workspace;
 
-    const provider = new IndexeddbPersistence(REVENOTE_EDITOR_KEY, doc);
+  //   const provider = new IndexeddbPersistence(REVENOTE_EDITOR_KEY, doc);
 
-    console.log('--- provider ---', provider);
+  //   console.log('--- provider ---', provider);
 
-    provider.on('synced', () => {
-      console.log('content from the database is loaded');
-    });
-  }
+  //   provider.on('synced', () => {
+  //     console.log('content from the database is loaded');
+  //   });
+  // }
 
   override connectedCallback(): void {
     const editor = new EditorContainer();

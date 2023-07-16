@@ -1,4 +1,3 @@
-import { atom, useAtom } from 'jotai';
 import { openDB, DBSchema, IDBPDatabase, IDBPTransaction } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment-timezone';
@@ -49,18 +48,6 @@ export const INDEXEDDB_FILE_KEY = 'file';
 export const INDEXEDDB_FOLD_FILE_MAPPING_KEY = 'folder_file_mapping';
 export const LOCALSTORAGE_FIRST_FOLDER_KEY = 'first_forlder_id';
 export const LOCALSTORAGE_FIRST_FILE_KEY = 'first_file_id';
-
-const INITIAL_ATOM = {
-  folders: [
-    {
-      id: 'default',
-      name: 'default'
-    }
-  ],
-  folderFileMapping: { default: 'default_page' }
-};
-
-export const revenoteAtom = atom(INITIAL_ATOM);
 
 class IndexeddbStorage {
   constructor() {

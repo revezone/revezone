@@ -1,5 +1,7 @@
 import { Workspace } from '@blocksuite/store';
-import { createIndexedDBProvider } from '@toeverything/y-indexeddb';
+import { AffineSchemas } from '@blocksuite/blocks/models';
+
+const REVENOTE_EDITOR_KEY = 'revenote-editor-indexeddb';
 
 class BlocksuiteStorage {
   constructor() {
@@ -7,22 +9,10 @@ class BlocksuiteStorage {
       return BlocksuiteStorage.instance;
     }
     BlocksuiteStorage.instance = this;
-    this.connect2indexeddb();
   }
 
-  workspace = new Workspace({
-    id: 'revenote-workspace'
-  });
-
+  workspace = new Workspace({ id: REVENOTE_EDITOR_KEY }).register(AffineSchemas);
   static instance: BlocksuiteStorage;
-
-  connect2indexeddb = async (): Promise<void> => {
-    const persistence = createIndexedDBProvider(this.workspace.doc);
-    persistence.connect();
-    await persistence.whenSynced.then(() => {
-      persistence.disconnect();
-    });
-  };
 }
 
 export const blocksuiteStorage = new BlocksuiteStorage();
