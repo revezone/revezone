@@ -13,32 +13,34 @@ function MarkdownEditor(): JSX.Element {
   const [currentFileId] = useAtom(currentFileIdAtom);
 
   useEffect(() => {
-    if (!editorMountRef.current) {
-      editorMountRef.current = true;
+    editorMountRef.current = true;
 
-      if (!currentFileId) {
-        return;
-      }
-
-      console.log('currentFileId', currentFileId);
-
-      const editor = new RevenoteBlockSuiteEditor({ pageId: currentFileId });
-      editorRef.current?.appendChild(editor);
-
-      // @ts-ignore TEST
-      window.editor = editor;
-
-      // editor.page.slots.historyUpdated.on((history) => {
-      //   console.log('--- history ---', history);
-
-      //   const jsx = editor.workspace.exportJSX();
-      //   const snapshot = editor.workspace.exportSnapshot();
-
-      //   console.log('--- jsx ---', jsx);
-      //   console.log('--- snapshot ---', snapshot);
-      // });
+    if (!currentFileId) {
+      return;
     }
-  }, []);
+
+    console.log('currentFileId', currentFileId);
+
+    if (editorRef.current) {
+      const editor = new RevenoteBlockSuiteEditor({ pageId: currentFileId });
+
+      editorRef.current.innerHTML = '';
+      editorRef.current?.appendChild(editor);
+    }
+
+    // @ts-ignore TEST
+    window.editor = editor;
+
+    // editor.page.slots.historyUpdated.on((history) => {
+    //   console.log('--- history ---', history);
+
+    //   const jsx = editor.workspace.exportJSX();
+    //   const snapshot = editor.workspace.exportSnapshot();
+
+    //   console.log('--- jsx ---', jsx);
+    //   console.log('--- snapshot ---', snapshot);
+    // });
+  }, [currentFileId]);
 
   return <div className="blocksuite-editor-container" ref={editorRef}></div>;
 }

@@ -10,8 +10,11 @@ import {
   setOpenKeysToLocal,
   setSelectedKeysToLocal
 } from '@renderer/store/localstorage';
+import { useAtom } from 'jotai';
+import { currentFileIdAtom } from '@renderer/store/jotai';
 
 import './index.css';
+
 interface Props {
   collapsed: boolean;
 }
@@ -21,6 +24,7 @@ export default function CustomMenu({ collapsed }: Props) {
   const [filesInFolder, setFilesInFolder] = useState<RevenoteFile[]>();
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>(getSelectedKeysFromLocal());
+  const [, setCurrentFileId] = useAtom(currentFileIdAtom);
 
   const getCurrentFolderId = useCallback((folders) => {
     let currentFolderId: string | undefined = openKeys?.filter(
@@ -99,6 +103,7 @@ export default function CustomMenu({ collapsed }: Props) {
   const onSelect = useCallback(({ key }) => {
     setSelectedKeys([key]);
     setSelectedKeysToLocal([key]);
+    setCurrentFileId(key);
   }, []);
 
   const folderMenu: MenuProps['items'] = useMemo(
