@@ -219,8 +219,6 @@ class IndexeddbStorage {
     // @ts-ignore
     const fileKey = await this.db?.getKeyFromIndex(INDEXEDDB_FILE_KEY, 'id', fileId);
 
-    console.log('--- fileKey ---', fileKey);
-
     fileKey && (await this.db?.delete(INDEXEDDB_FILE_KEY, fileKey));
 
     const folderFileMappingKeys = await this.db?.getAllKeysFromIndex(

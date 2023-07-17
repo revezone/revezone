@@ -5,6 +5,21 @@ import { emitter, events } from './eventemitter';
 
 const REVENOTE_EDITOR_KEY = 'revenote-editor-indexeddb';
 
+/**
+ * the hack method to update blocksuite editor title dom
+ * fix the problem that not rerender after rename page block's title prop
+ * @param title string
+ */
+const hackUpdateTitleDom = (title) => {
+  const titleDom = document
+    .querySelector('.affine-default-page-block-title ')
+    ?.querySelector('span[data-virgo-text]');
+
+  if (titleDom) {
+    titleDom.innerHTML = title;
+  }
+};
+
 class BlocksuiteStorage {
   constructor() {
     if (BlocksuiteStorage.instance) {
@@ -45,9 +60,7 @@ class BlocksuiteStorage {
 
     page?.updateBlock(block, { title: new Text(title) });
 
-    console.log('--- update title ---', title);
-
-    // emitter.emit(events.FORCE_UPDATE_EDITOR);
+    hackUpdateTitleDom(title);
   }
 
   async deletePage(pageId: string) {
