@@ -1,15 +1,15 @@
+import { useEffect, useState } from 'react';
 import Layout from './components/CustomLayout';
 import MarkdownEditor from './components/MarkdownEditor/index';
-import { emmiter } from './store/eventemitter';
+import { emitter, events } from './store/eventemitter';
 
 import './App.css';
-import { useEffect, useState } from 'react';
 
 function App(): JSX.Element {
   const [workspaceLoaded, setWorkspaceLoaded] = useState(false);
 
   useEffect(() => {
-    emmiter.on('workspace_loaded', () => {
+    emitter.on(events.WORKSPACE_LOADED, () => {
       setWorkspaceLoaded(true);
     });
   }, []);

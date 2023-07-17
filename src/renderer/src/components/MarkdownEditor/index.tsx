@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import '@blocksuite/editor';
 import '@blocksuite/editor/themes/affine.css';
 import RevenoteBlockSuiteEditor from '../RevenoteBlockSuiteEditor';
 import { useAtom } from 'jotai';
 import { currentFileIdAtom } from '@renderer/store/jotai';
+// import { emitter, events } from '@renderer/store/eventemitter';
 
 import './index.css';
 

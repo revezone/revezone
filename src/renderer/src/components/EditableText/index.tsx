@@ -16,10 +16,14 @@ export default function EditableText({ text, onChange }: Props) {
 
   const onInnerChange = useCallback((e) => {
     setValue(e.target.value);
-    onChange(e.target.value);
   }, []);
 
-  const onDoubleClick = useCallback(() => {
+  const onBlur = useCallback(() => {
+    setIsPreview(true);
+    onChange(value);
+  }, [value]);
+
+  const onEdit = useCallback(() => {
     setIsPreview(!isPreview);
 
     setTimeout(() => {
@@ -29,14 +33,14 @@ export default function EditableText({ text, onChange }: Props) {
   }, [isPreview]);
 
   return (
-    <div className="editable-text-container" ref={ref} onDoubleClick={onDoubleClick}>
+    <div className="editable-text-container" ref={ref} onDoubleClick={onEdit}>
       {isPreview ? (
         value
       ) : (
         <Input
           defaultValue={value}
           onChange={onInnerChange}
-          onBlur={() => setIsPreview(true)}
+          onBlur={onBlur}
           onPressEnter={() => setIsPreview(true)}
         />
       )}

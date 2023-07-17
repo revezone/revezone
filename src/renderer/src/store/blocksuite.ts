@@ -1,11 +1,9 @@
-import { Workspace } from '@blocksuite/store';
+import { Workspace, Text } from '@blocksuite/store';
 import { AffineSchemas } from '@blocksuite/blocks/models';
 import { IndexeddbPersistence } from 'y-indexeddb';
-import * as Y from 'yjs';
-import { emmiter } from './eventemitter';
+import { emitter, events } from './eventemitter';
 
 const REVENOTE_EDITOR_KEY = 'revenote-editor-indexeddb';
-const REVENOTE_WORKSPACE_KEY = 'revenote-workspace';
 
 class BlocksuiteStorage {
   constructor() {
@@ -14,13 +12,11 @@ class BlocksuiteStorage {
     }
     BlocksuiteStorage.instance = this;
 
-    this.workspace = new Workspace({ id: REVENOTE_EDITOR_KEY }).register(AffineSchemas);
-
     this.initYIndexeddb();
   }
 
   static instance: BlocksuiteStorage;
-  workspace;
+  workspace: Workspace = new Workspace({ id: REVENOTE_EDITOR_KEY }).register(AffineSchemas);
   indexeddbPersistence;
 
   async initYIndexeddb() {
@@ -35,12 +31,27 @@ class BlocksuiteStorage {
 
     indexeddbPersistence.on('synced', async () => {
       console.log('content from the database is loaded');
-      emmiter.emit('workspace_loaded');
+      emitter.emit(events.WORKSPACE_LOADED);
     });
   }
 
   async updatePageTitle(title: string, pageId: string) {
-    (await this.workspace.getPage(pageId)).title = title;
+    const page = await this.workspace.getPage(pageId);
+    const block = await page?.getBlockByFlavour('affine:page')?.[0];
+
+    if (!block) {
+      return;
+    }
+
+    page?.updateBlock(block, { title: new Text(title) });
+
+    console.log('--- update title ---', title);
+
+    // emitter.emit(events.FORCE_UPDATE_EDITOR);
+  }
+
+  async deletePage(pageId: string) {
+    await this.workspace.removePage(pageId);
   }
 }
 

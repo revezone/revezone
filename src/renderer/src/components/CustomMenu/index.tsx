@@ -59,8 +59,6 @@ export default function CustomMenu({ collapsed }: Props) {
 
     const filesInFolder = await indexeddbStorage.getFilesInFolder(folderId);
 
-    console.log('--- getFilesInFolder ---', filesInFolder);
-
     setFilesInFolder(filesInFolder);
 
     const currentFile = filesInFolder?.[0];
@@ -93,6 +91,7 @@ export default function CustomMenu({ collapsed }: Props) {
     async (fileId: string, folderId: string) => {
       await indexeddbStorage.deleteFile(fileId);
       await getFilesInFolder(folderId);
+      await blocksuiteStorage.deletePage(fileId);
     },
     [indexeddbStorage]
   );
