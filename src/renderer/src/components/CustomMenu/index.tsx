@@ -81,8 +81,8 @@ export default function CustomMenu({ collapsed }: Props) {
   const addFile = useCallback(
     async (folderId: string) => {
       const file = await indexeddbStorage.addFile(folderId, 'markdown');
-      setSelectedKeys([file.id]);
       await getFilesInFolder(folderId);
+      setSelectedKeys([file.id]);
     },
     [indexeddbStorage]
   );
@@ -155,6 +155,10 @@ export default function CustomMenu({ collapsed }: Props) {
 
   const onFileNameChange = useCallback((text, fileId) => {
     blocksuiteStorage.updatePageTitle(text, fileId);
+
+    console.log('onFileNameChange', text);
+
+    indexeddbStorage.updateFileName(fileId, text);
   }, []);
 
   return (

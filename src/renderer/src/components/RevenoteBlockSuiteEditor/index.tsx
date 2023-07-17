@@ -4,6 +4,8 @@ import { LitElement } from 'lit';
 import { EditorContainer } from '@blocksuite/editor';
 import { blocksuiteStorage } from '../../store/blocksuite';
 
+const CUSTOM_ELEMENT_NAME = 'revenote-block-suite-editor';
+
 interface Props {
   pageId: string;
 }
@@ -37,4 +39,4 @@ export default class RevenoteBlockSuiteEditor extends LitElement {
   }
 }
 
-customElements.define('revenote-block-suite-editor', RevenoteBlockSuiteEditor);
+customElements.define(CUSTOM_ELEMENT_NAME, RevenoteBlockSuiteEditor);

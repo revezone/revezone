@@ -234,6 +234,16 @@ class IndexeddbStorage {
 
     deleteFolderFileMappingPromises && (await Promise.all(deleteFolderFileMappingPromises));
   }
+
+  async updateFileName(fileId: string, name: string) {
+    await this.initDB();
+    // @ts-ignore
+    const fileKey = await this.db?.getKeyFromIndex(INDEXEDDB_FILE_KEY, 'id', fileId);
+
+    const file = await this.getFile(fileId);
+
+    file && this.db?.put(INDEXEDDB_FILE_KEY, { ...file, name }, fileKey);
+  }
 }
 
 export const indexeddbStorage = new IndexeddbStorage();
