@@ -14,8 +14,11 @@ import { useAtom } from 'jotai';
 import { currentFileIdAtom, currentFileAtom } from '@renderer/store/jotai';
 import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
+import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 
 import './index.css';
+
+const FILE_ID_REGEX = /^([a-zA-Z0-9-]+)______.*/;
 
 interface Props {
   collapsed: boolean;
@@ -28,6 +31,8 @@ export default function CustomMenu({ collapsed }: Props) {
   const [selectedKeys, setSelectedKeys] = useState<string[]>(getSelectedKeysFromLocal());
   const [currentFileId, setCurrentFileId] = useAtom(currentFileIdAtom);
   const [, setCurrentFile] = useAtom(currentFileAtom);
+  const [pageTitle] = useBlocksuitePageTitle();
+  const [currentFolderId, setCurrentFolderId] = useState<string>();
 
   const getCurrentFolderId = useCallback((folders) => {
     let currentFolderId: string | undefined = openKeys?.filter(
@@ -80,6 +85,10 @@ export default function CustomMenu({ collapsed }: Props) {
   }, [selectedKeys]);
 
   useEffect(() => {
+    setCurrentFolderId(openKeys?.[0]);
+  }, [openKeys?.[0]]);
+
+  useEffect(() => {
     const file = filesInFolder?.find((_file) => _file.id === currentFileId);
 
     setCurrentFile(file);
@@ -87,10 +96,23 @@ export default function CustomMenu({ collapsed }: Props) {
 
   useEffect(() => {
     if (currentFileId) {
-      setSelectedKeys([currentFileId]);
       setCurrentFileIdToLocal(currentFileId);
     }
   }, [currentFileId]);
+
+  const updateFileNameInMenu = useCallback(async () => {
+    if (!currentFileId || pageTitle === undefined) {
+      return;
+    }
+    console.log('--- pageTitle ---', pageTitle);
+    await indexeddbStorage.updateFileName(currentFileId, pageTitle);
+    currentFolderId && (await getFilesInFolder(currentFolderId));
+    setSelectedKeys([`${currentFileId}______${pageTitle}`]);
+  }, [pageTitle, currentFileId, currentFolderId]);
+
+  useEffect(() => {
+    updateFileNameInMenu();
+  }, [pageTitle, currentFileId, currentFolderId]);
 
   const addFile = useCallback(
     async (folderId: string) => {
@@ -106,8 +128,6 @@ export default function CustomMenu({ collapsed }: Props) {
       await indexeddbStorage.deleteFile(fileId);
       const files = await getFilesInFolder(folderId);
 
-      console.log('--- files  ---', files);
-
       setCurrentFileId(files?.[0]?.id);
       await blocksuiteStorage.deletePage(fileId);
     },
@@ -120,7 +140,9 @@ export default function CustomMenu({ collapsed }: Props) {
   }, []);
 
   const onSelect = useCallback(({ key }) => {
-    setCurrentFileId(key);
+    const fileId = key?.match(FILE_ID_REGEX)?.[1];
+    setCurrentFileId(fileId);
+    setSelectedKeys([key]);
   }, []);
 
   const folderMenu: MenuProps['items'] = useMemo(
@@ -206,7 +228,7 @@ export default function CustomMenu({ collapsed }: Props) {
           ),
           children: filesInFolder?.map((file) => {
             return {
-              key: file.id,
+              key: `${file.id}______${file.name}`,
               label: (
                 <Dropdown menu={{ items: getFileMenu(file, folder) }} trigger={['contextMenu']}>
                   <div className="flex items-center justify-between">

@@ -6,4 +6,8 @@
   .menu-icon {
     visibility: hidden;
   }
+
+  .ant-menu-title-content{
+    height: 100%;
+  }
 }

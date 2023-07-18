@@ -243,6 +243,8 @@ class IndexeddbStorage {
 
     const file = await this.getFile(fileId);
 
+    console.log('updateFileName', name, file);
+
     file && this.db?.put(INDEXEDDB_FILE_KEY, { ...file, name }, fileKey);
   }
 }
