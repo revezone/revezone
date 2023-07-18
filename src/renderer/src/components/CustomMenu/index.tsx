@@ -15,6 +15,7 @@ import { currentFileIdAtom, currentFileAtom } from '@renderer/store/jotai';
 import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
+import { useDebounceEffect } from 'ahooks';
 
 import './index.css';
 
@@ -30,7 +31,7 @@ export default function CustomMenu({ collapsed }: Props) {
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>(getSelectedKeysFromLocal());
   const [currentFileId, setCurrentFileId] = useAtom(currentFileIdAtom);
-  const [, setCurrentFile] = useAtom(currentFileAtom);
+  const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
   const [pageTitle] = useBlocksuitePageTitle();
   const [currentFolderId, setCurrentFolderId] = useState<string>();
 
@@ -101,18 +102,24 @@ export default function CustomMenu({ collapsed }: Props) {
   }, [currentFileId]);
 
   const updateFileNameInMenu = useCallback(async () => {
-    if (!currentFileId || pageTitle === undefined) {
+    if (!currentFile || pageTitle === undefined || currentFile.name === pageTitle) {
       return;
     }
     console.log('--- pageTitle ---', pageTitle);
-    await indexeddbStorage.updateFileName(currentFileId, pageTitle);
+    await indexeddbStorage.updateFileName(currentFile, pageTitle);
     currentFolderId && (await getFilesInFolder(currentFolderId));
-    setSelectedKeys([`${currentFileId}______${pageTitle}`]);
-  }, [pageTitle, currentFileId, currentFolderId]);
+    setSelectedKeys([`${currentFile.id}______${pageTitle}`]);
+  }, [pageTitle, currentFile, currentFolderId]);
 
-  useEffect(() => {
-    updateFileNameInMenu();
-  }, [pageTitle, currentFileId, currentFolderId]);
+  useDebounceEffect(
+    () => {
+      updateFileNameInMenu();
+    },
+    [pageTitle, currentFile, currentFolderId],
+    {
+      wait: 200
+    }
+  );
 
   const addFile = useCallback(
     async (folderId: string) => {
@@ -191,12 +198,12 @@ export default function CustomMenu({ collapsed }: Props) {
     []
   );
 
-  const onFileNameChange = useCallback((text, fileId) => {
-    blocksuiteStorage.updatePageTitle(text, fileId);
+  const onFileNameChange = useCallback((text: string, file: RevenoteFile) => {
+    blocksuiteStorage.updatePageTitle(text, file.id);
 
     console.log('onFileNameChange', text);
 
-    indexeddbStorage.updateFileName(fileId, text);
+    indexeddbStorage.updateFileName(file, text);
   }, []);
 
   return (
@@ -235,7 +242,7 @@ export default function CustomMenu({ collapsed }: Props) {
                     <EditableText
                       text={file.name}
                       defaultText="Utitled"
-                      onChange={(text) => onFileNameChange(text, file.id)}
+                      onChange={(text) => onFileNameChange(text, file)}
                     />
                   </div>
                 </Dropdown>

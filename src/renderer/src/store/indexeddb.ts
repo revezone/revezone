@@ -236,12 +236,15 @@ class IndexeddbStorage {
     deleteFolderFileMappingPromises && (await Promise.all(deleteFolderFileMappingPromises));
   }
 
-  async updateFileName(fileId: string, name: string) {
+  async updateFileName(file: RevenoteFile, name: string) {
     await this.initDB();
-    // @ts-ignore
-    const fileKey = await this.db?.getKeyFromIndex(INDEXEDDB_FILE_KEY, 'id', fileId);
 
-    const file = await this.getFile(fileId);
+    console.log('updatefilename', file, name);
+
+    // @ts-ignore
+    const fileKey = await this.db?.getKeyFromIndex(INDEXEDDB_FILE_KEY, 'id', file.id);
+
+    if (name === file?.name) return;
 
     console.log('updateFileName', name, file);
 
