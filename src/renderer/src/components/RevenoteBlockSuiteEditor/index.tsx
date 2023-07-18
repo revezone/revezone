@@ -16,8 +16,6 @@ export default class RevenoteBlockSuiteEditor extends LitElement {
   constructor({ pageId }: Props) {
     super();
 
-    console.log('--- get page ---', pageId, this.workspace.getPage(pageId));
-
     this.page =
       this.workspace.getPage(pageId) || this.workspace.createPage({ id: pageId, init: true });
 

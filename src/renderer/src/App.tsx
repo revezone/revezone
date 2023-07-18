@@ -10,8 +10,6 @@ import './App.css';
 function App(): JSX.Element {
   const [currentFile] = useAtom(currentFileAtom);
 
-  console.log('currentFile', currentFile);
-
   const renderContent = useCallback(
     (currentFileType) => {
       switch (currentFileType) {

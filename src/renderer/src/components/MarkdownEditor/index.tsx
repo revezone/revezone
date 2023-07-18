@@ -24,8 +24,6 @@ function MarkdownEditor({ pageId }: Props): JSX.Element | null {
 
     editorMountRef.current = true;
 
-    console.log('pageId', pageId);
-
     if (editorRef.current) {
       const editor = new RevenoteBlockSuiteEditor({
         pageId
