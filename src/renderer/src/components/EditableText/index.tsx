@@ -6,10 +6,11 @@ import './index.css';
 
 interface Props {
   text: string;
+  defaultText?: string;
   onChange: (text: string) => void;
 }
 
-export default function EditableText({ text, onChange }: Props) {
+export default function EditableText({ text, defaultText, onChange }: Props) {
   const [isPreview, setIsPreview] = useState(true);
   const [value, setValue] = useState(text);
   const ref = useRef<HTMLDivElement>(null);
@@ -35,7 +36,7 @@ export default function EditableText({ text, onChange }: Props) {
   return (
     <div className="editable-text-container" ref={ref} onDoubleClick={onEdit}>
       {isPreview ? (
-        value
+        value || defaultText
       ) : (
         <Input
           defaultValue={value}

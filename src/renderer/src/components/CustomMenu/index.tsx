@@ -234,6 +234,7 @@ export default function CustomMenu({ collapsed }: Props) {
                   <div className="flex items-center justify-between">
                     <EditableText
                       text={file.name}
+                      defaultText="Utitled"
                       onChange={(text) => onFileNameChange(text, file.id)}
                     />
                   </div>
