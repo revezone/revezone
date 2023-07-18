@@ -11,7 +11,7 @@ import {
   setSelectedKeysToLocal
 } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
-import { currentFileIdAtom } from '@renderer/store/jotai';
+import { currentFileIdAtom, currentFileAtom } from '@renderer/store/jotai';
 import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 
@@ -26,7 +26,8 @@ export default function CustomMenu({ collapsed }: Props) {
   const [filesInFolder, setFilesInFolder] = useState<RevenoteFile[]>();
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>(getSelectedKeysFromLocal());
-  const [, setCurrentFileId] = useAtom(currentFileIdAtom);
+  const [currentFileId, setCurrentFileId] = useAtom(currentFileIdAtom);
+  const [, setCurrentFile] = useAtom(currentFileAtom);
 
   const getCurrentFolderId = useCallback((folders) => {
     let currentFolderId: string | undefined = openKeys?.filter(
@@ -67,7 +68,7 @@ export default function CustomMenu({ collapsed }: Props) {
       return;
     }
 
-    setSelectedKeys([currentFile.id]);
+    return filesInFolder;
   }, []);
 
   useEffect(() => {
@@ -75,14 +76,27 @@ export default function CustomMenu({ collapsed }: Props) {
   }, [indexeddbStorage, collapsed]);
 
   useEffect(() => {
-    setCurrentFileIdToLocal(selectedKeys?.[0]);
+    setSelectedKeysToLocal(selectedKeys);
   }, [selectedKeys]);
+
+  useEffect(() => {
+    const file = filesInFolder?.find((_file) => _file.id === currentFileId);
+
+    setCurrentFile(file);
+  }, [currentFileId, filesInFolder]);
+
+  useEffect(() => {
+    if (currentFileId) {
+      setSelectedKeys([currentFileId]);
+      setCurrentFileIdToLocal(currentFileId);
+    }
+  }, [currentFileId]);
 
   const addFile = useCallback(
     async (folderId: string) => {
       const file = await indexeddbStorage.addFile(folderId, 'markdown');
       await getFilesInFolder(folderId);
-      setSelectedKeys([file.id]);
+      setCurrentFileId(file.id);
     },
     [indexeddbStorage]
   );
@@ -90,7 +104,11 @@ export default function CustomMenu({ collapsed }: Props) {
   const deleteFile = useCallback(
     async (fileId: string, folderId: string) => {
       await indexeddbStorage.deleteFile(fileId);
-      await getFilesInFolder(folderId);
+      const files = await getFilesInFolder(folderId);
+
+      console.log('--- files  ---', files);
+
+      setCurrentFileId(files?.[0]?.id);
       await blocksuiteStorage.deletePage(fileId);
     },
     [indexeddbStorage]
@@ -102,8 +120,6 @@ export default function CustomMenu({ collapsed }: Props) {
   }, []);
 
   const onSelect = useCallback(({ key }) => {
-    setSelectedKeys([key]);
-    setSelectedKeysToLocal([key]);
     setCurrentFileId(key);
   }, []);
 

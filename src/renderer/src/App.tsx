@@ -1,22 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import Layout from './components/CustomLayout';
-import MarkdownEditor from './components/MarkdownEditor/index';
-import { emitter, events } from './store/eventemitter';
+import MarkdownEditor from './components/MarkdownEditor';
+import { useAtom } from 'jotai';
+import { currentFileAtom } from './store/jotai';
+import WorkspaceLoaded from './components/WorkspaceLoaded';
 
 import './App.css';
 
 function App(): JSX.Element {
-  const [workspaceLoaded, setWorkspaceLoaded] = useState(false);
+  const [currentFile] = useAtom(currentFileAtom);
 
-  useEffect(() => {
-    emitter.on(events.WORKSPACE_LOADED, () => {
-      setWorkspaceLoaded(true);
-    });
-  }, []);
+  console.log('currentFile', currentFile);
+
+  const renderContent = useCallback(
+    (currentFileType) => {
+      switch (currentFileType) {
+        case 'markdown':
+          return <MarkdownEditor pageId={currentFile?.id} />;
+        case 'canvas':
+          return 'canvas';
+        default:
+          return null;
+      }
+    },
+    [currentFile]
+  );
 
   return (
     <div className="revenote-app-container">
-      <Layout>{workspaceLoaded ? <MarkdownEditor /> : null}</Layout>
+      <Layout>
+        <WorkspaceLoaded>{renderContent(currentFile?.type)}</WorkspaceLoaded>
+      </Layout>
     </div>
   );
 }

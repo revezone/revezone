@@ -1,4 +1,9 @@
 import { atom } from 'jotai';
 import { getCurrentFileIdFromLocal } from './localstorage';
+import { RevenoteFile } from './indexeddb';
 
-export const currentFileIdAtom = atom(getCurrentFileIdFromLocal());
+export const currentFileIdAtom = atom<string | undefined | null>(getCurrentFileIdFromLocal());
+
+export const currentFileAtom = atom<RevenoteFile | undefined>(undefined);
+
+export const workspaceLoadedAtom = atom(false);

@@ -140,6 +140,7 @@ class IndexeddbStorage {
     await fileStore.add({
       id: firstFileId,
       name: 'Default File',
+      type: 'markdown',
       gmtCreate: moment().toLocaleString(),
       gmtModified: moment().toLocaleString()
     });

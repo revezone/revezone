@@ -1,30 +1,34 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import '@blocksuite/editor';
 import '@blocksuite/editor/themes/affine.css';
 import RevenoteBlockSuiteEditor from '../RevenoteBlockSuiteEditor';
-import { useAtom } from 'jotai';
-import { currentFileIdAtom } from '@renderer/store/jotai';
-// import { emitter, events } from '@renderer/store/eventemitter';
 
 import './index.css';
 
-function MarkdownEditor(): JSX.Element {
+interface Props {
+  pageId: string | undefined;
+}
+
+function MarkdownEditor({ pageId }: Props): JSX.Element | null {
+  if (!pageId) {
+    return null;
+  }
+
   const editorRef = useRef<HTMLDivElement>(null);
   const editorMountRef = useRef(false);
-  const [currentFileId] = useAtom(currentFileIdAtom);
 
   useEffect(() => {
-    if (!currentFileId || editorMountRef.current) {
+    if (!pageId || editorMountRef.current) {
       return;
     }
 
     editorMountRef.current = true;
 
-    console.log('currentFileId', currentFileId);
+    console.log('pageId', pageId);
 
     if (editorRef.current) {
       const editor = new RevenoteBlockSuiteEditor({
-        pageId: currentFileId
+        pageId
       });
 
       editorRef.current.innerHTML = '';
@@ -34,11 +38,11 @@ function MarkdownEditor(): JSX.Element {
       // @ts-ignore TEST
       window.editor = editor;
     }
-  }, [currentFileId, editorMountRef.current]);
+  }, [pageId, editorMountRef.current]);
 
   useEffect(() => {
     editorMountRef.current = !editorMountRef.current;
-  }, [currentFileId]);
+  }, [pageId]);
 
   return <div className="blocksuite-editor-container" ref={editorRef}></div>;
 }

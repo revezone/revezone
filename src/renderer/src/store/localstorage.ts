@@ -1,7 +1,6 @@
 const LOCALSTORAGE_MENU_OPEN_KEYS = 'menu_open_keys';
 const LOCALSTORAGE_MENU_ACTIVE_KEYS = 'menu_active_keys';
 const LOCALSTORAGE_CURRENT_FILE_ID = 'current_file_id';
-const LOCALSTORAGE_CURRENT_MARKDOWN_PAGE_ID = 'current_markdown_page_id';
 
 export const getOpenKeysFromLocal = () => {
   const localStr = localStorage.getItem(LOCALSTORAGE_MENU_OPEN_KEYS);
