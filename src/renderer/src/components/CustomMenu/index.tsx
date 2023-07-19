@@ -93,6 +93,7 @@ export default function CustomMenu({ collapsed }: Props) {
     const file = filesInFolder?.find((_file) => _file.id === currentFileId);
 
     setCurrentFile(file);
+    file && setSelectedKeys([`${file.id}______${file.name}`]);
   }, [currentFileId, filesInFolder]);
 
   useEffect(() => {
@@ -149,7 +150,6 @@ export default function CustomMenu({ collapsed }: Props) {
   const onSelect = useCallback(({ key }) => {
     const fileId = key?.match(FILE_ID_REGEX)?.[1];
     setCurrentFileId(fileId);
-    setSelectedKeys([key]);
   }, []);
 
   const folderMenu: MenuProps['items'] = useMemo(
@@ -241,7 +241,7 @@ export default function CustomMenu({ collapsed }: Props) {
                   <div className="flex items-center justify-between">
                     <EditableText
                       text={file.name}
-                      defaultText="Utitled"
+                      defaultText="Untitled"
                       onChange={(text) => onFileNameChange(text, file)}
                     />
                   </div>
