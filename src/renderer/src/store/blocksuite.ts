@@ -1,4 +1,4 @@
-import { Workspace, Text } from '@blocksuite/store';
+import { Workspace, Text, createIndexeddbStorage, createMemoryStorage } from '@blocksuite/store';
 import { AffineSchemas } from '@blocksuite/blocks/models';
 import { IndexeddbPersistence } from 'y-indexeddb';
 import { emitter, events } from './eventemitter';
@@ -31,7 +31,10 @@ class BlocksuiteStorage {
   }
 
   static instance: BlocksuiteStorage;
-  workspace: Workspace = new Workspace({ id: REVENOTE_EDITOR_KEY }).register(AffineSchemas);
+  workspace: Workspace = new Workspace({
+    id: REVENOTE_EDITOR_KEY,
+    blobStorages: [createIndexeddbStorage, createMemoryStorage]
+  }).register(AffineSchemas);
   indexeddbPersistence;
 
   async initYIndexeddb() {
