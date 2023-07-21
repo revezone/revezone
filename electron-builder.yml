@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: react-ts
+productName: ReveNote
 directories:
   buildResources: build
 files:
@@ -13,7 +13,7 @@ asarUnpack:
   - resources/**
 afterSign: build/notarize.js
 win:
-  executableName: react-ts
+  executableName: ReveNote
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
