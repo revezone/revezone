@@ -3,7 +3,7 @@ import { AffineSchemas } from '@blocksuite/blocks/models';
 import { IndexeddbPersistence } from 'y-indexeddb';
 import { emitter, events } from './eventemitter';
 
-const REVENOTE_EDITOR_KEY = 'revenote-editor-indexeddb';
+const REVENOTE_EDITOR_KEY = 'revenote_blocksuite';
 
 /**
  * the hack method to update blocksuite editor title dom

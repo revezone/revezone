@@ -16,6 +16,7 @@ import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 import { useDebounceEffect } from 'ahooks';
+import { RevenoteFileType } from '@renderer/store/indexeddb';
 
 import './index.css';
 
@@ -106,7 +107,6 @@ export default function CustomMenu({ collapsed }: Props) {
     if (!currentFile || pageTitle === undefined || currentFile.name === pageTitle) {
       return;
     }
-    console.log('--- pageTitle ---', pageTitle);
     await indexeddbStorage.updateFileName(currentFile, pageTitle);
     currentFolderId && (await getFilesInFolder(currentFolderId));
     setSelectedKeys([`${currentFile.id}______${pageTitle}`]);
@@ -123,8 +123,8 @@ export default function CustomMenu({ collapsed }: Props) {
   );
 
   const addFile = useCallback(
-    async (folderId: string) => {
-      const file = await indexeddbStorage.addFile(folderId, 'markdown');
+    async (folderId: string, type: RevenoteFileType) => {
+      const file = await indexeddbStorage.addFile(folderId, type);
       await getFilesInFolder(folderId);
       setCurrentFileId(file.id);
     },
@@ -166,6 +166,26 @@ export default function CustomMenu({ collapsed }: Props) {
         label: 'delete',
         onClick: () => {
           console.log('delete');
+        }
+      }
+    ],
+    []
+  );
+
+  const getAddFileMenu = useCallback(
+    (folder) => [
+      {
+        key: 'markdown',
+        label: 'Markdown',
+        onClick: () => {
+          addFile(folder.id, 'markdown');
+        }
+      },
+      {
+        key: 'canvas',
+        label: 'Canvas',
+        onClick: () => {
+          addFile(folder.id, 'canvas');
         }
       }
     ],
@@ -223,13 +243,12 @@ export default function CustomMenu({ collapsed }: Props) {
             <Dropdown menu={{ items: folderMenu }} trigger={['contextMenu']}>
               <div className="flex items-center justify-between">
                 <span>{folder.name}</span>
-                <DocumentPlusIcon
-                  className="h-4 w-4 text-current cursor-pointer mr-4 menu-icon"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    addFile(folder.id);
-                  }}
-                />
+                <Dropdown menu={{ items: getAddFileMenu(folder) }}>
+                  <DocumentPlusIcon
+                    className="h-4 w-4 text-current cursor-pointer mr-4 menu-icon"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </Dropdown>
               </div>
             </Dropdown>
           ),

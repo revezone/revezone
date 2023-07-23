@@ -1,4 +1,4 @@
-import { openDB, DBSchema, IDBPDatabase, IDBPTransaction } from 'idb';
+import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment-timezone';
 
@@ -18,12 +18,12 @@ export interface FolderFileMapping {
   gmtModified: string;
 }
 
-export type RevnoteFileType = 'markdown' | 'canvas';
+export type RevenoteFileType = 'markdown' | 'canvas';
 
 export interface RevenoteFile {
   id: string;
   name: string;
-  type: RevnoteFileType;
+  type: RevenoteFileType;
   gmtCreate: string;
   gmtModified: string;
 }
@@ -70,7 +70,7 @@ class IndexeddbStorage {
       return this.db;
     }
 
-    const db = await openDB<RevenoteDBSchema>('revenote-indexeddb', 1, {
+    const db = await openDB<RevenoteDBSchema>('revenote', 1, {
       upgrade: async (db) => {
         await this.initFolderStore(db);
         await this.initFileStore(db);
@@ -189,7 +189,7 @@ class IndexeddbStorage {
     return files;
   }
 
-  async addFile(folderId: string, type: RevnoteFileType = 'markdown'): Promise<RevenoteFile> {
+  async addFile(folderId: string, type: RevenoteFileType = 'markdown'): Promise<RevenoteFile> {
     await this.initDB();
 
     const fileId = uuidv4();

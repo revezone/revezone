@@ -4,6 +4,7 @@ import MarkdownEditor from './components/MarkdownEditor';
 import { useAtom } from 'jotai';
 import { currentFileAtom } from './store/jotai';
 import WorkspaceLoaded from './components/WorkspaceLoaded';
+import Handraw from './components/Handraw';
 
 import './App.css';
 
@@ -16,7 +17,7 @@ function App(): JSX.Element {
         case 'markdown':
           return <MarkdownEditor pageId={currentFile?.id} />;
         case 'canvas':
-          return 'canvas';
+          return <Handraw pageId={currentFile?.id}></Handraw>;
         default:
           return null;
       }
