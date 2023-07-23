@@ -14,8 +14,6 @@ function App(): JSX.Element {
   const renderContent = useCallback((file) => {
     if (!file) return null;
 
-    console.log('--- renderContent ---', file);
-
     switch (file.type) {
       case 'markdown':
         return <MarkdownEditor pageId={file.id} />;

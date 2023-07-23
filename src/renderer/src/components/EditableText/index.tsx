@@ -1,16 +1,17 @@
-import { useCallback, useRef, useState, forwardRef } from 'react';
-import { Input } from 'antd';
-import type { InputRef } from 'antd';
+import { useCallback, useRef, useState } from 'react';
+import { Input, Tag } from 'antd';
 
 import './index.css';
+import { RevenoteFileType } from '@renderer/types/file';
 
 interface Props {
   text: string;
   defaultText?: string;
+  type: RevenoteFileType;
   onChange: (text: string) => void;
 }
 
-export default function EditableText({ text, defaultText, onChange }: Props) {
+export default function EditableText({ text, defaultText, type, onChange }: Props) {
   const [isPreview, setIsPreview] = useState(true);
   const [value, setValue] = useState(text);
   const ref = useRef<HTMLDivElement>(null);
@@ -33,10 +34,24 @@ export default function EditableText({ text, defaultText, onChange }: Props) {
     }, 0);
   }, [isPreview]);
 
+  const getMark = useCallback((type) => {
+    switch (type) {
+      case 'markdown':
+        return 'md';
+      case 'canvas':
+        return 'cv';
+    }
+  }, []);
+
   return (
     <div className="editable-text-container" ref={ref} onDoubleClick={onEdit}>
       {isPreview ? (
-        value || defaultText
+        <p className="flex justify-between">
+          <span>{value || defaultText}</span>
+          <span>
+            <Tag color="blue">{getMark(type)}</Tag>
+          </span>
+        </p>
       ) : (
         <Input
           defaultValue={value}

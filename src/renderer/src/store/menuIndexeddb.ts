@@ -25,21 +25,22 @@ export const INDEXEDDB_FILE_KEY = 'file';
 export const INDEXEDDB_FOLD_FILE_MAPPING_KEY = 'folder_file_mapping';
 export const LOCALSTORAGE_FIRST_FOLDER_KEY = 'first_forlder_id';
 export const LOCALSTORAGE_FIRST_FILE_KEY = 'first_file_id';
+export const INDEXEDDB_REVENOTE_MENU = 'revenote_menu';
 
-class IndexeddbStorage {
+class MenuIndexeddbStorage {
   constructor() {
-    if (IndexeddbStorage.instance) {
-      return IndexeddbStorage.instance;
+    if (MenuIndexeddbStorage.instance) {
+      return MenuIndexeddbStorage.instance;
     }
 
-    IndexeddbStorage.instance = this;
+    MenuIndexeddbStorage.instance = this;
 
     (async () => {
       this.db = await this.initDB();
     })();
   }
 
-  static instance: IndexeddbStorage;
+  static instance: MenuIndexeddbStorage;
   db: IDBPDatabase<RevenoteDBSchema> | undefined;
 
   async initDB(): Promise<IDBPDatabase<RevenoteDBSchema>> {
@@ -47,7 +48,7 @@ class IndexeddbStorage {
       return this.db;
     }
 
-    const db = await openDB<RevenoteDBSchema>('revenote', 1, {
+    const db = await openDB<RevenoteDBSchema>(INDEXEDDB_REVENOTE_MENU, 1, {
       upgrade: async (db) => {
         await this.initFolderStore(db);
         await this.initFileStore(db);
@@ -134,7 +135,7 @@ class IndexeddbStorage {
 
   async getFolders(): Promise<RevenoteFolder[] | undefined> {
     await this.initDB();
-    return await indexeddbStorage.db?.getAll('folder');
+    return await this.db?.getAll('folder');
   }
 
   async getFile(fileId: string): Promise<RevenoteFile | undefined> {
@@ -229,4 +230,4 @@ class IndexeddbStorage {
   }
 }
 
-export const indexeddbStorage = new IndexeddbStorage();
+export const menuIndexeddbStorage = new MenuIndexeddbStorage();

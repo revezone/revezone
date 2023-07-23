@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Menu, Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 import { FolderIcon, DocumentPlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { indexeddbStorage } from '@renderer/store/indexeddb';
+import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import type { RevenoteFolder, RevenoteFile, RevenoteFileType } from '@renderer/types/file';
 import {
   getOpenKeysFromLocal,
@@ -49,7 +49,7 @@ export default function CustomMenu({ collapsed }: Props) {
   }, []);
 
   const getFolders = useCallback(async () => {
-    const folders = await indexeddbStorage.getFolders();
+    const folders = await menuIndexeddbStorage.getFolders();
     setFolderList(folders);
 
     const currentFolderId = getCurrentFolderId(folders);
@@ -58,14 +58,14 @@ export default function CustomMenu({ collapsed }: Props) {
       getFilesInFolder(currentFolderId);
       setOpenKeys([currentFolderId]);
     }
-  }, [indexeddbStorage]);
+  }, [menuIndexeddbStorage]);
 
   const getFilesInFolder = useCallback(async (folderId: string) => {
     if (!folderId) {
       return;
     }
 
-    const filesInFolder = await indexeddbStorage.getFilesInFolder(folderId);
+    const filesInFolder = await menuIndexeddbStorage.getFilesInFolder(folderId);
 
     setFilesInFolder(filesInFolder);
 
@@ -80,7 +80,7 @@ export default function CustomMenu({ collapsed }: Props) {
 
   useEffect(() => {
     !collapsed && getFolders();
-  }, [indexeddbStorage, collapsed]);
+  }, [menuIndexeddbStorage, collapsed]);
 
   useEffect(() => {
     setSelectedKeysToLocal(selectedKeys);
@@ -107,7 +107,7 @@ export default function CustomMenu({ collapsed }: Props) {
     if (!currentFile || pageTitle === undefined || currentFile.name === pageTitle) {
       return;
     }
-    await indexeddbStorage.updateFileName(currentFile, pageTitle);
+    await menuIndexeddbStorage.updateFileName(currentFile, pageTitle);
     currentFolderId && (await getFilesInFolder(currentFolderId));
     setSelectedKeys([`${currentFile.id}______${pageTitle}`]);
   }, [pageTitle, currentFile, currentFolderId]);
@@ -124,22 +124,22 @@ export default function CustomMenu({ collapsed }: Props) {
 
   const addFile = useCallback(
     async (folderId: string, type: RevenoteFileType) => {
-      const file = await indexeddbStorage.addFile(folderId, type);
+      const file = await menuIndexeddbStorage.addFile(folderId, type);
       await getFilesInFolder(folderId);
       setCurrentFileId(file.id);
     },
-    [indexeddbStorage]
+    [menuIndexeddbStorage]
   );
 
   const deleteFile = useCallback(
     async (fileId: string, folderId: string) => {
-      await indexeddbStorage.deleteFile(fileId);
+      await menuIndexeddbStorage.deleteFile(fileId);
       const files = await getFilesInFolder(folderId);
 
       setCurrentFileId(files?.[0]?.id);
       await blocksuiteStorage.deletePage(fileId);
     },
-    [indexeddbStorage]
+    [menuIndexeddbStorage]
   );
 
   const onOpenChange = useCallback((keys) => {
@@ -177,14 +177,16 @@ export default function CustomMenu({ collapsed }: Props) {
       {
         key: 'markdown',
         label: 'Markdown',
-        onClick: () => {
+        onClick: ({ domEvent }) => {
+          domEvent.stopPropagation();
           addFile(folder.id, 'markdown');
         }
       },
       {
         key: 'canvas',
         label: 'Canvas',
-        onClick: () => {
+        onClick: ({ domEvent }) => {
+          domEvent.stopPropagation();
           addFile(folder.id, 'canvas');
         }
       }
@@ -225,7 +227,7 @@ export default function CustomMenu({ collapsed }: Props) {
 
     console.log('onFileNameChange', text);
 
-    indexeddbStorage.updateFileName(file, text);
+    menuIndexeddbStorage.updateFileName(file, text);
   }, []);
 
   return (
@@ -261,6 +263,7 @@ export default function CustomMenu({ collapsed }: Props) {
                 <Dropdown menu={{ items: getFileMenu(file, folder) }} trigger={['contextMenu']}>
                   <div className="flex items-center justify-between">
                     <EditableText
+                      type={file.type}
                       text={file.name}
                       defaultText="Untitled"
                       onChange={(text) => onFileNameChange(text, file)}
