@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Menu, Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 import { FolderIcon, DocumentPlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { indexeddbStorage, RevenoteFolder, RevenoteFile } from '@renderer/store/indexeddb';
+import { indexeddbStorage } from '@renderer/store/indexeddb';
+import type { RevenoteFolder, RevenoteFile, RevenoteFileType } from '@renderer/types/file';
 import {
   getOpenKeysFromLocal,
   getSelectedKeysFromLocal,
@@ -16,7 +17,6 @@ import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 import { useDebounceEffect } from 'ahooks';
-import { RevenoteFileType } from '@renderer/store/indexeddb';
 
 import './index.css';
 
@@ -219,7 +219,9 @@ export default function CustomMenu({ collapsed }: Props) {
   );
 
   const onFileNameChange = useCallback((text: string, file: RevenoteFile) => {
-    blocksuiteStorage.updatePageTitle(text, file.id);
+    if (file.type === 'markdown') {
+      blocksuiteStorage.updatePageTitle(text, file.id);
+    }
 
     console.log('onFileNameChange', text);
 

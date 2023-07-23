@@ -11,24 +11,23 @@ import './App.css';
 function App(): JSX.Element {
   const [currentFile] = useAtom(currentFileAtom);
 
-  const renderContent = useCallback(
-    (currentFileType) => {
-      switch (currentFileType) {
-        case 'markdown':
-          return <MarkdownEditor pageId={currentFile?.id} />;
-        case 'canvas':
-          return <Handraw pageId={currentFile?.id}></Handraw>;
-        default:
-          return null;
-      }
-    },
-    [currentFile]
-  );
+  const renderContent = useCallback((file) => {
+    if (!file) return null;
+
+    switch (file) {
+      case 'markdown':
+        return <MarkdownEditor pageId={file.id} />;
+      case 'canvas':
+        return <Handraw file={file} />;
+      default:
+        return null;
+    }
+  }, []);
 
   return (
     <div className="revenote-app-container">
       <Layout>
-        <WorkspaceLoaded>{renderContent(currentFile?.type)}</WorkspaceLoaded>
+        <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
       </Layout>
     </div>
   );

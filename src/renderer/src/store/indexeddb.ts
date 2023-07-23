@@ -1,32 +1,9 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment-timezone';
+import { RevenoteFile, RevenoteFolder, RevenoteFileType, FolderFileMapping } from '../types/file';
 
 moment.tz.setDefault('Asia/Shanghai');
-
-export interface RevenoteFolder {
-  id: string;
-  name: string;
-  gmtCreate: string;
-  gmtModified: string;
-}
-
-export interface FolderFileMapping {
-  folderId: string;
-  fileId: string;
-  gmtCreate: string;
-  gmtModified: string;
-}
-
-export type RevenoteFileType = 'markdown' | 'canvas';
-
-export interface RevenoteFile {
-  id: string;
-  name: string;
-  type: RevenoteFileType;
-  gmtCreate: string;
-  gmtModified: string;
-}
 
 export interface RevenoteDBSchema extends DBSchema {
   folder: {

@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { getCurrentFileIdFromLocal } from './localstorage';
-import { RevenoteFile } from './indexeddb';
+import { RevenoteFile } from '../types/file';
 
 export const currentFileIdAtom = atom<string | undefined | null>(getCurrentFileIdFromLocal());
 

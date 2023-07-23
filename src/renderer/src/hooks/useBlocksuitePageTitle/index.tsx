@@ -16,8 +16,6 @@ export default function useBlocksuitePageTitle() {
     const page = await blocksuiteStorage.workspace.getPage(currentFileId);
     const prevTitle = page?.meta.title;
 
-    console.log('pageTitleUpdateListener', prevTitle, page);
-
     page?.slots.historyUpdated.on(() => {
       const currentTitle = page.meta.title;
       if (currentTitle !== prevTitle) {

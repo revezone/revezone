@@ -6,12 +6,10 @@ import RevenoteBlockSuiteEditor from '../RevenoteBlockSuiteEditor';
 import './index.css';
 
 interface Props {
-  pageId: string | undefined;
+  pageId: string;
 }
 
 function MarkdownEditor({ pageId }: Props): JSX.Element | null {
-  console.log('markdoweditor', pageId);
-
   if (!pageId) {
     return null;
   }
@@ -23,8 +21,6 @@ function MarkdownEditor({ pageId }: Props): JSX.Element | null {
     if (!pageId || editorMountRef.current) {
       return;
     }
-
-    console.log('markdoweditor', pageId, editorMountRef.current);
 
     editorMountRef.current = true;
 
