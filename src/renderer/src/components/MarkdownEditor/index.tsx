@@ -10,6 +10,7 @@ interface Props {
 }
 
 function MarkdownEditor({ pageId }: Props): JSX.Element | null {
+  console.log('--- markdowneditor ---', pageId);
   if (!pageId) {
     return null;
   }
