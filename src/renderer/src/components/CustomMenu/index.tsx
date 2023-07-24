@@ -222,7 +222,7 @@ export default function CustomMenu({ collapsed }: Props) {
 
   const onFileNameChange = useCallback((text: string, file: RevenoteFile) => {
     if (file.type === 'markdown') {
-      blocksuiteStorage.updatePageTitle(text, file.id);
+      blocksuiteStorage.updatePageTitle(file.id, text);
     }
 
     console.log('onFileNameChange', text);

@@ -2,23 +2,9 @@ import { Workspace, Text, createIndexeddbStorage, createMemoryStorage } from '@b
 import { AffineSchemas } from '@blocksuite/blocks/models';
 import { IndexeddbPersistence } from 'y-indexeddb';
 import { emitter, events } from './eventemitter';
+import { hackUpdateTitleDom } from '@renderer/utils/dom';
 
 const REVENOTE_EDITOR_KEY = 'revenote_blocksuite';
-
-/**
- * the hack method to update blocksuite editor title dom
- * fix the problem that not rerender after rename page block's title prop
- * @param title string
- */
-const hackUpdateTitleDom = (title) => {
-  const titleDom = document
-    .querySelector('.affine-default-page-block-title ')
-    ?.querySelector('span[data-virgo-text]');
-
-  if (titleDom) {
-    titleDom.innerHTML = title;
-  }
-};
 
 class BlocksuiteStorage {
   constructor() {
@@ -53,7 +39,7 @@ class BlocksuiteStorage {
     });
   }
 
-  async updatePageTitle(title: string, pageId: string) {
+  async updatePageTitle(pageId: string, title: string) {
     const page = await this.workspace.getPage(pageId);
     const block = await page?.getBlockByFlavour('affine:page')?.[0];
 
@@ -61,9 +47,11 @@ class BlocksuiteStorage {
       return;
     }
 
-    page?.updateBlock(block, { title: new Text(title) });
-
-    hackUpdateTitleDom(title);
+    if (page) {
+      page.updateBlock(block, { title: new Text(title) });
+      page.workspace.setPageMeta(page.id, { title });
+      hackUpdateTitleDom(title);
+    }
   }
 
   async deletePage(pageId: string) {

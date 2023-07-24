@@ -7,11 +7,11 @@ moment.tz.setDefault('Asia/Shanghai');
 
 export interface RevenoteDBSchema extends DBSchema {
   folder: {
-    key: number;
+    key: string;
     value: RevenoteFolder;
   };
   file: {
-    key: number;
+    key: string;
     value: RevenoteFile;
   };
   folder_file_mapping: {
@@ -72,12 +72,15 @@ class MenuIndexeddbStorage {
 
     localStorage.setItem(LOCALSTORAGE_FIRST_FOLDER_KEY, id);
 
-    await folderStore.add({
-      id,
-      name: 'Default Folder',
-      gmtCreate: moment().toLocaleString(),
-      gmtModified: moment().toLocaleString()
-    });
+    await folderStore.add(
+      {
+        id,
+        name: 'Default Folder',
+        gmtCreate: moment().toLocaleString(),
+        gmtModified: moment().toLocaleString()
+      },
+      id
+    );
 
     return folderStore;
   }
@@ -115,13 +118,16 @@ class MenuIndexeddbStorage {
 
     localStorage.setItem(LOCALSTORAGE_FIRST_FILE_KEY, firstFileId);
 
-    await fileStore.add({
-      id: firstFileId,
-      name: 'Default File',
-      type: 'markdown',
-      gmtCreate: moment().toLocaleString(),
-      gmtModified: moment().toLocaleString()
-    });
+    await fileStore.add(
+      {
+        id: firstFileId,
+        name: 'Default File',
+        type: 'markdown',
+        gmtCreate: moment().toLocaleString(),
+        gmtModified: moment().toLocaleString()
+      },
+      firstFileId
+    );
 
     return fileStore;
   }
@@ -180,7 +186,7 @@ class MenuIndexeddbStorage {
       gmtModified: moment().toLocaleString()
     };
 
-    await this.db?.add(INDEXEDDB_FILE_KEY, fileInfo);
+    await this.db?.add(INDEXEDDB_FILE_KEY, fileInfo, fileId);
 
     await this.db?.add(INDEXEDDB_FOLD_FILE_MAPPING_KEY, {
       folderId,
@@ -195,10 +201,7 @@ class MenuIndexeddbStorage {
   async deleteFile(fileId: string) {
     await this.initDB();
 
-    // @ts-ignore
-    const fileKey = await this.db?.getKeyFromIndex(INDEXEDDB_FILE_KEY, 'id', fileId);
-
-    fileKey && (await this.db?.delete(INDEXEDDB_FILE_KEY, fileKey));
+    fileId && (await this.db?.delete(INDEXEDDB_FILE_KEY, fileId));
 
     const folderFileMappingKeys = await this.db?.getAllKeysFromIndex(
       INDEXEDDB_FOLD_FILE_MAPPING_KEY,
@@ -217,16 +220,11 @@ class MenuIndexeddbStorage {
   async updateFileName(file: RevenoteFile, name: string) {
     await this.initDB();
 
-    console.log('updatefilename', file, name);
-
-    // @ts-ignore
-    const fileKey = await this.db?.getKeyFromIndex(INDEXEDDB_FILE_KEY, 'id', file.id);
-
     if (name === file?.name) return;
 
     console.log('updateFileName', name, file);
 
-    file && this.db?.put(INDEXEDDB_FILE_KEY, { ...file, name }, fileKey);
+    file && this.db?.put(INDEXEDDB_FILE_KEY, { ...file, name }, file.id);
   }
 }
 

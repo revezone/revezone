@@ -27,6 +27,7 @@ export default function useBlocksuitePageTitle() {
   const getPageTitle = useCallback(async () => {
     if (!currentFileId) return;
     const page = await blocksuiteStorage.workspace.getPage(currentFileId);
+
     setPageTitle(page?.meta.title);
   }, [currentFileId]);
 

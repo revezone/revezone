@@ -41,6 +41,7 @@ export default function EditableText({ text, defaultText, type, onChange }: Prop
       case 'canvas':
         return 'cv';
     }
+    return null;
   }, []);
 
   return (
