@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: revenote
 productName: ReveNote
 directories:
   buildResources: build
