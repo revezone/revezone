@@ -3,6 +3,7 @@ import { RevenoteFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
 import { canvasIndexeddbStorage } from '@renderer/store/canvasIndexeddb';
 import { useDebounceFn } from 'ahooks';
+import { Button } from 'antd';
 
 import './index.css';
 
@@ -31,11 +32,24 @@ export default function Handraw({ file }: Props) {
 
   const { run: onChangeDebounceFn } = useDebounceFn(onChangeFn, { wait: 200 });
 
+  const openFile = useCallback(() => {
+    window.api.openFile(null);
+  }, []);
+
   useEffect(() => {
     getDataSource(file.id);
   }, [file.id]);
 
   return dataSource ? (
-    <Revedraw dataSource={dataSource} canvasName={file.name} onChange={onChangeDebounceFn} />
+    <Revedraw
+      dataSource={dataSource}
+      canvasName={file.name}
+      onChange={onChangeDebounceFn}
+      customMenuItems={[
+        <Button key="open-file" onClick={openFile}>
+          open file
+        </Button>
+      ]}
+    />
   ) : null;
 }

@@ -3,7 +3,8 @@ import { electronAPI } from '@electron-toolkit/preload';
 
 // Custom APIs for renderer
 const api = {
-  toggleTrafficLight: (isShow: boolean): void => ipcRenderer.send('toggle-traffic-light', isShow)
+  toggleTrafficLight: (isShow: boolean): void => ipcRenderer.send('toggle-traffic-light', isShow),
+  openFile: (): void => ipcRenderer.send('open-file')
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
