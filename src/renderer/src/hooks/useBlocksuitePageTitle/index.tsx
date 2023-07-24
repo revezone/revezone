@@ -2,6 +2,7 @@ import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import { currentFileIdAtom, workspaceLoadedAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { useCallback, useEffect, useState } from 'react';
+import { useDebounceEffect } from 'ahooks';
 
 export default function useBlocksuitePageTitle() {
   const [currentFileId] = useAtom(currentFileIdAtom);
@@ -13,11 +14,17 @@ export default function useBlocksuitePageTitle() {
     if (!currentFileId || !workspaceLoaded) {
       return;
     }
+
     const page = await blocksuiteStorage.workspace.getPage(currentFileId);
     const prevTitle = page?.meta.title;
 
+    console.log('--- pageTitleUpdateListener ---', page, prevTitle);
+
     page?.slots.historyUpdated.on(() => {
       const currentTitle = page.meta.title;
+
+      console.log('--- historyupdated ---', currentTitle);
+
       if (currentTitle !== prevTitle) {
         setPageTitle(currentTitle);
       }
@@ -31,10 +38,14 @@ export default function useBlocksuitePageTitle() {
     setPageTitle(page?.meta.title);
   }, [currentFileId]);
 
-  useEffect(() => {
-    getPageTitle();
-    pageTitleUpdateListener();
-  }, [currentFileId, workspaceLoaded]);
+  useDebounceEffect(
+    () => {
+      getPageTitle();
+      pageTitleUpdateListener();
+    },
+    [currentFileId, workspaceLoaded],
+    { wait: 200 }
+  );
 
   return [pageTitle];
 }

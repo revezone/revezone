@@ -47,9 +47,6 @@ dependencies:
   event-emitter:
     specifier: ^0.3.5
     version: 0.3.5
-  handraw-materials:
-    specifier: 0.0.2-beta.2
-    version: 0.0.2-beta.2(react-dom@18.2.0)(react@18.2.0)
   idb:
     specifier: ^7.1.1
     version: 7.1.1
@@ -65,6 +62,9 @@ dependencies:
   moment-timezone:
     specifier: ^0.5.43
     version: 0.5.43
+  revemate:
+    specifier: 0.0.1-beta.0
+    version: 0.0.1-beta.0(react-dom@18.2.0)(react@18.2.0)
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -3078,20 +3078,6 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
-  /handraw-materials@0.0.2-beta.2(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-rsvba72xu+ahoSrIbXA7eOIZtLr9obi1TuOmR/n6wuvJn4nz3OMe24c5VJjVG7roY0U9P+xD+q9D+g6jWhjaoQ==}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@handraw/excalidraw': 1.0.0-alpha.5(react-dom@18.2.0)(react@18.2.0)
-      clsx: 1.2.1
-      lodash: 4.17.21
-      open-color: 1.9.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
   /has-bigints@1.0.2:
     resolution: {integrity: sha512-tSvCKtBr9lkF0Ex0aQiP9N+OpV4zi2r/Nee5VkRDbaqv35RLYMzbwQfFSZZH0kR+Rd6302UJZ2p/bJCEoR3VoQ==}
     dev: true
@@ -4795,6 +4781,20 @@ packages:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
     dev: true
+
+  /revemate@0.0.1-beta.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-IYBEoLh2GNxbQ83nOE++AuoA5azd0r9Cn0nBWBHMqzKyjZa6P+LzAyWvBaVXn0z2VvPkGPb4ed5GXRZ2xmtWJA==}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+    dependencies:
+      '@handraw/excalidraw': 1.0.0-alpha.5(react-dom@18.2.0)(react@18.2.0)
+      clsx: 1.2.1
+      lodash: 4.17.21
+      open-color: 1.9.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
 
   /rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
