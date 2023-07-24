@@ -5,7 +5,7 @@ export interface RevenoteFolder {
   gmtModified: string;
 }
 
-export interface FolderFileMapping {
+export interface RevenoteFolderFileMapping {
   folderId: string;
   fileId: string;
   gmtCreate: string;
@@ -28,3 +28,7 @@ export interface RevenoteFolder {
   gmtCreate: string;
   gmtModified: string;
 }
+
+export type FileTreeItem = RevenoteFolder & { children: RevenoteFile[] };
+
+export type FileTree = FileTreeItem[];

@@ -1,7 +1,13 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment-timezone';
-import { RevenoteFile, RevenoteFolder, RevenoteFileType, FolderFileMapping } from '../types/file';
+import { FileTree } from '../types/file';
+import {
+  RevenoteFile,
+  RevenoteFolder,
+  RevenoteFileType,
+  RevenoteFolderFileMapping
+} from '../types/file';
 
 moment.tz.setDefault('Asia/Shanghai');
 
@@ -16,7 +22,7 @@ export interface RevenoteDBSchema extends DBSchema {
   };
   folder_file_mapping: {
     key: number;
-    value: FolderFileMapping;
+    value: RevenoteFolderFileMapping;
   };
 }
 
@@ -162,9 +168,41 @@ class MenuIndexeddbStorage {
 
   async getFile(fileId: string): Promise<RevenoteFile | undefined> {
     await this.initDB();
-    // @ts-ignore
-    const value = await this.db?.getFromIndex(INDEXEDDB_FILE_KEY, 'id', fileId);
+    const value = await this.db?.get(INDEXEDDB_FILE_KEY, fileId);
     return value;
+  }
+
+  async getFiles(): Promise<RevenoteFile[]> {
+    await this.initDB();
+    const files = await this.db?.getAll(INDEXEDDB_FILE_KEY);
+    return files || [];
+  }
+
+  async getAllFileFolderMappings(): Promise<RevenoteFolderFileMapping[]> {
+    await this.initDB();
+    const mappings = await this.db?.getAll(INDEXEDDB_FOLD_FILE_MAPPING_KEY);
+    return mappings || [];
+  }
+
+  async getFileTree(): Promise<FileTree> {
+    await this.initDB();
+    const folders = await this.getFolders();
+    const files = await this.getFiles();
+    const mappings = await this.getAllFileFolderMappings();
+
+    const tree = folders.map((folder) => {
+      const children: RevenoteFile[] = [];
+      mappings.forEach((map) => {
+        const file = map.folderId === folder.id && files.find((_file) => _file.id === map.fileId);
+        if (file) {
+          children.push(file);
+        }
+      });
+
+      return { ...folder, children };
+    });
+
+    return tree;
   }
 
   async getFilesInFolder(folderId: string): Promise<RevenoteFile[] | undefined> {

@@ -1,9 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Menu, Dropdown } from 'antd';
-import type { MenuProps } from 'antd';
 import { FolderIcon, DocumentPlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import type { RevenoteFile, RevenoteFileType, RevenoteFolder } from '@renderer/types/file';
+import type {
+  RevenoteFile,
+  RevenoteFileType,
+  RevenoteFolder,
+  FileTreeItem
+} from '@renderer/types/file';
 import {
   getOpenKeysFromLocal,
   getSelectedKeysFromLocal,
@@ -12,29 +16,40 @@ import {
   setSelectedKeysToLocal
 } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
-import { currentFileIdAtom, currentFileAtom, folderListAtom } from '@renderer/store/jotai';
+import {
+  currentFileIdAtom,
+  currentFileAtom,
+  folderListAtom,
+  fileTreeAtom
+} from '@renderer/store/jotai';
 import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 import { useDebounceEffect } from 'ahooks';
+import { FILE_ID_REGEX } from '@renderer/utils/constant';
 
 import './index.css';
-
-const FILE_ID_REGEX = /^([a-zA-Z0-9-]+)______.*/;
 
 interface Props {
   collapsed: boolean;
 }
 
 export default function CustomMenu({ collapsed }: Props) {
-  const [folderList, setFolderList] = useAtom(folderListAtom);
-  const [filesInFolder, setFilesInFolder] = useState<RevenoteFile[]>();
+  // const [folderList, setFolderList] = useAtom(folderListAtom);
+  // const [filesInFolder, setFilesInFolder] = useState<RevenoteFile[]>();
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>(getSelectedKeysFromLocal());
   const [currentFileId, setCurrentFileId] = useAtom(currentFileIdAtom);
   const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
   const [pageTitle] = useBlocksuitePageTitle();
   const [currentFolderId, setCurrentFolderId] = useState<string>();
+  const [fileTree, setFileTree] = useAtom(fileTreeAtom);
+
+  const getFileTree = useCallback(async () => {
+    const tree = await menuIndexeddbStorage.getFileTree();
+    setFileTree(tree);
+    return tree;
+  }, []);
 
   const getCurrentFolderId = useCallback((folders) => {
     let currentFolderId: string | undefined = openKeys?.filter(
@@ -48,38 +63,38 @@ export default function CustomMenu({ collapsed }: Props) {
     return currentFolderId;
   }, []);
 
-  const getFolders = useCallback(async () => {
-    const folders = await menuIndexeddbStorage.getFolders();
-    setFolderList(folders || []);
+  // const getFolders = useCallback(async () => {
+  //   const folders = await menuIndexeddbStorage.getFolders();
+  //   setFolderList(folders || []);
 
-    const currentFolderId = getCurrentFolderId(folders);
+  //   const currentFolderId = getCurrentFolderId(folders);
 
-    if (currentFolderId) {
-      getFilesInFolder(currentFolderId);
-      setOpenKeys([currentFolderId]);
-    }
-  }, [menuIndexeddbStorage]);
+  //   if (currentFolderId) {
+  //     getFilesInFolder(currentFolderId);
+  //     setOpenKeys([currentFolderId]);
+  //   }
+  // }, [menuIndexeddbStorage]);
 
-  const getFilesInFolder = useCallback(async (folderId: string) => {
-    if (!folderId) {
-      return;
-    }
+  // const getFilesInFolder = useCallback(async (folderId: string) => {
+  //   if (!folderId) {
+  //     return;
+  //   }
 
-    const filesInFolder = await menuIndexeddbStorage.getFilesInFolder(folderId);
+  //   const filesInFolder = await menuIndexeddbStorage.getFilesInFolder(folderId);
 
-    setFilesInFolder(filesInFolder);
+  //   setFilesInFolder(filesInFolder);
 
-    const currentFile = filesInFolder?.[0];
+  //   const currentFile = filesInFolder?.[0];
 
-    if (!currentFile) {
-      return;
-    }
+  //   if (!currentFile) {
+  //     return;
+  //   }
 
-    return filesInFolder;
-  }, []);
+  //   return filesInFolder;
+  // }, []);
 
   useEffect(() => {
-    !collapsed && getFolders();
+    !collapsed && getFileTree();
   }, [menuIndexeddbStorage, collapsed]);
 
   useEffect(() => {
@@ -91,11 +106,18 @@ export default function CustomMenu({ collapsed }: Props) {
   }, [openKeys?.[0]]);
 
   useEffect(() => {
-    const file = filesInFolder?.find((_file) => _file.id === currentFileId);
+    const files = fileTree.reduce(
+      (prev, item) => [...prev, ...item.children],
+      [] as RevenoteFile[]
+    );
+    const file =
+      (currentFileId && files?.find((_file) => _file.id === currentFileId)) || files?.[0];
+
+    console.log('--- file ---', file, currentFileId, files);
 
     setCurrentFile(file);
     file && setSelectedKeys([`${file.id}______${file.name}`]);
-  }, [currentFileId, filesInFolder]);
+  }, [currentFileId, fileTree]);
 
   useEffect(() => {
     if (currentFileId) {
@@ -108,7 +130,7 @@ export default function CustomMenu({ collapsed }: Props) {
       return;
     }
     await menuIndexeddbStorage.updateFileName(currentFile, pageTitle);
-    currentFolderId && (await getFilesInFolder(currentFolderId));
+    await getFileTree();
     setSelectedKeys([`${currentFile.id}______${pageTitle}`]);
   }, [pageTitle, currentFile, currentFolderId]);
 
@@ -125,7 +147,7 @@ export default function CustomMenu({ collapsed }: Props) {
   const addFile = useCallback(
     async (folderId: string, type: RevenoteFileType) => {
       const file = await menuIndexeddbStorage.addFile(folderId, type);
-      await getFilesInFolder(folderId);
+      await getFileTree();
       setCurrentFileId(file.id);
     },
     [menuIndexeddbStorage]
@@ -134,10 +156,18 @@ export default function CustomMenu({ collapsed }: Props) {
   const deleteFile = useCallback(
     async (fileId: string, folderId: string) => {
       await menuIndexeddbStorage.deleteFile(fileId);
-      const files = await getFilesInFolder(folderId);
-
-      setCurrentFileId(files?.[0]?.id);
       await blocksuiteStorage.deletePage(fileId);
+
+      const tree = await getFileTree();
+
+      console.log('currentFileId', currentFileId, fileId);
+
+      // reset current file when current file is removed
+      if (currentFileId === fileId) {
+        const filesInFolder = tree.find((folder) => folder.id === folderId)?.children;
+
+        setCurrentFileId(filesInFolder?.[0]?.id);
+      }
     },
     [menuIndexeddbStorage]
   );
@@ -145,9 +175,8 @@ export default function CustomMenu({ collapsed }: Props) {
   const deleteFolder = useCallback(
     async (folderId: string) => {
       await menuIndexeddbStorage.deleteFolder(folderId);
-      const folders = await menuIndexeddbStorage.getFolders();
-      setCurrentFolderId(folders?.[0]?.id);
-      setFolderList(folders);
+      const tree = await getFileTree();
+      setCurrentFolderId(tree?.[0]?.id);
     },
     [menuIndexeddbStorage]
   );
@@ -255,7 +284,7 @@ export default function CustomMenu({ collapsed }: Props) {
         onOpenChange={onOpenChange}
         onSelect={onSelect}
         style={{ border: 'none' }}
-        items={folderList?.map((folder) => ({
+        items={fileTree?.map((folder) => ({
           key: folder.id,
           icon: <FolderIcon className="h-4 w-4" />,
           label: (
@@ -275,7 +304,7 @@ export default function CustomMenu({ collapsed }: Props) {
               </div>
             </Dropdown>
           ),
-          children: filesInFolder?.map((file) => {
+          children: folder?.children?.map((file) => {
             return {
               key: `${file.id}______${file.name}`,
               label: (

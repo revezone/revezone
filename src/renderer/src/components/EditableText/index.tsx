@@ -20,7 +20,7 @@ export default function EditableText({ text, defaultText, type, onChange }: Prop
     setValue(e.target.value);
   }, []);
 
-  const onBlur = useCallback(() => {
+  const onSave = useCallback(() => {
     setIsPreview(true);
     onChange(value);
   }, [value]);
@@ -57,8 +57,8 @@ export default function EditableText({ text, defaultText, type, onChange }: Prop
         <Input
           defaultValue={value}
           onChange={onInnerChange}
-          onBlur={onBlur}
-          onPressEnter={() => setIsPreview(true)}
+          onBlur={onSave}
+          onPressEnter={onSave}
         />
       )}
     </div>
