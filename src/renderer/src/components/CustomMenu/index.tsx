@@ -2,12 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Menu, Dropdown } from 'antd';
 import { FolderIcon, DocumentPlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import type {
-  RevenoteFile,
-  RevenoteFileType,
-  RevenoteFolder,
-  FileTreeItem
-} from '@renderer/types/file';
+import type { RevenoteFile, RevenoteFileType, RevenoteFolder } from '@renderer/types/file';
 import {
   getOpenKeysFromLocal,
   getSelectedKeysFromLocal,
@@ -16,12 +11,7 @@ import {
   setSelectedKeysToLocal
 } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
-import {
-  currentFileIdAtom,
-  currentFileAtom,
-  folderListAtom,
-  fileTreeAtom
-} from '@renderer/store/jotai';
+import { currentFileIdAtom, currentFileAtom, fileTreeAtom } from '@renderer/store/jotai';
 import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
@@ -34,9 +24,9 @@ interface Props {
   collapsed: boolean;
 }
 
+const getFileMenuKey = (id, name) => `${id}______${name}`;
+
 export default function CustomMenu({ collapsed }: Props) {
-  // const [folderList, setFolderList] = useAtom(folderListAtom);
-  // const [filesInFolder, setFilesInFolder] = useState<RevenoteFile[]>();
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>(getSelectedKeysFromLocal());
   const [currentFileId, setCurrentFileId] = useAtom(currentFileIdAtom);
@@ -50,48 +40,6 @@ export default function CustomMenu({ collapsed }: Props) {
     setFileTree(tree);
     return tree;
   }, []);
-
-  const getCurrentFolderId = useCallback((folders) => {
-    let currentFolderId: string | undefined = openKeys?.filter(
-      (key) => !!folders?.find((folder) => folder.id === key)
-    )?.[0];
-
-    if (!currentFolderId) {
-      currentFolderId = folders?.[0]?.id;
-    }
-
-    return currentFolderId;
-  }, []);
-
-  // const getFolders = useCallback(async () => {
-  //   const folders = await menuIndexeddbStorage.getFolders();
-  //   setFolderList(folders || []);
-
-  //   const currentFolderId = getCurrentFolderId(folders);
-
-  //   if (currentFolderId) {
-  //     getFilesInFolder(currentFolderId);
-  //     setOpenKeys([currentFolderId]);
-  //   }
-  // }, [menuIndexeddbStorage]);
-
-  // const getFilesInFolder = useCallback(async (folderId: string) => {
-  //   if (!folderId) {
-  //     return;
-  //   }
-
-  //   const filesInFolder = await menuIndexeddbStorage.getFilesInFolder(folderId);
-
-  //   setFilesInFolder(filesInFolder);
-
-  //   const currentFile = filesInFolder?.[0];
-
-  //   if (!currentFile) {
-  //     return;
-  //   }
-
-  //   return filesInFolder;
-  // }, []);
 
   useEffect(() => {
     !collapsed && getFileTree();
@@ -113,10 +61,8 @@ export default function CustomMenu({ collapsed }: Props) {
     const file =
       (currentFileId && files?.find((_file) => _file.id === currentFileId)) || files?.[0];
 
-    console.log('--- file ---', file, currentFileId, files);
-
     setCurrentFile(file);
-    file && setSelectedKeys([`${file.id}______${file.name}`]);
+    file && setSelectedKeys([getFileMenuKey(file.id, file.name)]);
   }, [currentFileId, fileTree]);
 
   useEffect(() => {
@@ -131,7 +77,7 @@ export default function CustomMenu({ collapsed }: Props) {
     }
     await menuIndexeddbStorage.updateFileName(currentFile, pageTitle);
     await getFileTree();
-    setSelectedKeys([`${currentFile.id}______${pageTitle}`]);
+    setSelectedKeys([getFileMenuKey(currentFile.id, pageTitle)]);
   }, [pageTitle, currentFile, currentFolderId]);
 
   useDebounceEffect(
@@ -306,7 +252,7 @@ export default function CustomMenu({ collapsed }: Props) {
           ),
           children: folder?.children?.map((file) => {
             return {
-              key: `${file.id}______${file.name}`,
+              key: getFileMenuKey(file.id, file.name),
               label: (
                 <Dropdown menu={{ items: getFileMenu(file, folder) }} trigger={['contextMenu']}>
                   <div className="flex items-center justify-between">
