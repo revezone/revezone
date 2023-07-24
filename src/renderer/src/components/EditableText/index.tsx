@@ -49,7 +49,7 @@ export default function EditableText({ text, defaultText, type, onChange }: Prop
         <p className="flex justify-between">
           <span>{value || defaultText}</span>
           <span>
-            <Tag color="blue">{getMark(type)}</Tag>
+            <Tag bordered={false}>{getMark(type)}</Tag>
           </span>
         </p>
       ) : (

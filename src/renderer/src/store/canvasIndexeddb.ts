@@ -55,6 +55,11 @@ class CanvasIndexeddbStorage {
     return canvasStore;
   }
 
+  async addOrUpdateCanvas(id, canvasInfo) {
+    await this.initDB();
+    await this.db?.put(INDEXEDDB_CANVAS_FILE_KEY, canvasInfo, id);
+  }
+
   async addCanvas(id, canvasInfo) {
     await this.initDB();
     await this.db?.add(INDEXEDDB_CANVAS_FILE_KEY, canvasInfo, id);

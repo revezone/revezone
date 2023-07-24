@@ -7,7 +7,11 @@
     visibility: hidden;
   }
 
-  .ant-menu-title-content{
+  .ant-menu-title-content {
     height: 100%;
+  }
+
+  .ant-menu-item {
+    padding-right: 0;
   }
 }
