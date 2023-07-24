@@ -8,7 +8,7 @@ import {
 import { SiderTheme } from 'antd/es/layout/Sider';
 import CustomMenu from '../CustomMenu';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import { folderListAtom } from '@renderer/store/jotai';
+import { folderListAtom, siderbarCollapsedAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 
 import './index.css';
@@ -20,9 +20,9 @@ type Props = {
 };
 
 const RevenoteLayout = ({ children }: Props): JSX.Element => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useAtom(siderbarCollapsedAtom);
   const [theme, setTheme] = useState<SiderTheme>('light');
-  const [folderList, setFolderList] = useAtom(folderListAtom);
+  const [, setFolderList] = useAtom(folderListAtom);
 
   const switchCollapse = useCallback(() => {
     setCollapsed(!collapsed);
@@ -36,7 +36,7 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
   }, []);
 
   return (
-    <div className="revenote-layout">
+    <div className={`revenote-layout ${collapsed ? 'sidebar-collapsed' : null}`}>
       <Layout>
         <Sider
           breakpoint="lg"
@@ -71,7 +71,7 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
             {collapsed && (
               <ArrowRightOnRectangleIcon
                 onClick={switchCollapse}
-                className="h-5 w-5 text-current cursor-pointer mt-3 ml-5 absolute z-50"
+                className="h-5 w-5 text-current cursor-pointer mt-3 ml-3 absolute z-50"
               />
             )}
             {children}

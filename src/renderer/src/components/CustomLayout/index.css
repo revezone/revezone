@@ -19,7 +19,7 @@
     .tool-buttons {
       display: flex;
       justify-content: space-between;
-      margin: 16px 10px 20px 0;
+      margin: 1rem 1rem 1rem 0;
       -webkit-app-region: no-drag;
     }
   }

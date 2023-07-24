@@ -4,6 +4,8 @@ import { Revedraw } from 'revemate';
 import { canvasIndexeddbStorage } from '@renderer/store/canvasIndexeddb';
 import { useDebounceFn } from 'ahooks';
 
+import './index.css';
+
 interface Props {
   file: RevenoteFile;
 }
@@ -15,8 +17,6 @@ export default function Handraw({ file }: Props) {
 
   const getDataSource = useCallback(async (id) => {
     const data = await canvasIndexeddbStorage.getCanvas(id);
-
-    console.log('getDataSource', data);
 
     setDataSource(data || DEFAULT_DATA_SOURCE);
   }, []);

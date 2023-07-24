@@ -32,7 +32,6 @@ export default function CustomMenu({ collapsed }: Props) {
   const [currentFileId, setCurrentFileId] = useAtom(currentFileIdAtom);
   const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
   const [pageTitle] = useBlocksuitePageTitle();
-  const [currentFolderId, setCurrentFolderId] = useState<string>();
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
 
   const getFileTree = useCallback(async () => {
@@ -48,10 +47,6 @@ export default function CustomMenu({ collapsed }: Props) {
   useEffect(() => {
     setSelectedKeysToLocal(selectedKeys);
   }, [selectedKeys]);
-
-  useEffect(() => {
-    setCurrentFolderId(openKeys?.[0]);
-  }, [openKeys?.[0]]);
 
   useEffect(() => {
     const files = fileTree.reduce(
@@ -71,20 +66,15 @@ export default function CustomMenu({ collapsed }: Props) {
     }
   }, [currentFileId]);
 
-  const updateFileNameInMenu = useCallback(async () => {
-    if (!currentFile || pageTitle === undefined || currentFile.name === pageTitle) {
-      return;
-    }
-    await menuIndexeddbStorage.updateFileName(currentFile, pageTitle);
+  const refreshMenu = useCallback(async () => {
     await getFileTree();
-    setSelectedKeys([getFileMenuKey(currentFile.id, pageTitle)]);
-  }, [pageTitle, currentFile, currentFolderId]);
+  }, [pageTitle]);
 
   useDebounceEffect(
     () => {
-      updateFileNameInMenu();
+      refreshMenu();
     },
-    [pageTitle, currentFile, currentFolderId],
+    [pageTitle],
     {
       wait: 200
     }
@@ -121,8 +111,7 @@ export default function CustomMenu({ collapsed }: Props) {
   const deleteFolder = useCallback(
     async (folderId: string) => {
       await menuIndexeddbStorage.deleteFolder(folderId);
-      const tree = await getFileTree();
-      setCurrentFolderId(tree?.[0]?.id);
+      await getFileTree();
     },
     [menuIndexeddbStorage]
   );

@@ -3,6 +3,7 @@ import { currentFileIdAtom, workspaceLoadedAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { useCallback, useEffect, useState } from 'react';
 import { useDebounceEffect } from 'ahooks';
+import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 
 export default function useBlocksuitePageTitle() {
   const [currentFileId] = useAtom(currentFileIdAtom);
@@ -20,13 +21,15 @@ export default function useBlocksuitePageTitle() {
 
     console.log('--- pageTitleUpdateListener ---', page, prevTitle);
 
-    page?.slots.historyUpdated.on(() => {
+    page?.slots.historyUpdated.on(async () => {
       const currentTitle = page.meta.title;
 
       console.log('--- historyupdated ---', currentTitle);
 
       if (currentTitle !== prevTitle) {
         setPageTitle(currentTitle);
+        const file = await menuIndexeddbStorage.getFile(currentFileId);
+        file && menuIndexeddbStorage.updateFileName(file, currentTitle);
       }
     });
   }, [currentFileId, workspaceLoaded]);
