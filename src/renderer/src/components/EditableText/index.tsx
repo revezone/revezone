@@ -7,7 +7,7 @@ import { RevenoteFileType } from '@renderer/types/file';
 interface Props {
   text: string;
   defaultText?: string;
-  type: RevenoteFileType;
+  type?: RevenoteFileType;
   onChange: (text: string) => void;
 }
 

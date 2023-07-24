@@ -21,3 +21,10 @@ export interface RevenoteFile {
   gmtCreate: string;
   gmtModified: string;
 }
+
+export interface RevenoteFolder {
+  id: string;
+  name: string;
+  gmtCreate: string;
+  gmtModified: string;
+}

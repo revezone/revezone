@@ -7,6 +7,9 @@ import {
 } from '@heroicons/react/24/outline';
 import { SiderTheme } from 'antd/es/layout/Sider';
 import CustomMenu from '../CustomMenu';
+import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
+import { folderListAtom } from '@renderer/store/jotai';
+import { useAtom } from 'jotai';
 
 import './index.css';
 
@@ -19,11 +22,18 @@ type Props = {
 const RevenoteLayout = ({ children }: Props): JSX.Element => {
   const [collapsed, setCollapsed] = useState(false);
   const [theme, setTheme] = useState<SiderTheme>('light');
+  const [folderList, setFolderList] = useAtom(folderListAtom);
 
   const switchCollapse = useCallback(() => {
     setCollapsed(!collapsed);
     window.api?.toggleTrafficLight(collapsed);
   }, [collapsed]);
+
+  const addFolder = useCallback(async () => {
+    await menuIndexeddbStorage.addFolder();
+    const folders = await menuIndexeddbStorage.getFolders();
+    setFolderList(folders || []);
+  }, []);
 
   return (
     <div className="revenote-layout">
@@ -44,7 +54,10 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
         >
           <div className="revenote-topleft-toolbar">
             <span className="tool-buttons">
-              <FolderPlusIcon className="h-5 w-5 text-current cursor-pointer mr-5" />
+              <FolderPlusIcon
+                className="h-5 w-5 text-current cursor-pointer mr-5"
+                onClick={addFolder}
+              />
               <ArrowLeftOnRectangleIcon
                 className="h-5 w-5 text-current cursor-pointer"
                 onClick={switchCollapse}

@@ -3,7 +3,7 @@ import { Menu, Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 import { FolderIcon, DocumentPlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import type { RevenoteFolder, RevenoteFile, RevenoteFileType } from '@renderer/types/file';
+import type { RevenoteFile, RevenoteFileType, RevenoteFolder } from '@renderer/types/file';
 import {
   getOpenKeysFromLocal,
   getSelectedKeysFromLocal,
@@ -12,7 +12,7 @@ import {
   setSelectedKeysToLocal
 } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
-import { currentFileIdAtom, currentFileAtom } from '@renderer/store/jotai';
+import { currentFileIdAtom, currentFileAtom, folderListAtom } from '@renderer/store/jotai';
 import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
@@ -27,7 +27,7 @@ interface Props {
 }
 
 export default function CustomMenu({ collapsed }: Props) {
-  const [folderList, setFolderList] = useState<RevenoteFolder[] | undefined>([]);
+  const [folderList, setFolderList] = useAtom(folderListAtom);
   const [filesInFolder, setFilesInFolder] = useState<RevenoteFile[]>();
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>(getSelectedKeysFromLocal());
@@ -42,7 +42,7 @@ export default function CustomMenu({ collapsed }: Props) {
     )?.[0];
 
     if (!currentFolderId) {
-      currentFolderId = folders?.[0].id;
+      currentFolderId = folders?.[0]?.id;
     }
 
     return currentFolderId;
@@ -50,7 +50,7 @@ export default function CustomMenu({ collapsed }: Props) {
 
   const getFolders = useCallback(async () => {
     const folders = await menuIndexeddbStorage.getFolders();
-    setFolderList(folders);
+    setFolderList(folders || []);
 
     const currentFolderId = getCurrentFolderId(folders);
 
@@ -142,6 +142,16 @@ export default function CustomMenu({ collapsed }: Props) {
     [menuIndexeddbStorage]
   );
 
+  const deleteFolder = useCallback(
+    async (folderId: string) => {
+      await menuIndexeddbStorage.deleteFolder(folderId);
+      const folders = await menuIndexeddbStorage.getFolders();
+      setCurrentFolderId(folders?.[0]?.id);
+      setFolderList(folders);
+    },
+    [menuIndexeddbStorage]
+  );
+
   const onOpenChange = useCallback((keys) => {
     setOpenKeys(keys);
     setOpenKeysToLocal(keys);
@@ -152,8 +162,8 @@ export default function CustomMenu({ collapsed }: Props) {
     setCurrentFileId(fileId);
   }, []);
 
-  const folderMenu: MenuProps['items'] = useMemo(
-    () => [
+  const getFolderMenu = useCallback(
+    (folder: RevenoteFolder) => [
       {
         key: 'rename',
         label: 'rename',
@@ -164,8 +174,9 @@ export default function CustomMenu({ collapsed }: Props) {
       {
         key: 'delete',
         label: 'delete',
-        onClick: () => {
-          console.log('delete');
+        onClick: ({ domEvent }) => {
+          domEvent.stopPropagation();
+          deleteFolder(folder.id);
         }
       }
     ],
@@ -230,6 +241,10 @@ export default function CustomMenu({ collapsed }: Props) {
     menuIndexeddbStorage.updateFileName(file, text);
   }, []);
 
+  const onFolderNameChange = useCallback((folder: RevenoteFolder, text: string) => {
+    menuIndexeddbStorage.updateFolderName(folder, text);
+  }, []);
+
   return (
     <div className="revenote-menu-container">
       <Menu
@@ -244,9 +259,13 @@ export default function CustomMenu({ collapsed }: Props) {
           key: folder.id,
           icon: <FolderIcon className="h-4 w-4" />,
           label: (
-            <Dropdown menu={{ items: folderMenu }} trigger={['contextMenu']}>
+            <Dropdown menu={{ items: getFolderMenu(folder) }} trigger={['contextMenu']}>
               <div className="flex items-center justify-between">
-                <span>{folder.name}</span>
+                <EditableText
+                  text={folder.name}
+                  defaultText="Untitled"
+                  onChange={(text) => onFolderNameChange(folder, text)}
+                />
                 <Dropdown menu={{ items: getAddFileMenu(folder) }}>
                   <DocumentPlusIcon
                     className="h-4 w-4 text-current cursor-pointer mr-4 menu-icon"

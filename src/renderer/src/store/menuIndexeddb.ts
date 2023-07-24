@@ -132,16 +132,32 @@ class MenuIndexeddbStorage {
     return fileStore;
   }
 
+  async addFolder() {
+    await this.initDB();
+    const id = uuidv4();
+    await this.db?.add(
+      INDEXEDDB_FOLDER_KEY,
+      {
+        id,
+        name: 'Untitled',
+        gmtCreate: moment().toLocaleString(),
+        gmtModified: moment().toLocaleString()
+      },
+      id
+    );
+  }
+
   async getFolder(folderId: string): Promise<RevenoteFolder | undefined> {
     await this.initDB();
     // @ts-ignore
-    const value = await this.db?.getFromIndex(INDEXEDDB_FOLDER_KEY, 'id', folderId);
+    const value = await this.db?.get(INDEXEDDB_FOLDER_KEY, folderId);
     return value;
   }
 
-  async getFolders(): Promise<RevenoteFolder[] | undefined> {
+  async getFolders(): Promise<RevenoteFolder[]> {
     await this.initDB();
-    return await this.db?.getAll('folder');
+    const folders = await this.db?.getAll('folder');
+    return folders || [];
   }
 
   async getFile(fileId: string): Promise<RevenoteFile | undefined> {
@@ -225,6 +241,35 @@ class MenuIndexeddbStorage {
     console.log('updateFileName', name, file);
 
     file && this.db?.put(INDEXEDDB_FILE_KEY, { ...file, name }, file.id);
+  }
+
+  async updateFolderName(folder: RevenoteFolder, name: string) {
+    await this.initDB();
+
+    if (name === folder?.name) return;
+
+    folder && this.db?.put(INDEXEDDB_FOLDER_KEY, { ...folder, name }, folder.id);
+  }
+
+  async deleteFolder(folderId: string) {
+    await this.initDB();
+
+    if (!folderId) return;
+
+    await this.db?.delete(INDEXEDDB_FOLDER_KEY, folderId);
+
+    const folderFileMappingKeys = await this.db?.getAllKeysFromIndex(
+      INDEXEDDB_FOLD_FILE_MAPPING_KEY,
+      // @ts-ignore
+      'folderId',
+      folderId
+    );
+
+    const deleteFolderFileMappingPromises = folderFileMappingKeys?.map(async (key) =>
+      this.db?.delete(INDEXEDDB_FOLD_FILE_MAPPING_KEY, key)
+    );
+
+    deleteFolderFileMappingPromises && (await Promise.all(deleteFolderFileMappingPromises));
   }
 }
 
