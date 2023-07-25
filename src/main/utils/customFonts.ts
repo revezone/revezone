@@ -9,7 +9,7 @@ import { EVENTS } from '../../preload/events';
 const FILENAME_REGEX = /\/(([^/]+)\.[a-zA-Z0-9]+)/;
 const REVENOTE_APP_FILES_DIR = '.revenote/custom-fonts';
 
-export const loadCustomFonts = async (mainWindow) => {
+export const loadCustomFont = async (mainWindow) => {
   const { filePaths } = await dialog.showOpenDialog(mainWindow, {
     properties: ['openFile', 'multiSelections'],
     filters: [{ name: 'Fonts', extensions: ['ttf', 'woff2'] }]
@@ -29,12 +29,6 @@ export const loadCustomFonts = async (mainWindow) => {
       const fontPath = join(appDir, `${filenameWithSuffix}`);
       await copyFile(filePath, fontPath);
 
-      const fontData = fs.readFileSync(fontPath);
-      const fontUrl = `url(data:font/truetype;base64,${fontData.toString('base64')})`;
-      mainWindow.webContents.insertCSS(
-        `@font-face { font-family: '${fontName}'; src: ${fontUrl}; }`
-      );
-
       mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, fontName, fontPath);
 
       notfiy(`Font ${fontName} added!`);
@@ -42,4 +36,11 @@ export const loadCustomFonts = async (mainWindow) => {
       console.error('copy file error:', err);
     }
   });
+};
+
+export const registryCustomFont = (mainWindow, fontName, fontPath) => {
+  const fontData = fs.readFileSync(fontPath);
+  const fontUrl = `url(data:font/truetype;base64,${fontData.toString('base64')})`;
+  mainWindow.webContents.insertCSS(`@font-face { font-family: '${fontName}'; src: ${fontUrl}; }`);
+  notfiy(`Font ${fontName} registered!`);
 };

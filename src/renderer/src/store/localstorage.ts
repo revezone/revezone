@@ -1,6 +1,7 @@
 const LOCALSTORAGE_MENU_OPEN_KEYS = 'menu_open_keys';
 const LOCALSTORAGE_MENU_ACTIVE_KEYS = 'menu_active_keys';
 const LOCALSTORAGE_CURRENT_FILE_ID = 'current_file_id';
+const LOCALSTORAGE_CUSTOM_FONTS = 'custom_fonts';
 
 export const getOpenKeysFromLocal = () => {
   const localStr = localStorage.getItem(LOCALSTORAGE_MENU_OPEN_KEYS);
@@ -28,4 +29,12 @@ export const setCurrentFileIdToLocal = (fileId: string) => {
 
 export const getCurrentFileIdFromLocal = () => {
   return localStorage.getItem(LOCALSTORAGE_CURRENT_FILE_ID);
+};
+
+export const addCustomFontToLocal = (fontFamilyName: string) => {
+  const customFonts = localStorage.getItem(LOCALSTORAGE_CUSTOM_FONTS);
+  const newCustomFonts = customFonts
+    ? customFonts.split(',').concat(fontFamilyName).join(',')
+    : fontFamilyName;
+  localStorage.setItem(LOCALSTORAGE_CUSTOM_FONTS, newCustomFonts);
 };

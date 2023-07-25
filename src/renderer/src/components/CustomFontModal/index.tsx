@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useState } from 'react';
 import { Button, Form, Input, Modal, message } from 'antd';
+import { addCustomFontToLocal } from '@renderer/store/localstorage';
 
 interface Props {
   open: boolean;
@@ -10,6 +11,7 @@ const CustomFontModal = (props: Props) => {
   const { open, closeModal } = props;
 
   const [fontName, setFontName] = useState();
+  const [fontPath, setFontPath] = useState();
   const [fontFamilyName, setFontFamilyName] = useState<string>();
 
   const loadCustomFonts = useCallback(() => {
@@ -20,12 +22,13 @@ const CustomFontModal = (props: Props) => {
     window.api.onLoadCustomFontSuccess(async (event, _fontName, _fontPath) => {
       console.log('onLoadCustomFontSuccess', event, _fontName, _fontPath);
       setFontName(_fontName);
+      setFontPath(_fontPath);
       setFontFamilyName(_fontName);
     });
   }, []);
 
   const onOk = useCallback(() => {
-    if (!fontName) {
+    if (!fontPath) {
       message.error('Please load font file');
       return;
     }
@@ -35,8 +38,12 @@ const CustomFontModal = (props: Props) => {
       return;
     }
 
+    window.api.registryCustomFont(fontFamilyName, fontPath);
+
+    addCustomFontToLocal(fontFamilyName);
+
     closeModal();
-  }, [fontName, fontFamilyName]);
+  }, [fontPath, fontFamilyName]);
 
   return (
     <Modal title="Custom Fonts" open={open} onOk={onOk} onCancel={() => closeModal()}>

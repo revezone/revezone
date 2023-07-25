@@ -2,7 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { isMacOS, isWindows } from './utils';
-import { loadCustomFonts } from './utils/customFonts';
+import { loadCustomFont, registryCustomFont } from './utils/customFonts';
 import { EVENTS } from '../preload/events';
 
 function createWindow(): void {
@@ -43,7 +43,11 @@ function createWindow(): void {
   });
 
   ipcMain.on(EVENTS.loadCustomFont, async () => {
-    loadCustomFonts(mainWindow);
+    loadCustomFont(mainWindow);
+  });
+
+  ipcMain.on(EVENTS.registryCustomFont, async (event, fontName, fontPath) => {
+    registryCustomFont(mainWindow, fontName, fontPath);
   });
 }
 
