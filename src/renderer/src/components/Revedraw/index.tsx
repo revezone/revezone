@@ -17,26 +17,38 @@ const DEFAULT_DATA_SOURCE = '{}';
 export default function Handraw({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const modalRef = useRef();
 
   const getDataSource = useCallback(async (id) => {
+    setDataSource(undefined);
+
     const data = await canvasIndexeddbStorage.getCanvas(id);
+
+    console.log('getDataSource', data);
 
     setDataSource(data || DEFAULT_DATA_SOURCE);
   }, []);
 
-  const onChangeFn = useCallback(async (data) => {
-    console.log('--- onchange ---', data);
+  const onChangeFn = useCallback(
+    async (data) => {
+      console.log('--- onchange ---', data);
 
-    const str = JSON.stringify(data);
+      const str = JSON.stringify(data);
 
-    await canvasIndexeddbStorage.addOrUpdateCanvas(file.id, str);
-  }, []);
+      await canvasIndexeddbStorage.addOrUpdateCanvas(file.id, str);
+    },
+    [file.id]
+  );
 
-  const { run: onChangeDebounceFn } = useDebounceFn(onChangeFn, { wait: 200 });
+  const { run: onChangeDebounceFn, cancel: cancelDebounceFn } = useDebounceFn(onChangeFn, {
+    wait: 200
+  });
 
   useEffect(() => {
     getDataSource(file.id);
+    return () => {
+      console.log('--- cancel ---', cancelDebounceFn);
+      cancelDebounceFn();
+    };
   }, [file.id]);
 
   return dataSource ? (
