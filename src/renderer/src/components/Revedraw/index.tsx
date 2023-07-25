@@ -3,7 +3,8 @@ import { RevenoteFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
 import { canvasIndexeddbStorage } from '@renderer/store/canvasIndexeddb';
 import { useDebounceFn } from 'ahooks';
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
+import CustomFont from '../CustomFont';
 
 import './index.css';
 
@@ -15,6 +16,7 @@ const DEFAULT_DATA_SOURCE = '{}';
 
 export default function Handraw({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const getDataSource = useCallback(async (id) => {
     const data = await canvasIndexeddbStorage.getCanvas(id);
@@ -32,24 +34,34 @@ export default function Handraw({ file }: Props) {
 
   const { run: onChangeDebounceFn } = useDebounceFn(onChangeFn, { wait: 200 });
 
-  const loadCustomFonts = useCallback(() => {
-    window.api.loadCustomFonts();
-  }, []);
-
   useEffect(() => {
     getDataSource(file.id);
   }, [file.id]);
 
   return dataSource ? (
-    <Revedraw
-      dataSource={dataSource}
-      canvasName={file.name}
-      onChange={onChangeDebounceFn}
-      customMenuItems={[
-        <Button key="load-custom-fonts" onClick={loadCustomFonts}>
-          open file
-        </Button>
-      ]}
-    />
+    <>
+      <Revedraw
+        dataSource={dataSource}
+        canvasName={file.name}
+        onChange={onChangeDebounceFn}
+        customMenuItems={[
+          <Button
+            key="load-custom-fonts"
+            title="Add Custom Fonts"
+            onClick={() => setIsModalOpen(true)}
+          >
+            custom font size
+          </Button>
+        ]}
+      />
+      <Modal
+        title="Custom Fonts"
+        open={isModalOpen}
+        onOk={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
+      >
+        <CustomFont />
+      </Modal>
+    </>
   ) : null;
 }

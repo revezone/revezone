@@ -3,6 +3,7 @@ import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { isMacOS, isWindows } from './utils';
 import { loadCustomFonts } from './utils/customFonts';
+import { EVENTS } from '../preload/events';
 
 function createWindow(): void {
   // Create the browser window.
@@ -37,11 +38,11 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
   }
 
-  ipcMain.on('toggle-traffic-light', (event, isShow) => {
+  ipcMain.on(EVENTS.toggleTrafficLight, (event, isShow) => {
     mainWindow.setWindowButtonVisibility(isShow);
   });
 
-  ipcMain.on('load-custom-fonts', async () => {
+  ipcMain.on(EVENTS.loadCustomFont, async () => {
     loadCustomFonts(mainWindow);
   });
 }

@@ -4,6 +4,7 @@ import os from 'os';
 import fs from 'fs-extra';
 import { join } from 'path';
 import { notfiy } from './notification';
+import { EVENTS } from '../../preload/events';
 
 const FILENAME_REGEX = /\/(([^/]+)\.[a-zA-Z0-9]+)/;
 const REVENOTE_APP_FILES_DIR = '.revenote/custom-fonts';
@@ -34,7 +35,7 @@ export const loadCustomFonts = async (mainWindow) => {
         `@font-face { font-family: '${fontName}'; src: ${fontUrl}; }`
       );
 
-      //   mainWindow.webContents.send('registry-custom-fontface', fontName, fontPath);
+      mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, fontName, fontPath);
 
       notfiy(`Font ${fontName} added!`);
     } catch (err) {

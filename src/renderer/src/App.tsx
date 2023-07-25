@@ -24,19 +24,6 @@ function App(): JSX.Element {
     }
   }, []);
 
-  useEffect(() => {
-    window.api.onRegistryCustomFont(async (event, fontName, fontPath) => {
-      console.log('onRegistryCustomFont', event, fontName, fontPath);
-      const fontFace = new FontFace(fontName, `${fontPath}`);
-
-      console.log('--- fontFace ---', fontFace);
-
-      await fontFace.load();
-
-      document.fonts.add(fontFace);
-    });
-  }, []);
-
   return (
     <div className="revenote-app-container">
       <Layout>
