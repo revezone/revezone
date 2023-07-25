@@ -1,10 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { isMacOS, isWindows } from './utils';
-import { copyFile } from 'node:fs/promises';
-
-const FILENAME_REGEX = /\/([^/]+\.[a-zA-Z0-9]+)/;
+import { loadCustomFonts } from './utils/customFonts';
 
 function createWindow(): void {
   // Create the browser window.
@@ -43,22 +41,8 @@ function createWindow(): void {
     mainWindow.setWindowButtonVisibility(isShow);
   });
 
-  ipcMain.on('open-file', async (event, data) => {
-    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
-      properties: ['openFile', 'multiSelections'],
-      filters: [{ name: 'Fonts', extensions: ['ttf', 'woff2'] }]
-    });
-
-    console.log('--- openfile ---', canceled, filePaths);
-
-    filePaths.forEach(async (filePath) => {
-      try {
-        const filename = filePath.match(FILENAME_REGEX)?.[1];
-        await copyFile(filePath, join(__dirname, `../../resources/${filename}`));
-      } catch (err) {
-        console.error('copy file error:', err);
-      }
-    });
+  ipcMain.on('load-custom-fonts', async () => {
+    loadCustomFonts(mainWindow);
   });
 }
 

@@ -46,7 +46,7 @@ export default function Handraw({ file }: Props) {
       canvasName={file.name}
       onChange={onChangeDebounceFn}
       customMenuItems={[
-        <Button key="open-file" onClick={openFile}>
+        <Button key="load-custom-fonts" onClick={openFile}>
           open file
         </Button>
       ]}
