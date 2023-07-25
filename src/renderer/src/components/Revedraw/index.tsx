@@ -32,8 +32,8 @@ export default function Handraw({ file }: Props) {
 
   const { run: onChangeDebounceFn } = useDebounceFn(onChangeFn, { wait: 200 });
 
-  const openFile = useCallback(() => {
-    window.api.openFile(null);
+  const loadCustomFonts = useCallback(() => {
+    window.api.loadCustomFonts();
   }, []);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function Handraw({ file }: Props) {
       canvasName={file.name}
       onChange={onChangeDebounceFn}
       customMenuItems={[
-        <Button key="load-custom-fonts" onClick={openFile}>
+        <Button key="load-custom-fonts" onClick={loadCustomFonts}>
           open file
         </Button>
       ]}

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import Layout from './components/CustomLayout';
 import MarkdownEditor from './components/MarkdownEditor';
 import { useAtom } from 'jotai';
@@ -22,6 +22,19 @@ function App(): JSX.Element {
       default:
         return null;
     }
+  }, []);
+
+  useEffect(() => {
+    window.api.onRegistryCustomFont(async (event, fontName, fontPath) => {
+      console.log('onRegistryCustomFont', event, fontName, fontPath);
+      const fontFace = new FontFace(fontName, `${fontPath}`);
+
+      console.log('--- fontFace ---', fontFace);
+
+      await fontFace.load();
+
+      document.fonts.add(fontFace);
+    });
   }, []);
 
   return (

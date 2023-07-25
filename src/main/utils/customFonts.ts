@@ -5,7 +5,7 @@ import fs from 'fs-extra';
 import { join } from 'path';
 import { notfiy } from './notification';
 
-const FILENAME_REGEX = /\/([^/]+\.[a-zA-Z0-9]+)/;
+const FILENAME_REGEX = /\/(([^/]+)\.[a-zA-Z0-9]+)/;
 const REVENOTE_APP_FILES_DIR = '.revenote/custom-fonts';
 
 export const loadCustomFonts = async (mainWindow) => {
@@ -22,11 +22,21 @@ export const loadCustomFonts = async (mainWindow) => {
 
   filePaths.forEach(async (filePath) => {
     try {
-      const filename = filePath.match(FILENAME_REGEX)?.[1];
-      console.log('copyfile', join(appDir, `${filename}`));
-      await copyFile(filePath, join(appDir, `${filename}`));
+      const matches = filePath.match(FILENAME_REGEX);
+      const filenameWithSuffix = matches?.[1];
+      const fontName = matches?.[2];
+      const fontPath = join(appDir, `${filenameWithSuffix}`);
+      await copyFile(filePath, fontPath);
 
-      notfiy('Custom fonts added success!');
+      const fontData = fs.readFileSync(fontPath);
+      const fontUrl = `url(data:font/truetype;base64,${fontData.toString('base64')})`;
+      mainWindow.webContents.insertCSS(
+        `@font-face { font-family: '${fontName}'; src: ${fontUrl}; }`
+      );
+
+      //   mainWindow.webContents.send('registry-custom-fontface', fontName, fontPath);
+
+      notfiy(`Font ${fontName} added!`);
     } catch (err) {
       console.error('copy file error:', err);
     }
