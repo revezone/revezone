@@ -1,8 +1,9 @@
-import { dialog, Notification } from 'electron';
+import { dialog } from 'electron';
 import { copyFile } from 'node:fs/promises';
 import os from 'os';
 import fs from 'fs-extra';
 import { join } from 'path';
+import { notfiy } from './notification';
 
 const FILENAME_REGEX = /\/([^/]+\.[a-zA-Z0-9]+)/;
 const REVENOTE_APP_FILES_DIR = '.revenote/custom-fonts';
@@ -25,7 +26,7 @@ export const loadCustomFonts = async (mainWindow) => {
       console.log('copyfile', join(appDir, `${filename}`));
       await copyFile(filePath, join(appDir, `${filename}`));
 
-      new Notification({ title: 'custom fonts loaded success' }).show();
+      notfiy('Custom fonts added success!');
     } catch (err) {
       console.error('copy file error:', err);
     }
