@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { RevenoteFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
 import { canvasIndexeddbStorage } from '@renderer/store/canvasIndexeddb';
 import { useDebounceFn } from 'ahooks';
 import { Button, Modal } from 'antd';
-import CustomFont from '../CustomFont';
+import CustomFontModal from '../CustomFontModal';
 
 import './index.css';
 
@@ -17,6 +17,7 @@ const DEFAULT_DATA_SOURCE = '{}';
 export default function Handraw({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const modalRef = useRef();
 
   const getDataSource = useCallback(async (id) => {
     const data = await canvasIndexeddbStorage.getCanvas(id);
@@ -54,14 +55,7 @@ export default function Handraw({ file }: Props) {
           </Button>
         ]}
       />
-      <Modal
-        title="Custom Fonts"
-        open={isModalOpen}
-        onOk={() => setIsModalOpen(false)}
-        onCancel={() => setIsModalOpen(false)}
-      >
-        <CustomFont />
-      </Modal>
+      <CustomFontModal open={isModalOpen} closeModal={() => setIsModalOpen(false)} />
     </>
   ) : null;
 }
