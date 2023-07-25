@@ -66,8 +66,8 @@ dependencies:
     specifier: ^0.5.43
     version: 0.5.43
   revemate:
-    specifier: 0.0.1-beta.1
-    version: 0.0.1-beta.1(react-dom@18.2.0)(react@18.2.0)
+    specifier: 0.0.1-beta.5
+    version: 0.0.1-beta.5(react-dom@18.2.0)(react@18.2.0)
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -919,8 +919,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@handraw/excalidraw@1.0.0-alpha.5(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-sgmdVDqyMSdpsNfTPbJ7LlfZ/8YzeQvKaeRq1Y/Mb2rS/Ry50bkSMvzNB0W1Id2zQDy7bppeNXb1B6tK+r6Ecw==}
+  /@handraw/excalidraw@1.0.0-alpha.9(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-bfvOJ0RonsML/WleSPyfUuxUVkh3KSl4IvT4lbh+5lU61N4d870hO9NjSyd+NX8jsYwyUXAGhS8H5KG39aBIDQ==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -4793,13 +4793,13 @@ packages:
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
     dev: true
 
-  /revemate@0.0.1-beta.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-9mEtQBuenO36+cJIrV3kblqrfGVe/mALTWo1jLqd7ZtDGNom76xrpmKR8tYPij6n+rmjnj6nqpMygHcgIoQMCQ==}
+  /revemate@0.0.1-beta.5(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-kxLf7ZlU6s/6PE8fvVHSUlRA5s2hqh/Qz2/Bv0Uy5I6sTWkb6M+rGLAGtGpBEKjBbyCddHvc5DQEfbBEXouBTw==}
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
     dependencies:
-      '@handraw/excalidraw': 1.0.0-alpha.5(react-dom@18.2.0)(react@18.2.0)
+      '@handraw/excalidraw': 1.0.0-alpha.9(react-dom@18.2.0)(react@18.2.0)
       clsx: 1.2.1
       lodash: 4.17.21
       open-color: 1.9.1

@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from 'react';
 import { Button, Form, Input, Modal, message } from 'antd';
-import { addCustomFontToLocal } from '@renderer/store/localstorage';
+import { addCustomFontToLocal, addCustomFontPathToLocal } from '@renderer/store/localstorage';
 
 interface Props {
   open: boolean;
@@ -38,9 +38,10 @@ const CustomFontModal = (props: Props) => {
       return;
     }
 
-    window.api.registryCustomFont(fontFamilyName, fontPath);
+    window.api.registerCustomFont(fontFamilyName, fontPath);
 
     addCustomFontToLocal(fontFamilyName);
+    addCustomFontPathToLocal(fontFamilyName, fontPath);
 
     closeModal();
   }, [fontPath, fontFamilyName]);

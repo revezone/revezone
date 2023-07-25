@@ -5,6 +5,7 @@ import { useAtom } from 'jotai';
 import { currentFileAtom } from './store/jotai';
 import WorkspaceLoaded from './components/WorkspaceLoaded';
 import Revedraw from './components/Revedraw';
+import { getCustomFontsPathsFromLocal } from './store/localstorage';
 
 import './App.css';
 
@@ -22,6 +23,11 @@ function App(): JSX.Element {
       default:
         return null;
     }
+  }, []);
+
+  useEffect(() => {
+    const fonts = getCustomFontsPathsFromLocal();
+    window.api.batchRegisterCustomFonts(fonts);
   }, []);
 
   return (

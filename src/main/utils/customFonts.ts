@@ -38,9 +38,16 @@ export const loadCustomFont = async (mainWindow) => {
   });
 };
 
-export const registryCustomFont = (mainWindow, fontName, fontPath) => {
+export const registerCustomFont = (mainWindow, fontName, fontPath) => {
   const fontData = fs.readFileSync(fontPath);
   const fontUrl = `url(data:font/truetype;base64,${fontData.toString('base64')})`;
   mainWindow.webContents.insertCSS(`@font-face { font-family: '${fontName}'; src: ${fontUrl}; }`);
-  notfiy(`Font ${fontName} registered!`);
+//   notfiy(`Font ${fontName} registered!`);
+};
+
+export const batchRegisterCustomFonts = (mainWindow, fonts: string) => {
+  const fontsObj = JSON.parse(fonts);
+  Object.entries(fontsObj).forEach(([key, value]) => {
+    registerCustomFont(mainWindow, key, value);
+  });
 };
