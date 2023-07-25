@@ -11,7 +11,7 @@ const REVENOTE_APP_FILES_DIR = '.revenote/custom-fonts';
 
 export const loadCustomFont = async (mainWindow) => {
   const { filePaths } = await dialog.showOpenDialog(mainWindow, {
-    properties: ['openFile', 'multiSelections'],
+    properties: ['openFile'],
     filters: [{ name: 'Fonts', extensions: ['ttf', 'woff2'] }]
   });
 
@@ -39,15 +39,24 @@ export const loadCustomFont = async (mainWindow) => {
 };
 
 export const registerCustomFont = (mainWindow, fontName, fontPath) => {
-  const fontData = fs.readFileSync(fontPath);
-  const fontUrl = `url(data:font/truetype;base64,${fontData.toString('base64')})`;
-  mainWindow.webContents.insertCSS(`@font-face { font-family: '${fontName}'; src: ${fontUrl}; }`);
-//   notfiy(`Font ${fontName} registered!`);
+  try {
+    const fontData = fs.readFileSync(fontPath);
+    const fontUrl = `url(data:font/truetype;base64,${fontData.toString('base64')})`;
+    mainWindow.webContents.insertCSS(`@font-face { font-family: '${fontName}'; src: ${fontUrl}; }`);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 export const batchRegisterCustomFonts = (mainWindow, fonts: string) => {
-  const fontsObj = JSON.parse(fonts);
-  Object.entries(fontsObj).forEach(([key, value]) => {
-    registerCustomFont(mainWindow, key, value);
-  });
+  try {
+    const fontsObj = fonts && JSON.parse(fonts);
+
+    fontsObj &&
+      Object.entries(fontsObj).forEach(([key, value]) => {
+        registerCustomFont(mainWindow, key, value);
+      });
+  } catch (err) {
+    console.error(err);
+  }
 };

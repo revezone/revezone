@@ -43,6 +43,10 @@ const CustomFontModal = (props: Props) => {
     addCustomFontToLocal(fontFamilyName);
     addCustomFontPathToLocal(fontFamilyName, fontPath);
 
+    setTimeout(() => {
+      window.location.reload();
+    }, 0);
+
     closeModal();
   }, [fontPath, fontFamilyName]);
 

@@ -27,7 +27,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     const fonts = getCustomFontsPathsFromLocal();
-    window.api.batchRegisterCustomFonts(fonts);
+    fonts && window.api.batchRegisterCustomFonts(fonts);
   }, []);
 
   return (
