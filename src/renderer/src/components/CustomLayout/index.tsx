@@ -1,17 +1,25 @@
 import { ReactNode, useCallback, useState } from 'react';
-import { Layout } from 'antd';
+import { Layout, message } from 'antd';
 import {
-  FolderPlusIcon,
   ArrowLeftOnRectangleIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  FolderPlusIcon
 } from '@heroicons/react/24/outline';
 import { SiderTheme } from 'antd/es/layout/Sider';
 import CustomMenu from '../CustomMenu';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import { fileTreeAtom, folderListAtom, siderbarCollapsedAtom } from '@renderer/store/jotai';
+import {
+  fileTreeAtom,
+  siderbarCollapsedAtom,
+  currentFolderIdAtom,
+  currentFileIdAtom
+} from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
+import { useTranslation } from 'react-i18next';
+import AddFile from '../AddFile/index';
 
 import './index.css';
+import { RevenoteFileType } from '@renderer/types/file';
 
 const { Content, Sider } = Layout;
 
@@ -22,7 +30,11 @@ type Props = {
 const RevenoteLayout = ({ children }: Props): JSX.Element => {
   const [collapsed, setCollapsed] = useAtom(siderbarCollapsedAtom);
   const [theme, setTheme] = useState<SiderTheme>('light');
-  const [, setFileTree] = useAtom(fileTreeAtom);
+  const [fileTree, setFileTree] = useAtom(fileTreeAtom);
+  const [currentFolderId] = useAtom(currentFolderIdAtom);
+  const [, setCurrentFileId] = useAtom(currentFileIdAtom);
+
+  const { t } = useTranslation();
 
   const switchCollapse = useCallback(() => {
     setCollapsed(!collapsed);
@@ -33,6 +45,19 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
     await menuIndexeddbStorage.addFolder();
     const tree = await menuIndexeddbStorage.getFileTree();
     setFileTree(tree);
+  }, []);
+
+  const addFile = useCallback(async (folderId: string | undefined, type: RevenoteFileType) => {
+    if (!folderId) {
+      message.info(t('message.createFolderFirst'));
+      return;
+    }
+
+    const file = await menuIndexeddbStorage.addFile(folderId, type);
+    const tree = await menuIndexeddbStorage.getFileTree();
+    setFileTree(tree);
+
+    setCurrentFileId(file.id);
   }, []);
 
   return (
@@ -54,6 +79,7 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
         >
           <div className="revenote-topleft-toolbar">
             <span className="tool-buttons">
+              <AddFile size="middle" folderId={currentFolderId} addFile={addFile}></AddFile>
               <FolderPlusIcon
                 className="h-5 w-5 text-current cursor-pointer mr-5"
                 onClick={addFolder}

@@ -8,5 +8,8 @@ export default {
     fontFile: '字体文件',
     fontName: '字体名称',
     load: '加载文件'
+  },
+  message: {
+    createFolderFirst: '请先创建文件夹'
   }
 };

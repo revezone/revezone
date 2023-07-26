@@ -8,5 +8,8 @@ export default {
     fontFile: 'Font File',
     fontName: 'Font Name',
     load: 'Load File'
+  },
+  message: {
+    createFolderFirst: 'Please create a folder first'
   }
 };

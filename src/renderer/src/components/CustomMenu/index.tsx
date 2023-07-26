@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Menu, Dropdown } from 'antd';
-import { FolderIcon, DocumentPlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { FolderIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import type { RevenoteFile, RevenoteFileType, RevenoteFolder } from '@renderer/types/file';
 import {
@@ -11,14 +11,21 @@ import {
   setSelectedKeysToLocal
 } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
-import { currentFileIdAtom, currentFileAtom, fileTreeAtom } from '@renderer/store/jotai';
+import {
+  currentFileIdAtom,
+  currentFileAtom,
+  fileTreeAtom,
+  currentFolderIdAtom
+} from '@renderer/store/jotai';
 import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 import { useDebounceEffect } from 'ahooks';
 import { FILE_ID_REGEX } from '@renderer/utils/constant';
+import AddFile from '../AddFile';
 
 import './index.css';
+import { getCurrentFolderId } from '@renderer/utils/menu';
 
 interface Props {
   collapsed: boolean;
@@ -30,9 +37,10 @@ export default function CustomMenu({ collapsed }: Props) {
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>(getSelectedKeysFromLocal());
   const [currentFileId, setCurrentFileId] = useAtom(currentFileIdAtom);
-  const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
+  const [, setCurrentFile] = useAtom(currentFileAtom);
   const [pageTitle] = useBlocksuitePageTitle();
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
+  const [currentFolderId, setCurrentFolderId] = useAtom(currentFolderIdAtom);
 
   const getFileTree = useCallback(async () => {
     const tree = await menuIndexeddbStorage.getFileTree();
@@ -65,6 +73,12 @@ export default function CustomMenu({ collapsed }: Props) {
       setCurrentFileIdToLocal(currentFileId);
     }
   }, [currentFileId]);
+
+  useEffect(() => {
+    if (!currentFileId) return;
+    const folderId = getCurrentFolderId(currentFileId, fileTree);
+    setCurrentFolderId(folderId);
+  }, [currentFileId, fileTree]);
 
   const refreshMenu = useCallback(async () => {
     await getFileTree();
@@ -148,28 +162,6 @@ export default function CustomMenu({ collapsed }: Props) {
     []
   );
 
-  const getAddFileMenu = useCallback(
-    (folder) => [
-      {
-        key: 'markdown',
-        label: 'Markdown',
-        onClick: ({ domEvent }) => {
-          domEvent.stopPropagation();
-          addFile(folder.id, 'markdown');
-        }
-      },
-      {
-        key: 'canvas',
-        label: 'Canvas',
-        onClick: ({ domEvent }) => {
-          domEvent.stopPropagation();
-          addFile(folder.id, 'canvas');
-        }
-      }
-    ],
-    []
-  );
-
   const getFileMenu = useCallback(
     (file, folder) => [
       {
@@ -231,12 +223,7 @@ export default function CustomMenu({ collapsed }: Props) {
                   defaultText="Untitled"
                   onChange={(text) => onFolderNameChange(folder, text)}
                 />
-                <Dropdown menu={{ items: getAddFileMenu(folder) }}>
-                  <DocumentPlusIcon
-                    className="h-4 w-4 text-current cursor-pointer mr-4 menu-icon"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                </Dropdown>
+                <AddFile size="small" folderId={currentFolderId} addFile={addFile} />
               </div>
             </Dropdown>
           ),

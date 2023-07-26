@@ -12,7 +12,7 @@ export const folderListAtom = atom<RevenoteFolder[]>([]);
 
 export const fileTreeAtom = atom<FileTree>([]);
 
-export const currentFolderAtom = atom<RevenoteFolder | undefined>(undefined);
+export const currentFolderIdAtom = atom<string | undefined>(undefined);
 
 export const siderbarCollapsedAtom = atom(false);
 
