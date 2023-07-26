@@ -8,9 +8,9 @@ import { EVENTS } from '../preload/events';
 
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  let mainWindow: BrowserWindow | null = new BrowserWindow({
     titleBarStyle: isMacOS() ? 'hiddenInset' : isWindows() ? 'hidden' : 'default',
-    width: 900,
+    width: 1000,
     height: 670,
     show: false,
     frame: false,
@@ -18,14 +18,19 @@ function createWindow(): void {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
-    },
-    icon: join(__dirname, '../../resources/icon.png')
+    }
   });
 
   registerAppMenu();
 
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show();
+    mainWindow?.show();
+  });
+
+  mainWindow.on('closed', () => {
+    mainWindow?.removeAllListeners();
+    mainWindow = null;
+    ipcMain.removeAllListeners();
   });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -42,7 +47,8 @@ function createWindow(): void {
   }
 
   ipcMain.on(EVENTS.toggleTrafficLight, (event, isShow) => {
-    mainWindow.setWindowButtonVisibility(isShow);
+    console.log('--- toggleTrafficLight ---', mainWindow);
+    mainWindow?.setWindowButtonVisibility(isShow);
   });
 
   ipcMain.on(EVENTS.loadCustomFont, async () => {
@@ -54,6 +60,7 @@ function createWindow(): void {
   });
 
   ipcMain.on(EVENTS.batchRegisterCustomFonts, async (event, fonts: string) => {
+    console.log('--- batchRegisterCustomFonts ---', mainWindow);
     batchRegisterCustomFonts(mainWindow, fonts);
   });
 }
@@ -75,6 +82,8 @@ app.whenReady().then(() => {
   createWindow();
 
   app.on('activate', function () {
+    console.log(`app activate: ${BrowserWindow.getAllWindows().length}`);
+
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
