@@ -1,10 +1,10 @@
 import { dialog } from 'electron';
 import { copyFile } from 'node:fs/promises';
 import os from 'os';
-import fs from 'fs-extra';
 import { join } from 'path';
 import { notfiy } from './notification';
 import { EVENTS } from '../../preload/events';
+import fs from 'node:fs';
 
 const FILENAME_REGEX = /\/(([^/]+)\.[a-zA-Z0-9]+)/;
 const REVENOTE_APP_FILES_DIR = '.revenote/custom-fonts';
@@ -17,7 +17,9 @@ export const loadCustomFont = async (mainWindow) => {
 
   const appDir = join(os.homedir(), REVENOTE_APP_FILES_DIR);
 
-  fs.ensureDirSync(appDir);
+  if (!fs.existsSync(appDir)) {
+    fs.mkdirSync(appDir, { recursive: true });
+  }
 
   console.log('--- openfile ---', filePaths);
 
