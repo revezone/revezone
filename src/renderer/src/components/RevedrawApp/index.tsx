@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { RevenoteFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
 import { canvasIndexeddbStorage } from '@renderer/store/canvasIndexeddb';
-import { useDebounceFn } from 'ahooks';
+import { useDebounceFn, useUpdate } from 'ahooks';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import CustomFontModal from '../CustomFontModal';
 
@@ -17,6 +17,8 @@ const DEFAULT_DATA_SOURCE = '{}';
 export default function RevedrawApp({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const forceUpdateFn = useUpdate();
 
   const getDataSource = useCallback(async (id) => {
     // reset data source for a new canvas file
@@ -67,7 +69,11 @@ export default function RevedrawApp({ file }: Props) {
           </button>
         ]}
       />
-      <CustomFontModal open={isModalOpen} closeModal={() => setIsModalOpen(false)} />
+      <CustomFontModal
+        open={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
+        forceUpdateRevedrawApp={forceUpdateFn}
+      />
     </>
   ) : null;
 }

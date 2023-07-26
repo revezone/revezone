@@ -5,10 +5,11 @@ import { addCustomFontToLocal, addCustomFontPathToLocal } from '@renderer/store/
 interface Props {
   open: boolean;
   closeModal: () => void;
+  forceUpdateRevedrawApp: () => void;
 }
 
 const CustomFontModal = (props: Props) => {
-  const { open, closeModal } = props;
+  const { open, closeModal, forceUpdateRevedrawApp } = props;
 
   const [fontName, setFontName] = useState();
   const [fontPath, setFontPath] = useState();
@@ -44,7 +45,7 @@ const CustomFontModal = (props: Props) => {
     addCustomFontPathToLocal(fontFamilyName, fontPath);
 
     setTimeout(() => {
-      window.location.reload();
+      forceUpdateRevedrawApp();
     }, 0);
 
     closeModal();
