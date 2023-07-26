@@ -5,7 +5,6 @@ import { isMacOS, isWindows } from './utils';
 import { loadCustomFont, registerCustomFont, batchRegisterCustomFonts } from './utils/customFonts';
 import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
-import { notfiy } from './utils/notification';
 
 function createWindow(): void {
   // Create the browser window.
@@ -43,7 +42,6 @@ function createWindow(): void {
   }
 
   ipcMain.on(EVENTS.toggleTrafficLight, (event, isShow) => {
-    notfiy(`toggleTrafficLight: ${isShow}`);
     mainWindow.setWindowButtonVisibility(isShow);
   });
 
