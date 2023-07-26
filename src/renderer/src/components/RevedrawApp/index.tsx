@@ -3,8 +3,11 @@ import { RevenoteFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
 import { canvasIndexeddbStorage } from '@renderer/store/canvasIndexeddb';
 import { useDebounceFn } from 'ahooks';
-import { PencilIcon } from '@heroicons/react/24/outline';
+import { PencilLine } from 'lucide-react';
 import CustomFontModal from '../CustomFontModal';
+import { langCodeAtom } from '@renderer/store/jotai';
+import { useAtom } from 'jotai';
+import { useTranslation } from 'react-i18next';
 
 import './index.css';
 
@@ -17,6 +20,9 @@ const DEFAULT_DATA_SOURCE = '{}';
 export default function RevedrawApp({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [langCode, setLangCode] = useAtom(langCodeAtom);
+
+  const { t, i18n } = useTranslation();
 
   const getDataSource = useCallback(async (id) => {
     // reset data source for a new canvas file
@@ -49,21 +55,27 @@ export default function RevedrawApp({ file }: Props) {
     };
   }, [file.id]);
 
+  useEffect(() => {
+    i18n.changeLanguage(langCode);
+    console.log('langCode', langCode);
+  }, [langCode]);
+
   return dataSource ? (
     <>
       <Revedraw
         dataSource={dataSource}
         canvasName={file.name}
         onChange={onChangeDebounceFn}
+        onLangCodeChange={(code) => setLangCode(code)}
         customMenuItems={[
           <button
             key="custom-font"
             className="dropdown-menu-item dropdown-menu-item-base"
-            title="Add Custom Font"
+            title={t('menu.loadCustomFont')}
             onClick={() => setIsModalOpen(true)}
           >
-            <PencilIcon className="revenote-app-custom-font-icon" />
-            custom font
+            <PencilLine className="revenote-app-custom-font-icon" />
+            {t('menu.customFont')}
           </button>
         ]}
       />

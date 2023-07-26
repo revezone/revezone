@@ -15,3 +15,5 @@ export const fileTreeAtom = atom<FileTree>([]);
 export const currentFolderAtom = atom<RevenoteFolder | undefined>(undefined);
 
 export const siderbarCollapsedAtom = atom(false);
+
+export const langCodeAtom = atom('en');

@@ -1,6 +1,9 @@
 import { useEffect, useCallback, useState } from 'react';
 import { Button, Form, Input, Modal, message } from 'antd';
 import { addCustomFontToLocal, addCustomFontPathToLocal } from '@renderer/store/localstorage';
+import { useTranslation } from 'react-i18next';
+
+import './index.css';
 
 interface Props {
   open: boolean;
@@ -9,6 +12,8 @@ interface Props {
 
 const CustomFontModal = (props: Props) => {
   const { open, closeModal } = props;
+
+  const { t } = useTranslation();
 
   const [fontName, setFontName] = useState();
   const [fontPath, setFontPath] = useState();
@@ -20,7 +25,6 @@ const CustomFontModal = (props: Props) => {
 
   useEffect(() => {
     window.api.onLoadCustomFontSuccess(async (event, _fontName, _fontPath) => {
-      console.log('onLoadCustomFontSuccess', event, _fontName, _fontPath);
       setFontName(_fontName);
       setFontPath(_fontPath);
       setFontFamilyName(_fontName);
@@ -51,15 +55,21 @@ const CustomFontModal = (props: Props) => {
   }, [fontPath, fontFamilyName]);
 
   return (
-    <Modal title="Custom Fonts" open={open} onOk={onOk} onCancel={() => closeModal()}>
-      <Form labelCol={{ span: 6 }}>
-        <Form.Item label="Load Font File">
+    <Modal
+      className="revenote-custom-font-modal"
+      title={t('customFontModal.title')}
+      open={open}
+      onOk={onOk}
+      onCancel={() => closeModal()}
+    >
+      <Form labelCol={{ span: 6 }} className="mt-6">
+        <Form.Item label={t('customFontModal.fontFile')}>
           <p>
-            <span>{fontName}</span>
-            <Button onClick={loadCustomFonts}>Load</Button>
+            <span className="mr-2">{fontName}</span>
+            <Button onClick={loadCustomFonts}>{t('customFontModal.load')}</Button>
           </p>
         </Form.Item>
-        <Form.Item label="Font Name">
+        <Form.Item label={t('customFontModal.fontName')}>
           <Input value={fontFamilyName} onChange={(e) => setFontFamilyName(e.target.value)} />
         </Form.Item>
       </Form>

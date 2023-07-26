@@ -2,18 +2,21 @@ import { useCallback, useEffect } from 'react';
 import Layout from './components/CustomLayout';
 import MarkdownEditor from './components/MarkdownEditor';
 import { useAtom } from 'jotai';
-import { currentFileAtom } from './store/jotai';
+import { currentFileAtom, langCodeAtom } from './store/jotai';
 import WorkspaceLoaded from './components/WorkspaceLoaded';
 import RevedrawApp from './components/RevedrawApp';
 import { getCustomFontsPathsFromLocal } from './store/localstorage';
 import zhCN from 'antd/locale/zh_CN';
+import zhTW from 'antd/locale/zh_TW';
 import enUS from 'antd/locale/en_US';
+import '@renderer/i18n';
 
 import './App.css';
 import { ConfigProvider } from 'antd';
 
 function App(): JSX.Element {
   const [currentFile] = useAtom(currentFileAtom);
+  const [langCode] = useAtom(langCodeAtom);
 
   const renderContent = useCallback((file) => {
     if (!file) return null;
@@ -28,13 +31,24 @@ function App(): JSX.Element {
     }
   }, []);
 
+  const getLocale = useCallback(() => {
+    switch (langCode) {
+      case 'zh-CN':
+        return zhCN;
+      case 'zh-TW':
+        return zhTW;
+      default:
+        return enUS;
+    }
+  }, [langCode]);
+
   useEffect(() => {
     const fonts = getCustomFontsPathsFromLocal();
     fonts && window.api.batchRegisterCustomFonts(fonts);
   }, []);
 
   return (
-    <ConfigProvider locale={enUS}>
+    <ConfigProvider locale={getLocale()}>
       <div className="revenote-app-container">
         <Layout>
           <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
