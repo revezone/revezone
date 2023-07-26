@@ -8,7 +8,7 @@ import {
 import { SiderTheme } from 'antd/es/layout/Sider';
 import CustomMenu from '../CustomMenu';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import { folderListAtom, siderbarCollapsedAtom } from '@renderer/store/jotai';
+import { fileTreeAtom, folderListAtom, siderbarCollapsedAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 
 import './index.css';
@@ -22,7 +22,7 @@ type Props = {
 const RevenoteLayout = ({ children }: Props): JSX.Element => {
   const [collapsed, setCollapsed] = useAtom(siderbarCollapsedAtom);
   const [theme, setTheme] = useState<SiderTheme>('light');
-  const [, setFolderList] = useAtom(folderListAtom);
+  const [, setFileTree] = useAtom(fileTreeAtom);
 
   const switchCollapse = useCallback(() => {
     setCollapsed(!collapsed);
@@ -31,8 +31,8 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
 
   const addFolder = useCallback(async () => {
     await menuIndexeddbStorage.addFolder();
-    const folders = await menuIndexeddbStorage.getFolders();
-    setFolderList(folders || []);
+    const tree = await menuIndexeddbStorage.getFileTree();
+    setFileTree(tree);
   }, []);
 
   return (

@@ -84,6 +84,7 @@ export default function CustomMenu({ collapsed }: Props) {
     async (folderId: string, type: RevenoteFileType) => {
       const file = await menuIndexeddbStorage.addFile(folderId, type);
       await getFileTree();
+      setOpenKeys([...openKeys, folderId]);
       setCurrentFileId(file.id);
     },
     [menuIndexeddbStorage]
