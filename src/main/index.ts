@@ -21,7 +21,7 @@ function createWindow(): void {
     }
   });
 
-  // registerAppMenu();
+  registerAppMenu();
 
   mainWindow.on('ready-to-show', () => {
     mainWindow?.show();
