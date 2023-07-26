@@ -65,7 +65,7 @@ export default function RevedrawApp({ file }: Props) {
             onClick={() => setIsModalOpen(true)}
           >
             <PencilIcon className="revenote-app-custom-font-icon" />
-            custom font size
+            custom font
           </button>
         ]}
       />
