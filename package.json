@@ -35,7 +35,6 @@
     "antd": "^5.6.4",
     "electron-window-state": "^5.0.3",
     "event-emitter": "^0.3.5",
-    "fs-extra": "^11.1.1",
     "idb": "^7.1.1",
     "jotai": "^2.2.2",
     "lit": "^2.7.6",
