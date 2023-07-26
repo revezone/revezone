@@ -36,6 +36,7 @@
     "idb": "^7.1.1",
     "jotai": "^2.2.2",
     "lit": "^2.7.6",
+    "lucide-react": "^0.263.1",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
     "revemate": "0.0.1-beta.6",
@@ -44,10 +45,10 @@
     "yjs": "^13.6.6"
   },
   "devDependencies": {
-    "@electron-toolkit/tsconfig": "^1.0.1",
-    "@electron/notarize": "^1.2.3",
     "@electron-toolkit/preload": "^2.0.0",
+    "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron-toolkit/utils": "^1.0.2",
+    "@electron/notarize": "^1.2.3",
     "@types/node": "^18.16.16",
     "@types/react": "^18.2.8",
     "@types/react-dom": "^18.2.4",

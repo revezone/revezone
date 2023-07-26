@@ -1,8 +1,9 @@
 import { useCallback, useRef, useState } from 'react';
-import { Input, Tag } from 'antd';
+import { Input } from 'antd';
+import { Palette, FileType } from 'lucide-react';
+import { RevenoteFileType } from '@renderer/types/file';
 
 import './index.css';
-import { RevenoteFileType } from '@renderer/types/file';
 
 interface Props {
   text: string;
@@ -37,9 +38,9 @@ export default function EditableText({ text, defaultText, type, onChange }: Prop
   const getMark = useCallback((type) => {
     switch (type) {
       case 'markdown':
-        return 'md';
+        return <FileType className="w-4 h-4 mr-2" />;
       case 'canvas':
-        return 'cv';
+        return <Palette className="w-4 h-4 mr-2" />;
     }
     return null;
   }, []);
@@ -47,11 +48,9 @@ export default function EditableText({ text, defaultText, type, onChange }: Prop
   return (
     <div className="editable-text-container" ref={ref} onDoubleClick={onEdit}>
       {isPreview ? (
-        <p className="flex justify-between">
+        <p className="flex justify-between items-center">
           <span>{value || defaultText}</span>
-          <span>
-            <Tag bordered={false}>{getMark(type)}</Tag>
-          </span>
+          {getMark(type)}
         </p>
       ) : (
         <Input
