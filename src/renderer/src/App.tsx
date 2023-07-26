@@ -4,7 +4,7 @@ import MarkdownEditor from './components/MarkdownEditor';
 import { useAtom } from 'jotai';
 import { currentFileAtom } from './store/jotai';
 import WorkspaceLoaded from './components/WorkspaceLoaded';
-import Revedraw from './components/Revedraw';
+import RevedrawApp from './components/RevedrawApp';
 import { getCustomFontsPathsFromLocal } from './store/localstorage';
 
 import './App.css';
@@ -19,7 +19,7 @@ function App(): JSX.Element {
       case 'markdown':
         return <MarkdownEditor pageId={file.id} />;
       case 'canvas':
-        return <Revedraw file={file} />;
+        return <RevedrawApp file={file} />;
       default:
         return null;
     }
