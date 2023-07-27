@@ -7,7 +7,11 @@ import { EVENTS } from '../../preload/events';
 import fs from 'node:fs';
 
 const FILENAME_REGEX = /\/(([^/]+)\.[a-zA-Z0-9]+)/;
-const REVENOTE_APP_FILES_DIR = '.revenote/custom-fonts';
+const REVENOTE_CUSTOM_FONTS_DIR = '.revenote/custom-fonts';
+const REVENOTE_CUSTOM_FONTS_MANIFEST_PATH = `${REVENOTE_CUSTOM_FONTS_DIR}/manifest.json`;
+
+const CUSTOM_FONTS_DIR = join(os.homedir(), REVENOTE_CUSTOM_FONTS_DIR);
+const CUSTOM_FONTS_MENIFEST_PATH = join(os.homedir(), REVENOTE_CUSTOM_FONTS_MANIFEST_PATH);
 
 export const loadCustomFont = async (mainWindow) => {
   if (!mainWindow) {
@@ -19,11 +23,7 @@ export const loadCustomFont = async (mainWindow) => {
     filters: [{ name: 'Fonts', extensions: ['ttf', 'woff2'] }]
   });
 
-  const appDir = join(os.homedir(), REVENOTE_APP_FILES_DIR);
-
-  if (!fs.existsSync(appDir)) {
-    fs.mkdirSync(appDir, { recursive: true });
-  }
+  ensureDir(CUSTOM_FONTS_DIR);
 
   console.log('--- openfile ---', filePaths);
 
@@ -32,7 +32,7 @@ export const loadCustomFont = async (mainWindow) => {
       const matches = filePath.match(FILENAME_REGEX);
       const filenameWithSuffix = matches?.[1];
       const fontName = matches?.[2];
-      const fontPath = join(appDir, `${filenameWithSuffix}`);
+      const fontPath = join(CUSTOM_FONTS_DIR, `${filenameWithSuffix}`);
       await copyFile(filePath, fontPath);
 
       mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, fontName, fontPath);
@@ -53,23 +53,53 @@ export const registerCustomFont = (mainWindow, fontName, fontPath) => {
     const fontData = fs.readFileSync(fontPath);
     const fontUrl = `url(data:font/truetype;base64,${fontData.toString('base64')})`;
 
-    console.log('--- registerCustomFont ---', mainWindow.webContents);
-
     mainWindow.webContents.insertCSS(`@font-face { font-family: '${fontName}'; src: ${fontUrl}; }`);
   } catch (err) {
     console.error(err);
   }
 };
 
-export const batchRegisterCustomFonts = (mainWindow, fonts: string) => {
+export const batchRegisterCustomFonts = (mainWindow) => {
   try {
-    const fontsObj = fonts && JSON.parse(fonts);
+    const config = getCustomFontsConfig();
+    const fonts = config.fonts;
 
-    fontsObj &&
-      Object.entries(fontsObj).forEach(([key, value]) => {
-        registerCustomFont(mainWindow, key, value);
+    console.log('--- batchRegisterCustomFonts ---', fonts);
+
+    fonts &&
+      Object.entries(fonts).map(([key, value]) => {
+        return registerCustomFont(mainWindow, key, value);
       });
   } catch (err) {
     console.error(err);
+  }
+};
+
+export const storeCustomFontConfig = (fontName: string, fontPath: string) => {
+  try {
+    ensureDir(CUSTOM_FONTS_DIR);
+    const config = getCustomFontsConfig();
+    config.fonts[fontName] = fontPath;
+    fs.writeFileSync(CUSTOM_FONTS_MENIFEST_PATH, JSON.stringify(config, null, 2));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getCustomFontsConfig = () => {
+  try {
+    const configBuffer =
+      fs.existsSync(CUSTOM_FONTS_MENIFEST_PATH) && fs.readFileSync(CUSTOM_FONTS_MENIFEST_PATH);
+    const config = configBuffer ? JSON.parse(configBuffer.toString()) : { fonts: {} };
+
+    return config;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const ensureDir = (dir: string) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
   }
 };

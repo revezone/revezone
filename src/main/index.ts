@@ -2,7 +2,12 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { isMacOS, isWindows } from './utils';
-import { loadCustomFont, registerCustomFont, batchRegisterCustomFonts } from './utils/customFonts';
+import {
+  loadCustomFont,
+  registerCustomFont,
+  batchRegisterCustomFonts,
+  storeCustomFontConfig
+} from './utils/customFonts';
 import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
 
@@ -20,6 +25,8 @@ function createWindow(): void {
       sandbox: false
     }
   });
+
+  batchRegisterCustomFonts(mainWindow);
 
   registerAppMenu();
 
@@ -56,13 +63,13 @@ function createWindow(): void {
   });
 
   ipcMain.on(EVENTS.registerCustomFont, async (event, fontName, fontPath) => {
+    storeCustomFontConfig(fontName, fontPath);
     registerCustomFont(mainWindow, fontName, fontPath);
   });
 
-  ipcMain.on(EVENTS.batchRegisterCustomFonts, async (event, fonts: string) => {
-    console.log('--- batchRegisterCustomFonts ---', mainWindow);
-    batchRegisterCustomFonts(mainWindow, fonts);
-  });
+  // ipcMain.on(EVENTS.batchRegisterCustomFonts, async (event, fonts: string) => {
+  //   batchRegisterCustomFonts(mainWindow, fonts);
+  // });
 }
 
 // This method will be called when Electron has finished

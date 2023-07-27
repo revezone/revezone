@@ -39,14 +39,3 @@ export const addCustomFontToLocal = (fontFamilyName: string) => {
     : fontFamilyName;
   localStorage.setItem(LOCALSTORAGE_CUSTOM_FONTS, newCustomFonts);
 };
-
-export const addCustomFontPathToLocal = (fontFamilyName: string, fontPath: string) => {
-  const str = localStorage.getItem(LOCALSTORAGE_CUSTOM_FONTS_PATHS);
-  const paths: { [key: string]: string } = (str && JSON.parse(str)) || {};
-  paths[fontFamilyName] = fontPath;
-  localStorage.setItem(LOCALSTORAGE_CUSTOM_FONTS_PATHS, JSON.stringify(paths));
-};
-
-export const getCustomFontsPathsFromLocal = () => {
-  return localStorage.getItem(LOCALSTORAGE_CUSTOM_FONTS_PATHS);
-};

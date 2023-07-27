@@ -5,7 +5,6 @@ import { useAtom } from 'jotai';
 import { currentFileAtom, langCodeAtom } from './store/jotai';
 import WorkspaceLoaded from './components/WorkspaceLoaded';
 import RevedrawApp from './components/RevedrawApp';
-import { getCustomFontsPathsFromLocal } from './store/localstorage';
 import zhCN from 'antd/locale/zh_CN';
 import zhTW from 'antd/locale/zh_TW';
 import enUS from 'antd/locale/en_US';
@@ -41,11 +40,6 @@ function App(): JSX.Element {
         return enUS;
     }
   }, [langCode]);
-
-  useEffect(() => {
-    const fonts = getCustomFontsPathsFromLocal();
-    fonts && window.api.batchRegisterCustomFonts(fonts);
-  }, []);
 
   return (
     <ConfigProvider locale={getLocale()}>
