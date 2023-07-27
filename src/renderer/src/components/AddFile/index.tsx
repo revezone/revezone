@@ -32,7 +32,7 @@ export default function AddFile(props: Props) {
       },
       {
         key: 'board',
-        label: <span className="text-xs">Bard</span>,
+        label: <span className="text-xs">Board</span>,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
           addFile(folderId, 'board', fileTree);
