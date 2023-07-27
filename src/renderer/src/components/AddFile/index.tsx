@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { currentFileIdAtom, fileTreeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
+import { Palette, FileType } from 'lucide-react';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
@@ -24,7 +25,12 @@ export default function AddFile(props: Props) {
     (folderId) => [
       {
         key: 'note',
-        label: <span className="text-xs">Note</span>,
+        label: (
+          <span className="text-xs">
+            <FileType className="w-4 h-4 mr-2" />
+            Note
+          </span>
+        ),
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
           addFile(folderId, 'note', fileTree);
@@ -32,7 +38,12 @@ export default function AddFile(props: Props) {
       },
       {
         key: 'board',
-        label: <span className="text-xs">Board</span>,
+        label: (
+          <span className="text-xs">
+            <Palette className="w-4 h-4 mr-2" />
+            Board
+          </span>
+        ),
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
           addFile(folderId, 'board', fileTree);

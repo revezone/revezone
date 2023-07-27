@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Menu, Dropdown } from 'antd';
 import { FolderIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import type { RevenoteFile, RevenoteFileType, RevenoteFolder } from '@renderer/types/file';
+import type { RevenoteFile, RevenoteFolder } from '@renderer/types/file';
 import {
   getOpenKeysFromLocal,
   getSelectedKeysFromLocal,

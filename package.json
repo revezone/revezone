@@ -16,7 +16,7 @@
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
-    "build:win": "npm run build && electron-builder --win --config",
+    "build:win": "electron-vite build && electron-builder --win --config",
     "build:mac": "electron-vite build && electron-builder --mac --config",
     "build:linux": "electron-vite build && electron-builder --linux --config"
   },
@@ -41,7 +41,7 @@
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
     "react-i18next": "^13.0.2",
-    "revemate": "0.0.1-beta.8",
+    "revemate": "0.0.1-beta.9",
     "uuid": "^9.0.0",
     "y-indexeddb": "^9.0.11",
     "yjs": "^13.6.6"

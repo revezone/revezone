@@ -66,8 +66,8 @@ dependencies:
     specifier: ^13.0.2
     version: 13.0.2(i18next@23.3.0)(react-dom@18.2.0)(react@18.2.0)
   revemate:
-    specifier: 0.0.1-beta.8
-    version: 0.0.1-beta.8(react-dom@18.2.0)(react@18.2.0)
+    specifier: 0.0.1-beta.9
+    version: 0.0.1-beta.9(react-dom@18.2.0)(react@18.2.0)
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -4879,8 +4879,8 @@ packages:
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
     dev: true
 
-  /revemate@0.0.1-beta.8(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-tSdo127guqYk7c7VAChuc6Bu+3fB7HGsTt8ZP0ReMfWlwnxDbBnAQU0Vw48JFCQ1Vp1N0xIWZqCUO9Llh8F+Cw==}
+  /revemate@0.0.1-beta.9(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-dfOcunOgWSpGeRiLsaeGPcmMTQ5MS/odC3+Zgf3iIKI8ip3Gt9AKYDQruURzuTlwBvcCCCRPAECEIeckcF+hmQ==}
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'

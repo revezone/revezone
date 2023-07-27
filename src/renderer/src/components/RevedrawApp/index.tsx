@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { RevenoteFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
+import { ExcalidrawImperativeAPI } from 'revemate/es/Revedraw/types';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
 import { PencilLine } from 'lucide-react';
@@ -10,6 +11,7 @@ import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 
 import './index.css';
+import { message } from 'antd';
 
 interface Props {
   file: RevenoteFile;
@@ -21,6 +23,7 @@ export default function RevedrawApp({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [langCode, setLangCode] = useAtom(langCodeAtom);
+  const [ref, setRef] = useState<ExcalidrawImperativeAPI>();
 
   const { t, i18n } = useTranslation();
 
@@ -65,6 +68,7 @@ export default function RevedrawApp({ file }: Props) {
       <Revedraw
         dataSource={dataSource}
         canvasName={file.name}
+        getRef={(ref) => setRef(ref)}
         onChange={onChangeDebounceFn}
         onLangCodeChange={(code) => setLangCode(code)}
         customMenuItems={[
