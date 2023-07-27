@@ -34,8 +34,10 @@ export const getCurrentFileIdFromLocal = () => {
 
 export const addCustomFontToLocal = (fontFamilyName: string) => {
   const customFonts = localStorage.getItem(LOCALSTORAGE_CUSTOM_FONTS);
-  const newCustomFonts = customFonts
-    ? customFonts.split(',').concat(fontFamilyName).join(',')
-    : fontFamilyName;
+  const arr = customFonts?.split(',');
+
+  if (arr?.includes(fontFamilyName)) return;
+
+  const newCustomFonts = arr ? arr.concat(fontFamilyName).join(',') : fontFamilyName;
   localStorage.setItem(LOCALSTORAGE_CUSTOM_FONTS, newCustomFonts);
 };
