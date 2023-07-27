@@ -9,8 +9,8 @@ interface Props {
   pageId: string;
 }
 
-function MarkdownEditor({ pageId }: Props): JSX.Element | null {
-  console.log('--- markdowneditor ---', pageId);
+function NoteEditor({ pageId }: Props): JSX.Element | null {
+  console.log('--- NoteEditor ---', pageId);
   if (!pageId) {
     return null;
   }
@@ -46,4 +46,4 @@ function MarkdownEditor({ pageId }: Props): JSX.Element | null {
   return <div className="blocksuite-editor-container" ref={editorRef}></div>;
 }
 
-export default MarkdownEditor;
+export default NoteEditor;

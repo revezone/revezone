@@ -128,7 +128,7 @@ class MenuIndexeddbStorage {
       {
         id: firstFileId,
         name: 'Default File',
-        type: 'markdown',
+        type: 'note',
         gmtCreate: moment().toLocaleString(),
         gmtModified: moment().toLocaleString()
       },
@@ -227,7 +227,7 @@ class MenuIndexeddbStorage {
     return files;
   }
 
-  async addFile(folderId: string, type: RevenoteFileType = 'markdown'): Promise<RevenoteFile> {
+  async addFile(folderId: string, type: RevenoteFileType = 'note'): Promise<RevenoteFile> {
     await this.initDB();
 
     const fileId = uuidv4();

@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import Layout from './components/CustomLayout';
-import MarkdownEditor from './components/MarkdownEditor';
+import NoteEditor from './components/NoteEditor';
 import { useAtom } from 'jotai';
 import { currentFileAtom, langCodeAtom } from './store/jotai';
 import WorkspaceLoaded from './components/WorkspaceLoaded';
@@ -22,9 +22,9 @@ function App(): JSX.Element {
     if (!file) return null;
 
     switch (file.type) {
-      case 'markdown':
-        return <MarkdownEditor pageId={file.id} />;
-      case 'canvas':
+      case 'note':
+        return <NoteEditor pageId={file.id} />;
+      case 'board':
         return <RevedrawApp file={file} />;
       default:
         return null;

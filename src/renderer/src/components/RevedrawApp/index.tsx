@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { RevenoteFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
-import { canvasIndexeddbStorage } from '@renderer/store/canvasIndexeddb';
+import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
 import { PencilLine } from 'lucide-react';
 import CustomFontModal from '../CustomFontModal';
@@ -28,7 +28,7 @@ export default function RevedrawApp({ file }: Props) {
     // reset data source for a new canvas file
     setDataSource(undefined);
 
-    const data = await canvasIndexeddbStorage.getCanvas(id);
+    const data = await boardIndexeddbStorage.getBoard(id);
 
     setDataSource(data || DEFAULT_DATA_SOURCE);
   }, []);
@@ -39,7 +39,7 @@ export default function RevedrawApp({ file }: Props) {
 
       const str = JSON.stringify(data);
 
-      await canvasIndexeddbStorage.addOrUpdateCanvas(file.id, str);
+      await boardIndexeddbStorage.addOrUpdateBoard(file.id, str);
     },
     [file.id]
   );

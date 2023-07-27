@@ -12,7 +12,7 @@ export interface RevenoteFolderFileMapping {
   gmtModified: string;
 }
 
-export type RevenoteFileType = 'markdown' | 'canvas';
+export type RevenoteFileType = 'note' | 'board';
 
 export interface RevenoteFile {
   id: string;

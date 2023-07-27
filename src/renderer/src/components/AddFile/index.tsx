@@ -1,37 +1,45 @@
 import { useCallback } from 'react';
 import { DocumentPlusIcon } from '@heroicons/react/24/outline';
-import { Dropdown } from 'antd';
-import { RevenoteFileType } from '@renderer/types/file';
+import { Dropdown, message } from 'antd';
+import { FileTree, RevenoteFileType } from '@renderer/types/file';
+import { useTranslation } from 'react-i18next';
+import { currentFileIdAtom, fileTreeAtom } from '@renderer/store/jotai';
+import { useAtom } from 'jotai';
+import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
   folderId: string | undefined;
-  addFile: (folderId: string, type: RevenoteFileType) => void;
+  onAdd?: (fileId: string, folderId: string) => void;
 }
 
 export default function AddFile(props: Props) {
-  const { folderId, size = 'middle', addFile } = props;
+  const { folderId, size = 'middle', onAdd } = props;
+  const [, setCurrentFileId] = useAtom(currentFileIdAtom);
+  const [fileTree, setFileTree] = useAtom(fileTreeAtom);
+
+  const { t } = useTranslation();
 
   const getAddFileMenu = useCallback(
     (folderId) => [
       {
-        key: 'markdown',
-        label: <span className="text-xs">Markdown</span>,
+        key: 'note',
+        label: <span className="text-xs">Note</span>,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
-          addFile(folderId, 'markdown');
+          addFile(folderId, 'note', fileTree);
         }
       },
       {
-        key: 'canvas',
-        label: <span className="text-xs">Canvas</span>,
+        key: 'board',
+        label: <span className="text-xs">Bard</span>,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
-          addFile(folderId, 'canvas');
+          addFile(folderId, 'board', fileTree);
         }
       }
     ],
-    []
+    [fileTree]
   );
 
   const getSizeClassName = useCallback(() => {
@@ -46,6 +54,26 @@ export default function AddFile(props: Props) {
         return 'h-5 w-5';
     }
   }, [size]);
+
+  const addFile = useCallback(
+    async (folderId: string | undefined, type: RevenoteFileType, fileTree: FileTree) => {
+      const _folderId = folderId || fileTree?.[0]?.id;
+
+      if (!_folderId) {
+        message.info(t('message.createFolderFirst'));
+        return;
+      }
+
+      const file = await menuIndexeddbStorage.addFile(_folderId, type);
+      const tree = await menuIndexeddbStorage.getFileTree();
+      setFileTree(tree);
+
+      setCurrentFileId(file.id);
+
+      onAdd?.(file.id, _folderId);
+    },
+    []
+  );
 
   return (
     <Dropdown menu={{ items: getAddFileMenu(folderId) }}>

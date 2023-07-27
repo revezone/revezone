@@ -37,9 +37,9 @@ export default function EditableText({ text, defaultText, type, onChange }: Prop
 
   const getMark = useCallback((type) => {
     switch (type) {
-      case 'markdown':
+      case 'note':
         return <FileType className="w-4 h-4 mr-2" />;
-      case 'canvas':
+      case 'board':
         return <Palette className="w-4 h-4 mr-2" />;
     }
     return null;

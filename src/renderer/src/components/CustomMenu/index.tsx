@@ -94,15 +94,9 @@ export default function CustomMenu({ collapsed }: Props) {
     }
   );
 
-  const addFile = useCallback(
-    async (folderId: string, type: RevenoteFileType) => {
-      const file = await menuIndexeddbStorage.addFile(folderId, type);
-      await getFileTree();
-      setOpenKeys([...openKeys, folderId]);
-      setCurrentFileId(file.id);
-    },
-    [menuIndexeddbStorage]
-  );
+  const onAddFile = useCallback((fileId: string, folderId: string) => {
+    setOpenKeys([...openKeys, folderId]);
+  }, []);
 
   const deleteFile = useCallback(
     async (fileId: string, folderId: string) => {
@@ -189,7 +183,7 @@ export default function CustomMenu({ collapsed }: Props) {
   );
 
   const onFileNameChange = useCallback((text: string, file: RevenoteFile) => {
-    if (file.type === 'markdown') {
+    if (file.type === 'note') {
       blocksuiteStorage.updatePageTitle(file.id, text);
     }
 
@@ -223,7 +217,7 @@ export default function CustomMenu({ collapsed }: Props) {
                   defaultText="Untitled"
                   onChange={(text) => onFolderNameChange(folder, text)}
                 />
-                <AddFile size="small" folderId={currentFolderId} addFile={addFile} />
+                <AddFile size="small" folderId={currentFolderId} onAdd={onAddFile} />
               </div>
             </Dropdown>
           ),
