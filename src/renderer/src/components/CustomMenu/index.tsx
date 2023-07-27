@@ -177,6 +177,14 @@ export default function CustomMenu({ collapsed }: Props) {
           console.log('delete');
           deleteFile(file.id, folder.id);
         }
+      },
+      {
+        key: 'copy_revenote_link',
+        label: 'Copy Revenote Link',
+        onClick: ({ domEvent }) => {
+          domEvent.stopPropagation();
+          navigator.clipboard.writeText(file.id);
+        }
       }
     ],
     []

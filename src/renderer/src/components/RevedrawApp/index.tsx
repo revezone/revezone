@@ -1,17 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
-import { RevenoteFile } from '@renderer/types/file';
+import { FileTreeItem, RevenoteFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
-import { ExcalidrawImperativeAPI } from 'revemate/es/Revedraw/types';
+import { ExcalidrawImperativeAPI, NonDeletedExcalidrawElement } from 'revemate/es/Revedraw/types';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
 import { PencilLine } from 'lucide-react';
 import CustomFontModal from '../CustomFontModal';
-import { langCodeAtom } from '@renderer/store/jotai';
+import {
+  currentFileAtom,
+  currentFileIdAtom,
+  fileTreeAtom,
+  langCodeAtom
+} from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
+import { DOUBLE_LINK_REGEX } from '@renderer/utils/constant';
 
 import './index.css';
-import { message } from 'antd';
 
 interface Props {
   file: RevenoteFile;
@@ -24,6 +29,9 @@ export default function RevedrawApp({ file }: Props) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [langCode, setLangCode] = useAtom(langCodeAtom);
   const [ref, setRef] = useState<ExcalidrawImperativeAPI>();
+  const [fileTree] = useAtom(fileTreeAtom);
+  const [, setCurrentFile] = useAtom(currentFileAtom);
+  const [, setCurrentFileId] = useAtom(currentFileIdAtom);
 
   const { t, i18n } = useTranslation();
 
@@ -51,6 +59,33 @@ export default function RevedrawApp({ file }: Props) {
     wait: 200
   });
 
+  const onLinkOpen = useCallback(
+    (element: NonDeletedExcalidrawElement) => {
+      const { link } = element;
+      console.log('link', link);
+
+      if (link && DOUBLE_LINK_REGEX.test(link)) {
+        const fileIdOrName = link?.match(DOUBLE_LINK_REGEX)?.[1];
+
+        const files = fileTree?.reduce((prev: RevenoteFile[], item: FileTreeItem) => {
+          return [...prev, ...item.children];
+        }, []);
+
+        const file = files.find(
+          (_file) => _file.id === fileIdOrName || _file.name === fileIdOrName
+        );
+
+        if (file) {
+          setCurrentFile(file);
+          setCurrentFileId(file.id);
+        }
+      } else {
+        link && window.open(link);
+      }
+    },
+    [fileTree]
+  );
+
   useEffect(() => {
     getDataSource(file.id);
     return () => {
@@ -71,6 +106,7 @@ export default function RevedrawApp({ file }: Props) {
         getRef={(ref) => setRef(ref)}
         onChange={onChangeDebounceFn}
         onLangCodeChange={(code) => setLangCode(code)}
+        onLinkOpen={onLinkOpen}
         customMenuItems={[
           <button
             key="custom-font"
