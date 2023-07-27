@@ -72,6 +72,10 @@ export const batchRegisterCustomFonts = (mainWindow) => {
       Object.entries(fonts).map(([key, value]) => {
         return registerCustomFont(mainWindow, key, value);
       });
+
+    // mainWindow.webContents.insertCSS(
+    //   `html body :where(.css-dev-only-do-not-override-14wwjjs).ant-menu {font-family: 'YeZiGongChangCangNanShouJi-2'}`
+    // );
   } catch (err) {
     console.error(err);
   }
