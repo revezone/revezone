@@ -8,11 +8,12 @@ import './index.css';
 interface Props {
   text: string;
   defaultText?: string;
+  extraText?: string;
   type?: RevenoteFileType;
   onChange: (text: string) => void;
 }
 
-export default function EditableText({ text, defaultText, type, onChange }: Props) {
+export default function EditableText({ text, defaultText, type, extraText, onChange }: Props) {
   const [isPreview, setIsPreview] = useState(true);
   const [value, setValue] = useState(text);
   const ref = useRef<HTMLDivElement>(null);
@@ -48,10 +49,13 @@ export default function EditableText({ text, defaultText, type, onChange }: Prop
   return (
     <div className="editable-text-container" ref={ref} onDoubleClick={onEdit}>
       {isPreview ? (
-        <p className="flex justify-between items-center">
-          <span>{value || defaultText}</span>
-          {getMark(type)}
-        </p>
+        <div>
+          <p className="flex justify-between items-center">
+            <span className="text-ellipsis overflow-hidden">{value || defaultText}</span>
+            {getMark(type)}
+          </p>
+          <p className="text-slate-400">{extraText}</p>
+        </div>
       ) : (
         <Input
           defaultValue={value}

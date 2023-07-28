@@ -273,6 +273,12 @@ export default function CustomMenu({ collapsed }: Props) {
 
   return (
     <div className="revenote-menu-container">
+      <div
+        className="flex items-center pl-5 h-10 text-lg font-mono underline font-semibold
+        bg-clip-text text-transparent text-sky-500 bg-gradient-to-r from-cyan-300 to-blue-500"
+      >
+        ReveNote
+      </div>
       <div className="revenote-menu-toolbar flex items-center pl-5 h-10">
         <span title="Add a folder">
           <FolderPlus className="h-4 w-4 text-current cursor-pointer mr-5" onClick={addFolder} />
@@ -298,7 +304,6 @@ export default function CustomMenu({ collapsed }: Props) {
                   defaultText="Untitled"
                   onChange={(text) => onFolderNameChange(folder, text)}
                 />
-                <p className="ml-6">{new Date(folder.gmtCreate).toLocaleTimeString()}</p>
               </div>
             </Dropdown>
           ),
@@ -308,10 +313,10 @@ export default function CustomMenu({ collapsed }: Props) {
               label: (
                 <Dropdown menu={{ items: getFileMenu(file, folder) }} trigger={['contextMenu']}>
                   <div className="flex items-center justify-between">
-                    <p className="mr-6">{new Date(file.gmtCreate).toLocaleTimeString()}</p>
                     <EditableText
                       type={file.type}
                       text={file.name}
+                      extraText={new Date(file.gmtModified).toLocaleString()}
                       defaultText="Untitled"
                       onChange={(text) => onFileNameChange(text, file)}
                     />
