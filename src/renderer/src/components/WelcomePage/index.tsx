@@ -22,20 +22,22 @@ export default function WelcomePage() {
         <div className="mb-6">
           <h2 className="mb-2 text-base">Add Operation Description</h2>
           <p className="mb-2">
-            Click the icons in sidebar operation toolbar to add a foler/note/board.
+            Click the icons in left sidebar operation toolbar to add a foler/note/board.
           </p>
-          <p className="mb-2">
-            <FolderPlus className="mr-2" />
-            Add a folder
-          </p>
-          <p className="mb-2">
-            <FileType className="mr-2" />
-            Add a note
-          </p>
-          <p className="mb-2">
-            <Palette className="mr-2" />
-            Add a board
-          </p>
+          <ul>
+            <li className="mb-2 list-disc list-inside">
+              <FolderPlus className="mr-2 w-4" />
+              Add a folder
+            </li>
+            <li className="mb-2 list-disc list-inside">
+              <FileType className="mr-2 w-4" />
+              Add a note
+            </li>
+            <li className="mb-2 list-disc list-inside">
+              <Palette className="mr-2 w-4" />
+              Add a board
+            </li>
+          </ul>
         </div>
         <div>
           <h2 className="mb-2 text-base">Links</h2>

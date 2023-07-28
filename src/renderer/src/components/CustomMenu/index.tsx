@@ -177,13 +177,15 @@ export default function CustomMenu({ collapsed }: Props) {
       if (changeType === 'increase') {
         const folderId = keys?.length ? keys[keys.length - 1] : undefined;
 
-        resetMenu();
+        if (currentFolderId !== folderId) {
+          resetMenu();
 
-        setCurrentFolderId(folderId);
-        setSelectedKeys([folderId]);
+          setCurrentFolderId(folderId);
+          setSelectedKeys([folderId]);
+        }
       }
     },
-    [openKeys]
+    [openKeys, currentFolderId]
   );
 
   const onSelect = useCallback(
