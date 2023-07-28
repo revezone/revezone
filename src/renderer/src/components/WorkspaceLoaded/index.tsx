@@ -12,7 +12,6 @@ export default function WorkspaceLoaded(props: Props) {
 
   useEffect(() => {
     emitter.on(events.WORKSPACE_LOADED, () => {
-      console.log('--- loaded ---');
       setWorkspaceLoaded(true);
     });
   }, []);

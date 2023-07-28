@@ -19,13 +19,8 @@ export default function useBlocksuitePageTitle() {
     const page = await blocksuiteStorage.workspace.getPage(currentFileId);
     const prevTitle = page?.meta.title;
 
-    console.log('--- pageTitleUpdateListener ---', page, prevTitle);
-
     page?.slots.historyUpdated.on(async () => {
       const currentTitle = page.meta.title;
-
-      console.log('--- historyupdated ---', currentTitle);
-
       if (currentTitle !== prevTitle) {
         setPageTitle(currentTitle);
         const file = await menuIndexeddbStorage.getFile(currentFileId);

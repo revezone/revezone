@@ -4,7 +4,7 @@ import { RevenoteFile, RevenoteFolder, FileTree } from '../types/file';
 
 export const currentFileIdAtom = atom<string | undefined | null>(getCurrentFileIdFromLocal());
 
-export const currentFileAtom = atom<RevenoteFile | undefined>(undefined);
+export const currentFileAtom = atom<RevenoteFile | undefined | null>(undefined);
 
 export const workspaceLoadedAtom = atom(false);
 

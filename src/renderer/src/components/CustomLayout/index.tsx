@@ -1,16 +1,10 @@
 import { ReactNode, useCallback, useState } from 'react';
-import { Layout, message } from 'antd';
-import {
-  ArrowLeftOnRectangleIcon,
-  ArrowRightOnRectangleIcon,
-  FolderPlusIcon
-} from '@heroicons/react/24/outline';
+import { Layout } from 'antd';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { SiderTheme } from 'antd/es/layout/Sider';
 import CustomMenu from '../CustomMenu';
-import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import { fileTreeAtom, siderbarCollapsedAtom, currentFolderIdAtom } from '@renderer/store/jotai';
+import { siderbarCollapsedAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
-import AddFile from '../AddFile/index';
 
 import './index.css';
 
@@ -23,19 +17,11 @@ type Props = {
 const RevenoteLayout = ({ children }: Props): JSX.Element => {
   const [collapsed, setCollapsed] = useAtom(siderbarCollapsedAtom);
   const [theme, setTheme] = useState<SiderTheme>('light');
-  const [, setFileTree] = useAtom(fileTreeAtom);
-  const [currentFolderId] = useAtom(currentFolderIdAtom);
 
   const switchCollapse = useCallback(() => {
     setCollapsed(!collapsed);
     window.api?.toggleTrafficLight(collapsed);
   }, [collapsed]);
-
-  const addFolder = useCallback(async () => {
-    await menuIndexeddbStorage.addFolder();
-    const tree = await menuIndexeddbStorage.getFileTree();
-    setFileTree(tree);
-  }, []);
 
   return (
     <div className={`revenote-layout ${collapsed ? 'sidebar-collapsed' : null}`}>
@@ -56,12 +42,7 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
         >
           <div className="revenote-topleft-toolbar">
             <span className="tool-buttons">
-              <AddFile size="middle" folderId={currentFolderId} />
-              <FolderPlusIcon
-                className="h-5 w-5 text-current cursor-pointer mr-5"
-                onClick={addFolder}
-              />
-              <ArrowLeftOnRectangleIcon
+              <PanelLeftClose
                 className="h-5 w-5 text-current cursor-pointer"
                 onClick={switchCollapse}
               />
@@ -72,7 +53,7 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
         <Layout>
           <Content className="font-sans">
             {collapsed && (
-              <ArrowRightOnRectangleIcon
+              <PanelLeftOpen
                 onClick={switchCollapse}
                 className="h-5 w-5 text-current cursor-pointer mt-3 ml-3 absolute z-50"
               />

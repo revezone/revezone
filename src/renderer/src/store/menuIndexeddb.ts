@@ -140,17 +140,18 @@ class MenuIndexeddbStorage {
 
   async addFolder() {
     await this.initDB();
-    const id = uuidv4();
-    await this.db?.add(
-      INDEXEDDB_FOLDER_KEY,
-      {
-        id,
-        name: 'Untitled',
-        gmtCreate: moment().toLocaleString(),
-        gmtModified: moment().toLocaleString()
-      },
-      id
-    );
+    const id = `folder_${uuidv4()}`;
+
+    const folderInfo = {
+      id,
+      name: 'Untitled',
+      gmtCreate: moment().toLocaleString(),
+      gmtModified: moment().toLocaleString()
+    };
+
+    await this.db?.add(INDEXEDDB_FOLDER_KEY, folderInfo, id);
+
+    return folderInfo;
   }
 
   async getFolder(folderId: string): Promise<RevenoteFolder | undefined> {
@@ -163,7 +164,34 @@ class MenuIndexeddbStorage {
   async getFolders(): Promise<RevenoteFolder[]> {
     await this.initDB();
     const folders = await this.db?.getAll('folder');
-    return folders || [];
+    const sortFn = (a: RevenoteFolder, b: RevenoteFolder) =>
+      new Date(a.gmtCreate).getTime() < new Date(b.gmtCreate).getTime() ? 1 : -1;
+    return folders?.sort(sortFn) || [];
+  }
+
+  async addFile(folderId: string, type: RevenoteFileType = 'note'): Promise<RevenoteFile> {
+    await this.initDB();
+
+    const fileId = `file_${uuidv4()}`;
+
+    const fileInfo = {
+      id: fileId,
+      name: 'Untitled',
+      type,
+      gmtCreate: moment().toLocaleString(),
+      gmtModified: moment().toLocaleString()
+    };
+
+    await this.db?.add(INDEXEDDB_FILE_KEY, fileInfo, fileId);
+
+    await this.db?.add(INDEXEDDB_FOLD_FILE_MAPPING_KEY, {
+      folderId,
+      fileId,
+      gmtCreate: moment().toLocaleString(),
+      gmtModified: moment().toLocaleString()
+    });
+
+    return fileInfo;
   }
 
   async getFile(fileId: string): Promise<RevenoteFile | undefined> {
@@ -172,10 +200,31 @@ class MenuIndexeddbStorage {
     return value;
   }
 
+  async deleteFile(fileId: string) {
+    await this.initDB();
+
+    fileId && (await this.db?.delete(INDEXEDDB_FILE_KEY, fileId));
+
+    const folderFileMappingKeys = await this.db?.getAllKeysFromIndex(
+      INDEXEDDB_FOLD_FILE_MAPPING_KEY,
+      // @ts-ignore
+      'fileId',
+      fileId
+    );
+
+    const deleteFolderFileMappingPromises = folderFileMappingKeys?.map(async (key) =>
+      this.db?.delete(INDEXEDDB_FOLD_FILE_MAPPING_KEY, key)
+    );
+
+    deleteFolderFileMappingPromises && (await Promise.all(deleteFolderFileMappingPromises));
+  }
+
   async getFiles(): Promise<RevenoteFile[]> {
     await this.initDB();
     const files = await this.db?.getAll(INDEXEDDB_FILE_KEY);
-    return files || [];
+    const sortFn = (a: RevenoteFile, b: RevenoteFile) =>
+      new Date(a.gmtCreate).getTime() < new Date(b.gmtCreate).getTime() ? 1 : -1;
+    return files?.sort(sortFn) || [];
   }
 
   async getAllFileFolderMappings(): Promise<RevenoteFolderFileMapping[]> {
@@ -192,9 +241,12 @@ class MenuIndexeddbStorage {
 
     const tree = folders.map((folder) => {
       const children: RevenoteFile[] = [];
-      mappings.forEach((map) => {
-        const file = map.folderId === folder.id && files.find((_file) => _file.id === map.fileId);
-        if (file) {
+
+      const mappingsCertainFolder = mappings.filter((map) => map.folderId === folder.id);
+
+      files.forEach((file) => {
+        const _file = mappingsCertainFolder.find((map) => map.fileId === file.id);
+        if (_file) {
           children.push(file);
         }
       });
@@ -225,50 +277,6 @@ class MenuIndexeddbStorage {
 
     // @ts-ignore
     return files;
-  }
-
-  async addFile(folderId: string, type: RevenoteFileType = 'note'): Promise<RevenoteFile> {
-    await this.initDB();
-
-    const fileId = uuidv4();
-
-    const fileInfo = {
-      id: fileId,
-      name: 'Untitled',
-      type,
-      gmtCreate: moment().toLocaleString(),
-      gmtModified: moment().toLocaleString()
-    };
-
-    await this.db?.add(INDEXEDDB_FILE_KEY, fileInfo, fileId);
-
-    await this.db?.add(INDEXEDDB_FOLD_FILE_MAPPING_KEY, {
-      folderId,
-      fileId,
-      gmtCreate: moment().toLocaleString(),
-      gmtModified: moment().toLocaleString()
-    });
-
-    return fileInfo;
-  }
-
-  async deleteFile(fileId: string) {
-    await this.initDB();
-
-    fileId && (await this.db?.delete(INDEXEDDB_FILE_KEY, fileId));
-
-    const folderFileMappingKeys = await this.db?.getAllKeysFromIndex(
-      INDEXEDDB_FOLD_FILE_MAPPING_KEY,
-      // @ts-ignore
-      'fileId',
-      fileId
-    );
-
-    const deleteFolderFileMappingPromises = folderFileMappingKeys?.map(async (key) =>
-      this.db?.delete(INDEXEDDB_FOLD_FILE_MAPPING_KEY, key)
-    );
-
-    deleteFolderFileMappingPromises && (await Promise.all(deleteFolderFileMappingPromises));
   }
 
   async updateFileName(file: RevenoteFile, name: string) {

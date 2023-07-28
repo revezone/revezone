@@ -10,7 +10,6 @@ interface Props {
 }
 
 function NoteEditor({ pageId }: Props): JSX.Element | null {
-  console.log('--- NoteEditor ---', pageId);
   if (!pageId) {
     return null;
   }

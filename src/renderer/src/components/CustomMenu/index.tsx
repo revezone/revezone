@@ -23,9 +23,11 @@ import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 import { useDebounceEffect } from 'ahooks';
 import { FILE_ID_REGEX } from '@renderer/utils/constant';
 import AddFile from '../AddFile';
+import { FolderPlus } from 'lucide-react';
+import moment from 'moment';
 
 import './index.css';
-import { getCurrentFolderId } from '@renderer/utils/menu';
+import { getCurrentFolderIdByFileId } from '@renderer/utils/menu';
 
 interface Props {
   collapsed: boolean;
@@ -58,14 +60,13 @@ export default function CustomMenu({ collapsed }: Props) {
 
   useEffect(() => {
     const files = fileTree.reduce(
-      (prev, item) => [...prev, ...item.children],
-      [] as RevenoteFile[]
+      (prev: RevenoteFile[], current) => [...prev, ...current.children],
+      []
     );
-    const file =
-      (currentFileId && files?.find((_file) => _file.id === currentFileId)) || files?.[0];
+
+    const file = currentFileId ? files?.find((_file) => _file.id === currentFileId) : null;
 
     setCurrentFile(file);
-    file && setSelectedKeys([getFileMenuKey(file.id, file.name)]);
   }, [currentFileId, fileTree]);
 
   useEffect(() => {
@@ -75,8 +76,10 @@ export default function CustomMenu({ collapsed }: Props) {
   }, [currentFileId]);
 
   useEffect(() => {
-    if (!currentFileId) return;
-    const folderId = getCurrentFolderId(currentFileId, fileTree);
+    if (!currentFileId) {
+      return;
+    }
+    const folderId = getCurrentFolderIdByFileId(currentFileId, fileTree);
     setCurrentFolderId(folderId);
   }, [currentFileId, fileTree]);
 
@@ -94,9 +97,43 @@ export default function CustomMenu({ collapsed }: Props) {
     }
   );
 
-  const onAddFile = useCallback((fileId: string, folderId: string) => {
-    setOpenKeys([...openKeys, folderId]);
+  const addSelectedKeys = useCallback(
+    (keys: string[] | undefined) => {
+      if (!keys) return;
+
+      let newKeys = selectedKeys;
+
+      keys.forEach((key: string) => {
+        const type = key?.startsWith('folder_') ? 'folder' : 'file';
+
+        newKeys = type ? newKeys.filter((_key) => !_key?.startsWith(type)) : newKeys;
+      });
+
+      newKeys = Array.from(new Set([...newKeys, ...keys])).filter((_key) => !!_key);
+
+      setSelectedKeys(newKeys);
+    },
+    [selectedKeys]
+  );
+
+  const addFolder = useCallback(async () => {
+    const folder = await menuIndexeddbStorage.addFolder();
+    const tree = await menuIndexeddbStorage.getFileTree();
+    setFileTree(tree);
+    setCurrentFolderId(folder.id);
+    setCurrentFileId(undefined);
+    setCurrentFile(undefined);
+    setOpenKeys([...openKeys, folder.id]);
+    addSelectedKeys([folder.id]);
   }, []);
+
+  const onFileAdd = useCallback(
+    (fileId: string, folderId: string) => {
+      setOpenKeys([...openKeys, folderId]);
+      addSelectedKeys([getFileMenuKey(fileId, 'Untitled')]);
+    },
+    [openKeys]
+  );
 
   const deleteFile = useCallback(
     async (fileId: string, folderId: string) => {
@@ -104,8 +141,6 @@ export default function CustomMenu({ collapsed }: Props) {
       await blocksuiteStorage.deletePage(fileId);
 
       const tree = await getFileTree();
-
-      console.log('currentFileId', currentFileId, fileId);
 
       // reset current file when current file is removed
       if (currentFileId === fileId) {
@@ -125,15 +160,49 @@ export default function CustomMenu({ collapsed }: Props) {
     [menuIndexeddbStorage]
   );
 
-  const onOpenChange = useCallback((keys) => {
-    setOpenKeys(keys);
-    setOpenKeysToLocal(keys);
+  const resetMenu = useCallback(() => {
+    setCurrentFileId(undefined);
+    setCurrentFile(undefined);
+    setCurrentFolderId(undefined);
+    setSelectedKeys([]);
   }, []);
 
-  const onSelect = useCallback(({ key }) => {
-    const fileId = key?.match(FILE_ID_REGEX)?.[1];
-    setCurrentFileId(fileId);
-  }, []);
+  const onOpenChange = useCallback(
+    (keys) => {
+      const changeType = keys?.length > openKeys.length ? 'increase' : 'decrease';
+
+      setOpenKeys(keys);
+      setOpenKeysToLocal(keys);
+
+      // only while openKeys increase
+      if (changeType === 'increase') {
+        const folderId = keys?.length ? keys[keys.length - 1] : undefined;
+
+        resetMenu();
+
+        setCurrentFolderId(folderId);
+        setSelectedKeys([folderId]);
+      }
+    },
+    [openKeys]
+  );
+
+  const onSelect = useCallback(
+    ({ key }) => {
+      const fileId = key?.match(FILE_ID_REGEX)?.[1];
+
+      if (!fileId) return;
+
+      const folderId = getCurrentFolderIdByFileId(fileId, fileTree);
+
+      resetMenu();
+
+      setCurrentFileId(fileId);
+      setCurrentFolderId(folderId);
+      addSelectedKeys([key, folderId]);
+    },
+    [fileTree]
+  );
 
   const getFolderMenu = useCallback(
     (folder: RevenoteFolder) => [
@@ -195,8 +264,6 @@ export default function CustomMenu({ collapsed }: Props) {
       blocksuiteStorage.updatePageTitle(file.id, text);
     }
 
-    console.log('onFileNameChange', text);
-
     menuIndexeddbStorage.updateFileName(file, text);
   }, []);
 
@@ -206,6 +273,12 @@ export default function CustomMenu({ collapsed }: Props) {
 
   return (
     <div className="revenote-menu-container">
+      <div className="revenote-menu-toolbar flex items-center pl-5 h-10">
+        <span title="Add a folder">
+          <FolderPlus className="h-4 w-4 text-current cursor-pointer mr-5" onClick={addFolder} />
+        </span>
+        <AddFile size="small" folderId={currentFolderId} onAdd={onFileAdd} />
+      </div>
       <Menu
         theme="light"
         mode="inline"
@@ -225,7 +298,7 @@ export default function CustomMenu({ collapsed }: Props) {
                   defaultText="Untitled"
                   onChange={(text) => onFolderNameChange(folder, text)}
                 />
-                <AddFile size="small" folderId={currentFolderId} onAdd={onAddFile} />
+                <p className="ml-6">{new Date(folder.gmtCreate).toLocaleTimeString()}</p>
               </div>
             </Dropdown>
           ),
@@ -235,6 +308,7 @@ export default function CustomMenu({ collapsed }: Props) {
               label: (
                 <Dropdown menu={{ items: getFileMenu(file, folder) }} trigger={['contextMenu']}>
                   <div className="flex items-center justify-between">
+                    <p className="mr-6">{new Date(file.gmtCreate).toLocaleTimeString()}</p>
                     <EditableText
                       type={file.type}
                       text={file.name}

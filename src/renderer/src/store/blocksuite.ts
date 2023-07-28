@@ -24,8 +24,6 @@ class BlocksuiteStorage {
   indexeddbPersistence;
 
   async initYIndexeddb() {
-    console.log('--- connect ---');
-
     const indexeddbPersistence = new IndexeddbPersistence(REVENOTE_EDITOR_KEY, this.workspace.doc);
 
     this.indexeddbPersistence = indexeddbPersistence;

@@ -3,7 +3,13 @@
     visibility: visible;
   }
 
-  .menu-icon {
+  .ant-menu-submenu-title {
+    padding-left: 16px !important;
+
+   
+  }
+
+  .ant-menu-submenu-title .menu-icon {
     visibility: hidden;
   }
 
@@ -13,5 +19,6 @@
 
   .ant-menu-item {
     padding-right: 0;
+    padding-left: 42px !important;
   }
 }

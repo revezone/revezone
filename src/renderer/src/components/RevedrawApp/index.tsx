@@ -46,8 +46,6 @@ export default function RevedrawApp({ file }: Props) {
 
   const onChangeFn = useCallback(
     async (data) => {
-      console.log('--- onchange ---', data);
-
       const str = JSON.stringify(data);
 
       await boardIndexeddbStorage.addOrUpdateBoard(file.id, str);
