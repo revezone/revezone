@@ -272,7 +272,9 @@ export default function CustomMenu({ collapsed }: Props) {
 
   return (
     <div className="revenote-menu-container">
-      <Logo className="pl-5" />
+      <div onClick={() => resetMenu()}>
+        <Logo className="pl-5 cursor-pointer" />
+      </div>
       <div className="revenote-menu-toolbar flex items-center pl-5 h-10">
         <span title="Add a folder">
           <FolderPlus className="h-4 w-4 text-current cursor-pointer mr-5" onClick={addFolder} />
