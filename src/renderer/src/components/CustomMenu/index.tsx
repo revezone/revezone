@@ -271,9 +271,7 @@ export default function CustomMenu({ collapsed }: Props) {
       <div onClick={() => resetMenu()}>
         <Logo className="pl-5 cursor-pointer" />
       </div>
-      <div className="revenote-menu-toolbar flex items-center pl-5 h-10">
-        <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
-      </div>
+      <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
       <Menu
         theme="light"
         mode="inline"

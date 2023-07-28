@@ -1,0 +1,15 @@
+.revenote-menu-toolbar {
+  .operation-item {
+    padding-right: 0.5rem;
+    .operation-btn-desc {
+      width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    &:hover .operation-btn-desc {
+      width: 80px;
+    }
+  }
+
+}

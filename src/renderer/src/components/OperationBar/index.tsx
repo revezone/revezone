@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
-import { message } from 'antd';
 import { FileTree, RevenoteFileType, OnFolderOrFileAddProps } from '@renderer/types/file';
-import { useTranslation } from 'react-i18next';
 import { currentFileIdAtom, currentFolderIdAtom, fileTreeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import { FolderPlus, Palette, FileType } from 'lucide-react';
+
+import './index.css';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
@@ -62,28 +62,37 @@ export default function AddFile(props: Props) {
   );
 
   return (
-    <>
-      <span title="Add a folder">
-        <FolderPlus className="h-4 w-4 text-current cursor-pointer mr-5" onClick={addFolder} />
+    <div className="revenote-menu-toolbar flex items-center pl-5 h-10">
+      <span
+        title="Add a folder"
+        className="operation-item flex items-center mr-3 cursor-pointer"
+        onClick={addFolder}
+      >
+        <FolderPlus className="h-4 w-4 text-current" />
+        <span className="operation-btn-desc ml-1 transition-all">Add a folder</span>
       </span>
-      <span title="Add a note">
-        <FileType
-          className={`${getSizeClassName()} text-current cursor-pointer mr-5 menu-icon`}
-          onClick={(e) => {
-            e.stopPropagation();
-            addFile(folderId, 'note', fileTree);
-          }}
-        />
+      <span
+        title="Add a note"
+        className="operation-item flex items-center mr-3 cursor-pointer"
+        onClick={(e) => {
+          e.stopPropagation();
+          addFile(folderId, 'note', fileTree);
+        }}
+      >
+        <FileType className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
+        <span className="operation-btn-desc ml-1 transition-all">Add a note</span>
       </span>
-      <span title="Add a board">
-        <Palette
-          className={`${getSizeClassName()} text-current cursor-pointer mr-5 menu-icon`}
-          onClick={(e) => {
-            e.stopPropagation();
-            addFile(folderId, 'board', fileTree);
-          }}
-        />
+      <span
+        title="Add a board"
+        className="operation-item flex items-center mr-3 cursor-pointer"
+        onClick={(e) => {
+          e.stopPropagation();
+          addFile(folderId, 'board', fileTree);
+        }}
+      >
+        <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
+        <span className="operation-btn-desc ml-1 transition-all">Add a board</span>
       </span>
-    </>
+    </div>
   );
 }

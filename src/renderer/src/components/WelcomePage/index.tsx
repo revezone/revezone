@@ -68,7 +68,7 @@ function WelcomeContent() {
             </a>
           </p>
         </div>
-        <div className="fixed bottom-60">
+        <div className="fixed bottom-10">
           Copyright © 2023{' '}
           <a href="https://twitter.com/korbinzhao" target="_blank" rel="noreferrer">
             Korbin Zhao
