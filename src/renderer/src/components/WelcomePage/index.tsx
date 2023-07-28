@@ -1,9 +1,10 @@
 import Logo from '../Logo';
 import { Twitter, Github, Coffee, Cat, FolderPlus, FileType, Palette } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import './index.css';
 
-export default function WelcomePage() {
+function WelcomeContent() {
   return (
     <div className="revenote-welcome-page w-full h-full flex pt-20 justify-center">
       <div className="content w-2/3">
@@ -77,4 +78,15 @@ export default function WelcomePage() {
       </div>
     </div>
   );
+}
+
+export default function WelcomePage() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 200);
+  }, []);
+
+  return !loading ? <WelcomeContent /> : null;
 }

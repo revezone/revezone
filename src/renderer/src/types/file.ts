@@ -32,3 +32,9 @@ export interface RevenoteFolder {
 export type FileTreeItem = RevenoteFolder & { children: RevenoteFile[] };
 
 export type FileTree = FileTreeItem[];
+
+export interface OnFolderOrFileAddProps {
+  fileId?: string;
+  folderId: string;
+  type: 'folder' | 'file';
+}

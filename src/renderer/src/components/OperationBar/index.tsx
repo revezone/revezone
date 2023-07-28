@@ -1,24 +1,23 @@
 import { useCallback } from 'react';
 import { message } from 'antd';
-import { FileTree, RevenoteFileType } from '@renderer/types/file';
+import { FileTree, RevenoteFileType, OnFolderOrFileAddProps } from '@renderer/types/file';
 import { useTranslation } from 'react-i18next';
-import { currentFileIdAtom, fileTreeAtom } from '@renderer/store/jotai';
+import { currentFileIdAtom, currentFolderIdAtom, fileTreeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import { Palette, FileType } from 'lucide-react';
+import { FolderPlus, Palette, FileType } from 'lucide-react';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
   folderId: string | undefined;
-  onAdd?: (fileId: string, folderId: string) => void;
+  onAdd?: ({ fileId, folderId, type }: OnFolderOrFileAddProps) => void;
 }
 
 export default function AddFile(props: Props) {
   const { folderId, size = 'middle', onAdd } = props;
   const [, setCurrentFileId] = useAtom(currentFileIdAtom);
+  const [, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
-
-  const { t } = useTranslation();
 
   const getSizeClassName = useCallback(() => {
     switch (size) {
@@ -32,6 +31,16 @@ export default function AddFile(props: Props) {
         return 'h-5';
     }
   }, [size]);
+
+  const addFolder = useCallback(async () => {
+    const folder = await menuIndexeddbStorage.addFolder();
+    const tree = await menuIndexeddbStorage.getFileTree();
+    setFileTree(tree);
+    setCurrentFolderId(folder.id);
+    setCurrentFileId(undefined);
+
+    onAdd?.({ folderId: folder.id, type: 'folder' });
+  }, []);
 
   const addFile = useCallback(
     async (folderId: string | undefined, type: RevenoteFileType, fileTree: FileTree) => {
@@ -47,13 +56,16 @@ export default function AddFile(props: Props) {
 
       setCurrentFileId(file.id);
 
-      onAdd?.(file.id, _folderId);
+      onAdd?.({ fileId: file.id, folderId: _folderId, type: 'file' });
     },
     []
   );
 
   return (
     <>
+      <span title="Add a folder">
+        <FolderPlus className="h-4 w-4 text-current cursor-pointer mr-5" onClick={addFolder} />
+      </span>
       <span title="Add a note">
         <FileType
           className={`${getSizeClassName()} text-current cursor-pointer mr-5 menu-icon`}

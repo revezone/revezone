@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Menu, Dropdown } from 'antd';
 import { FolderIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import type { RevenoteFile, RevenoteFolder } from '@renderer/types/file';
+import type { RevenoteFile, RevenoteFolder, OnFolderOrFileAddProps } from '@renderer/types/file';
 import {
   getOpenKeysFromLocal,
   getSelectedKeysFromLocal,
@@ -22,8 +22,7 @@ import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 import { useDebounceEffect } from 'ahooks';
 import { FILE_ID_REGEX } from '@renderer/utils/constant';
-import AddFile from '../AddFile';
-import { FolderPlus } from 'lucide-react';
+import OperationBar from '../OperationBar';
 import moment from 'moment';
 import Logo from '../Logo';
 
@@ -115,21 +114,16 @@ export default function CustomMenu({ collapsed }: Props) {
     [selectedKeys]
   );
 
-  const addFolder = useCallback(async () => {
-    const folder = await menuIndexeddbStorage.addFolder();
-    const tree = await menuIndexeddbStorage.getFileTree();
-    setFileTree(tree);
-    setCurrentFolderId(folder.id);
-    setCurrentFileId(undefined);
-    setCurrentFile(undefined);
-    setOpenKeys([...openKeys, folder.id]);
-    addSelectedKeys([folder.id]);
-  }, []);
-
-  const onFileAdd = useCallback(
-    (fileId: string, folderId: string) => {
+  const onFolderOrFileAdd = useCallback(
+    ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
       setOpenKeys([...openKeys, folderId]);
-      addSelectedKeys([getFileMenuKey(fileId, 'Untitled')]);
+      if (type === 'file') {
+        addSelectedKeys([getFileMenuKey(fileId, 'Untitled')]);
+      } else if (type === 'folder') {
+        resetMenu();
+        setCurrentFile(undefined);
+        addSelectedKeys([folderId]);
+      }
     },
     [openKeys]
   );
@@ -278,10 +272,7 @@ export default function CustomMenu({ collapsed }: Props) {
         <Logo className="pl-5 cursor-pointer" />
       </div>
       <div className="revenote-menu-toolbar flex items-center pl-5 h-10">
-        <span title="Add a folder">
-          <FolderPlus className="h-4 w-4 text-current cursor-pointer mr-5" onClick={addFolder} />
-        </span>
-        <AddFile size="small" folderId={currentFolderId} onAdd={onFileAdd} />
+        <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
       </div>
       <Menu
         theme="light"
