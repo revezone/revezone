@@ -25,6 +25,7 @@ import { FILE_ID_REGEX } from '@renderer/utils/constant';
 import AddFile from '../AddFile';
 import { FolderPlus } from 'lucide-react';
 import moment from 'moment';
+import Logo from '../Logo';
 
 import './index.css';
 import { getCurrentFolderIdByFileId } from '@renderer/utils/menu';
@@ -271,13 +272,7 @@ export default function CustomMenu({ collapsed }: Props) {
 
   return (
     <div className="revenote-menu-container">
-      <div
-        className="flex items-center pl-5 h-10 text-xl font-mono underline font-semibold tracking-wider
-        bg-clip-text text-transparent text-sky-500 bg-gradient-to-r from-sky-300 to-sky-600 decoration-cyan-100
-        underline-offset-2"
-      >
-        ReveNote
-      </div>
+      <Logo className="pl-5" />
       <div className="revenote-menu-toolbar flex items-center pl-5 h-10">
         <span title="Add a folder">
           <FolderPlus className="h-4 w-4 text-current cursor-pointer mr-5" onClick={addFolder} />
