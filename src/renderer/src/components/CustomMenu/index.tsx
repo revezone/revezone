@@ -70,9 +70,7 @@ export default function CustomMenu({ collapsed }: Props) {
   }, [currentFileId, fileTree]);
 
   useEffect(() => {
-    if (currentFileId) {
-      setCurrentFileIdToLocal(currentFileId);
-    }
+    setCurrentFileIdToLocal(currentFileId);
   }, [currentFileId]);
 
   useEffect(() => {

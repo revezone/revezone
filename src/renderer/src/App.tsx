@@ -10,26 +10,25 @@ import zhTW from 'antd/locale/zh_TW';
 import enUS from 'antd/locale/en_US';
 import '@renderer/i18n';
 import moment from 'moment';
+import WelcomePage from './components/WelcomePage';
+import { ConfigProvider } from 'antd';
 
 moment.tz.setDefault();
 
 import './App.css';
-import { ConfigProvider } from 'antd';
 
 function App(): JSX.Element {
   const [currentFile] = useAtom(currentFileAtom);
   const [langCode] = useAtom(langCodeAtom);
 
   const renderContent = useCallback((file) => {
-    if (!file) return null;
-
-    switch (file.type) {
+    switch (file?.type) {
       case 'note':
         return <NoteEditor pageId={file.id} />;
       case 'board':
         return <RevedrawApp file={file} />;
       default:
-        return null;
+        return <WelcomePage />;
     }
   }, []);
 

@@ -23,8 +23,8 @@ export const setSelectedKeysToLocal = (SelectedKeys) => {
   localStorage.setItem(LOCALSTORAGE_MENU_ACTIVE_KEYS, localStr);
 };
 
-export const setCurrentFileIdToLocal = (fileId: string) => {
-  localStorage.setItem(LOCALSTORAGE_CURRENT_FILE_ID, fileId);
+export const setCurrentFileIdToLocal = (fileId: string | undefined | null) => {
+  localStorage.setItem(LOCALSTORAGE_CURRENT_FILE_ID, fileId || '');
 };
 
 export const getCurrentFileIdFromLocal = () => {
