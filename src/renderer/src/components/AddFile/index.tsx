@@ -35,11 +35,10 @@ export default function AddFile(props: Props) {
 
   const addFile = useCallback(
     async (folderId: string | undefined, type: RevenoteFileType, fileTree: FileTree) => {
-      const _folderId = folderId || fileTree?.[0]?.id;
+      let _folderId = folderId || fileTree?.[0]?.id;
 
       if (!_folderId) {
-        message.info(t('message.createFolderFirst'));
-        return;
+        _folderId = (await menuIndexeddbStorage.addFolder())?.id;
       }
 
       const file = await menuIndexeddbStorage.addFile(_folderId, type);

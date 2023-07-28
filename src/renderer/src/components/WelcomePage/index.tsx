@@ -20,7 +20,7 @@ export default function WelcomePage() {
           whiteboarding features.
         </p>
         <div className="mb-6">
-          <h2 className="mb-2 text-base">Add Operation Description</h2>
+          <h2 className="mb-2 text-base">Operation Help</h2>
           <p className="mb-2">
             Click the icons in left sidebar operation toolbar to add a foler/note/board.
           </p>
@@ -66,6 +66,13 @@ export default function WelcomePage() {
               <Twitter className="w-4 h-4" /> Follow the author
             </a>
           </p>
+        </div>
+        <div className="fixed bottom-60">
+          Copyright © 2023{' '}
+          <a href="https://twitter.com/korbinzhao" target="_blank" rel="noreferrer">
+            Korbin Zhao
+          </a>
+          . All rights reserved.
         </div>
       </div>
     </div>

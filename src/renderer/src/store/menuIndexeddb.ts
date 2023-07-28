@@ -267,9 +267,7 @@ class MenuIndexeddbStorage {
       folderId
     );
 
-    const reversed = mappings?.reverse();
-
-    const promises = reversed
+    const promises = mappings
       ?.map(async (item) => this.getFile(item.fileId))
       .filter((item) => !!item);
 
@@ -320,18 +318,11 @@ class MenuIndexeddbStorage {
 
     await this.db?.delete(INDEXEDDB_FOLDER_KEY, folderId);
 
-    const folderFileMappingKeys = await this.db?.getAllKeysFromIndex(
-      INDEXEDDB_FOLD_FILE_MAPPING_KEY,
-      // @ts-ignore
-      'folderId',
-      folderId
-    );
+    const filesInFolder = await this.getFilesInFolder(folderId);
 
-    const deleteFolderFileMappingPromises = folderFileMappingKeys?.map(async (key) =>
-      this.db?.delete(INDEXEDDB_FOLD_FILE_MAPPING_KEY, key)
-    );
+    const deleteFilesPromise = filesInFolder?.map(async (file) => this.deleteFile(file.id));
 
-    deleteFolderFileMappingPromises && (await Promise.all(deleteFolderFileMappingPromises));
+    deleteFilesPromise && (await Promise.all(deleteFilesPromise));
   }
 }
 
