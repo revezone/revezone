@@ -274,8 +274,9 @@ export default function CustomMenu({ collapsed }: Props) {
   return (
     <div className="revenote-menu-container">
       <div
-        className="flex items-center pl-5 h-10 text-lg font-mono underline font-semibold
-        bg-clip-text text-transparent text-sky-500 bg-gradient-to-r from-cyan-300 to-blue-500"
+        className="flex items-center pl-5 h-10 text-xl font-mono underline font-semibold tracking-wider
+        bg-clip-text text-transparent text-sky-500 bg-gradient-to-r from-sky-300 to-sky-600 decoration-cyan-100
+        underline-offset-2"
       >
         ReveNote
       </div>
@@ -316,7 +317,7 @@ export default function CustomMenu({ collapsed }: Props) {
                     <EditableText
                       type={file.type}
                       text={file.name}
-                      extraText={new Date(file.gmtModified).toLocaleString()}
+                      extraText={moment(file.gmtModified).format('YYYY-MM-DD HH:mm:ss')}
                       defaultText="Untitled"
                       onChange={(text) => onFileNameChange(text, file)}
                     />

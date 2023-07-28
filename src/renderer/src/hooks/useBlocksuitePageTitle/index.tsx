@@ -11,7 +11,7 @@ export default function useBlocksuitePageTitle() {
 
   const [pageTitle, setPageTitle] = useState<string>();
 
-  const pageTitleUpdateListener = useCallback(async () => {
+  const pageUpdateListener = useCallback(async () => {
     if (!currentFileId || !workspaceLoaded) {
       return;
     }
@@ -20,11 +20,15 @@ export default function useBlocksuitePageTitle() {
     const prevTitle = page?.meta.title;
 
     page?.slots.historyUpdated.on(async () => {
+      const file = await menuIndexeddbStorage.getFile(currentFileId);
+
       const currentTitle = page.meta.title;
       if (currentTitle !== prevTitle) {
         setPageTitle(currentTitle);
-        const file = await menuIndexeddbStorage.getFile(currentFileId);
+
         file && menuIndexeddbStorage.updateFileName(file, currentTitle);
+      } else {
+        file && menuIndexeddbStorage.updateFileGmtModified(file);
       }
     });
   }, [currentFileId, workspaceLoaded]);
@@ -39,7 +43,7 @@ export default function useBlocksuitePageTitle() {
   useDebounceEffect(
     () => {
       getPageTitle();
-      pageTitleUpdateListener();
+      pageUpdateListener();
     },
     [currentFileId, workspaceLoaded],
     { wait: 200 }

@@ -286,7 +286,23 @@ class MenuIndexeddbStorage {
 
     console.log('updateFileName', name, file);
 
-    file && this.db?.put(INDEXEDDB_FILE_KEY, { ...file, name }, file.id);
+    file &&
+      (await this.db?.put(
+        INDEXEDDB_FILE_KEY,
+        { ...file, name, gmtModified: moment().toLocaleString() },
+        file.id
+      ));
+  }
+
+  async updateFileGmtModified(file: RevenoteFile) {
+    await this.initDB();
+
+    file &&
+      (await this.db?.put(
+        INDEXEDDB_FILE_KEY,
+        { ...file, gmtModified: moment().toLocaleString() },
+        file.id
+      ));
   }
 
   async updateFolderName(folder: RevenoteFolder, name: string) {

@@ -47,14 +47,16 @@ export default function EditableText({ text, defaultText, type, extraText, onCha
   }, []);
 
   return (
-    <div className="editable-text-container" ref={ref} onDoubleClick={onEdit}>
+    <div className="editable-text-container flex items-center" ref={ref} onDoubleClick={onEdit}>
       {isPreview ? (
-        <div>
-          <p className="flex justify-between items-center">
-            <span className="text-ellipsis overflow-hidden">{value || defaultText}</span>
-            {getMark(type)}
-          </p>
-          <p className="text-slate-400">{extraText}</p>
+        <div title={value} className="flex items-center justify-between w-full">
+          <div className="leading-4">
+            <p className="text-ellipsis overflow-hidden">{value || defaultText}</p>
+            {extraText ? (
+              <p className="text-slate-400 leading-4 text-xs mt-1">{extraText}</p>
+            ) : null}
+          </div>
+          <p>{getMark(type)}</p>
         </div>
       ) : (
         <Input

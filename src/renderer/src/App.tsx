@@ -9,6 +9,9 @@ import zhCN from 'antd/locale/zh_CN';
 import zhTW from 'antd/locale/zh_TW';
 import enUS from 'antd/locale/en_US';
 import '@renderer/i18n';
+import moment from 'moment';
+
+moment.tz.setDefault();
 
 import './App.css';
 import { ConfigProvider } from 'antd';

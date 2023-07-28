@@ -5,8 +5,6 @@
 
   .ant-menu-submenu-title {
     padding-left: 16px !important;
-
-   
   }
 
   .ant-menu-submenu-title .menu-icon {
@@ -14,11 +12,19 @@
   }
 
   .ant-menu-title-content {
+    display: flex;
+    align-items: center;
     height: 100%;
+    width: 100%;
+  }
+
+  .ant-dropdown-trigger {
+    width: 100%;
   }
 
   .ant-menu-item {
     padding-right: 0;
     padding-left: 42px !important;
+    height: 50px;
   }
 }
