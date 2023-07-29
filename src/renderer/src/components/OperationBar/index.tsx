@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
-import { FileTree, RevenoteFileType, OnFolderOrFileAddProps } from '@renderer/types/file';
+import { OnFolderOrFileAddProps } from '@renderer/types/file';
 import { currentFileIdAtom, currentFolderIdAtom, fileTreeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import { FolderPlus, Palette, FileType } from 'lucide-react';
+import useAddFile from '@renderer/hooks/useAddFile';
 
 import './index.css';
 
@@ -14,11 +15,12 @@ interface Props {
   onAdd?: ({ fileId, folderId, type }: OnFolderOrFileAddProps) => void;
 }
 
-export default function AddFile(props: Props) {
+export default function OperationBar(props: Props) {
   const { folderId, size = 'middle', className, onAdd } = props;
   const [, setCurrentFileId] = useAtom(currentFileIdAtom);
   const [, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
+  const [addFile] = useAddFile({ onAdd });
 
   const getSizeClassName = useCallback(() => {
     switch (size) {
@@ -42,25 +44,6 @@ export default function AddFile(props: Props) {
 
     onAdd?.({ folderId: folder.id, type: 'folder' });
   }, []);
-
-  const addFile = useCallback(
-    async (folderId: string | undefined, type: RevenoteFileType, fileTree: FileTree) => {
-      let _folderId = folderId || fileTree?.[0]?.id;
-
-      if (!_folderId) {
-        _folderId = (await menuIndexeddbStorage.addFolder())?.id;
-      }
-
-      const file = await menuIndexeddbStorage.addFile(_folderId, type);
-      const tree = await menuIndexeddbStorage.getFileTree();
-      setFileTree(tree);
-
-      setCurrentFileId(file.id);
-
-      onAdd?.({ fileId: file.id, folderId: _folderId, type: 'file' });
-    },
-    []
-  );
 
   return (
     <div className={`revenote-menu-toolbar flex items-center pl-5 h-10 ${className}`}>

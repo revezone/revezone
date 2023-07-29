@@ -1,5 +1,5 @@
-import { useCallback, useRef, useState } from 'react';
-import { Input } from 'antd';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Input, InputRef } from 'antd';
 import { Palette, FileType } from 'lucide-react';
 import { RevenoteFileType } from '@renderer/types/file';
 
@@ -25,7 +25,7 @@ export default function EditableText({
   onEdit
 }: Props) {
   const [value, setValue] = useState(text);
-  const ref = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<InputRef>(null);
 
   const _onChange = useCallback((e) => {
     setValue(e.target.value);
@@ -43,9 +43,14 @@ export default function EditableText({
 
   const _onEdit = useCallback(() => {
     onEdit();
+  }, [isPreview]);
+
+  useEffect(() => {
+    if (isPreview) return;
+
     setTimeout(() => {
-      const input = ref.current?.querySelector('input') as HTMLInputElement;
-      input?.focus();
+      console.log('_onEdit', inputRef);
+      inputRef.current?.focus();
     }, 0);
   }, [isPreview]);
 
@@ -60,7 +65,7 @@ export default function EditableText({
   }, []);
 
   return (
-    <div className="editable-text-container flex items-center" ref={ref} onDoubleClick={_onEdit}>
+    <div className="editable-text-container flex items-center" onDoubleClick={_onEdit}>
       {isPreview ? (
         <div title={value} className="flex items-center justify-between w-full">
           <div className="leading-4">
@@ -72,7 +77,13 @@ export default function EditableText({
           <p className="flex items-center">{getMark(type)}</p>
         </div>
       ) : (
-        <Input defaultValue={value} onChange={_onChange} onBlur={_onSave} onPressEnter={_onSave} />
+        <Input
+          ref={inputRef}
+          defaultValue={value}
+          onChange={_onChange}
+          onBlur={_onSave}
+          onPressEnter={_onSave}
+        />
       )}
     </div>
   );

@@ -27,7 +27,16 @@ import RevenoteLogo from '../RevenoteLogo';
 
 import './index.css';
 import { getCurrentFolderIdByFileId, getFileMenuKey } from '@renderer/utils/menu';
-import { Copy, FileEdit, FolderEdit, Trash2, Folder, ClipboardCopy } from 'lucide-react';
+import {
+  FileEdit,
+  FolderEdit,
+  Trash2,
+  Folder,
+  ClipboardCopy,
+  FileType,
+  Palette
+} from 'lucide-react';
+import useAddFile from '@renderer/hooks/useAddFile';
 
 interface Props {
   collapsed: boolean;
@@ -42,6 +51,23 @@ export default function CustomMenu({ collapsed }: Props) {
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
   const [currentFolderId, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [editableTextState, setEditableTextState] = useState<{ [key: string]: boolean }>({});
+
+  const onFolderOrFileAdd = useCallback(
+    ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
+      setOpenKeys([...openKeys, folderId]);
+      updateEditableTextState(fileId || folderId, false, editableTextState);
+      if (type === 'file') {
+        addSelectedKeys([getFileMenuKey(fileId, 'Untitled')]);
+      } else if (type === 'folder') {
+        resetMenu();
+        setCurrentFileId(undefined);
+        setSelectedKeys([folderId]);
+      }
+    },
+    [openKeys, editableTextState]
+  );
+
+  const [addFile] = useAddFile({ onAdd: onFolderOrFileAdd });
 
   const getFileTree = useCallback(async () => {
     const tree = await menuIndexeddbStorage.getFileTree();
@@ -113,21 +139,6 @@ export default function CustomMenu({ collapsed }: Props) {
       setSelectedKeys(newKeys);
     },
     [selectedKeys]
-  );
-
-  const onFolderOrFileAdd = useCallback(
-    ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
-      setOpenKeys([...openKeys, folderId]);
-      updateEditableTextState(fileId || folderId, false, editableTextState);
-      if (type === 'file') {
-        addSelectedKeys([getFileMenuKey(fileId, 'Untitled')]);
-      } else if (type === 'folder') {
-        resetMenu();
-        setCurrentFileId(undefined);
-        setSelectedKeys([folderId]);
-      }
-    },
-    [openKeys, editableTextState]
   );
 
   const deleteFile = useCallback(
@@ -204,6 +215,24 @@ export default function CustomMenu({ collapsed }: Props) {
 
   const getFolderMenu = useCallback(
     (folder: RevenoteFolder) => [
+      {
+        key: 'addnote',
+        label: 'Add a note',
+        icon: <FileType className="w-4" />,
+        onClick: ({ domEvent }) => {
+          domEvent.stopPropagation();
+          addFile(folder.id, 'note', fileTree);
+        }
+      },
+      {
+        key: 'addboard',
+        label: 'Add a board',
+        icon: <Palette className="w-4" />,
+        onClick: ({ domEvent }) => {
+          domEvent.stopPropagation();
+          addFile(folder.id, 'board', fileTree);
+        }
+      },
       {
         key: 'rename',
         label: 'rename',

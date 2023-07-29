@@ -8,7 +8,6 @@ import {
   RevenoteFileType,
   RevenoteFolderFileMapping
 } from '../types/file';
-import { blocksuiteStorage } from './blocksuite';
 
 moment.tz.setDefault('Asia/Shanghai');
 
@@ -145,7 +144,7 @@ class MenuIndexeddbStorage {
 
     const folderInfo = {
       id,
-      name: 'Untitled Folder',
+      name: '',
       gmtCreate: moment().toLocaleString(),
       gmtModified: moment().toLocaleString()
     };
@@ -181,7 +180,7 @@ class MenuIndexeddbStorage {
 
     const fileInfo = {
       id: fileId,
-      name: name || 'Untitled',
+      name: name || '',
       type,
       gmtCreate: moment().toLocaleString(),
       gmtModified: moment().toLocaleString()
