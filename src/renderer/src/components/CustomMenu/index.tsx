@@ -228,13 +228,16 @@ export default function CustomMenu({ collapsed }: Props) {
   );
 
   const onFileNameChange = useCallback(
-    (text: string, file: RevenoteFile) => {
+    async (text: string, file: RevenoteFile) => {
       if (file.type === 'note') {
-        blocksuiteStorage.updatePageTitle(file.id, text);
+        await blocksuiteStorage.updatePageTitle(file.id, text);
       }
-      menuIndexeddbStorage.updateFileName(file, text);
+      await menuIndexeddbStorage.updateFileName(file, text);
       updateEditableTextState(file.id, true, editableTextState);
+
       setSelectedKeys([getFileMenuKey(file.id, text)]);
+
+      await getFileTree();
     },
     [editableTextState]
   );
