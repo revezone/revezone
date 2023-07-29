@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { FolderEdit, Trash2, FileType, Palette } from 'lucide-react';
 import { FileTree, RevenoteFolder, RevenoteFileType } from '@renderer/types/file';
 import { EditableTextState } from '@renderer/types/menu';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   fileTree: FileTree;
@@ -17,12 +18,13 @@ interface Props {
 
 export default function useFolderContextMenu(props: Props) {
   const { editableTextState, fileTree, addFile, updateEditableTextState, deleteFolder } = props;
+  const { t } = useTranslation();
 
   const getFolderContextMenu = useCallback(
     (folder: RevenoteFolder) => [
       {
         key: 'addnote',
-        label: 'Add a note',
+        label: t('operation.addNote'),
         icon: <FileType className="w-4" />,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
@@ -31,7 +33,7 @@ export default function useFolderContextMenu(props: Props) {
       },
       {
         key: 'addboard',
-        label: 'Add a board',
+        label: t('operation.addBoard'),
         icon: <Palette className="w-4" />,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
@@ -40,7 +42,7 @@ export default function useFolderContextMenu(props: Props) {
       },
       {
         key: 'rename',
-        label: 'rename',
+        label: t('operation.rename'),
         icon: <FolderEdit className="w-4" />,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
@@ -50,7 +52,7 @@ export default function useFolderContextMenu(props: Props) {
       },
       {
         key: 'delete',
-        label: 'delete',
+        label: t('operation.delete'),
         icon: <Trash2 className="w-4"></Trash2>,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();

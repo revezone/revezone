@@ -7,6 +7,7 @@ import { FolderPlus, Palette, FileType } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 
 import './index.css';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
@@ -21,6 +22,7 @@ export default function OperationBar(props: Props) {
   const [, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
   const [addFile] = useAddFile({ onAdd });
+  const { t } = useTranslation();
 
   const getSizeClassName = useCallback(() => {
     switch (size) {
@@ -48,7 +50,7 @@ export default function OperationBar(props: Props) {
   return (
     <div className={`revenote-menu-toolbar flex items-center pl-5 h-10 ${className}`}>
       <span
-        title="Add a folder"
+        title={t('operation.addFolder')}
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={addFolder}
       >
@@ -56,7 +58,7 @@ export default function OperationBar(props: Props) {
         <span className="operation-btn-desc ml-1 transition-all">Add a folder</span>
       </span>
       <span
-        title="Add a note"
+        title={t('operation.addNote')}
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
@@ -67,7 +69,7 @@ export default function OperationBar(props: Props) {
         <span className="operation-btn-desc ml-1 transition-all">Add a note</span>
       </span>
       <span
-        title="Add a board"
+        title={t('operation.addBoard')}
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();

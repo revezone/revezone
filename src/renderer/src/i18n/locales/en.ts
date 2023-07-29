@@ -11,5 +11,28 @@ export default {
   },
   message: {
     createFolderFirst: 'Please create a folder first'
+  },
+  operation: {
+    addFolder: 'Add a folder',
+    addNote: 'Add a note',
+    addBoard: 'Add a board',
+    rename: 'Rename',
+    delete: 'Delete',
+    copyRevenoteLink: 'Copy revenote link'
+  },
+  welcome: {
+    productDesc:
+      'A lightweight productivity tool to build Second Brain that integrates note-taking and whiteboarding features. Local-first and block-based.',
+    operationTip: 'This is an empty page. Please add or select a file first.',
+    operationGuide: 'Operation Guide',
+    operationDetailDesc:
+      'Click the icons in left sidebar operation toolbar to add a foler/note/board.'
+  },
+  links: {
+    github: 'Official Github',
+    twitter: 'Official Twitter',
+    buyMeACoffee: 'By me a coffee',
+    feedMyCat: 'Feed my cat',
+    followTheAuthor: 'Follow the author'
   }
 };

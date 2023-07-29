@@ -11,5 +11,27 @@ export default {
   },
   message: {
     createFolderFirst: '请先创建文件夹'
+  },
+  operation: {
+    addFolder: '添加文件夹',
+    addNote: '添加 Note',
+    addBoard: '添加 Board',
+    rename: '重命名',
+    delete: '删除',
+    copyRevenoteLink: '复制 Revenote 链接'
+  },
+  welcome: {
+    productDesc:
+      '一款用于构建第二大脑的轻量级本地优先效率工具，集成了类 Notion 笔记和类 Excalidraw 白板能力。',
+    operationTip: '这是一个空白页，请先添加或选择某个文件',
+    operationGuide: '操作说明',
+    operationDetailDesc: '点击左侧边栏的操作图标来创建一个文件夹、Note 或 Board。'
+  },
+  links: {
+    github: '官方 Github',
+    twitter: '官方 Twitter',
+    buyMeACoffee: '买杯咖啡',
+    feedMyCat: '投喂猫粮',
+    followTheAuthor: '关注作者'
   }
 };

@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { FileEdit, Trash2, ClipboardCopy } from 'lucide-react';
 import { EditableTextState } from '@renderer/types/menu';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   editableTextState: EditableTextState;
@@ -14,12 +15,13 @@ interface Props {
 
 export default function useFileContextMenu(props: Props) {
   const { editableTextState, updateEditableTextState, deleteFile } = props;
+  const { t } = useTranslation();
 
   const getFileContextMenu = useCallback(
     (file, folder) => [
       {
         key: 'rename',
-        label: 'rename',
+        label: t('operation.rename'),
         icon: <FileEdit className="w-4" />,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
@@ -29,7 +31,7 @@ export default function useFileContextMenu(props: Props) {
       },
       {
         key: 'delete',
-        label: 'delete',
+        label: t('operation.delete'),
         icon: <Trash2 className="w-4"></Trash2>,
         onClick: () => {
           console.log('delete');
@@ -38,7 +40,7 @@ export default function useFileContextMenu(props: Props) {
       },
       {
         key: 'copy_revenote_link',
-        label: 'Copy Revenote Link',
+        label: t('operation.copyRevenoteLink'),
         icon: <ClipboardCopy className="w-4" />,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
