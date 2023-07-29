@@ -1,9 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import '@blocksuite/editor';
 import '@blocksuite/editor/themes/affine.css';
 import RevenoteBlockSuiteEditor from '../RevenoteBlockSuiteEditor';
+import { blocksuiteStorage } from '@renderer/store/blocksuite';
+import type { Page } from '@blocksuite/store';
 
-import './index.css';
+const { workspace } = blocksuiteStorage;
 
 interface Props {
   pageId: string;
@@ -14,35 +16,14 @@ function NoteEditor({ pageId }: Props): JSX.Element | null {
     return null;
   }
 
-  const editorRef = useRef<HTMLDivElement>(null);
-  const editorMountRef = useRef(false);
+  const [currentPage, setCurrentPage] = useState<Page>();
 
   useEffect(() => {
-    if (!pageId || editorMountRef.current) {
-      return;
-    }
-
-    editorMountRef.current = true;
-
-    if (editorRef.current) {
-      const editor = new RevenoteBlockSuiteEditor({
-        pageId
-      });
-
-      editorRef.current.innerHTML = '';
-
-      editorRef.current?.appendChild(editor);
-
-      // @ts-ignore TEST
-      window.editor = editor;
-    }
-  }, [pageId, editorMountRef.current]);
-
-  useEffect(() => {
-    editorMountRef.current = !editorMountRef.current;
+    const page = workspace.getPage(pageId) || workspace.createPage({ id: pageId });
+    setCurrentPage(page);
   }, [pageId]);
 
-  return <div className="blocksuite-editor-container" ref={editorRef}></div>;
+  return currentPage ? <RevenoteBlockSuiteEditor page={currentPage} /> : null;
 }
 
 export default NoteEditor;

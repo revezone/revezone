@@ -1,40 +1,37 @@
-import type { Page } from '@blocksuite/store';
-import { Workspace } from '@blocksuite/store';
-import { LitElement } from 'lit';
+import { useEffect, useRef } from 'react';
 import { EditorContainer } from '@blocksuite/editor';
-import { blocksuiteStorage } from '../../store/blocksuite';
+import { Page } from '@blocksuite/store';
+import '@blocksuite/editor/themes/affine.css';
 
-const CUSTOM_ELEMENT_NAME = 'revenote-block-suite-editor';
+import './index.css';
 
 interface Props {
-  pageId: string;
-}
-export default class RevenoteBlockSuiteEditor extends LitElement {
-  readonly workspace: Workspace = blocksuiteStorage.workspace;
-  readonly page: Page;
-
-  constructor({ pageId }: Props) {
-    super();
-
-    this.page =
-      this.workspace.getPage(pageId) || this.workspace.createPage({ id: pageId, init: true });
-
-    // @ts-ignore
-    window.workspace = RevenoteBlockSuiteEditor.workspace;
-
-    // @ts-ignore
-    window.editor = this;
-  }
-
-  override connectedCallback(): void {
-    const editor = new EditorContainer();
-    editor.page = this.page;
-    this.appendChild(editor);
-  }
-
-  override disconnectedCallback(): void {
-    this.removeChild(this.children[0]);
-  }
+  page: Page;
 }
 
-customElements.define(CUSTOM_ELEMENT_NAME, RevenoteBlockSuiteEditor);
+export default function RevenoteBlockSuiteEditor({ page }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const editorContainer = new EditorContainer();
+
+    editorContainer.page = page;
+
+    containerRef.current?.appendChild(editorContainer);
+
+    console.log('--- page change ---', page);
+
+    return () => {
+      console.log('--- remove child ---');
+      containerRef.current?.removeChild(editorContainer);
+    };
+  }, [page]);
+
+  return (
+    <div
+      className="blocksuite-editor-container"
+      style={{ width: '100%', height: '100%' }}
+      ref={containerRef}
+    ></div>
+  );
+}
