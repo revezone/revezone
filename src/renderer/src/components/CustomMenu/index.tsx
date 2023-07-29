@@ -27,16 +27,10 @@ import RevenoteLogo from '../RevenoteLogo';
 
 import './index.css';
 import { getCurrentFolderIdByFileId, getFileMenuKey } from '@renderer/utils/menu';
-import {
-  FileEdit,
-  FolderEdit,
-  Trash2,
-  Folder,
-  ClipboardCopy,
-  FileType,
-  Palette
-} from 'lucide-react';
+import { Folder } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
+import useFileContextMenu from '@renderer/hooks/useFileContextMenu';
+import useFolderContextMenu from '@renderer/hooks/useFolderContextMenu';
 
 interface Props {
   collapsed: boolean;
@@ -57,7 +51,7 @@ export default function CustomMenu({ collapsed }: Props) {
       setOpenKeys([...openKeys, folderId]);
       updateEditableTextState(fileId || folderId, false, editableTextState);
       if (type === 'file') {
-        addSelectedKeys([getFileMenuKey(fileId, 'Untitled')]);
+        addSelectedKeys([getFileMenuKey(fileId, '')]);
       } else if (type === 'folder') {
         resetMenu();
         setCurrentFileId(undefined);
@@ -158,6 +152,12 @@ export default function CustomMenu({ collapsed }: Props) {
     [menuIndexeddbStorage]
   );
 
+  const updateEditableTextState = useCallback((id: string, value: boolean, editableTextState) => {
+    const newEditableTextState = { ...editableTextState };
+    newEditableTextState[id] = value;
+    setEditableTextState(newEditableTextState);
+  }, []);
+
   const deleteFolder = useCallback(
     async (folderId: string) => {
       await menuIndexeddbStorage.deleteFolder(folderId);
@@ -165,6 +165,20 @@ export default function CustomMenu({ collapsed }: Props) {
     },
     [menuIndexeddbStorage]
   );
+
+  const [getFileContextMenu] = useFileContextMenu({
+    editableTextState,
+    deleteFile,
+    updateEditableTextState
+  });
+
+  const [getFolderContextMenu] = useFolderContextMenu({
+    fileTree,
+    editableTextState,
+    updateEditableTextState,
+    addFile,
+    deleteFolder
+  });
 
   const resetMenu = useCallback(() => {
     setCurrentFileId(undefined);
@@ -212,89 +226,6 @@ export default function CustomMenu({ collapsed }: Props) {
     },
     [fileTree]
   );
-
-  const getFolderMenu = useCallback(
-    (folder: RevenoteFolder) => [
-      {
-        key: 'addnote',
-        label: 'Add a note',
-        icon: <FileType className="w-4" />,
-        onClick: ({ domEvent }) => {
-          domEvent.stopPropagation();
-          addFile(folder.id, 'note', fileTree);
-        }
-      },
-      {
-        key: 'addboard',
-        label: 'Add a board',
-        icon: <Palette className="w-4" />,
-        onClick: ({ domEvent }) => {
-          domEvent.stopPropagation();
-          addFile(folder.id, 'board', fileTree);
-        }
-      },
-      {
-        key: 'rename',
-        label: 'rename',
-        icon: <FolderEdit className="w-4" />,
-        onClick: ({ domEvent }) => {
-          domEvent.stopPropagation();
-          console.log('rename');
-          updateEditableTextState(folder.id, false, editableTextState);
-        }
-      },
-      {
-        key: 'delete',
-        label: 'delete',
-        icon: <Trash2 className="w-4"></Trash2>,
-        onClick: ({ domEvent }) => {
-          domEvent.stopPropagation();
-          deleteFolder(folder.id);
-        }
-      }
-    ],
-    [editableTextState]
-  );
-
-  const getFileMenu = useCallback(
-    (file, folder) => [
-      {
-        key: 'rename',
-        label: 'rename',
-        icon: <FileEdit className="w-4" />,
-        onClick: ({ domEvent }) => {
-          domEvent.stopPropagation();
-          console.log('rename');
-          updateEditableTextState(file.id, false, editableTextState);
-        }
-      },
-      {
-        key: 'delete',
-        label: 'delete',
-        icon: <Trash2 className="w-4"></Trash2>,
-        onClick: () => {
-          console.log('delete');
-          deleteFile(file.id, folder.id);
-        }
-      },
-      {
-        key: 'copy_revenote_link',
-        label: 'Copy Revenote Link',
-        icon: <ClipboardCopy className="w-4" />,
-        onClick: ({ domEvent }) => {
-          domEvent.stopPropagation();
-          navigator.clipboard.writeText(file.id);
-        }
-      }
-    ],
-    []
-  );
-
-  const updateEditableTextState = useCallback((id: string, value: boolean, editableTextState) => {
-    const newEditableTextState = { ...editableTextState };
-    newEditableTextState[id] = value;
-    setEditableTextState(newEditableTextState);
-  }, []);
 
   const onFileNameChange = useCallback(
     (text: string, file: RevenoteFile) => {
@@ -346,7 +277,7 @@ export default function CustomMenu({ collapsed }: Props) {
           key: folder.id,
           icon: <Folder className="w-3" />,
           label: (
-            <Dropdown menu={{ items: getFolderMenu(folder) }} trigger={['contextMenu']}>
+            <Dropdown menu={{ items: getFolderContextMenu(folder) }} trigger={['contextMenu']}>
               <div className="flex items-center justify-between">
                 <EditableText
                   isPreview={editableTextState[folder.id]}
@@ -362,7 +293,10 @@ export default function CustomMenu({ collapsed }: Props) {
             return {
               key: getFileMenuKey(file.id, file.name),
               label: (
-                <Dropdown menu={{ items: getFileMenu(file, folder) }} trigger={['contextMenu']}>
+                <Dropdown
+                  menu={{ items: getFileContextMenu(file, folder) }}
+                  trigger={['contextMenu']}
+                >
                   <div className="flex items-center justify-between">
                     <EditableText
                       isPreview={editableTextState[file.id]}
