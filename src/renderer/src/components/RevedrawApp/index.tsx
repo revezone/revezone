@@ -84,11 +84,6 @@ export default function RevedrawApp({ file }: Props) {
     };
   }, [file.id]);
 
-  // useEffect(() => {
-  //   i18n.changeLanguage(langCode);
-  //   console.log('langCode', langCode);
-  // }, [langCode]);
-
   return dataSource ? (
     <>
       <Revedraw

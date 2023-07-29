@@ -22,10 +22,7 @@ function App(): JSX.Element {
   const [currentFile] = useAtom(currentFileAtom);
   const [langCode] = useAtom(langCodeAtom);
 
-  const [currentFileId] = useAtom(currentFileIdAtom);
-
   const renderContent = useCallback((file) => {
-    console.log('renderContent', currentFileId, file);
     switch (file?.type) {
       case 'note':
         return <NoteEditor pageId={file.id} />;

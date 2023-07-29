@@ -84,8 +84,6 @@ export default function CustomMenu({ collapsed }: Props) {
 
     const file = currentFileId ? files?.find((_file) => _file.id === currentFileId) : null;
 
-    console.log('--- file ---', currentFileId, file);
-
     setCurrentFile(file);
   }, [currentFileId, fileTree]);
 

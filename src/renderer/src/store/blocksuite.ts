@@ -4,6 +4,8 @@ import { IndexeddbPersistence } from 'y-indexeddb';
 import { emitter, events } from './eventemitter';
 import { hackUpdateTitleDom } from '@renderer/utils/dom';
 
+console.log('AffineSchemas', AffineSchemas);
+
 const REVENOTE_EDITOR_KEY = 'revenote_blocksuite';
 
 class BlocksuiteStorage {
