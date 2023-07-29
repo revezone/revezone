@@ -24,7 +24,13 @@ export default function LanguageSwitcher() {
   }, []);
 
   return (
-    <Select size="small" value={langCode} onChange={onChange}>
+    <Select
+      size="small"
+      value={langCode}
+      onChange={onChange}
+      className="revenote-language-select mr-2 flex items-center"
+      bordered={false}
+    >
       {langCodeList.map((item) => {
         return (
           <Select.Option key={item.key} value={item.key}>

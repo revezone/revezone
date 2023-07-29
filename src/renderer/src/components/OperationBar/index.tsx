@@ -55,7 +55,7 @@ export default function OperationBar(props: Props) {
         onClick={addFolder}
       >
         <FolderPlus className={`${getSizeClassName()} text-current`} />
-        <span className="operation-btn-desc ml-1 transition-all">Add a folder</span>
+        <span className="operation-btn-desc ml-1 transition-all">{t('operation.addFolder')}</span>
       </span>
       <span
         title={t('operation.addNote')}
@@ -66,7 +66,7 @@ export default function OperationBar(props: Props) {
         }}
       >
         <FileType className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
-        <span className="operation-btn-desc ml-1 transition-all">Add a note</span>
+        <span className="operation-btn-desc ml-1 transition-all">{t('operation.addNote')}</span>
       </span>
       <span
         title={t('operation.addBoard')}
@@ -77,7 +77,7 @@ export default function OperationBar(props: Props) {
         }}
       >
         <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
-        <span className="operation-btn-desc ml-1 transition-all">Add a board</span>
+        <span className="operation-btn-desc ml-1 transition-all">{t('operation.addBoard')}</span>
       </span>
     </div>
   );

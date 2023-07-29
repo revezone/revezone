@@ -42,7 +42,7 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
           }}
         >
           <div className="revenote-topleft-toolbar">
-            <span className="tool-buttons">
+            <span className="tool-buttons flex items-center">
               <LanguageSwitcher />
               <PanelLeftClose
                 className="w-5 text-current cursor-pointer"
