@@ -23,7 +23,7 @@ export default {
   welcome: {
     productDesc:
       '一款用于构建第二大脑的轻量级本地优先效率工具，集成了类 Notion 笔记和类 Excalidraw 白板能力。',
-    operationTip: '这是一个空白页，请先添加或选择某个文件',
+    operationTip: '这是一个空白页，请先在左侧边栏添加或选择某个文件',
     operationGuide: '操作说明',
     operationDetailDesc: '点击左侧边栏的操作图标来创建一个文件夹、Note 或 Board。'
   },
