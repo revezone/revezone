@@ -1,4 +1,4 @@
-import Logo from '../Logo';
+import RevenoteLogo from '../RevenoteLogo';
 import { Twitter, Github, Coffee, Cat, FolderPlus, FileType, Palette } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -9,14 +9,14 @@ function WelcomeContent() {
     <div className="revenote-welcome-page w-full h-full flex pt-20 justify-center">
       <div className="content w-2/3 h-3/4 overflow-scroll">
         <div className="flex items-end mb-6">
-          <Logo size="large" />
+          <RevenoteLogo size="large" />
         </div>
         <p className="mb-6 text-lg">
           A lightweight productivity tool to build Second Brain that integrates note-taking and
-          whiteboarding features.
+          whiteboarding features. Local-first and block-based.
         </p>
         <div className="mb-6">
-          <h2 className="mb-2 text-base">Operation Help</h2>
+          <h2 className="mb-2 text-base">Operation Guide</h2>
           <p className="mb-2">
             Click the icons in left sidebar operation toolbar to add a foler/note/board.
           </p>

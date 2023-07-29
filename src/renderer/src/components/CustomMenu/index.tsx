@@ -23,7 +23,7 @@ import { useDebounceEffect } from 'ahooks';
 import { FILE_ID_REGEX } from '@renderer/utils/constant';
 import OperationBar from '../OperationBar';
 import moment from 'moment';
-import Logo from '../Logo';
+import RevenoteLogo from '../RevenoteLogo';
 
 import './index.css';
 import { getCurrentFolderIdByFileId, getFileMenuKey } from '@renderer/utils/menu';
@@ -64,6 +64,8 @@ export default function CustomMenu({ collapsed }: Props) {
     );
 
     const file = currentFileId ? files?.find((_file) => _file.id === currentFileId) : null;
+
+    console.log('--- file ---', currentFileId, file);
 
     setCurrentFile(file);
   }, [currentFileId, fileTree]);
@@ -120,7 +122,7 @@ export default function CustomMenu({ collapsed }: Props) {
         addSelectedKeys([getFileMenuKey(fileId, 'Untitled')]);
       } else if (type === 'folder') {
         resetMenu();
-        setCurrentFile(undefined);
+        setCurrentFileId(undefined);
         addSelectedKeys([folderId]);
       }
     },
@@ -154,7 +156,6 @@ export default function CustomMenu({ collapsed }: Props) {
 
   const resetMenu = useCallback(() => {
     setCurrentFileId(undefined);
-    setCurrentFile(undefined);
     setCurrentFolderId(undefined);
     setSelectedKeys([]);
   }, []);
@@ -184,6 +185,8 @@ export default function CustomMenu({ collapsed }: Props) {
   const onSelect = useCallback(
     ({ key }) => {
       const fileId = key?.match(FILE_ID_REGEX)?.[1];
+
+      console.log('onSelect', fileId, key);
 
       if (!fileId) return;
 
@@ -292,7 +295,7 @@ export default function CustomMenu({ collapsed }: Props) {
   return (
     <div className="revenote-menu-container">
       <div onClick={() => resetMenu()}>
-        <Logo size="small" className="pl-5" />
+        <RevenoteLogo size="small" className="pl-5" />
       </div>
       <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
       <Menu

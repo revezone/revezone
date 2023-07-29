@@ -74,7 +74,6 @@ export default function RevedrawApp({ file }: Props) {
         );
 
         if (file) {
-          setCurrentFile(file);
           setCurrentFileId(file.id);
         }
       } else {
