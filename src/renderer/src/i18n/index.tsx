@@ -28,3 +28,18 @@ i18n
       escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
     }
   });
+
+export const langCodeList = [
+  {
+    key: 'en',
+    label: 'English'
+  },
+  {
+    key: 'zh-CN',
+    label: '简体中文'
+  },
+  {
+    key: 'zh-TW',
+    label: '繁體中文'
+  }
+];

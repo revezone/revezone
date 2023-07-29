@@ -5,6 +5,7 @@ import { SiderTheme } from 'antd/es/layout/Sider';
 import CustomMenu from '../CustomMenu';
 import { siderbarCollapsedAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 import './index.css';
 
@@ -42,6 +43,7 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
         >
           <div className="revenote-topleft-toolbar">
             <span className="tool-buttons">
+              <LanguageSwitcher />
               <PanelLeftClose
                 className="w-5 text-current cursor-pointer"
                 onClick={switchCollapse}
