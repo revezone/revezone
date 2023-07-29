@@ -9,12 +9,7 @@ function WelcomeContent() {
     <div className="revenote-welcome-page w-full h-full flex pt-20 justify-center">
       <div className="content w-2/3 h-3/4 overflow-scroll">
         <div className="flex items-end mb-6">
-          <img
-            className="w-16 h-16 mr-4"
-            src="https://img.alicdn.com/imgextra/i2/O1CN01Ei2rTp1x7sUnWKWj3_!!6000000006397-2-tps-720-720.png"
-            alt=""
-          />
-          <Logo className="text-4xl mb-2" />
+          <Logo size="large" />
         </div>
         <p className="mb-6 text-lg">
           A lightweight productivity tool to build Second Brain that integrates note-taking and

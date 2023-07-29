@@ -292,7 +292,7 @@ export default function CustomMenu({ collapsed }: Props) {
   return (
     <div className="revenote-menu-container">
       <div onClick={() => resetMenu()}>
-        <Logo className="pl-5 cursor-pointer" />
+        <Logo size="small" className="pl-5" />
       </div>
       <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
       <Menu

@@ -10,8 +10,6 @@ export const getCurrentFolderIdByFileId = (currentFileId: string, fileTree: File
     }
   }
 
-  console.log('getCurrentFolderIdByFileId', currentFolderId, currentFileId, fileTree);
-
   return currentFolderId;
 };
 

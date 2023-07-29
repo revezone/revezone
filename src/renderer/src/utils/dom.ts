@@ -10,11 +10,13 @@ export const getPageTitleDom = (): HTMLElement | null | undefined => {
  * @param title string
  */
 export const hackUpdateTitleDom = (title) => {
-  const titleDom = getPageTitleDom();
+  setTimeout(() => {
+    const titleDom = getPageTitleDom();
 
-  if (titleDom) {
-    titleDom.innerHTML = title;
-  }
+    if (titleDom) {
+      titleDom.innerHTML = title;
+    }
+  }, 0);
 };
 
 export const getPageTitleFromDom = (): string => {
