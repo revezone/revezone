@@ -1,4 +1,7 @@
 .revenote-menu-container {
+  position: relative;
+  height: calc(100% - 4rem);
+
   .ant-menu-submenu-title:hover .menu-icon {
     visibility: visible;
   }
@@ -26,5 +29,11 @@
     padding-right: 0;
     padding-left: 42px !important;
     height: 50px;
+  }
+
+  .menu-list {
+    overflow-y: scroll;
+    width: 100%;
+    height: calc(100% - 6rem)
   }
 }

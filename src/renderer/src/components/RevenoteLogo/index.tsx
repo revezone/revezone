@@ -3,6 +3,7 @@ type Size = 'small' | 'middle' | 'large';
 interface Props {
   className?: string;
   size?: Size;
+  url?: string;
 }
 
 const getTextSizeName = (size: Size) => {
@@ -27,12 +28,13 @@ const getImageSizeName = (size: Size) => {
   }
 };
 
-export default function Logo({ size = 'small', className = '' }: Props) {
+export default function Logo({ size = 'small', className = '', url }: Props) {
   return (
     <div
       className={`flex items-center text-xl font-mono cursor-pointer ${getTextSizeName(
         size
       )} ${className}`}
+      onClick={() => url && window.open(url)}
     >
       <img
         className={getImageSizeName(size)}
@@ -41,7 +43,8 @@ export default function Logo({ size = 'small', className = '' }: Props) {
       />
       <span
         className={`tracking-wider bg-clip-text text-transparent text-sky-500 bg-gradient-to-r 
-      from-sky-300 to-sky-600 decoration-cyan-100 underline-offset-2  underline font-semibold ${getTextSizeName(size)}`}
+      from-sky-300 to-sky-600 decoration-cyan-100 underline-offset-2  underline font-semibold 
+      ${getTextSizeName(size)}`}
       >
         eveNote
       </span>

@@ -8,13 +8,12 @@
 
   .revenote-topleft-toolbar {
     display: flex;
-    position: relative;
     flex-direction: row-reverse;
+    width: 100%;
     height: 50px;
     font-size: 16px;
     -webkit-user-select: none;
     -webkit-app-region: drag;
-
 
     .tool-buttons {
       display: flex;
@@ -42,7 +41,8 @@
     }
   }
 
-  .ant-layout-sider-children {
+  .ant-layout-sider-children{
+    height: 100%;
     overflow-y: scroll;
   }
 }

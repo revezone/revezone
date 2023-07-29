@@ -9,7 +9,7 @@ function WelcomeContent() {
     <div className="revenote-welcome-page w-full h-full flex pt-20 justify-center text-slate-400">
       <div className="content w-2/3 h-5/6 overflow-scroll">
         <div className="flex items-end mb-6">
-          <RevenoteLogo size="large" />
+          <RevenoteLogo size="large" url="https://revenote.com" />
         </div>
         <p className="mb-6 text-lg">
           A lightweight productivity tool to build Second Brain that integrates note-taking and

@@ -268,55 +268,57 @@ export default function CustomMenu({ collapsed }: Props) {
         onAdd={onFolderOrFileAdd}
         className="mb-3"
       />
-      <Menu
-        theme="light"
-        mode="inline"
-        selectedKeys={selectedKeys}
-        openKeys={openKeys}
-        onOpenChange={onOpenChange}
-        onSelect={onSelect}
-        style={{ border: 'none' }}
-        items={fileTree?.map((folder) => ({
-          key: folder.id,
-          icon: <Folder className="w-3" />,
-          label: (
-            <Dropdown menu={{ items: getFolderContextMenu(folder) }} trigger={['contextMenu']}>
-              <div className="flex items-center justify-between">
-                <EditableText
-                  isPreview={editableTextState[folder.id]}
-                  text={folder.name}
-                  defaultText="Untitled"
-                  onSave={(text) => onFolderNameChange(folder, text)}
-                  onEdit={() => onEditableTextEdit(folder.id)}
-                />
-              </div>
-            </Dropdown>
-          ),
-          children: folder?.children?.map((file) => {
-            return {
-              key: getFileMenuKey(file.id, file.name),
-              label: (
-                <Dropdown
-                  menu={{ items: getFileContextMenu(file, folder) }}
-                  trigger={['contextMenu']}
-                >
-                  <div className="flex items-center justify-between">
-                    <EditableText
-                      isPreview={editableTextState[file.id]}
-                      type={file.type}
-                      text={file.name}
-                      extraText={moment(file.gmtModified).format('YYYY-MM-DD HH:mm:ss')}
-                      defaultText="Untitled"
-                      onSave={(text) => onFileNameChange(text, file)}
-                      onEdit={() => onEditableTextEdit(file.id)}
-                    />
-                  </div>
-                </Dropdown>
-              )
-            };
-          })
-        }))}
-      />
+      <div className="menu-list">
+        <Menu
+          theme="light"
+          mode="inline"
+          selectedKeys={selectedKeys}
+          openKeys={openKeys}
+          onOpenChange={onOpenChange}
+          onSelect={onSelect}
+          style={{ border: 'none' }}
+          items={fileTree?.map((folder) => ({
+            key: folder.id,
+            icon: <Folder className="w-3" />,
+            label: (
+              <Dropdown menu={{ items: getFolderContextMenu(folder) }} trigger={['contextMenu']}>
+                <div className="flex items-center justify-between">
+                  <EditableText
+                    isPreview={editableTextState[folder.id]}
+                    text={folder.name}
+                    defaultText="Untitled"
+                    onSave={(text) => onFolderNameChange(folder, text)}
+                    onEdit={() => onEditableTextEdit(folder.id)}
+                  />
+                </div>
+              </Dropdown>
+            ),
+            children: folder?.children?.map((file) => {
+              return {
+                key: getFileMenuKey(file.id, file.name),
+                label: (
+                  <Dropdown
+                    menu={{ items: getFileContextMenu(file, folder) }}
+                    trigger={['contextMenu']}
+                  >
+                    <div className="flex items-center justify-between">
+                      <EditableText
+                        isPreview={editableTextState[file.id]}
+                        type={file.type}
+                        text={file.name}
+                        extraText={moment(file.gmtModified).format('YYYY-MM-DD HH:mm:ss')}
+                        defaultText="Untitled"
+                        onSave={(text) => onFileNameChange(text, file)}
+                        onEdit={() => onEditableTextEdit(file.id)}
+                      />
+                    </div>
+                  </Dropdown>
+                )
+              };
+            })
+          }))}
+        />
+      </div>
     </div>
   );
 }
