@@ -39,7 +39,10 @@ export default function Logo({ size = 'small', className = '' }: Props) {
         src="https://img.alicdn.com/imgextra/i2/O1CN01Ei2rTp1x7sUnWKWj3_!!6000000006397-2-tps-720-720.png"
         alt=""
       />
-      <span className="tracking-wider bg-clip-text text-transparent text-sky-500 bg-gradient-to-r from-sky-300 to-sky-600 decoration-cyan-100 underline-offset-2  underline font-semibold">
+      <span
+        className={`tracking-wider bg-clip-text text-transparent text-sky-500 bg-gradient-to-r 
+      from-sky-300 to-sky-600 decoration-cyan-100 underline-offset-2  underline font-semibold ${getTextSizeName(size)}`}
+      >
         eveNote
       </span>
     </div>
