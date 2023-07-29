@@ -27,7 +27,7 @@ import RevenoteLogo from '../RevenoteLogo';
 
 import './index.css';
 import { getCurrentFolderIdByFileId, getFileMenuKey } from '@renderer/utils/menu';
-import { Copy, FileEdit, FolderEdit, Trash2, Folder } from 'lucide-react';
+import { Copy, FileEdit, FolderEdit, Trash2, Folder, ClipboardCopy } from 'lucide-react';
 
 interface Props {
   collapsed: boolean;
@@ -124,7 +124,7 @@ export default function CustomMenu({ collapsed }: Props) {
       } else if (type === 'folder') {
         resetMenu();
         setCurrentFileId(undefined);
-        addSelectedKeys([folderId]);
+        setSelectedKeys([folderId]);
       }
     },
     [openKeys, editableTextState]
@@ -251,7 +251,7 @@ export default function CustomMenu({ collapsed }: Props) {
       {
         key: 'copy_revenote_link',
         label: 'Copy Revenote Link',
-        icon: <Copy className="w-4" />,
+        icon: <ClipboardCopy className="w-4" />,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
           navigator.clipboard.writeText(file.id);
@@ -296,10 +296,15 @@ export default function CustomMenu({ collapsed }: Props) {
 
   return (
     <div className="revenote-menu-container">
-      <div onClick={() => resetMenu()}>
+      <div onClick={() => resetMenu()} className="mb-5">
         <RevenoteLogo size="small" className="pl-5" />
       </div>
-      <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
+      <OperationBar
+        size="small"
+        folderId={currentFolderId}
+        onAdd={onFolderOrFileAdd}
+        className="mb-3"
+      />
       <Menu
         theme="light"
         mode="inline"
@@ -310,7 +315,7 @@ export default function CustomMenu({ collapsed }: Props) {
         style={{ border: 'none' }}
         items={fileTree?.map((folder) => ({
           key: folder.id,
-          icon: <Folder className="w-4" />,
+          icon: <Folder className="w-3" />,
           label: (
             <Dropdown menu={{ items: getFolderMenu(folder) }} trigger={['contextMenu']}>
               <div className="flex items-center justify-between">

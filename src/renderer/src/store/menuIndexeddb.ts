@@ -8,6 +8,7 @@ import {
   RevenoteFileType,
   RevenoteFolderFileMapping
 } from '../types/file';
+import { blocksuiteStorage } from './blocksuite';
 
 moment.tz.setDefault('Asia/Shanghai');
 
@@ -169,14 +170,18 @@ class MenuIndexeddbStorage {
     return folders?.sort(sortFn) || [];
   }
 
-  async addFile(folderId: string, type: RevenoteFileType = 'note'): Promise<RevenoteFile> {
+  async addFile(
+    folderId: string,
+    type: RevenoteFileType = 'note',
+    name?: string
+  ): Promise<RevenoteFile> {
     await this.initDB();
 
     const fileId = `file_${uuidv4()}`;
 
     const fileInfo = {
       id: fileId,
-      name: 'Untitled',
+      name: name || 'Untitled',
       type,
       gmtCreate: moment().toLocaleString(),
       gmtModified: moment().toLocaleString()
@@ -192,6 +197,19 @@ class MenuIndexeddbStorage {
     });
 
     return fileInfo;
+  }
+
+  // TODO: NOT FINISHED, DO NOT USE
+  async _copyFile(copyFileId: string, folderId: string) {
+    await this.initDB();
+
+    if (!(copyFileId && folderId)) return;
+
+    const copyFile = await this.db?.get(INDEXEDDB_FILE_KEY, copyFileId);
+
+    await this.addFile(folderId, copyFile?.type);
+
+    // await blocksuiteStorage.copyPage();
   }
 
   async getFile(fileId: string): Promise<RevenoteFile | undefined> {

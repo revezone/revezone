@@ -10,11 +10,12 @@ import './index.css';
 interface Props {
   size: 'small' | 'middle' | 'large';
   folderId: string | undefined;
+  className?: string;
   onAdd?: ({ fileId, folderId, type }: OnFolderOrFileAddProps) => void;
 }
 
 export default function AddFile(props: Props) {
-  const { folderId, size = 'middle', onAdd } = props;
+  const { folderId, size = 'middle', className, onAdd } = props;
   const [, setCurrentFileId] = useAtom(currentFileIdAtom);
   const [, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
@@ -22,7 +23,7 @@ export default function AddFile(props: Props) {
   const getSizeClassName = useCallback(() => {
     switch (size) {
       case 'small':
-        return 'h-4';
+        return 'h-5';
       case 'middle':
         return 'h-5';
       case 'large':
@@ -62,13 +63,13 @@ export default function AddFile(props: Props) {
   );
 
   return (
-    <div className="revenote-menu-toolbar flex items-center pl-5 h-10">
+    <div className={`revenote-menu-toolbar flex items-center pl-5 h-10 ${className}`}>
       <span
         title="Add a folder"
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={addFolder}
       >
-        <FolderPlus className="h-4 w-4 text-current" />
+        <FolderPlus className={`${getSizeClassName()} text-current`} />
         <span className="operation-btn-desc ml-1 transition-all">Add a folder</span>
       </span>
       <span

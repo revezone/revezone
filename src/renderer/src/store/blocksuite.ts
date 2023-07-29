@@ -55,6 +55,15 @@ class BlocksuiteStorage {
   async deletePage(pageId: string) {
     await this.workspace.removePage(pageId);
   }
+
+  // TODO: FIGURE OUT THE API OF COPY PAGE IN BLOCKSUITE
+  async copyPage(pageId: string, copyPageId: string, title: string) {
+    // const copyPage = await this.workspace.getPage(copyPageId);
+    // const newPage = await this.workspace.createPage({
+    //   id: pageId,
+    //   init: { title }
+    // });
+  }
 }
 
 export const blocksuiteStorage = new BlocksuiteStorage();
