@@ -31,9 +31,15 @@ export default function EditableText({
     setValue(e.target.value);
   }, []);
 
-  const _onSave = useCallback(() => {
-    onSave(value);
-  }, [value]);
+  const _onSave = useCallback(
+    (e) => {
+      console.log('_onSave', e);
+      e.stopPropagation();
+      e.preventDefault();
+      onSave(value);
+    },
+    [value]
+  );
 
   const _onEdit = useCallback(() => {
     onEdit();
@@ -63,7 +69,7 @@ export default function EditableText({
               <p className="text-slate-400 leading-4 text-xs mt-1">{extraText}</p>
             ) : null}
           </div>
-          <p>{getMark(type)}</p>
+          <p className="flex items-center">{getMark(type)}</p>
         </div>
       ) : (
         <Input defaultValue={value} onChange={_onChange} onBlur={_onSave} onPressEnter={_onSave} />

@@ -118,6 +118,7 @@ export default function CustomMenu({ collapsed }: Props) {
   const onFolderOrFileAdd = useCallback(
     ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
       setOpenKeys([...openKeys, folderId]);
+      updateEditableTextState(fileId || folderId, false, editableTextState);
       if (type === 'file') {
         addSelectedKeys([getFileMenuKey(fileId, 'Untitled')]);
       } else if (type === 'folder') {
@@ -126,7 +127,7 @@ export default function CustomMenu({ collapsed }: Props) {
         addSelectedKeys([folderId]);
       }
     },
-    [openKeys]
+    [openKeys, editableTextState]
   );
 
   const deleteFile = useCallback(
@@ -273,6 +274,7 @@ export default function CustomMenu({ collapsed }: Props) {
       }
       menuIndexeddbStorage.updateFileName(file, text);
       updateEditableTextState(file.id, true, editableTextState);
+      setSelectedKeys([getFileMenuKey(file.id, text)]);
     },
     [editableTextState]
   );

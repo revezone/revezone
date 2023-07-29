@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import Layout from './components/CustomLayout';
 import NoteEditor from './components/NoteEditor';
 import { useAtom } from 'jotai';
-import { currentFileAtom, langCodeAtom } from './store/jotai';
+import { currentFileAtom, currentFileIdAtom, langCodeAtom } from './store/jotai';
 import WorkspaceLoaded from './components/WorkspaceLoaded';
 import RevedrawApp from './components/RevedrawApp';
 import zhCN from 'antd/locale/zh_CN';
@@ -21,8 +21,10 @@ function App(): JSX.Element {
   const [currentFile] = useAtom(currentFileAtom);
   const [langCode] = useAtom(langCodeAtom);
 
+  const [currentFileId] = useAtom(currentFileIdAtom);
+
   const renderContent = useCallback((file) => {
-    console.log('renderContent', file);
+    console.log('renderContent', currentFileId, file);
     switch (file?.type) {
       case 'note':
         return <NoteEditor pageId={file.id} />;
