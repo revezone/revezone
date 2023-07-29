@@ -6,12 +6,7 @@ import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
 import { PencilLine } from 'lucide-react';
 import CustomFontModal from '../CustomFontModal';
-import {
-  currentFileAtom,
-  currentFileIdAtom,
-  fileTreeAtom,
-  langCodeAtom
-} from '@renderer/store/jotai';
+import { currentFileIdAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { DOUBLE_LINK_REGEX } from '@renderer/utils/constant';
@@ -27,11 +22,10 @@ const DEFAULT_DATA_SOURCE = '{}';
 export default function RevedrawApp({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [langCode, setLangCode] = useAtom(langCodeAtom);
-  const [ref, setRef] = useState<ExcalidrawImperativeAPI>();
+  const [, setRef] = useState<ExcalidrawImperativeAPI>();
   const [fileTree] = useAtom(fileTreeAtom);
-  const [, setCurrentFile] = useAtom(currentFileAtom);
   const [, setCurrentFileId] = useAtom(currentFileIdAtom);
+  const [langCode, setLangCode] = useAtom(langCodeAtom);
 
   const { t, i18n } = useTranslation();
 
@@ -90,10 +84,10 @@ export default function RevedrawApp({ file }: Props) {
     };
   }, [file.id]);
 
-  useEffect(() => {
-    i18n.changeLanguage(langCode);
-    console.log('langCode', langCode);
-  }, [langCode]);
+  // useEffect(() => {
+  //   i18n.changeLanguage(langCode);
+  //   console.log('langCode', langCode);
+  // }, [langCode]);
 
   return dataSource ? (
     <>
@@ -101,6 +95,7 @@ export default function RevedrawApp({ file }: Props) {
         dataSource={dataSource}
         canvasName={file.name}
         getRef={(ref) => setRef(ref)}
+        systemLangCode={langCode}
         onChange={onChangeDebounceFn}
         onLangCodeChange={(code) => setLangCode(code)}
         onLinkOpen={onLinkOpen}
