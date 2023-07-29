@@ -12,6 +12,7 @@ import '@renderer/i18n';
 import moment from 'moment';
 import WelcomePage from './components/WelcomePage';
 import { ConfigProvider } from 'antd';
+import { theme } from './utils/theme';
 
 moment.tz.setDefault();
 
@@ -47,7 +48,7 @@ function App(): JSX.Element {
   }, [langCode]);
 
   return (
-    <ConfigProvider locale={getLocale()}>
+    <ConfigProvider locale={getLocale()} theme={theme}>
       <div className="revenote-app-container">
         <Layout>
           <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
