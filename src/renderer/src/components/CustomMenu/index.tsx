@@ -20,13 +20,12 @@ import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 import { useDebounceEffect } from 'ahooks';
-import { FILE_ID_REGEX } from '@renderer/utils/constant';
 import OperationBar from '../OperationBar';
 import moment from 'moment';
 import RevenoteLogo from '../RevenoteLogo';
 
 import './index.css';
-import { getCurrentFolderIdByFileId, getFileMenuKey } from '@renderer/utils/menu';
+import { getCurrentFolderIdByFileId } from '@renderer/utils/menu';
 import { Folder } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import useFileContextMenu from '@renderer/hooks/useFileContextMenu';
@@ -51,7 +50,7 @@ export default function CustomMenu({ collapsed }: Props) {
       setOpenKeys([...openKeys, folderId]);
       updateEditableTextState(fileId || folderId, false, editableTextState);
       if (type === 'file') {
-        addSelectedKeys([getFileMenuKey(fileId, '')]);
+        addSelectedKeys(fileId ? [fileId] : []);
       } else if (type === 'folder') {
         resetMenu();
         setCurrentFileId(undefined);
@@ -210,7 +209,7 @@ export default function CustomMenu({ collapsed }: Props) {
 
   const onSelect = useCallback(
     ({ key }) => {
-      const fileId = key?.match(FILE_ID_REGEX)?.[1];
+      const fileId = key?.startsWith('file_') ? key : undefined;
 
       console.log('onSelect', fileId, key);
 
@@ -235,7 +234,7 @@ export default function CustomMenu({ collapsed }: Props) {
       await menuIndexeddbStorage.updateFileName(file, text);
       updateEditableTextState(file.id, true, editableTextState);
 
-      setSelectedKeys([getFileMenuKey(file.id, text)]);
+      setSelectedKeys([file.id]);
 
       await getFileTree();
     },
@@ -295,7 +294,7 @@ export default function CustomMenu({ collapsed }: Props) {
             ),
             children: folder?.children?.map((file) => {
               return {
-                key: getFileMenuKey(file.id, file.name),
+                key: file.id,
                 label: (
                   <Dropdown
                     menu={{ items: getFileContextMenu(file, folder) }}
