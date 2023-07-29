@@ -1,21 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { Menu, Dropdown } from 'antd';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import type { RevenoteFile, RevenoteFolder, OnFolderOrFileAddProps } from '@renderer/types/file';
 import {
   getOpenKeysFromLocal,
-  getSelectedKeysFromLocal,
+  // getSelectedKeysFromLocal,
   setCurrentFileIdToLocal,
-  setOpenKeysToLocal,
-  setSelectedKeysToLocal
+  setOpenKeysToLocal
+  // setSelectedKeysToLocal
 } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
-import {
-  currentFileIdAtom,
-  currentFileAtom,
-  fileTreeAtom,
-  currentFolderIdAtom
-} from '@renderer/store/jotai';
+import { currentFileAtom, fileTreeAtom, currentFolderIdAtom } from '@renderer/store/jotai';
 import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
@@ -25,11 +20,12 @@ import moment from 'moment';
 import RevenoteLogo from '../RevenoteLogo';
 
 import './index.css';
-import { getCurrentFolderIdByFileId } from '@renderer/utils/menu';
+import { getFileById, getFolderIdByFileId } from '@renderer/utils/file';
 import { Folder } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import useFileContextMenu from '@renderer/hooks/useFileContextMenu';
 import useFolderContextMenu from '@renderer/hooks/useFolderContextMenu';
+import { getCurrentFileIdFromLocal } from '@renderer/store/localstorage';
 
 interface Props {
   collapsed: boolean;
@@ -37,13 +33,13 @@ interface Props {
 
 export default function CustomMenu({ collapsed }: Props) {
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
-  const [selectedKeys, setSelectedKeys] = useState<string[]>(getSelectedKeysFromLocal());
-  const [currentFileId, setCurrentFileId] = useAtom(currentFileIdAtom);
-  const [, setCurrentFile] = useAtom(currentFileAtom);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
   const [pageTitle] = useBlocksuitePageTitle();
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
   const [currentFolderId, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [editableTextState, setEditableTextState] = useState<{ [key: string]: boolean }>({});
+  const firstRenderRef = useRef(false);
 
   const onFolderOrFileAdd = useCallback(
     ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
@@ -53,7 +49,7 @@ export default function CustomMenu({ collapsed }: Props) {
         addSelectedKeys(fileId ? [fileId] : []);
       } else if (type === 'folder') {
         resetMenu();
-        setCurrentFileId(undefined);
+        setCurrentFile(undefined);
         setSelectedKeys([folderId]);
       }
     },
@@ -73,31 +69,28 @@ export default function CustomMenu({ collapsed }: Props) {
   }, [menuIndexeddbStorage, collapsed]);
 
   useEffect(() => {
-    setSelectedKeysToLocal(selectedKeys);
-  }, [selectedKeys]);
+    if (firstRenderRef.current === true || !fileTree?.length) return;
+    firstRenderRef.current = true;
 
-  useEffect(() => {
-    const files = fileTree.reduce(
-      (prev: RevenoteFile[], current) => [...prev, ...current.children],
-      []
-    );
-
-    const file = currentFileId ? files?.find((_file) => _file.id === currentFileId) : null;
+    const currentFileIdFromLocal = getCurrentFileIdFromLocal();
+    const file = currentFileIdFromLocal ? getFileById(currentFileIdFromLocal, fileTree) : undefined;
 
     setCurrentFile(file);
-  }, [currentFileId, fileTree]);
+  }, [fileTree]);
 
   useEffect(() => {
-    setCurrentFileIdToLocal(currentFileId);
-  }, [currentFileId]);
+    if (firstRenderRef.current === false) return;
+    setCurrentFileIdToLocal(currentFile?.id);
+    setSelectedKeys(currentFile?.id ? [currentFile.id] : []);
+  }, [currentFile?.id]);
 
   useEffect(() => {
-    if (!currentFileId) {
+    if (!currentFile) {
       return;
     }
-    const folderId = getCurrentFolderIdByFileId(currentFileId, fileTree);
+    const folderId = getFolderIdByFileId(currentFile.id, fileTree);
     setCurrentFolderId(folderId);
-  }, [currentFileId, fileTree]);
+  }, [currentFile, fileTree]);
 
   const refreshMenu = useCallback(async () => {
     await getFileTree();
@@ -140,13 +133,13 @@ export default function CustomMenu({ collapsed }: Props) {
       const tree = await getFileTree();
 
       // reset current file when current file is removed
-      if (currentFileId === fileId) {
+      if (currentFile?.id === fileId) {
         const filesInFolder = tree.find((folder) => folder.id === folderId)?.children;
 
-        setCurrentFileId(filesInFolder?.[0]?.id);
+        setCurrentFile(filesInFolder?.[0]);
       }
     },
-    [menuIndexeddbStorage]
+    [menuIndexeddbStorage, currentFile]
   );
 
   const updateEditableTextState = useCallback((id: string, value: boolean, editableTextState) => {
@@ -178,14 +171,33 @@ export default function CustomMenu({ collapsed }: Props) {
   });
 
   const resetMenu = useCallback(() => {
-    setCurrentFileId(undefined);
+    setCurrentFile(undefined);
     setCurrentFolderId(undefined);
     setSelectedKeys([]);
   }, []);
 
   const onOpenChange = useCallback(
     (keys) => {
-      const changeType = keys?.length > openKeys.length ? 'increase' : 'decrease';
+      const folderKeys = keys.filter((key) => key.startsWith('folder_'));
+      const openFolderKeys = openKeys.filter((key) => key.startsWith('folder_'));
+
+      const diffNum = folderKeys?.length - openFolderKeys.length;
+
+      let changeType;
+
+      switch (true) {
+        case diffNum === 0:
+          changeType = 'unchanged';
+          break;
+        case diffNum > 0:
+          changeType = 'increase';
+          break;
+        default:
+          changeType = 'decrease';
+          break;
+      }
+
+      console.log('onOpenChange', changeType, folderKeys, openFolderKeys);
 
       setOpenKeys(keys);
       setOpenKeysToLocal(keys);
@@ -213,11 +225,13 @@ export default function CustomMenu({ collapsed }: Props) {
 
       if (!fileId) return;
 
-      const folderId = getCurrentFolderIdByFileId(fileId, fileTree);
+      const folderId = getFolderIdByFileId(fileId, fileTree);
 
       resetMenu();
 
-      setCurrentFileId(fileId);
+      const file = getFileById(fileId, fileTree);
+
+      setCurrentFile(file);
       setCurrentFolderId(folderId);
       addSelectedKeys([key, folderId]);
     },

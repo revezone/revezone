@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { OnFolderOrFileAddProps } from '@renderer/types/file';
-import { currentFileIdAtom, currentFolderIdAtom, fileTreeAtom } from '@renderer/store/jotai';
+import { currentFileAtom, currentFolderIdAtom, fileTreeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import { FolderPlus, Palette, FileType } from 'lucide-react';
@@ -18,7 +18,7 @@ interface Props {
 
 export default function OperationBar(props: Props) {
   const { folderId, size = 'middle', className, onAdd } = props;
-  const [, setCurrentFileId] = useAtom(currentFileIdAtom);
+  const [, setCurrentFile] = useAtom(currentFileAtom);
   const [, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
   const [addFile] = useAddFile({ onAdd });
@@ -42,7 +42,7 @@ export default function OperationBar(props: Props) {
     const tree = await menuIndexeddbStorage.getFileTree();
     setFileTree(tree);
     setCurrentFolderId(folder.id);
-    setCurrentFileId(undefined);
+    setCurrentFile(undefined);
 
     onAdd?.({ folderId: folder.id, type: 'folder' });
   }, []);

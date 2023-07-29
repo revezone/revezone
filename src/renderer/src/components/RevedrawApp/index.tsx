@@ -6,7 +6,7 @@ import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
 import { PencilLine } from 'lucide-react';
 import CustomFontModal from '../CustomFontModal';
-import { currentFileIdAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jotai';
+import { currentFileAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { DOUBLE_LINK_REGEX } from '@renderer/utils/constant';
@@ -24,7 +24,7 @@ export default function RevedrawApp({ file }: Props) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [, setRef] = useState<ExcalidrawImperativeAPI>();
   const [fileTree] = useAtom(fileTreeAtom);
-  const [, setCurrentFileId] = useAtom(currentFileIdAtom);
+  const [, setCurrentFileId] = useAtom(currentFileAtom);
   const [langCode, setLangCode] = useAtom(langCodeAtom);
 
   const { t, i18n } = useTranslation();
@@ -68,7 +68,7 @@ export default function RevedrawApp({ file }: Props) {
         );
 
         if (file) {
-          setCurrentFileId(file.id);
+          setCurrentFileId(file);
         }
       } else {
         link && window.open(link);
