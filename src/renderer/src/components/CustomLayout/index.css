@@ -41,4 +41,8 @@
       font-size: 20px;
     }
   }
+
+  .ant-layout-sider-children {
+    overflow-y: scroll;
+  }
 }

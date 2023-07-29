@@ -51,6 +51,8 @@ export default function EditableText({
     setTimeout(() => {
       console.log('_onEdit', inputRef);
       inputRef.current?.focus();
+      // scroll the focused input element into view
+      document.querySelector('.revenote-menu-container')?.scrollIntoView();
     }, 0);
   }, [isPreview]);
 
