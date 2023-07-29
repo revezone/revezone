@@ -144,7 +144,7 @@ class MenuIndexeddbStorage {
 
     const folderInfo = {
       id,
-      name: 'Untitled',
+      name: 'Untitled Folder',
       gmtCreate: moment().toLocaleString(),
       gmtModified: moment().toLocaleString()
     };

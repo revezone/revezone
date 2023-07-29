@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Menu, Dropdown } from 'antd';
-import { FolderIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import type { RevenoteFile, RevenoteFolder, OnFolderOrFileAddProps } from '@renderer/types/file';
 import {
@@ -27,13 +26,12 @@ import moment from 'moment';
 import Logo from '../Logo';
 
 import './index.css';
-import { getCurrentFolderIdByFileId } from '@renderer/utils/menu';
+import { getCurrentFolderIdByFileId, getFileMenuKey } from '@renderer/utils/menu';
+import { Copy, FileEdit, FolderEdit, Trash2, Folder } from 'lucide-react';
 
 interface Props {
   collapsed: boolean;
 }
-
-const getFileMenuKey = (id, name) => `${id}______${name}`;
 
 export default function CustomMenu({ collapsed }: Props) {
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
@@ -43,6 +41,7 @@ export default function CustomMenu({ collapsed }: Props) {
   const [pageTitle] = useBlocksuitePageTitle();
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
   const [currentFolderId, setCurrentFolderId] = useAtom(currentFolderIdAtom);
+  const [editableTextState, setEditableTextState] = useState<{ [key: string]: boolean }>({});
 
   const getFileTree = useCallback(async () => {
     const tree = await menuIndexeddbStorage.getFileTree();
@@ -204,20 +203,24 @@ export default function CustomMenu({ collapsed }: Props) {
       {
         key: 'rename',
         label: 'rename',
-        onClick: () => {
+        icon: <FolderEdit className="w-4" />,
+        onClick: ({ domEvent }) => {
+          domEvent.stopPropagation();
           console.log('rename');
+          updateEditableTextState(folder.id, false, editableTextState);
         }
       },
       {
         key: 'delete',
         label: 'delete',
+        icon: <Trash2 className="w-4"></Trash2>,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
           deleteFolder(folder.id);
         }
       }
     ],
-    []
+    [editableTextState]
   );
 
   const getFileMenu = useCallback(
@@ -225,18 +228,17 @@ export default function CustomMenu({ collapsed }: Props) {
       {
         key: 'rename',
         label: 'rename',
-        onClick: () => {
+        icon: <FileEdit className="w-4" />,
+        onClick: ({ domEvent }) => {
+          domEvent.stopPropagation();
           console.log('rename');
+          updateEditableTextState(file.id, false, editableTextState);
         }
       },
       {
         key: 'delete',
-        label: (
-          <div className="flex items-center justify-between">
-            <TrashIcon className="h-4 w-4" />
-            <span className="ml-2">Delete</span>
-          </div>
-        ),
+        label: 'delete',
+        icon: <Trash2 className="w-4"></Trash2>,
         onClick: () => {
           console.log('delete');
           deleteFile(file.id, folder.id);
@@ -245,6 +247,7 @@ export default function CustomMenu({ collapsed }: Props) {
       {
         key: 'copy_revenote_link',
         label: 'Copy Revenote Link',
+        icon: <Copy className="w-4" />,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
           navigator.clipboard.writeText(file.id);
@@ -254,17 +257,37 @@ export default function CustomMenu({ collapsed }: Props) {
     []
   );
 
-  const onFileNameChange = useCallback((text: string, file: RevenoteFile) => {
-    if (file.type === 'note') {
-      blocksuiteStorage.updatePageTitle(file.id, text);
-    }
-
-    menuIndexeddbStorage.updateFileName(file, text);
+  const updateEditableTextState = useCallback((id: string, value: boolean, editableTextState) => {
+    const newEditableTextState = { ...editableTextState };
+    newEditableTextState[id] = value;
+    setEditableTextState(newEditableTextState);
   }, []);
 
-  const onFolderNameChange = useCallback((folder: RevenoteFolder, text: string) => {
-    menuIndexeddbStorage.updateFolderName(folder, text);
-  }, []);
+  const onFileNameChange = useCallback(
+    (text: string, file: RevenoteFile) => {
+      if (file.type === 'note') {
+        blocksuiteStorage.updatePageTitle(file.id, text);
+      }
+      menuIndexeddbStorage.updateFileName(file, text);
+      updateEditableTextState(file.id, true, editableTextState);
+    },
+    [editableTextState]
+  );
+
+  const onFolderNameChange = useCallback(
+    (folder: RevenoteFolder, text: string) => {
+      menuIndexeddbStorage.updateFolderName(folder, text);
+      updateEditableTextState(folder.id, true, editableTextState);
+    },
+    [editableTextState]
+  );
+
+  const onEditableTextEdit = useCallback(
+    (id: string) => {
+      updateEditableTextState(id, false, editableTextState);
+    },
+    [editableTextState]
+  );
 
   return (
     <div className="revenote-menu-container">
@@ -282,14 +305,16 @@ export default function CustomMenu({ collapsed }: Props) {
         style={{ border: 'none' }}
         items={fileTree?.map((folder) => ({
           key: folder.id,
-          icon: <FolderIcon className="h-4 w-4" />,
+          icon: <Folder className="w-4" />,
           label: (
             <Dropdown menu={{ items: getFolderMenu(folder) }} trigger={['contextMenu']}>
               <div className="flex items-center justify-between">
                 <EditableText
+                  isPreview={editableTextState[folder.id]}
                   text={folder.name}
                   defaultText="Untitled"
-                  onChange={(text) => onFolderNameChange(folder, text)}
+                  onSave={(text) => onFolderNameChange(folder, text)}
+                  onEdit={() => onEditableTextEdit(folder.id)}
                 />
               </div>
             </Dropdown>
@@ -301,11 +326,13 @@ export default function CustomMenu({ collapsed }: Props) {
                 <Dropdown menu={{ items: getFileMenu(file, folder) }} trigger={['contextMenu']}>
                   <div className="flex items-center justify-between">
                     <EditableText
+                      isPreview={editableTextState[file.id]}
                       type={file.type}
                       text={file.name}
                       extraText={moment(file.gmtModified).format('YYYY-MM-DD HH:mm:ss')}
                       defaultText="Untitled"
-                      onChange={(text) => onFileNameChange(text, file)}
+                      onSave={(text) => onFileNameChange(text, file)}
+                      onEdit={() => onEditableTextEdit(file.id)}
                     />
                   </div>
                 </Dropdown>

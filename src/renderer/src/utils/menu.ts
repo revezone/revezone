@@ -14,3 +14,5 @@ export const getCurrentFolderIdByFileId = (currentFileId: string, fileTree: File
 
   return currentFolderId;
 };
+
+export const getFileMenuKey = (id, name) => `${id}______${name}`;

@@ -7,7 +7,7 @@ import './index.css';
 function WelcomeContent() {
   return (
     <div className="revenote-welcome-page w-full h-full flex pt-20 justify-center">
-      <div className="content w-2/3">
+      <div className="content w-2/3 h-3/4 overflow-scroll">
         <div className="flex items-end mb-6">
           <img
             className="w-16 h-16 mr-4"
@@ -68,13 +68,13 @@ function WelcomeContent() {
             </a>
           </p>
         </div>
-        <div className="fixed bottom-10">
-          Copyright © 2023{' '}
-          <a href="https://twitter.com/korbinzhao" target="_blank" rel="noreferrer">
-            Korbin Zhao
-          </a>
-          . All rights reserved.
-        </div>
+      </div>
+      <div className="absolute bottom-10">
+        Copyright © 2023{' '}
+        <a href="https://twitter.com/korbinzhao" target="_blank" rel="noreferrer">
+          Korbin Zhao
+        </a>
+        . All rights reserved.
       </div>
     </div>
   );

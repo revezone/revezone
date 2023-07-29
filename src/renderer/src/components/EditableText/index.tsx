@@ -10,26 +10,33 @@ interface Props {
   defaultText?: string;
   extraText?: string;
   type?: RevenoteFileType;
-  onChange: (text: string) => void;
+  isPreview: boolean;
+  onSave: (text: string) => void;
+  onEdit: () => void;
 }
 
-export default function EditableText({ text, defaultText, type, extraText, onChange }: Props) {
-  const [isPreview, setIsPreview] = useState(true);
+export default function EditableText({
+  isPreview = true,
+  text,
+  defaultText,
+  type,
+  extraText,
+  onSave,
+  onEdit
+}: Props) {
   const [value, setValue] = useState(text);
   const ref = useRef<HTMLDivElement>(null);
 
-  const onInnerChange = useCallback((e) => {
+  const _onChange = useCallback((e) => {
     setValue(e.target.value);
   }, []);
 
-  const onSave = useCallback(() => {
-    setIsPreview(true);
-    onChange(value);
+  const _onSave = useCallback(() => {
+    onSave(value);
   }, [value]);
 
-  const onEdit = useCallback(() => {
-    setIsPreview(!isPreview);
-
+  const _onEdit = useCallback(() => {
+    onEdit();
     setTimeout(() => {
       const input = ref.current?.querySelector('input') as HTMLInputElement;
       input?.focus();
@@ -47,7 +54,7 @@ export default function EditableText({ text, defaultText, type, extraText, onCha
   }, []);
 
   return (
-    <div className="editable-text-container flex items-center" ref={ref} onDoubleClick={onEdit}>
+    <div className="editable-text-container flex items-center" ref={ref} onDoubleClick={_onEdit}>
       {isPreview ? (
         <div title={value} className="flex items-center justify-between w-full">
           <div className="leading-4">
@@ -59,12 +66,7 @@ export default function EditableText({ text, defaultText, type, extraText, onCha
           <p>{getMark(type)}</p>
         </div>
       ) : (
-        <Input
-          defaultValue={value}
-          onChange={onInnerChange}
-          onBlur={onSave}
-          onPressEnter={onSave}
-        />
+        <Input defaultValue={value} onChange={_onChange} onBlur={_onSave} onPressEnter={_onSave} />
       )}
     </div>
   );
