@@ -299,8 +299,6 @@ class MenuIndexeddbStorage {
 
     if (name === file?.name) return;
 
-    console.log('updateFileName', name, file);
-
     file &&
       (await this.db?.put(
         INDEXEDDB_FILE_KEY,

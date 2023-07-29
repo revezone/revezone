@@ -4,8 +4,13 @@ import { useAtom } from 'jotai';
 import { useCallback, useEffect, useState } from 'react';
 import { useDebounceEffect } from 'ahooks';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
+import { FileTree } from '@renderer/types/file';
 
-export default function useBlocksuitePageTitle() {
+interface Props {
+  getFileTree: () => Promise<FileTree>;
+}
+
+export default function useBlocksuitePageTitle({ getFileTree }: Props) {
   const [currentFile] = useAtom(currentFileAtom);
   const [workspaceLoaded] = useAtom(workspaceLoadedAtom);
 
@@ -26,7 +31,9 @@ export default function useBlocksuitePageTitle() {
       if (currentTitle !== prevTitle) {
         setPageTitle(currentTitle);
 
-        file && menuIndexeddbStorage.updateFileName(file, currentTitle);
+        file && (await menuIndexeddbStorage.updateFileName(file, currentTitle));
+
+        getFileTree();
       } else {
         file && menuIndexeddbStorage.updateFileGmtModified(file);
       }

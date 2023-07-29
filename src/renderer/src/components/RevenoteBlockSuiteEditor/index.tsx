@@ -19,10 +19,7 @@ export default function RevenoteBlockSuiteEditor({ page }: Props) {
 
     containerRef.current?.appendChild(editorContainer);
 
-    console.log('--- page change ---', page);
-
     return () => {
-      console.log('--- remove child ---');
       containerRef.current?.removeChild(editorContainer);
     };
   }, [page]);

@@ -35,7 +35,6 @@ export default function CustomMenu({ collapsed }: Props) {
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
-  const [pageTitle] = useBlocksuitePageTitle();
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
   const [currentFolderId, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [editableTextState, setEditableTextState] = useState<{ [key: string]: boolean }>({});
@@ -63,6 +62,8 @@ export default function CustomMenu({ collapsed }: Props) {
     setFileTree(tree);
     return tree;
   }, []);
+
+  const [pageTitle] = useBlocksuitePageTitle({ getFileTree });
 
   useEffect(() => {
     !collapsed && getFileTree();
@@ -312,7 +313,10 @@ export default function CustomMenu({ collapsed }: Props) {
                     menu={{ items: getFileContextMenu(file, folder) }}
                     trigger={['contextMenu']}
                   >
-                    <div className="flex items-center justify-between">
+                    <div
+                      className="flex items-center justify-between"
+                      key={`${file.id}_${file.name}`}
+                    >
                       <EditableText
                         isPreview={editableTextState[file.id]}
                         type={file.type}
