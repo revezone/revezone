@@ -29,6 +29,7 @@ export default {
       'Click the icons in left sidebar operation toolbar to add a foler/note/board.'
   },
   links: {
+    title: 'Links',
     github: 'Official Github',
     twitter: 'Official Twitter',
     buyMeACoffee: 'By me a coffee',

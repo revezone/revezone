@@ -1,8 +1,6 @@
 import RevenoteLogo from '../RevenoteLogo';
 import { Twitter, Github, Coffee, Cat, FolderPlus, FileType, Palette } from 'lucide-react';
 import { useEffect, useState } from 'react';
-
-import './index.css';
 import { useTranslation } from 'react-i18next';
 
 function WelcomeContent() {
@@ -14,10 +12,10 @@ function WelcomeContent() {
         <div className="flex items-end mb-6">
           <RevenoteLogo size="large" url="https://revenote.com" />
         </div>
-        <p className="mb-6 text-lg">{t('welcome.productDesc')}</p>
-        <p className="mb-6 text-xl  text-slate-600">{t('welcome.operationTip')}</p>
+        <p className="mb-6 text-base">{t('welcome.productDesc')}</p>
+        <p className="mb-6 text-base  text-slate-500">{t('welcome.operationTip')}</p>
         <div className="mb-6">
-          <h2 className="mb-2 text-lg">{t('welcome.operationGuide')}</h2>
+          <h2 className="mb-2 text-base">{t('welcome.operationGuide')}</h2>
           <p className="mb-2">{t('welcome.operationDetailDesc')}</p>
           <ul>
             <li className="mb-2 list-disc list-inside">
@@ -35,7 +33,7 @@ function WelcomeContent() {
           </ul>
         </div>
         <div>
-          <h2 className="mb-2 text-lg">Links</h2>
+          <h2 className="mb-2 text-base">{t('links.title')}</h2>
           <p className="mb-2">
             <a href="https://github.com/revenote/revenote" target="_blank" rel="noreferrer">
               <Github className="w-4 h-4" /> {t('links.github')}

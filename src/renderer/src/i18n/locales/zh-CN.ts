@@ -28,6 +28,7 @@ export default {
     operationDetailDesc: '点击左侧边栏的操作图标来创建一个文件夹、Note 或 Board。'
   },
   links: {
+    title: '链接',
     github: '官方 Github',
     twitter: '官方 Twitter',
     buyMeACoffee: '买杯咖啡',
