@@ -23,7 +23,7 @@ function App(): JSX.Element {
     console.log('renderContent', currentFile?.id, file);
     switch (file?.type) {
       case 'note':
-        return <NoteEditor pageId={file.id} />;
+        return <NoteEditor file={file} />;
       case 'board':
         return <RevedrawApp file={file} />;
       default:

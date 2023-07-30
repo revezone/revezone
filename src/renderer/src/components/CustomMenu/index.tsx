@@ -8,11 +8,10 @@ import {
   setOpenKeysToLocal
 } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
-import { currentFileAtom, fileTreeAtom, currentFolderIdAtom } from '@renderer/store/jotai';
+import { currentFileAtom, currentFolderIdAtom } from '@renderer/store/jotai';
 import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
-import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
-import { useDebounceEffect } from 'ahooks';
+// import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 import OperationBar from '../OperationBar';
 import moment from 'moment';
 import RevenoteLogo from '../RevenoteLogo';
@@ -24,6 +23,7 @@ import useAddFile from '@renderer/hooks/useAddFile';
 import useFileContextMenu from '@renderer/hooks/useFileContextMenu';
 import useFolderContextMenu from '@renderer/hooks/useFolderContextMenu';
 import { getCurrentFileIdFromLocal } from '@renderer/store/localstorage';
+import useFileTree from '@renderer/hooks/useFileTree';
 
 interface Props {
   collapsed: boolean;
@@ -33,10 +33,10 @@ export default function CustomMenu({ collapsed }: Props) {
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
-  const [fileTree, setFileTree] = useAtom(fileTreeAtom);
   const [currentFolderId, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [editableTextState, setEditableTextState] = useState<{ [key: string]: boolean }>({});
   const firstRenderRef = useRef(false);
+  const { fileTree, getFileTree } = useFileTree();
 
   const onFolderOrFileAdd = useCallback(
     ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
@@ -55,13 +55,7 @@ export default function CustomMenu({ collapsed }: Props) {
 
   const [addFile] = useAddFile({ onAdd: onFolderOrFileAdd });
 
-  const getFileTree = useCallback(async () => {
-    const tree = await menuIndexeddbStorage.getFileTree();
-    setFileTree(tree);
-    return tree;
-  }, []);
-
-  const [pageTitle] = useBlocksuitePageTitle({ getFileTree });
+  // const [pageTitle] = useBlocksuitePageTitle({ getFileTree });
 
   useEffect(() => {
     !collapsed && getFileTree();
@@ -90,20 +84,6 @@ export default function CustomMenu({ collapsed }: Props) {
     const folderId = getFolderIdByFileId(currentFile.id, fileTree);
     setCurrentFolderId(folderId);
   }, [currentFile, fileTree]);
-
-  const refreshMenu = useCallback(async () => {
-    await getFileTree();
-  }, [pageTitle]);
-
-  useDebounceEffect(
-    () => {
-      refreshMenu();
-    },
-    [pageTitle],
-    {
-      wait: 200
-    }
-  );
 
   const addSelectedKeys = useCallback(
     (keys: string[] | undefined) => {
@@ -239,13 +219,12 @@ export default function CustomMenu({ collapsed }: Props) {
 
   const onFileNameChange = useCallback(
     async (text: string, file: RevenoteFile) => {
-      if (file.type === 'note') {
-        await blocksuiteStorage.updatePageTitle(file.id, text);
-      }
       await menuIndexeddbStorage.updateFileName(file, text);
       updateEditableTextState(file.id, true, editableTextState);
 
       setSelectedKeys([file.id]);
+
+      setCurrentFile({ ...file, name: text });
 
       await getFileTree();
     },

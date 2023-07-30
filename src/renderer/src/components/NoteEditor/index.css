@@ -15,4 +15,8 @@
   .affine-default-page-block-container {
     height: 100%;
   }
+
+  .affine-default-page-block-title {
+    display: none;
+  }
 }

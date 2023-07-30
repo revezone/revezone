@@ -16,8 +16,9 @@ export default class RevenoteBlockSuiteEditor extends LitElement {
   constructor({ pageId }: Props) {
     super();
 
-    this.page =
-      this.workspace.getPage(pageId) || this.workspace.createPage({ id: pageId, init: true });
+    const pageExsited = this.workspace.getPage(pageId);
+
+    this.page = pageExsited || this.workspace.createPage({ id: pageId, init: true });
 
     // @ts-ignore
     window.workspace = RevenoteBlockSuiteEditor.workspace;

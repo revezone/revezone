@@ -34,5 +34,8 @@ export default {
     buyMeACoffee: '買杯咖啡',
     feedMyCat: '投餵貓糧',
     followTheAuthor: '關註作者'
+  },
+  text: {
+    untitled: '請輸入標題'
   }
 };

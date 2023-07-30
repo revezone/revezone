@@ -35,5 +35,8 @@ export default {
     buyMeACoffee: 'By me a coffee',
     feedMyCat: 'Feed my cat',
     followTheAuthor: 'Follow the author'
+  },
+  text: {
+    untitled: 'Untitled'
   }
 };

@@ -34,5 +34,8 @@ export default {
     buyMeACoffee: '买杯咖啡',
     feedMyCat: '投喂猫粮',
     followTheAuthor: '关注作者'
+  },
+  text: {
+    untitled: '请输入标题'
   }
 };

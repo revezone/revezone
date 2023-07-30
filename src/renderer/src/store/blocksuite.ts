@@ -1,8 +1,7 @@
-import { Workspace, Text, createIndexeddbStorage, createMemoryStorage } from '@blocksuite/store';
+import { Workspace, createIndexeddbStorage, createMemoryStorage } from '@blocksuite/store';
 import { AffineSchemas } from '@blocksuite/blocks/models';
 import { IndexeddbPersistence } from 'y-indexeddb';
 import { emitter, events } from './eventemitter';
-import { hackUpdateTitleDom } from '@renderer/utils/dom';
 
 console.log('AffineSchemas', AffineSchemas);
 
@@ -37,21 +36,6 @@ class BlocksuiteStorage {
       console.log('content from the database is loaded');
       emitter.emit(events.WORKSPACE_LOADED);
     });
-  }
-
-  async updatePageTitle(pageId: string, title: string) {
-    const page = await this.workspace.getPage(pageId);
-    const block = await page?.getBlockByFlavour('affine:page')?.[0];
-
-    if (!block) {
-      return;
-    }
-
-    if (page) {
-      page.updateBlock(block, { title: new Text(title) });
-      page.workspace.setPageMeta(page.id, { title });
-      hackUpdateTitleDom(title);
-    }
   }
 
   async deletePage(pageId: string) {

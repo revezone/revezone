@@ -1,24 +1,32 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import '@blocksuite/editor';
 import '@blocksuite/editor/themes/affine.css';
 import RevenoteBlockSuiteEditor from '../RevenoteBlockSuiteEditor';
+import { Input } from 'antd';
+import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
+import { RevenoteFile } from '@renderer/types/file';
 
 import './index.css';
+import useFileTree from '@renderer/hooks/useFileTree';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
-  pageId: string;
+  file: RevenoteFile;
 }
 
-function NoteEditor({ pageId }: Props): JSX.Element | null {
-  if (!pageId) {
+function NoteEditor({ file }: Props): JSX.Element | null {
+  if (!file) {
     return null;
   }
 
   const editorRef = useRef<HTMLDivElement>(null);
   const editorMountRef = useRef(false);
+  const [title, setTitle] = useState(file.name);
+  const { getFileTree } = useFileTree();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    if (!pageId || editorMountRef.current) {
+    if (!file || editorMountRef.current) {
       return;
     }
 
@@ -28,7 +36,7 @@ function NoteEditor({ pageId }: Props): JSX.Element | null {
 
     if (editorRef.current) {
       editor = new RevenoteBlockSuiteEditor({
-        pageId
+        pageId: file.id
       });
 
       editorRef.current.innerHTML = '';
@@ -42,13 +50,38 @@ function NoteEditor({ pageId }: Props): JSX.Element | null {
     return () => {
       editorRef.current?.removeChild(editor);
     };
-  }, [pageId]);
+  }, [file.id]);
+
+  useEffect(() => {
+    setTitle(file.name);
+  }, [file.name]);
 
   useEffect(() => {
     editorMountRef.current = false;
-  }, [pageId]);
+  }, [file.id]);
 
-  return <div className="blocksuite-editor-container" ref={editorRef}></div>;
+  const onPageTitleChange = useCallback(
+    (e) => {
+      const newTitle = e.target.value;
+      setTitle(newTitle);
+      menuIndexeddbStorage.updateFileName(file, newTitle);
+      getFileTree();
+    },
+    [file.id]
+  );
+
+  return (
+    <div className="blocksuite-editor-container">
+      <Input
+        className="text-4xl font-bold"
+        bordered={false}
+        value={title}
+        placeholder={t('text.untitled')}
+        onChange={onPageTitleChange}
+      ></Input>
+      <div className="blocksuite-editor-content" ref={editorRef}></div>
+    </div>
+  );
 }
 
 export default NoteEditor;
