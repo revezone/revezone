@@ -1,6 +1,10 @@
 import { Menu, MenuItem } from 'electron';
+let registered = false;
 
 export const registerAppMenu = () => {
+  if (registered) return;
+  registered = true;
+
   const helpSubMenuItems = [
     new MenuItem({
       label: 'Twitter',
