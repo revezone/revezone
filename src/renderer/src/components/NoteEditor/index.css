@@ -19,4 +19,8 @@
   .affine-default-page-block-title {
     display: none;
   }
+
+  .blocksuite-editor-content {
+    height: calc(100% - 2rem);
+  }
 }
