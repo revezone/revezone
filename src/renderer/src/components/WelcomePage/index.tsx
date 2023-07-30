@@ -3,12 +3,14 @@ import { Twitter, Github, Coffee, Cat, FolderPlus, FileType, Palette } from 'luc
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import './index.css';
+
 function WelcomeContent() {
   const { t } = useTranslation();
 
   return (
-    <div className="revenote-welcome-page w-full h-full flex pt-20 justify-center text-slate-400">
-      <div className="content w-2/3 h-5/6 overflow-scroll">
+    <div className="revenote-welcome-page w-full h-full flex pt-10 justify-center text-slate-400">
+      <div className="content w-2/3 overflow-scroll">
         <div className="flex items-end mb-6">
           <RevenoteLogo size="large" url="https://revenote.com" />
         </div>
@@ -61,7 +63,7 @@ function WelcomeContent() {
           </p>
         </div>
       </div>
-      <div className="absolute bottom-10">
+      <div className="copyright absolute bottom-0 text-center">
         Copyright © 2023{' '}
         <a href="https://twitter.com/korbinzhao" target="_blank" rel="noreferrer">
           Korbin Zhao
