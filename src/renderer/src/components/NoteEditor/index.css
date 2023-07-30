@@ -13,7 +13,7 @@
   -webkit-font-smoothing: antialiased;
 
   .affine-default-page-block-container {
-    height: 100%;
+    min-height: 600px;
   }
 
   .affine-default-page-block-title {
