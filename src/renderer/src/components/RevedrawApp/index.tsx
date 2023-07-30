@@ -25,9 +25,9 @@ export default function RevedrawApp({ file }: Props) {
   const [, setRef] = useState<ExcalidrawImperativeAPI>();
   const [fileTree] = useAtom(fileTreeAtom);
   const [, setCurrentFile] = useAtom(currentFileAtom);
-  const [langCode, setLangCode] = useAtom(langCodeAtom);
+  const [systemLangCode] = useAtom(langCodeAtom);
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const getDataSource = useCallback(async (id) => {
     // reset data source for a new canvas file
@@ -90,9 +90,8 @@ export default function RevedrawApp({ file }: Props) {
         dataSource={dataSource}
         canvasName={file.name}
         getRef={(ref) => setRef(ref)}
-        systemLangCode={langCode}
+        systemLangCode={systemLangCode}
         onChange={onChangeDebounceFn}
-        onLangCodeChange={(code) => setLangCode(code)}
         onLinkOpen={onLinkOpen}
         customMenuItems={[
           <button
