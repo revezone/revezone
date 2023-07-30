@@ -4,10 +4,8 @@ import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import type { RevenoteFile, RevenoteFolder, OnFolderOrFileAddProps } from '@renderer/types/file';
 import {
   getOpenKeysFromLocal,
-  // getSelectedKeysFromLocal,
   setCurrentFileIdToLocal,
   setOpenKeysToLocal
-  // setSelectedKeysToLocal
 } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
 import { currentFileAtom, fileTreeAtom, currentFolderIdAtom } from '@renderer/store/jotai';

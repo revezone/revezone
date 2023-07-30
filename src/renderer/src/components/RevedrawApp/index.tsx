@@ -24,7 +24,7 @@ export default function RevedrawApp({ file }: Props) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [, setRef] = useState<ExcalidrawImperativeAPI>();
   const [fileTree] = useAtom(fileTreeAtom);
-  const [, setCurrentFileId] = useAtom(currentFileAtom);
+  const [, setCurrentFile] = useAtom(currentFileAtom);
   const [langCode, setLangCode] = useAtom(langCodeAtom);
 
   const { t, i18n } = useTranslation();
@@ -68,7 +68,7 @@ export default function RevedrawApp({ file }: Props) {
         );
 
         if (file) {
-          setCurrentFileId(file);
+          setCurrentFile(file);
         }
       } else {
         link && window.open(link);
