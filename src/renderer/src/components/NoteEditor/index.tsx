@@ -70,14 +70,24 @@ function NoteEditor({ file }: Props): JSX.Element | null {
     [file.id]
   );
 
+  const onPressEnter = useCallback(() => {
+    const richText = document
+      .querySelector('.affine-frame-block-container')
+      ?.querySelector('.affine-rich-text');
+
+    // @ts-ignore
+    richText?.focus();
+  }, []);
+
   return (
     <div className="blocksuite-editor-container">
       <Input
-        className="text-4xl font-bold px-5"
+        className="note-editor-title text-4xl font-bold px-5"
         bordered={false}
         value={title}
         placeholder={t('text.untitled')}
         onChange={onPageTitleChange}
+        onPressEnter={onPressEnter}
       ></Input>
       <div className="blocksuite-editor-content" ref={editorRef}></div>
     </div>

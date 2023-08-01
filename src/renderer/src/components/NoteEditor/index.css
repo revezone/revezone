@@ -6,6 +6,9 @@
   --affine-font-family: "zh quote", "Helvetica Neue", -apple-system, "PingFang SC", "Microsoft YaHei", STHeiti, Helvetica, Arial, sans-serif, "Apple Color Emoji";
   --affine-link-color: rgb(49, 126, 208);
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100%;
   padding: 20px;
@@ -16,11 +19,16 @@
     min-height: 600px;
   }
 
-  .affine-default-page-block-title {
+  .affine-default-page-block-title-container, .affine-default-page-block-title {
     display: none;
   }
 
+  .note-editor-title{
+    max-width: var(--affine-editor-width);
+  }
+
   .blocksuite-editor-content {
+    width: 100%;
     height: calc(100% - 2rem);
   }
 }

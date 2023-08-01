@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function Versions(): JSX.Element {
+function Versions(): JSX.Element | null {
   if (!window.electron) {
     return null;
   }
