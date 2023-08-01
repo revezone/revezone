@@ -16,7 +16,7 @@ function createWindow(): void {
   let mainWindow: BrowserWindow | null = new BrowserWindow({
     titleBarStyle: isMacOS() ? 'hiddenInset' : 'default',
     titleBarOverlay: isMacOS() ? false : true,
-    width: 1000,
+    width: 1200,
     height: 670,
     show: false,
     frame: true,

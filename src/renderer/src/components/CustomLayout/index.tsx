@@ -32,7 +32,7 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
           theme={theme}
           trigger={null}
           collapsed={collapsed}
-          width={260}
+          width={300}
           onBreakpoint={(broken): void => {
             console.log(broken);
           }}

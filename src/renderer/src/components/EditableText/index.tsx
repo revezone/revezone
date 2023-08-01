@@ -71,11 +71,7 @@ export default function EditableText({
   }, []);
 
   return (
-    <div
-      className="editable-text-container flex items-center"
-      onDoubleClick={_onEdit}
-      onClick={(e) => e.stopPropagation()}
-    >
+    <div className="editable-text-container flex items-center" onDoubleClick={_onEdit}>
       {isPreview ? (
         <div title={value} className="flex items-center justify-between w-full">
           <div className="leading-4">
