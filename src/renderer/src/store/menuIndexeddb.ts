@@ -72,22 +72,6 @@ class MenuIndexeddbStorage {
       autoIncrement: true
     });
 
-    await folderStore.createIndex('id', 'id', { unique: true });
-
-    const id = uuidv4();
-
-    localStorage.setItem(LOCALSTORAGE_FIRST_FOLDER_KEY, id);
-
-    await folderStore.add(
-      {
-        id,
-        name: 'Default Folder',
-        gmtCreate: moment().toLocaleString(),
-        gmtModified: moment().toLocaleString()
-      },
-      id
-    );
-
     return folderStore;
   }
 
@@ -117,23 +101,7 @@ class MenuIndexeddbStorage {
       autoIncrement: true
     });
 
-    await fileStore.createIndex('id', 'id', { unique: true });
     await fileStore.createIndex('type', 'type', { unique: false });
-
-    const firstFileId = uuidv4();
-
-    localStorage.setItem(LOCALSTORAGE_FIRST_FILE_KEY, firstFileId);
-
-    await fileStore.add(
-      {
-        id: firstFileId,
-        name: 'Default File',
-        type: 'note',
-        gmtCreate: moment().toLocaleString(),
-        gmtModified: moment().toLocaleString()
-      },
-      firstFileId
-    );
 
     return fileStore;
   }

@@ -1,4 +1,5 @@
 @import "./style/fonts.css";
+@import "./style/customize-scrollbar.css";
 
 @tailwind base;
 @tailwind components;

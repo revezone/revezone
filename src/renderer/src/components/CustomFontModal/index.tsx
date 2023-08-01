@@ -20,15 +20,16 @@ const CustomFontModal = (props: Props) => {
   const [fontFamilyName, setFontFamilyName] = useState<string>();
 
   const loadCustomFonts = useCallback(() => {
-    window.api.loadCustomFonts();
+    window.api && window.api.loadCustomFonts();
   }, []);
 
   useEffect(() => {
-    window.api.onLoadCustomFontSuccess(async (event, _fontName, _fontPath) => {
-      setFontName(_fontName);
-      setFontPath(_fontPath);
-      setFontFamilyName(_fontName);
-    });
+    window.api &&
+      window.api.onLoadCustomFontSuccess(async (event, _fontName, _fontPath) => {
+        setFontName(_fontName);
+        setFontPath(_fontPath);
+        setFontFamilyName(_fontName);
+      });
   }, []);
 
   const onOk = useCallback(() => {

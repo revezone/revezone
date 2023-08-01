@@ -12,8 +12,11 @@ import '@renderer/i18n';
 import WelcomePage from './components/WelcomePage';
 import { ConfigProvider } from 'antd';
 import { theme } from './utils/theme';
+import { getOSName } from './utils/navigator';
 
 import './App.css';
+
+const OS_NAME = getOSName();
 
 function App(): JSX.Element {
   const [currentFile] = useAtom(currentFileAtom);
@@ -44,7 +47,7 @@ function App(): JSX.Element {
 
   return (
     <ConfigProvider locale={getLocale()} theme={theme}>
-      <div className="revenote-app-container">
+      <div className={`revenote-app-container ${OS_NAME === 'Windows' ? 'os-is-windows' : null}`}>
         <Layout>
           <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
         </Layout>
