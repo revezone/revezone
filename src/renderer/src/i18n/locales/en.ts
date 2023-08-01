@@ -37,6 +37,7 @@ export default {
     followTheAuthor: 'Follow the author'
   },
   text: {
-    untitled: 'Untitled'
+    untitled: 'Untitled',
+    defaultFolder: 'Default Folder'
   }
 };

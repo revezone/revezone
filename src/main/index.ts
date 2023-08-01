@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
-import { isMacOS, isWindows } from './utils';
+import { isMacOS } from './utils';
 import {
   loadCustomFont,
   registerCustomFont,
@@ -14,11 +14,12 @@ import { EVENTS } from '../preload/events';
 function createWindow(): void {
   // Create the browser window.
   let mainWindow: BrowserWindow | null = new BrowserWindow({
-    titleBarStyle: isMacOS() ? 'hiddenInset' : isWindows() ? 'hidden' : 'default',
+    titleBarStyle: isMacOS() ? 'hiddenInset' : 'default',
+    titleBarOverlay: isMacOS() ? false : true,
     width: 1000,
     height: 670,
     show: false,
-    frame: false,
+    frame: true,
     trafficLightPosition: { x: 24, y: 18 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -29,6 +30,8 @@ function createWindow(): void {
   batchRegisterCustomFonts(mainWindow);
 
   registerAppMenu();
+
+  mainWindow.setMenuBarVisibility(false);
 
   mainWindow.on('ready-to-show', () => {
     mainWindow?.show();
@@ -53,9 +56,11 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
   }
 
-  ipcMain.on(EVENTS.toggleTrafficLight, (event, isShow) => {
-    mainWindow?.setWindowButtonVisibility(isShow);
-  });
+  if (isMacOS()) {
+    ipcMain.on(EVENTS.toggleTrafficLight, (event, isShow) => {
+      mainWindow?.setWindowButtonVisibility(isShow);
+    });
+  }
 
   ipcMain.on(EVENTS.loadCustomFont, async () => {
     loadCustomFont(mainWindow);

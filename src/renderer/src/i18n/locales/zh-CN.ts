@@ -36,6 +36,7 @@ export default {
     followTheAuthor: '关注作者'
   },
   text: {
-    untitled: '请输入标题'
+    untitled: '请输入标题',
+    defaultFolder: '默认文件夹'
   }
 };

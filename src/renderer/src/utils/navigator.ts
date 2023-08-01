@@ -4,13 +4,13 @@ export const getOSName = () => {
   const userAgent = navigator.userAgent;
 
   switch (true) {
-    case userAgent.indexOf('Win') !== -1:
+    case userAgent.includes('Win'):
       os = 'Windows';
       break;
-    case userAgent.indexOf('Mac') !== -1:
+    case userAgent.includes('Mac'):
       os = 'MacOS';
       break;
-    case userAgent.indexOf('Linux') !== -1:
+    case userAgent.includes('Linux'):
       os = 'Linux';
       break;
     default:
@@ -19,4 +19,8 @@ export const getOSName = () => {
   }
 
   return os;
+};
+
+export const isInRevenoteApp = () => {
+  return navigator.userAgent.includes('revenote');
 };

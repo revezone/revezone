@@ -28,7 +28,7 @@ export default function LanguageSwitcher() {
       size="small"
       value={langCode}
       onChange={onChange}
-      className="revenote-language-select mr-2 flex items-center"
+      className="revenote-language-select items-center w-auto"
       bordered={false}
     >
       {langCodeList.map((item) => {

@@ -36,6 +36,7 @@ export default {
     followTheAuthor: '關註作者'
   },
   text: {
-    untitled: '請輸入標題'
+    untitled: '請輸入標題',
+    defaultFolder: '默認文件夾'
   }
 };

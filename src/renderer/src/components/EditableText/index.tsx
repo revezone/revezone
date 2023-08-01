@@ -41,9 +41,14 @@ export default function EditableText({
     [value]
   );
 
-  const _onEdit = useCallback(() => {
-    onEdit();
-  }, [isPreview]);
+  const _onEdit = useCallback(
+    (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      onEdit();
+    },
+    [isPreview]
+  );
 
   useEffect(() => {
     if (isPreview) return;

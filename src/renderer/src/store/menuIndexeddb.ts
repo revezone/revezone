@@ -106,13 +106,13 @@ class MenuIndexeddbStorage {
     return fileStore;
   }
 
-  async addFolder() {
+  async addFolder(name?: string) {
     await this.initDB();
     const id = `folder_${uuidv4()}`;
 
     const folderInfo = {
       id,
-      name: '',
+      name: name || '',
       gmtCreate: moment().toLocaleString(),
       gmtModified: moment().toLocaleString()
     };

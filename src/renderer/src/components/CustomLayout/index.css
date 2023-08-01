@@ -7,9 +7,16 @@
   }
 
   .revenote-topleft-toolbar {
+
+    .os-is-macos.is-in-revenote-native-app & {
+      position: relative;
+    }
+
+    position: absolute;
+    right: 0;
+    z-index: 100;
     display: flex;
     flex-direction: row-reverse;
-    width: 100%;
     height: 50px;
     font-size: 16px;
     -webkit-user-select: none;
@@ -22,6 +29,8 @@
       -webkit-app-region: no-drag;
     }
   }
+
+
 
   .ant-menu-title-content {
     flex: auto;
@@ -41,7 +50,7 @@
     }
   }
 
-  .ant-layout-sider-children{
+  .ant-layout-sider-children {
     height: 100%;
     overflow-y: scroll;
   }

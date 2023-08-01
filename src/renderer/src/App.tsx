@@ -12,7 +12,7 @@ import '@renderer/i18n';
 import WelcomePage from './components/WelcomePage';
 import { ConfigProvider } from 'antd';
 import { theme } from './utils/theme';
-import { getOSName } from './utils/navigator';
+import { getOSName, isInRevenoteApp } from './utils/navigator';
 
 import './App.css';
 
@@ -47,7 +47,11 @@ function App(): JSX.Element {
 
   return (
     <ConfigProvider locale={getLocale()} theme={theme}>
-      <div className={`revenote-app-container ${OS_NAME === 'Windows' ? 'os-is-windows' : null}`}>
+      <div
+        className={`revenote-app-container os-is-${OS_NAME.toLowerCase()} ${
+          isInRevenoteApp() ? 'is-in-revenote-native-app' : 'is-in-browser'
+        }`}
+      >
         <Layout>
           <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
         </Layout>

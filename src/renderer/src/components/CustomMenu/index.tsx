@@ -24,6 +24,7 @@ import useFileContextMenu from '@renderer/hooks/useFileContextMenu';
 import useFolderContextMenu from '@renderer/hooks/useFolderContextMenu';
 import { getCurrentFileIdFromLocal } from '@renderer/store/localstorage';
 import useFileTree from '@renderer/hooks/useFileTree';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 interface Props {
   collapsed: boolean;
@@ -248,8 +249,9 @@ export default function CustomMenu({ collapsed }: Props) {
 
   return (
     <div className="revenote-menu-container">
-      <div onClick={() => resetMenu()} className="mb-5">
-        <RevenoteLogo size="small" className="pl-5" />
+      <div className="flex items-center mb-5 pl-5 pr-8 pt-3 justify-between">
+        <RevenoteLogo size="small" onClick={() => resetMenu()} />
+        <LanguageSwitcher />
       </div>
       <OperationBar
         size="small"

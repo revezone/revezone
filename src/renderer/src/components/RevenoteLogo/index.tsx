@@ -4,6 +4,7 @@ interface Props {
   className?: string;
   size?: Size;
   url?: string;
+  onClick?: () => void;
 }
 
 const getTextSizeName = (size: Size) => {
@@ -28,13 +29,16 @@ const getImageSizeName = (size: Size) => {
   }
 };
 
-export default function Logo({ size = 'small', className = '', url }: Props) {
+export default function Logo({ size = 'small', className = '', url, onClick }: Props) {
   return (
     <div
       className={`flex items-center text-xl font-mono cursor-pointer ${getTextSizeName(
         size
       )} ${className}`}
-      onClick={() => url && window.open(url)}
+      onClick={() => {
+        onClick?.();
+        url && window.open(url);
+      }}
     >
       <img
         className={getImageSizeName(size)}

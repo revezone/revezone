@@ -3,6 +3,7 @@ import { FileTree, RevenoteFileType, OnFolderOrFileAddProps } from '@renderer/ty
 import { fileTreeAtom, currentFileAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   onAdd?: ({ fileId, folderId, type }: OnFolderOrFileAddProps) => void;
@@ -11,13 +12,14 @@ interface Props {
 export default function useAddFile({ onAdd }: Props) {
   const [, setCurrentFile] = useAtom(currentFileAtom);
   const [, setFileTree] = useAtom(fileTreeAtom);
+  const { t } = useTranslation();
 
   const addFile = useCallback(
     async (folderId: string | undefined, type: RevenoteFileType, fileTree: FileTree) => {
       let _folderId = folderId || fileTree?.[0]?.id;
 
       if (!_folderId) {
-        _folderId = (await menuIndexeddbStorage.addFolder())?.id;
+        _folderId = (await menuIndexeddbStorage.addFolder(t('text.defaultFolder')))?.id;
       }
 
       const file = await menuIndexeddbStorage.addFile(_folderId, type);
