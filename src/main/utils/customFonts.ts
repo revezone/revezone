@@ -53,7 +53,11 @@ export const registerCustomFont = (mainWindow, fontName, fontPath) => {
     const fontData = fs.readFileSync(fontPath);
     const fontUrl = `url(data:font/truetype;base64,${fontData.toString('base64')})`;
 
-    mainWindow.webContents.insertCSS(`@font-face { font-family: '${fontName}'; src: ${fontUrl}; }`);
+    console.log('--- reigister font ---', fontName);
+
+    mainWindow.webContents.insertCSS(
+      `@font-face { font-family: '${fontName}'; src: ${fontUrl}; font-display: 'block' }`
+    );
   } catch (err) {
     console.error(err);
   }

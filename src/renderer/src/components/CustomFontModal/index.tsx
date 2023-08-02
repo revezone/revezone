@@ -4,6 +4,8 @@ import { addCustomFontToLocal } from '@renderer/store/localstorage';
 import { useTranslation } from 'react-i18next';
 
 import './index.css';
+import { useAtom } from 'jotai';
+import { currentFileAtom } from '@renderer/store/jotai';
 
 interface Props {
   open: boolean;
@@ -18,6 +20,7 @@ const CustomFontModal = (props: Props) => {
   const [fontName, setFontName] = useState();
   const [fontPath, setFontPath] = useState();
   const [fontFamilyName, setFontFamilyName] = useState<string>();
+  const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
 
   const loadCustomFonts = useCallback(() => {
     window.api && window.api.loadCustomFonts();
@@ -47,12 +50,15 @@ const CustomFontModal = (props: Props) => {
 
     addCustomFontToLocal(fontFamilyName);
 
+    const prevFile = currentFile;
+
+    setCurrentFile(undefined);
     setTimeout(() => {
-      window.location.reload();
+      setCurrentFile(prevFile);
     }, 0);
 
     closeModal();
-  }, [fontPath, fontFamilyName]);
+  }, [fontPath, fontFamilyName, currentFile]);
 
   return (
     <Modal
