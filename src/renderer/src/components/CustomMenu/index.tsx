@@ -18,13 +18,14 @@ import RevenoteLogo from '../RevenoteLogo';
 
 import './index.css';
 import { getFileById, getFolderIdByFileId } from '@renderer/utils/file';
-import { Folder } from 'lucide-react';
+import { Folder, HardDrive, UploadCloud } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import useFileContextMenu from '@renderer/hooks/useFileContextMenu';
 import useFolderContextMenu from '@renderer/hooks/useFolderContextMenu';
 import { getCurrentFileIdFromLocal } from '@renderer/store/localstorage';
 import useFileTree from '@renderer/hooks/useFileTree';
-import LanguageSwitcher from '../LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../LanguageSwitcher/index';
 
 interface Props {
   collapsed: boolean;
@@ -38,6 +39,7 @@ export default function CustomMenu({ collapsed }: Props) {
   const [editableTextState, setEditableTextState] = useState<{ [key: string]: boolean }>({});
   const firstRenderRef = useRef(false);
   const { fileTree, getFileTree } = useFileTree();
+  const { t } = useTranslation();
 
   const onFolderOrFileAdd = useCallback(
     ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
@@ -247,17 +249,41 @@ export default function CustomMenu({ collapsed }: Props) {
     [editableTextState]
   );
 
+  const storageTypeItems = [
+    {
+      key: 'local',
+      icon: <HardDrive className="w-4 mr-1"></HardDrive>,
+      label: t('storage.local')
+    },
+    {
+      key: 'cloud',
+      icon: <UploadCloud className="w-4 mr-1"></UploadCloud>,
+      disabled: true,
+      label: t('storage.cloud')
+    }
+  ];
+
   return (
     <div className="revenote-menu-container">
-      <div className="flex items-center mb-5 pl-5 pr-8 pt-3 justify-between">
+      <div className="flex flex-col mb-1 pl-5 pr-8 pt-3 justify-between">
         <RevenoteLogo size="small" onClick={() => resetMenu()} />
-        <LanguageSwitcher />
+        <div className="flex justify-start">
+          <div className="mr-2 whitespace-nowrap">
+            <Dropdown menu={{ items: storageTypeItems }}>
+              <span className="text-slate-500 flex items-center cursor-pointer">
+                <HardDrive className="w-4 mr-1"></HardDrive>
+                {t('storage.local')}
+              </span>
+            </Dropdown>
+          </div>
+          <LanguageSwitcher></LanguageSwitcher>
+        </div>
       </div>
       <OperationBar
         size="small"
         folderId={currentFolderId}
         onAdd={onFolderOrFileAdd}
-        className="mb-3"
+        className="mb-1"
       />
       <div className="menu-list">
         <Menu

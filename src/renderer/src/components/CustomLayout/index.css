@@ -17,7 +17,7 @@
     z-index: 100;
     display: flex;
     flex-direction: row-reverse;
-    height: 50px;
+    height: 2rem;
     font-size: 16px;
     -webkit-user-select: none;
     -webkit-app-region: drag;
@@ -25,7 +25,7 @@
     .tool-buttons {
       display: flex;
       justify-content: space-between;
-      margin: 1rem 1rem 1rem 0;
+      margin: 2rem 1rem 1rem 0;
       -webkit-app-region: no-drag;
     }
   }

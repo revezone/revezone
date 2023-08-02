@@ -37,4 +37,8 @@
     height: calc(100% - 6rem);
     padding-bottom: 2rem;
   }
+
+  .ant-select-selection-item{
+    color: rgb(100 116 139); 
+  }
 }

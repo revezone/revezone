@@ -38,5 +38,9 @@ export default {
   text: {
     untitled: '請輸入標題',
     defaultFolder: '默認文件夾'
+  },
+  storage: {
+    cloud: '雲存儲(敬請期待)',
+    local: '本地存儲'
   }
 };

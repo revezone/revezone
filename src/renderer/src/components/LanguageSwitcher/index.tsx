@@ -27,8 +27,9 @@ export default function LanguageSwitcher() {
     <Select
       size="small"
       value={langCode}
+      onClick={(e) => e.stopPropagation()}
       onChange={onChange}
-      className="revenote-language-select items-center w-auto"
+      className="revenote-language-select items-center w-auto whitespace-nowrap"
       bordered={false}
     >
       {langCodeList.map((item) => {

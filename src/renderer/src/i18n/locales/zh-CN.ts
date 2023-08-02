@@ -38,5 +38,9 @@ export default {
   text: {
     untitled: '请输入标题',
     defaultFolder: '默认文件夹'
+  },
+  storage: {
+    cloud: '云存储(敬请期待)',
+    local: '本地存储'
   }
 };

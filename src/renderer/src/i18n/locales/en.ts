@@ -39,5 +39,9 @@ export default {
   text: {
     untitled: 'Untitled',
     defaultFolder: 'Default Folder'
+  },
+  storage: {
+    cloud: 'Cloud(Comming soon)',
+    local: 'Local'
   }
 };
