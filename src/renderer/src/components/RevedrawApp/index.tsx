@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { FileTreeItem, RevenoteFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
 import { ExcalidrawImperativeAPI, NonDeletedExcalidrawElement } from 'revemate/es/Revedraw/types';
@@ -19,6 +19,8 @@ interface Props {
 
 const DEFAULT_DATA_SOURCE = '{}';
 
+let firsRender = true;
+
 export default function RevedrawApp({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -26,6 +28,7 @@ export default function RevedrawApp({ file }: Props) {
   const [fileTree] = useAtom(fileTreeAtom);
   const [, setCurrentFile] = useAtom(currentFileAtom);
   const [systemLangCode] = useAtom(langCodeAtom);
+  const [didRender, setDidRender] = useState(true);
 
   const { t } = useTranslation();
 
@@ -36,6 +39,23 @@ export default function RevedrawApp({ file }: Props) {
     const data = await boardIndexeddbStorage.getBoard(id);
 
     setDataSource(data || DEFAULT_DATA_SOURCE);
+  }, []);
+
+  // HACK: fix the custom font not working completely when first render
+  const rerender = useCallback(() => {
+    setTimeout(() => {
+      setDidRender(false);
+      setTimeout(() => {
+        setDidRender(true);
+      }, 100);
+    }, 200);
+  }, []);
+
+  useEffect(() => {
+    if (firsRender) {
+      firsRender = false;
+      rerender();
+    }
   }, []);
 
   const onChangeFn = useCallback(
@@ -86,25 +106,28 @@ export default function RevedrawApp({ file }: Props) {
 
   return dataSource ? (
     <>
-      <Revedraw
-        dataSource={dataSource}
-        canvasName={file.name}
-        getRef={(ref) => setRef(ref)}
-        systemLangCode={systemLangCode}
-        onChange={onChangeDebounceFn}
-        onLinkOpen={onLinkOpen}
-        customMenuItems={[
-          <button
-            key="custom-font"
-            className="dropdown-menu-item dropdown-menu-item-base"
-            title={t('menu.loadCustomFont')}
-            onClick={() => setIsModalOpen(true)}
-          >
-            <PencilLine className="revenote-app-custom-font-icon" />
-            {t('menu.customFont')}
-          </button>
-        ]}
-      />
+      {didRender ? (
+        <Revedraw
+          dataSource={dataSource}
+          canvasName={file.name}
+          getRef={(ref) => setRef(ref)}
+          systemLangCode={systemLangCode}
+          onChange={onChangeDebounceFn}
+          onLinkOpen={onLinkOpen}
+          customMenuItems={[
+            <button
+              key="custom-font"
+              className="dropdown-menu-item dropdown-menu-item-base"
+              title={t('menu.loadCustomFont')}
+              onClick={() => setIsModalOpen(true)}
+            >
+              <PencilLine className="revenote-app-custom-font-icon" />
+              {t('menu.customFont')}
+            </button>
+          ]}
+        />
+      ) : null}
+
       <CustomFontModal open={isModalOpen} closeModal={() => setIsModalOpen(false)} />
     </>
   ) : null;
