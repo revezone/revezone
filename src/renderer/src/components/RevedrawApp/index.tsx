@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FileTreeItem, RevenoteFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
 import { ExcalidrawImperativeAPI, NonDeletedExcalidrawElement } from 'revemate/es/Revedraw/types';
@@ -10,6 +10,7 @@ import { currentFileAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jot
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { DOUBLE_LINK_REGEX } from '@renderer/utils/constant';
+import { getOSName } from '@renderer/utils/navigator';
 
 import './index.css';
 
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const DEFAULT_DATA_SOURCE = '{}';
+const OS_NAME = getOSName();
 
 let firsRender = true;
 
@@ -43,12 +45,17 @@ export default function RevedrawApp({ file }: Props) {
 
   // HACK: fix the custom font not working completely when first render
   const rerender = useCallback(() => {
+    const WAIT_TIME_WINDWOS = 500;
+    const WAIT_TIME_MACOS = 200;
+
+    const waitTime = OS_NAME === 'MacOS' ? WAIT_TIME_MACOS : WAIT_TIME_WINDWOS;
+
     setTimeout(() => {
       setDidRender(false);
       setTimeout(() => {
         setDidRender(true);
       }, 100);
-    }, 200);
+    }, waitTime);
   }, []);
 
   useEffect(() => {
