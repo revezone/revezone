@@ -1,6 +1,11 @@
 .revenote-menu-container {
   position: relative;
   height: calc(100% - 3rem);
+  margin-top: 1rem;
+
+  .os-is-macos.is-in-revenote-native-app & {
+    margin-top: 0;
+  }
 
   .ant-menu-submenu-title:hover .menu-icon {
     visibility: visible;
