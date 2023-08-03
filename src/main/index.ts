@@ -20,7 +20,7 @@ function createWindow(): void {
     height: 670,
     show: false,
     frame: true,
-    trafficLightPosition: { x: 24, y: 18 },
+    trafficLightPosition: { x: 20, y: 10 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
