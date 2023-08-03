@@ -1,7 +1,8 @@
 export default {
   menu: {
     customFont: '自定義字體',
-    loadCustomFont: '加載自定義字體'
+    loadCustomFont: '加載自定義字體',
+    downloadApp: '下載桌面應用開啟自定義字體功能'
   },
   customFontModal: {
     title: '自定義字體',
@@ -35,7 +36,8 @@ export default {
     authorTwitter: '關註作者',
     authorBilibili: '官方 B 站',
     buyMeACoffee: '買杯咖啡',
-    feedMyCat: '投餵貓糧'
+    feedMyCat: '投餵貓糧',
+    downloadApp: '下載桌面應用'
   },
   text: {
     untitled: '請輸入標題',

@@ -10,7 +10,8 @@ import { currentFileAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jot
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { DOUBLE_LINK_REGEX } from '@renderer/utils/constant';
-import { getOSName } from '@renderer/utils/navigator';
+import { getOSName, getIsInRevenoteApp } from '@renderer/utils/navigator';
+import { Button, Tooltip } from 'antd';
 
 import './index.css';
 
@@ -20,6 +21,7 @@ interface Props {
 
 const DEFAULT_DATA_SOURCE = '{}';
 const OS_NAME = getOSName();
+const IS_IN_REVENOTE_APP = getIsInRevenoteApp();
 
 let firsRender = true;
 
@@ -122,15 +124,27 @@ export default function RevedrawApp({ file }: Props) {
           onChange={onChangeDebounceFn}
           onLinkOpen={onLinkOpen}
           customMenuItems={[
-            <button
-              key="custom-font"
-              className="dropdown-menu-item dropdown-menu-item-base"
-              title={t('menu.loadCustomFont')}
-              onClick={() => setIsModalOpen(true)}
-            >
-              <PencilLine className="revenote-app-custom-font-icon" />
-              {t('menu.customFont')}
-            </button>
+            IS_IN_REVENOTE_APP ? (
+              <Button
+                key="custom-font"
+                className={`dropdown-menu-item dropdown-menu-item-base`}
+                title={t('menu.loadCustomFont')}
+                onClick={() => setIsModalOpen(true)}
+              >
+                <PencilLine className="revenote-app-custom-font-icon" />
+                {t('menu.customFont')}
+              </Button>
+            ) : (
+              <p
+                className="flex justify-start items-center cursor-pointer px-3 py-2 text-sm text-gray-400"
+                onClick={() => window.open('https://github.com/revenote/revenote/releases')}
+              >
+                <PencilLine className="revenote-app-custom-font-icon w-3 h-3 " />
+                <Tooltip title={t('menu.downloadApp')}>
+                  <span className="pl-3">{t('menu.customFont')}</span>
+                </Tooltip>
+              </p>
+            )
           ]}
         />
       ) : null}

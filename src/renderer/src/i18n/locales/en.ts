@@ -1,7 +1,8 @@
 export default {
   menu: {
-    customFont: 'Custom Font',
-    loadCustomFont: 'Load Custom Font'
+    customFont: 'Custom font',
+    loadCustomFont: 'Load custom font',
+    downloadApp: 'Download desktop app to enable custom font function'
   },
   customFontModal: {
     title: 'Custom Font',
@@ -36,7 +37,8 @@ export default {
     buyMeACoffee: 'By me a coffee',
     feedMyCat: 'Feed my cat',
     authorTwitter: "Follow author's twitter",
-    authorBilibili: 'Official Bilibili'
+    authorBilibili: 'Official Bilibili',
+    downloadApp: 'Download the desktop app'
   },
   text: {
     untitled: 'Untitled',
