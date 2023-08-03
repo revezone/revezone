@@ -280,7 +280,7 @@ export default function CustomMenu({ collapsed }: Props) {
         </div>
       </div>
       <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
-      <div className="menu-list">
+      <div className="menu-list border-t border-slate-100">
         <Menu
           theme="light"
           mode="inline"
