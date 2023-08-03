@@ -265,7 +265,7 @@ export default function CustomMenu({ collapsed }: Props) {
 
   return (
     <div className="revenote-menu-container">
-      <div className="flex flex-col mb-1 pl-5 pr-8 pt-3 justify-between">
+      <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
         <RevenoteLogo size="small" onClick={() => resetMenu()} />
         <div className="flex justify-start">
           <div className="mr-2 whitespace-nowrap">
@@ -279,12 +279,7 @@ export default function CustomMenu({ collapsed }: Props) {
           <LanguageSwitcher></LanguageSwitcher>
         </div>
       </div>
-      <OperationBar
-        size="small"
-        folderId={currentFolderId}
-        onAdd={onFolderOrFileAdd}
-        className="mb-1"
-      />
+      <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
       <div className="menu-list">
         <Menu
           theme="light"

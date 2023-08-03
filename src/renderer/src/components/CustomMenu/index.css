@@ -1,6 +1,6 @@
 .revenote-menu-container {
   position: relative;
-  height: calc(100% - 5rem);
+  height: calc(100% - 3rem);
 
   .ant-menu-submenu-title:hover .menu-icon {
     visibility: visible;
