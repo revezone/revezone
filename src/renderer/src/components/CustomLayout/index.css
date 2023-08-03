@@ -22,10 +22,8 @@
     -webkit-user-select: none;
     -webkit-app-region: drag;
 
-    .tool-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin: 2rem 1rem 1rem 0;
+    .panel-left-button {
+      margin: 1rem 1rem 0 0;
       -webkit-app-region: no-drag;
     }
   }

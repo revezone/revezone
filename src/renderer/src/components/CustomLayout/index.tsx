@@ -57,12 +57,10 @@ const RevenoteLayout = ({ children }: Props): JSX.Element => {
           }}
         >
           <div className="revenote-topleft-toolbar">
-            <span className="tool-buttons flex items-center">
-              <PanelLeftClose
-                className="w-5 text-current cursor-pointer"
-                onClick={switchCollapse}
-              />
-            </span>
+            <PanelLeftClose
+              className="panel-left-button w-5 text-current cursor-pointer"
+              onClick={switchCollapse}
+            />
           </div>
           <CustomMenu collapsed={collapsed} />
           {/* <div className="bottom-toolbar absolute bottom-0 right-0">
