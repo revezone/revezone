@@ -66,8 +66,8 @@ dependencies:
     specifier: ^13.0.2
     version: 13.0.2(i18next@23.3.0)(react-dom@18.2.0)(react@18.2.0)
   revemate:
-    specifier: 0.0.1-beta.16
-    version: 0.0.1-beta.16(react-dom@18.2.0)(react@18.2.0)
+    specifier: 0.0.1-beta.18
+    version: 0.0.1-beta.18(react-dom@18.2.0)(react@18.2.0)
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -3812,8 +3812,8 @@ packages:
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
     dev: true
 
-  /revedraw@1.0.0-alpha.2(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-RYIsVbfaLulzUeXR7ygRXFfMYuXzFTK4w26pH31Ag2GtT9rzhklp88aMeMyqUnLG13bHiFLtfJtpiC5xqC8KFA==}
+  /revedraw@1.0.0-alpha.6(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-ghPo633Rja8HSdrH3lt/RCRBTa1RIv6hhQFyPAlmtuJ8u9jsrbYlbkyduFc3MGgZhputGXS/+QsV7cvaChSyJQ==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -3822,8 +3822,8 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /revemate@0.0.1-beta.16(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-SDDYbn8uz5ODPeuzf5UseqPMuA8pUM67y2SIcL8QavWtfrP9NasnV8yQT8lYPhRfk6ed5bLFLK4ZO8B3rny7mw==}
+  /revemate@0.0.1-beta.18(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-P74o1/2nTk42yxmPOqTeIuaRJ0mkHhvoz+UCARQr62m5lB/38wmWJpBVKiAHFJTLoOM0DO1kKAazGv0UIFprlg==}
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
@@ -3833,7 +3833,7 @@ packages:
       open-color: 1.9.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      revedraw: 1.0.0-alpha.2(react-dom@18.2.0)(react@18.2.0)
+      revedraw: 1.0.0-alpha.6(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
   /rimraf@3.0.2:
