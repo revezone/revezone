@@ -66,8 +66,8 @@ dependencies:
     specifier: ^13.0.2
     version: 13.0.2(i18next@23.3.0)(react-dom@18.2.0)(react@18.2.0)
   revemate:
-    specifier: 0.0.1-beta.11
-    version: 0.0.1-beta.11(react-dom@18.2.0)(react@18.2.0)
+    specifier: 0.0.1-beta.16
+    version: 0.0.1-beta.16(react-dom@18.2.0)(react@18.2.0)
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -881,16 +881,6 @@ packages:
     resolution: {integrity: sha512-6SWlXpWU5AvId8Ac7zjzmIOqMOba/JWY8XZ4A7q7Gn1Vlfg/SFFIlrtHXt9nPn4op9ZPAkl91Jao+QQv3r/ukw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
-
-  /@handraw/excalidraw@1.0.0-alpha.10(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-eW7IS2d8fp8/A4tff74213oXm/epZ0RCjMB84lDjmM6XLAm9sFxQ8tQeFuE+F8idhHLBkhKDEbvPo7sCfAvLlQ==}
-    peerDependencies:
-      react: 18.2.0
-      react-dom: 18.2.0
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
 
   /@headlessui/react@1.7.15(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-OTO0XtoRQ6JPB1cKNFYBZv2Q0JMqMGNhYP1CjPvcJvjz8YGokz8oAj89HIYZGN0gZzn/4kk9iUpmMF4Q21Gsqw==}
@@ -3822,18 +3812,28 @@ packages:
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
     dev: true
 
-  /revemate@0.0.1-beta.11(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-chwTRBIpn1/fPfmnOTCFMCsZUglJTGSghpjS8swAWDDyNqVYB+fICqNDAPK+esOQ5F3kqgK0/GdcvzKzAGqEjg==}
+  /revedraw@1.0.0-alpha.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-RYIsVbfaLulzUeXR7ygRXFfMYuXzFTK4w26pH31Ag2GtT9rzhklp88aMeMyqUnLG13bHiFLtfJtpiC5xqC8KFA==}
+    peerDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /revemate@0.0.1-beta.16(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-SDDYbn8uz5ODPeuzf5UseqPMuA8pUM67y2SIcL8QavWtfrP9NasnV8yQT8lYPhRfk6ed5bLFLK4ZO8B3rny7mw==}
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
     dependencies:
-      '@handraw/excalidraw': 1.0.0-alpha.10(react-dom@18.2.0)(react@18.2.0)
       clsx: 1.2.1
       lodash: 4.17.21
       open-color: 1.9.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+      revedraw: 1.0.0-alpha.2(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
   /rimraf@3.0.2:
