@@ -1,6 +1,6 @@
 .revenote-menu-container {
   position: relative;
-  height: calc(100% - 3rem);
+  height: calc(100% - 4rem);
   margin-top: 1rem;
 
   .os-is-macos.is-in-revenote-native-app & {

@@ -7,6 +7,13 @@ export const registerAppMenu = () => {
 
   const helpSubMenuItems = [
     new MenuItem({
+      label: 'Website',
+      click: () => {
+        const { shell } = require('electron');
+        shell.openExternal('https://revenote.com');
+      }
+    }),
+    new MenuItem({
       label: 'Twitter',
       click: () => {
         const { shell } = require('electron');

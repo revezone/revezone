@@ -2,6 +2,7 @@ import RevenoteLogo from '../RevenoteLogo';
 import { Twitter, Github, Coffee, Cat, FolderPlus, FileType, Palette } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Bilibili } from '../../icons';
 
 import './index.css';
 
@@ -9,7 +10,7 @@ function WelcomeContent() {
   const { t } = useTranslation();
 
   return (
-    <div className="revenote-welcome-page w-full h-full flex pt-10 justify-center text-slate-400">
+    <div className="revenote-welcome-page w-full h-full flex pt-10 pb-10 justify-center text-slate-400">
       <div className="content w-2/3 overflow-scroll">
         <div className="flex items-end mb-6">
           <RevenoteLogo size="large" url="https://revenote.com" />
@@ -47,6 +48,16 @@ function WelcomeContent() {
             </a>
           </p>
           <p className="mb-2">
+            <a href="https://space.bilibili.com/393134139" target="_blank" rel="noreferrer">
+              <Bilibili className="w-4 h-4" /> {t('links.authorBilibili')}
+            </a>
+          </p>
+          <p className="mb-2">
+            <a href="https://twitter.com/korbinzhao" target="_blank" rel="noreferrer">
+              <Twitter className="w-4 h-4" /> {t('links.authorTwitter')}
+            </a>
+          </p>
+          <p className="mb-2">
             <a href="https://www.buymeacoffee.com/korbinzhao" target="_blank" rel="noreferrer">
               <Coffee className="w-4 h-4" /> {t('links.buyMeACoffee')}
             </a>
@@ -54,11 +65,6 @@ function WelcomeContent() {
           <p className="mb-2">
             <a href="https://afdian.net/a/wantian" target="_blank" rel="noreferrer">
               <Cat className="w-4 h-4" /> {t('links.feedMyCat')}
-            </a>
-          </p>
-          <p className="mb-2">
-            <a href="https://twitter.com/korbinzhao" target="_blank" rel="noreferrer">
-              <Twitter className="w-4 h-4" /> {t('links.followTheAuthor')}
             </a>
           </p>
         </div>

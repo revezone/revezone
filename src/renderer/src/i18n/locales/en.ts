@@ -30,11 +30,13 @@ export default {
   },
   links: {
     title: 'Links',
-    github: 'Official Github',
+    website: 'Official website',
+    github: 'Official Github (Give a star)',
     twitter: 'Official Twitter',
     buyMeACoffee: 'By me a coffee',
     feedMyCat: 'Feed my cat',
-    followTheAuthor: 'Follow the author'
+    authorTwitter: "Follow author's twitter",
+    authorBilibili: 'Official Bilibili'
   },
   text: {
     untitled: 'Untitled',
@@ -43,5 +45,9 @@ export default {
   storage: {
     cloud: 'Cloud(Comming soon)',
     local: 'Local'
+  },
+  help: {
+    issue: 'Report a issue',
+    contactTheAuthor: 'Contact the author'
   }
 };

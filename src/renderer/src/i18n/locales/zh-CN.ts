@@ -14,26 +14,28 @@ export default {
   },
   operation: {
     addFolder: '新建文件夹',
-    addNote: '新建 Note',
-    addBoard: '新建 Board',
+    addNote: '新建笔记',
+    addBoard: '新建白板',
     rename: '重命名',
     delete: '删除',
     copyRevenoteLink: '复制 Revenote 链接'
   },
   welcome: {
     productDesc:
-      '一款用于构建第二大脑的轻量级本地优先效率工具，集成了类 Notion 笔记和类 Excalidraw 白板能力。',
+      '一款轻量级本地优先的用于构建第二大脑的效率工具，集成了类 Notion 笔记和类 Excalidraw 白板能力。',
     operationTip: '这是一个空白页，请先在左侧边栏新建或选择某个文件',
     operationGuide: '操作说明',
     operationDetailDesc: '点击左侧边栏的操作图标来创建一个文件夹、Note 或 Board。'
   },
   links: {
     title: '链接',
-    github: '官方 Github',
+    website: '官网',
+    github: '官方 Github (给个 Star 吧)',
     twitter: '官方 Twitter',
+    authorTwitter: '关注作者',
+    authorBilibili: '官方 B 站',
     buyMeACoffee: '买杯咖啡',
-    feedMyCat: '投喂猫粮',
-    followTheAuthor: '关注作者'
+    feedMyCat: '投喂猫粮'
   },
   text: {
     untitled: '请输入标题',
@@ -42,5 +44,9 @@ export default {
   storage: {
     cloud: '云存储(敬请期待)',
     local: '本地存储'
+  },
+  help: {
+    issue: '提交问题',
+    contactTheAuthor: '联系作者'
   }
 };
