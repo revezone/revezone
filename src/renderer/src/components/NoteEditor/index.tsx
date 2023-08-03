@@ -82,7 +82,7 @@ function NoteEditor({ file }: Props): JSX.Element | null {
   return (
     <div className="blocksuite-editor-container">
       <Input
-        className="note-editor-title text-4xl font-bold px-5"
+        className="note-editor-title text-4xl font-bold px-6"
         bordered={false}
         value={title}
         placeholder={t('text.untitled')}
