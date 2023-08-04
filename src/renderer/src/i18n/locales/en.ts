@@ -21,6 +21,10 @@ export default {
     delete: 'Delete',
     copyRevenoteLink: 'Copy revenote link'
   },
+  description: {
+    noteDesc: 'A notion-like note function',
+    boardDesc: 'A whiteboard based on Excalidraw'
+  },
   welcome: {
     productDesc:
       'A lightweight productivity tool to build your second brain that integrates note-taking and whiteboarding features. Local-first and block-based.',

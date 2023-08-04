@@ -21,6 +21,10 @@ export default {
     delete: '删除',
     copyRevenoteLink: '复制 Revenote 链接'
   },
+  description: {
+    noteDesc: '类 Notion 笔记',
+    boardDesc: '基于 Excalidraw 的白板'
+  },
   welcome: {
     productDesc:
       '一款轻量级本地优先的用于构建第二大脑的效率工具，集成了类 Notion 笔记和类 Excalidraw 白板能力。',
@@ -36,7 +40,7 @@ export default {
     authorTwitter: '关注作者',
     authorBilibili: '官方 B 站',
     buyMeACoffee: '买杯咖啡',
-    feedMyCat: '投喂猫粮',
+    feedMyCat: '投喂猫粮(大陆用户)',
     downloadApp: '下载桌面应用'
   },
   text: {

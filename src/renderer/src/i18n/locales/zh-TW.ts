@@ -21,6 +21,10 @@ export default {
     delete: '刪除',
     copyRevenoteLink: '復制 Revenote 鏈接'
   },
+  description: {
+    noteDesc: '類 Notion 筆記',
+    boardDesc: '基於 Excalidraw 的白闆'
+  },
   welcome: {
     productDesc:
       '一款輕量級本地優先的用於構建第二大腦的效率工具，集成了類 Notion 筆記和類 Excalidraw 白闆能力。',

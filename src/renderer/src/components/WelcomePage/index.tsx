@@ -20,20 +20,18 @@ function WelcomeContent() {
         <div className="mb-6">
           <h2 className="mb-2 text-base">{t('welcome.operationGuide')}</h2>
           <p className="mb-2">{t('welcome.operationDetailDesc')}</p>
-          <ul>
-            <li className="mb-2 list-disc list-inside">
-              <FolderPlus className="mr-2 w-4" />
-              {t('operation.addFolder')}
-            </li>
-            <li className="mb-2 list-disc list-inside">
-              <FileType className="mr-2 w-4" />
-              {t('operation.addNote')}
-            </li>
-            <li className="mb-2 list-disc list-inside">
-              <Palette className="mr-2 w-4" />
-              {t('operation.addBoard')}
-            </li>
-          </ul>
+          <p className="mb-2">
+            <FolderPlus className="mr-2 w-4 h-4" />
+            {t('operation.addFolder')}
+          </p>
+          <p className="mb-2">
+            <FileType className="mr-2 w-4 h-4" />
+            {t('operation.addNote')}: {t('description.noteDesc')}
+          </p>
+          <p className="mb-2">
+            <Palette className="mr-2 w-4 h-4" />
+            {t('operation.addBoard')}: {t('description.boardDesc')}
+          </p>
         </div>
         <div>
           <h2 className="mb-2 text-base">{t('links.title')}</h2>
