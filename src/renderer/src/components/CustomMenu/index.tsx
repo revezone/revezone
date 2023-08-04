@@ -294,7 +294,10 @@ export default function CustomMenu({ collapsed }: Props) {
             icon: <Folder className="w-3" />,
             label: (
               <Dropdown menu={{ items: getFolderContextMenu(folder) }} trigger={['contextMenu']}>
-                <div className="flex items-center justify-between">
+                <div
+                  className="flex items-center justify-between"
+                  onClick={() => addSelectedKeys([folder.id])}
+                >
                   <EditableText
                     isPreview={editableTextState[folder.id]}
                     text={folder.name}
