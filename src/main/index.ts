@@ -10,9 +10,8 @@ import {
 } from './utils/customFonts';
 import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
-import autoUpdater from 'update-electron-app';
-
-autoUpdater();
+import { autoUpdater } from 'electron-updater';
+import { notfiy } from './utils/notification';
 
 function createWindow(): void {
   // Create the browser window.
@@ -89,6 +88,12 @@ app.whenReady().then(() => {
   });
 
   createWindow();
+
+  autoUpdater.checkForUpdatesAndNotify();
+
+  autoUpdater.on('update-available', (info) => {
+    notfiy(`update avilable: ${info && JSON.stringify(info)} `);
+  });
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

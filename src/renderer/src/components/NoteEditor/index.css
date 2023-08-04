@@ -25,6 +25,7 @@
 
   .note-editor-title{
     max-width: var(--affine-editor-width);
+    width: 100%;
   }
 
   .blocksuite-editor-content {

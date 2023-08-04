@@ -81,14 +81,18 @@ function NoteEditor({ file }: Props): JSX.Element | null {
 
   return (
     <div className="blocksuite-editor-container">
-      <Input
-        className="note-editor-title text-4xl font-bold px-6"
-        bordered={false}
-        value={title}
-        placeholder={t('text.untitled')}
-        onChange={onPageTitleChange}
-        onPressEnter={onPressEnter}
-      ></Input>
+      <div className="note-editor-title border-slate-100 border-b">
+        <Input.TextArea
+          className="text-3xl font-bold px-6"
+          bordered={false}
+          value={title}
+          autoSize={{ minRows: 1, maxRows: 6 }}
+          style={{ whiteSpace: 'pre-wrap' }}
+          placeholder={t('text.untitled')}
+          onChange={onPageTitleChange}
+          onPressEnter={onPressEnter}
+        ></Input.TextArea>
+      </div>
       <div className="blocksuite-editor-content" ref={editorRef}></div>
     </div>
   );

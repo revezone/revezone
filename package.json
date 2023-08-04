@@ -31,6 +31,7 @@
     "@toeverything/y-indexeddb": "0.7.0-canary.44",
     "ahooks": "^3.7.8",
     "antd": "^5.6.4",
+    "electron-updater": "^6.1.1",
     "electron-window-state": "^5.0.3",
     "event-emitter": "^0.3.5",
     "i18next": "^23.3.0",
@@ -42,7 +43,6 @@
     "moment-timezone": "^0.5.43",
     "react-i18next": "^13.0.2",
     "revemate": "0.0.1-beta.18",
-    "update-electron-app": "^2.0.1",
     "uuid": "^9.0.0",
     "y-indexeddb": "^9.0.11",
     "yjs": "^13.6.6"
