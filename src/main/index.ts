@@ -10,6 +10,9 @@ import {
 } from './utils/customFonts';
 import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
+import autoUpdater from 'update-electron-app';
+
+autoUpdater();
 
 function createWindow(): void {
   // Create the browser window.
