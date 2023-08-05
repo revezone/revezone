@@ -25,7 +25,7 @@ Note in ReveNote is a WYSIWYG Notion-like editor，supports '/' Command and Mark
 ![](https://img.alicdn.com/imgextra/i3/O1CN01ZtyLi025xBnRgRRZM_!!6000000007592-2-tps-2472-1412.png)
 
 ### Board
-Board in ReveNote is a white board based on Excalidraw. You can use Excalidraw in a new easier way in ReveNote, even link notes in ReveNote through double link.
+Board in ReveNote is a white board based on Excalidraw. You can use Excalidraw in a new easier way in ReveNote, even customing fonts in desktop app and linking notes in ReveNote through double link.
 ![](https://img.alicdn.com/imgextra/i3/O1CN015e68dL1YngFlaiz9g_!!6000000003104-2-tps-2472-1412.png)
 
 ### File Management

@@ -25,7 +25,7 @@ ReveNote 中的笔记是一个所见即所得的类 Notion 编辑器，支持 '/
 ![](https://img.alicdn.com/imgextra/i3/O1CN01ZtyLi025xBnRgRRZM_!!6000000007592-2-tps-2472-1412.png)
 
 ### 画布
-ReveNote 中的画布是一个基于 Excalidraw 的无限画布白板。你可以在 ReveNote 中以更简单的姿势使用 Excalidraw 功能，也可以通过双链功能有效连接 ReveNote 中的笔记。
+ReveNote 中的画布是一个基于 Excalidraw 的无限画布白板。你可以在 ReveNote 中以更简单的姿势使用 Excalidraw 功能，可以在桌面应用中自定义字体，也可以通过双链功能有效连接 ReveNote 中的笔记。
 ![](https://img.alicdn.com/imgextra/i3/O1CN015e68dL1YngFlaiz9g_!!6000000003104-2-tps-2472-1412.png)
 
 ### 文件管理
