@@ -1,3 +1,32 @@
 # ReveNote
-A personal knowledge management(PKM) and mind management productivity tool that integrates note-taking and whiteboarding features. Local-first, block-based.
+[中文](README_zh.md)
+A lightweight productivity tool to build your second brain that integrates note-taking and whiteboarding features. Local-first and block-based.
+
+![](https://img.alicdn.com/imgextra/i2/O1CN01dA0A6k1hqH2PElE0f_!!6000000004328-2-tps-2472-1412.png)
+
+## Sponsor
+[Buy me a coffee](https://www.buymeacoffee.com/korbinzhao) or [feed my cat](https://afdian.net/a/wantian).
+
+## Giving a star
+Please give it a star if this repository is helpful to you.
+
+## Features
+* Note: A Notion-like note-taking function.
+* Board: A whiteboard function based on Excalidraw.
+* File Management: You can manage notes or boards based on folder.
+
+### Note
+Note in ReveNote is a WYSIWYG Notion-like editor，supports '/' Command and Markdown syntax.
+![](https://img.alicdn.com/imgextra/i3/O1CN01ZtyLi025xBnRgRRZM_!!6000000007592-2-tps-2472-1412.png)
+
+### Board
+Board in ReveNote is a white board based on Excalidraw. You can use Excalidraw in a new easier way in ReveNote, even link notes in ReveNote through double link.
+![](https://img.alicdn.com/imgextra/i3/O1CN015e68dL1YngFlaiz9g_!!6000000003104-2-tps-2472-1412.png)
+
+### File Management
+You can create and manage a folder/note/board in the left sidebar, and you can get the operation menu by right click a folder/note/board.
+![](https://img.alicdn.com/imgextra/i3/O1CN01nqVYEV1TGdbGbWlFK_!!6000000002355-2-tps-722-804.png)
+
+## Future planning
+More useful features are developing. You can get more information and developing stories from [Twitter](https://twitter.com/TheReveNote) or [Bilibili](https://space.bilibili.com/393134139).
 
