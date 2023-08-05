@@ -3,6 +3,7 @@ import { Twitter, Github, Coffee, Cat, FolderPlus, FileType, Palette } from 'luc
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bilibili } from '../../icons';
+import DownloadApp from '../DownloadApp';
 
 import './index.css';
 
@@ -16,6 +17,9 @@ function WelcomeContent() {
           <RevenoteLogo size="large" url="https://revenote.com" />
         </div>
         <p className="mb-6 text-sm">{t('welcome.productDesc')}</p>
+        <p className="mb-6 text-sm flex items-center">
+          {t('welcome.downloadApp')} <DownloadApp className="ml-2" />
+        </p>
         <p className="mb-6 text-sm  text-slate-600">{t('welcome.operationTip')}</p>
         <div className="mb-6">
           <h2 className="mb-2 text-base">{t('welcome.operationGuide')}</h2>

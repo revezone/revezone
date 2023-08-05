@@ -30,7 +30,8 @@ export default {
       '一款轻量级本地优先的用于构建第二大脑的效率工具，集成了类 Notion 笔记和类 Excalidraw 白板能力。',
     operationTip: '这是一个空白页，请先在左侧边栏新建或选择某个文件',
     operationGuide: '操作说明',
-    operationDetailDesc: '点击左侧边栏的操作图标来创建一个文件夹、Note 或 Board。'
+    operationDetailDesc: '点击左侧边栏的操作图标来创建一个文件夹、Note 或 Board。',
+    downloadApp: '下载桌面应用体验全量功能.'
   },
   links: {
     title: '链接',
@@ -41,7 +42,7 @@ export default {
     authorBilibili: '官方 B 站',
     buyMeACoffee: '买杯咖啡',
     feedMyCat: '投喂猫粮(大陆用户)',
-    downloadApp: '下载桌面应用'
+    downloadApp: '下载桌面应用.'
   },
   text: {
     untitled: '请输入标题',
