@@ -31,7 +31,8 @@ export default {
     operationTip: '這是一個空白頁，請先在左側邊欄新建或選擇某個文件',
     operationGuide: '操作說明',
     operationDetailDesc: '點擊左側邊欄的操作圖標來創建一個文件夾、Note 或 Board。',
-    downloadApp: '下載桌面應用體驗全量功能'
+    onlineTry: '此為線上體驗版，只包含基礎功能。',
+    downloadApp: '下載桌面應用體驗全量功能。'
   },
   links: {
     title: '鏈接',

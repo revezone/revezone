@@ -32,6 +32,7 @@ export default {
     operationGuide: 'Operation Guide',
     operationDetailDesc:
       'Click the icons in left sidebar operation toolbar to add a foler/note/board.',
+    onlineTry: 'This is an online trial version which only supports basic functions.',
     downloadApp: 'Download desktop app to enable full function.'
   },
   links: {

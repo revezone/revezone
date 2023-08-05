@@ -18,7 +18,7 @@ function WelcomeContent() {
         </div>
         <p className="mb-6 text-sm">{t('welcome.productDesc')}</p>
         <p className="mb-6 text-sm flex items-center">
-          {t('welcome.downloadApp')} <DownloadApp className="ml-2" />
+          {t('welcome.onlineTry')} {t('welcome.downloadApp')} <DownloadApp className="ml-2" />
         </p>
         <p className="mb-6 text-sm  text-slate-600">{t('welcome.operationTip')}</p>
         <div className="mb-6">

@@ -10,10 +10,7 @@ import { GithubCircle, Bilibili } from '@renderer/icons';
 import { Dropdown } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
-import { getIsInRevenoteApp } from '@renderer/utils/navigator';
 import DownloadApp from '../DownloadApp/index';
-
-const isInRevenoteApp = getIsInRevenoteApp();
 
 export default function BottomToolbar() {
   const { t } = useTranslation();
@@ -77,7 +74,7 @@ export default function BottomToolbar() {
       {
         key: 'downloadApp',
         title: t('links.downloadApp'),
-        icon: <DownloadCloud className="w-4" />,
+        icon: <DownloadCloud className="w-4 animate-bounce" />,
         label: (
           <a href="https://github.com/revenote/revenote/releases" target="_blank" rel="noreferrer">
             {t('links.downloadApp')}
