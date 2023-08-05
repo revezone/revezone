@@ -11,7 +11,11 @@
 ## 给个 Star
 如果这个仓库对你有帮助，请不要吝惜小手给个 Star 吧
 
-## Features
+## 使用 ReveNote
+* 线上体验版本（基础功能）: https://revenote.com
+* 桌面应用版本（全量功能）: https://github.com/revenote/revenote/releases
+
+## 产品特性
 * 笔记: 类 Notion 笔记
 * 画布: 基于 Excalidraw 的无限画布白板
 * 文件管理: 你可以通过文件夹的方式管理笔记或者画布

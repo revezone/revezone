@@ -11,6 +11,10 @@ A lightweight productivity tool to build your second brain that integrates note-
 ## Giving a star
 Please give it a star if this repository is helpful to you.
 
+## Using ReveNote
+* Online Version (Basic function): https://revenote.com
+* Desktop App Version (Full function): https://github.com/revenote/revenote/releases
+
 ## Features
 * Note: A Notion-like note-taking function.
 * Board: A whiteboard function based on Excalidraw.
