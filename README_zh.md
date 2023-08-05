@@ -1,5 +1,6 @@
 # ReveNote
 [English](README.md)
+
 一款轻量级本地优先的用于构建第二大脑的效率工具，集成了类 Notion 笔记和类 Excalidraw 白板能力。
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01dA0A6k1hqH2PElE0f_!!6000000004328-2-tps-2472-1412.png)
