@@ -11,9 +11,12 @@ import { Dropdown } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import DownloadApp from '../DownloadApp/index';
+import { useAtom } from 'jotai';
+import { langCodeAtom } from '@renderer/store/jotai';
 
 export default function BottomToolbar() {
   const { t } = useTranslation();
+  const [langCode] = useAtom(langCodeAtom);
 
   const helpMenu = useMemo(
     () => [
@@ -82,7 +85,7 @@ export default function BottomToolbar() {
         )
       }
     ],
-    []
+    [langCode]
   );
 
   return (
@@ -93,7 +96,7 @@ export default function BottomToolbar() {
         href="https://afdian.net/a/wantian"
         target="_blank"
         rel="noreferrer"
-        title="Feed my cat"
+        title={t('links.feedMyCat')}
       >
         <Cat className="w-4 h-4"></Cat>
       </a>
@@ -102,7 +105,7 @@ export default function BottomToolbar() {
         href="https://www.buymeacoffee.com/korbinzhao"
         target="_blank"
         rel="noreferrer"
-        title="Buy me a coffee"
+        title={t('links.buyMeACoffee')}
       >
         <Coffee className="w-4 h-4"></Coffee>
       </a>
@@ -111,7 +114,7 @@ export default function BottomToolbar() {
         href="https://github.com/revenote/revenote"
         target="_blank"
         rel="noreferrer"
-        title="Give a star"
+        title={t('operation.giveAStar')}
       >
         <GithubCircle className="w-4 h-4"></GithubCircle>
       </a>

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import Layout from './components/CustomLayout';
+import CustomLayout from './components/CustomLayout';
 import NoteEditor from './components/NoteEditor';
 import { useAtom } from 'jotai';
 import { currentFileAtom, langCodeAtom } from './store/jotai';
@@ -8,7 +8,6 @@ import RevedrawApp from './components/RevedrawApp';
 import zhCN from 'antd/locale/zh_CN';
 import zhTW from 'antd/locale/zh_TW';
 import enUS from 'antd/locale/en_US';
-import '@renderer/i18n';
 import WelcomePage from './components/WelcomePage';
 import { ConfigProvider } from 'antd';
 import { theme } from './utils/theme';
@@ -52,9 +51,9 @@ function App(): JSX.Element {
           getIsInRevenoteApp() ? 'is-in-revenote-native-app' : 'is-in-browser'
         }`}
       >
-        <Layout>
+        <CustomLayout>
           <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
-        </Layout>
+        </CustomLayout>
       </div>
     </ConfigProvider>
   );
