@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bilibili } from '../../icons';
 import DownloadApp from '../DownloadApp';
+import { isInRevenoteApp } from '@renderer/utils/navigator';
 
 import './index.css';
 
@@ -18,7 +19,8 @@ function WelcomeContent() {
         </div>
         <p className="mb-6 text-sm">{t('welcome.productDesc')}</p>
         <p className="mb-6 text-sm flex items-center">
-          {t('welcome.onlineTry')} {t('welcome.downloadApp')} <DownloadApp className="ml-2" />
+          {!isInRevenoteApp ? t('welcome.onlineTry') : null} {t('welcome.downloadApp')}{' '}
+          <DownloadApp className="ml-2" />
         </p>
         <p className="mb-6 text-sm  text-slate-600">{t('welcome.operationTip')}</p>
         <div className="mb-6">

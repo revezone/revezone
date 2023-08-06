@@ -10,7 +10,7 @@ import { currentFileAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jot
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { DOUBLE_LINK_REGEX } from '@renderer/utils/constant';
-import { getOSName, getIsInRevenoteApp } from '@renderer/utils/navigator';
+import { getOSName, isInRevenoteApp } from '@renderer/utils/navigator';
 import { Button, Tooltip } from 'antd';
 
 import './index.css';
@@ -21,7 +21,6 @@ interface Props {
 
 const DEFAULT_DATA_SOURCE = '{}';
 const OS_NAME = getOSName();
-const IS_IN_REVENOTE_APP = getIsInRevenoteApp();
 
 let firsRender = true;
 
@@ -124,7 +123,7 @@ export default function RevedrawApp({ file }: Props) {
           onChange={onChangeDebounceFn}
           onLinkOpen={onLinkOpen}
           customMenuItems={[
-            IS_IN_REVENOTE_APP ? (
+            isInRevenoteApp ? (
               <Button
                 key="custom-font"
                 className={`dropdown-menu-item dropdown-menu-item-base`}

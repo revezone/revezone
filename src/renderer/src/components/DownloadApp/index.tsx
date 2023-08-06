@@ -1,8 +1,6 @@
 import { DownloadCloud } from 'lucide-react';
-import { getIsInRevenoteApp } from '@renderer/utils/navigator';
+import { isInRevenoteApp } from '@renderer/utils/navigator';
 import { useTranslation } from 'react-i18next';
-
-const isInRevenoteApp = getIsInRevenoteApp();
 
 export default function DownloadApp({ className = '' }: { className?: string }) {
   const { t } = useTranslation();
