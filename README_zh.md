@@ -15,6 +15,12 @@
 * 线上体验版本（基础功能）: https://revenote.com
 * 桌面应用版本（全量功能）: https://github.com/revenote/revenote/releases
 
+## 参与公测
+目前 ReveNote 已正式开放公测。如果大家在产品使用过程中有任何问题或者产品上的想法，欢迎参与公测反馈问题或建议，您的建议将直接影响未来产品迭代的方向和节奏。让我们一起打造一个用起来爽的思维管理工具。
+
+参与公测方式：扫码添加微信邀请进入公测群
+![](https://img.alicdn.com/imgextra/i4/O1CN01rXBaQt1bGC8tJAAit_!!6000000003437-0-tps-1074-885.jpg_300x300)
+
 ## 产品特性
 * 笔记: 类 Notion 笔记
 * 画布: 基于 Excalidraw 的无限画布白板
