@@ -37,7 +37,7 @@ ReveNote app supports customing fonts in Revenote board. You can upload fonts yo
 Operation Method:
 > Open a board -> Click the top left menu button -> Click 'Custom Font' button in menu list -> Upload a font file from local -> Click 'OK' button to complete font customing
 
-![](https://img.alicdn.com/imgextra/i1/O1CN01E9tKv220tutDKR0pj_!!6000000006908-2-tps-2472-1412.png)
+![](https://img.alicdn.com/imgextra/i4/O1CN01Yv35wX1v5vZtxi7iR_!!6000000006122-2-tps-2472-1412.png)
 
 ### File Management
 You can create and manage a folder/note/board in the left sidebar, and you can get the operation menu by right click a folder/note/board.
