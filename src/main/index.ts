@@ -13,6 +13,9 @@ import { EVENTS } from '../preload/events';
 import { autoUpdater } from 'electron-updater';
 import { notfiy } from './utils/notification';
 
+// IMPORTANT: to fix file save problem in excalidraw: The request is not allowed by the user agent or the platform in the current context
+app.commandLine.appendSwitch('enable-experimental-web-platform-features');
+
 function createWindow(): void {
   // Create the browser window.
   let mainWindow: BrowserWindow | null = new BrowserWindow({
