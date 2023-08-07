@@ -15,6 +15,9 @@
 * 线上体验版本（基础功能）: https://revenote.com
 * 桌面应用版本（全量功能）: https://github.com/revenote/revenote/releases
 
+## 反馈问题
+ReveNote 正处于公测阶段，功能还有不少不足或者缺陷。如果你有任何问题或者建议，欢迎提交 [issue](https://github.com/revenote/revenote/issues/new) 进行反馈。
+
 ## 参与公测
 目前 ReveNote 已正式开放公测。如果大家在产品使用过程中有任何问题或者产品上的想法，欢迎参与公测反馈问题或建议，您的建议将直接影响未来产品迭代的方向和节奏。让我们一起打造一个用起来爽的思维管理工具。
 
@@ -33,6 +36,14 @@ ReveNote 中的笔记是一个所见即所得的类 Notion 编辑器，支持 '/
 ### 画布
 ReveNote 中的画布是一个基于 Excalidraw 的无限画布白板。你可以在 ReveNote 中以更简单的姿势使用 Excalidraw 功能，可以在桌面应用中自定义字体，也可以通过双链功能有效连接 ReveNote 中的笔记。
 ![](https://img.alicdn.com/imgextra/i3/O1CN015e68dL1YngFlaiz9g_!!6000000003104-2-tps-2472-1412.png)
+
+#### 在画布中自定义字体
+ReveNote 的画布支持用户自定义字体，不过目前只有桌面端应用支持画布自定义字体。
+
+操作方法:
+> 选择画布文件 - 点击左上角菜单按钮 - 点击“自定义字体” - 出现弹窗，上传字体 - 点击确定，完成自定义字体。
+
+![](https://img.alicdn.com/imgextra/i1/O1CN01E9tKv220tutDKR0pj_!!6000000006908-2-tps-2472-1412.png)
 
 ### 文件管理
 你可以在左侧边栏创建和管理文件夹、笔记和画布，右键使用具体功能菜单。
