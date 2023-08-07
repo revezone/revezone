@@ -1,6 +1,6 @@
 {
   "name": "revenote",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "A productivity tool to build the Second Brain, Capture-Organize-Distill-Express.",
   "main": "./out/main/index.js",
   "author": "korbinzhao",
