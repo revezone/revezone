@@ -1,17 +1,16 @@
-import { dialog } from 'electron';
+import { dialog, app } from 'electron';
 import { copyFile } from 'node:fs/promises';
-import os from 'os';
 import { join } from 'path';
-import { notfiy } from './notification';
+import { notify } from './notification';
 import { EVENTS } from '../../preload/events';
 import fs from 'node:fs';
 
 const FILENAME_REGEX = /\/(([^/]+)\.[a-zA-Z0-9]+)/;
-const REVENOTE_CUSTOM_FONTS_DIR = '.revenote/custom-fonts';
-const REVENOTE_CUSTOM_FONTS_MANIFEST_PATH = `${REVENOTE_CUSTOM_FONTS_DIR}/manifest.json`;
 
-const CUSTOM_FONTS_DIR = join(os.homedir(), REVENOTE_CUSTOM_FONTS_DIR);
-const CUSTOM_FONTS_MENIFEST_PATH = join(os.homedir(), REVENOTE_CUSTOM_FONTS_MANIFEST_PATH);
+const USER_DATA_PATH = app.getPath('userData');
+
+const CUSTOM_FONTS_DIR = join(USER_DATA_PATH, 'custom_fonts');
+const CUSTOM_FONTS_MENIFEST_PATH = join(CUSTOM_FONTS_DIR, 'manifest.json');
 
 export const loadCustomFont = async (mainWindow) => {
   if (!mainWindow) {
@@ -37,7 +36,7 @@ export const loadCustomFont = async (mainWindow) => {
 
       mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, fontName, fontPath);
 
-      notfiy(`Font ${fontName} added!`);
+      notify(`Font ${fontName} added!`);
     } catch (err) {
       console.error('copy file error:', err);
     }
