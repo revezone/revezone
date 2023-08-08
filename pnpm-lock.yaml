@@ -69,8 +69,8 @@ dependencies:
     specifier: ^13.0.2
     version: 13.0.2(i18next@23.3.0)(react-dom@18.2.0)(react@18.2.0)
   revemate:
-    specifier: 0.0.1-beta.19
-    version: 0.0.1-beta.19(react-dom@18.2.0)(react@18.2.0)
+    specifier: 0.0.1-beta.20
+    version: 0.0.1-beta.20(react-dom@18.2.0)(react@18.2.0)
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -2798,7 +2798,6 @@ packages:
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: false
 
   /loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -3855,8 +3854,8 @@ packages:
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
     dev: true
 
-  /revedraw@1.0.0-alpha.6(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-ghPo633Rja8HSdrH3lt/RCRBTa1RIv6hhQFyPAlmtuJ8u9jsrbYlbkyduFc3MGgZhputGXS/+QsV7cvaChSyJQ==}
+  /revedraw@1.0.0-alpha.8(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-msgKCDEHwK3upBQpGdOZGnzsMO/DlkHSNsX2ErvqpuxU+IRHE8sR7EiPG/11dQKd8DJhrYiwoFVLIPSFIbxB9w==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -3865,8 +3864,8 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /revemate@0.0.1-beta.19(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-HAsAiAA6xq6D4WDIglo370kB8BnBpP6f/jyMvmGV03JkpSWvqxHCpStTMeRJEzLdDn/2S9nJpxRilpUZi2K0lw==}
+  /revemate@0.0.1-beta.20(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-SM376VjHdC4QfwO0OrQOmg822Qz6r+Zq/Qp4F/VhEGn7M1Wgi8iiMqT9NBVPtIEP0S3E7kn2XSbw+BihBjLGUw==}
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
@@ -3876,7 +3875,7 @@ packages:
       open-color: 1.9.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      revedraw: 1.0.0-alpha.6(react-dom@18.2.0)(react@18.2.0)
+      revedraw: 1.0.0-alpha.8(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
   /rimraf@3.0.2:
@@ -4540,7 +4539,7 @@ packages:
     dependencies:
       debug: registry.npmmirror.com/debug@4.3.4
       fs-extra: registry.npmmirror.com/fs-extra@9.1.0
-      lodash: registry.npmmirror.com/lodash@4.17.21
+      lodash: 4.17.21
       tmp-promise: registry.npmmirror.com/tmp-promise@3.0.3
     transitivePeerDependencies:
       - supports-color
@@ -5789,12 +5788,6 @@ packages:
     resolution: {integrity: sha512-0/BnGCCfyUMkBpeDgWihanIAF9JmZhHBgUhEqzvf+adhNGLoP6TaiI5oF8oyb3I45P+PcnrqihSf01M0l0G5+Q==, registry: https://registry.npmjs.org/, tarball: https://registry.npmmirror.com/lazy-val/-/lazy-val-1.0.5.tgz}
     name: lazy-val
     version: 1.0.5
-    dev: true
-
-  registry.npmmirror.com/lodash@4.17.21:
-    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==, registry: https://registry.npmjs.org/, tarball: https://registry.npmmirror.com/lodash/-/lodash-4.17.21.tgz}
-    name: lodash
-    version: 4.17.21
     dev: true
 
   registry.npmmirror.com/lowercase-keys@2.0.0:
