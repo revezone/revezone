@@ -1,5 +1,5 @@
 import { Notification } from 'electron';
 
-export const notfiy = (message: string) => {
+export const notify = (message: string) => {
   return new Notification({ title: message }).show();
 };
