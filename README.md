@@ -1,6 +1,10 @@
 # ReveNote
 [中文](README_zh.md)
 
+ReveNote is currently in a public beta. Please report a [issue](https://github.com/revenote/revenote/issues/new), if you have any suggestions or questions.
+
+---
+
 A lightweight productivity tool to build your second brain that integrates Notion-like note-taking and enhanced Excalidraw whiteboarding features. Local-first and block-based.
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01dA0A6k1hqH2PElE0f_!!6000000004328-2-tps-2472-1412.png)
@@ -16,7 +20,7 @@ Please give it a star if this repository is helpful to you.
 * Desktop App Version (Full function): https://github.com/revenote/revenote/releases
 
 ## Reporting a Issue
-ReveNote is currently in public beta stage. Please report a [issue](https://github.com/revenote/revenote/issues/new), if you have any suggestions or questions.
+ReveNote is currently in a public beta. Please report a [issue](https://github.com/revenote/revenote/issues/new), if you have any suggestions or questions.
 
 ## Features
 * Note: A Notion-like note-taking function.
