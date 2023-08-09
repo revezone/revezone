@@ -10,6 +10,7 @@ import { useAtom } from 'jotai';
 import './index.css';
 import { useTranslation } from 'react-i18next';
 import BottomToolbar from '../BottomToolbar/index';
+import { submiteUserEvent } from '@renderer/statistics';
 
 const { Content, Sider } = Layout;
 
@@ -24,6 +25,8 @@ const RevezoneLayout = ({ children }: Props): JSX.Element => {
   const switchCollapse = useCallback(() => {
     setCollapsed(!collapsed);
     window.api?.toggleTrafficLight(collapsed);
+
+    submiteUserEvent('click_collapsebutton', { collapsed });
   }, [collapsed]);
 
   return (

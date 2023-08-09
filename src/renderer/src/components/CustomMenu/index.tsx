@@ -27,6 +27,7 @@ import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/index';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
+import { submiteUserEvent } from '@renderer/statistics';
 
 interface Props {
   collapsed: boolean;
@@ -110,7 +111,7 @@ export default function CustomMenu({ collapsed }: Props) {
 
   const deleteFile = useCallback(
     async (file: RevezoneFile, folderId: string) => {
-      await menuIndexeddbStorage.deleteFile(file.id);
+      await menuIndexeddbStorage.deleteFile(file);
 
       console.log('--- delete file ---', file);
 
@@ -222,6 +223,8 @@ export default function CustomMenu({ collapsed }: Props) {
       setCurrentFile(file);
       setCurrentFolderId(folderId);
       addSelectedKeys([key, folderId]);
+
+      submiteUserEvent('select_menu', { key });
     },
     [fileTree]
   );

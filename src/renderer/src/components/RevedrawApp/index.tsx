@@ -14,6 +14,7 @@ import { getOSName, isInRevezoneApp } from '@renderer/utils/navigator';
 import { Button, Tooltip } from 'antd';
 
 import './index.css';
+import { submiteUserEvent } from '@renderer/statistics';
 
 interface Props {
   file: RevezoneFile;
@@ -128,7 +129,10 @@ export default function RevedrawApp({ file }: Props) {
                 key="custom-font"
                 className={`dropdown-menu-item dropdown-menu-item-base`}
                 title={t('menu.loadCustomFont')}
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                  setIsModalOpen(true);
+                  submiteUserEvent('revedraw_click_customfont', {});
+                }}
               >
                 <PencilLine className="revezone-app-custom-font-icon" />
                 {t('menu.customFont')}

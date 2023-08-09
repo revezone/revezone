@@ -13,6 +13,7 @@ import { useMemo } from 'react';
 import DownloadApp from '../DownloadApp/index';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from '@renderer/store/jotai';
+import { submiteUserEvent } from '@renderer/statistics';
 
 export default function BottomToolbar() {
   const { t } = useTranslation();
@@ -29,6 +30,9 @@ export default function BottomToolbar() {
             href="https://github.com/revezone/revezone/issues/new"
             target="_blank"
             rel="noreferrer"
+            onClick={() => {
+              submiteUserEvent('bottombar_click_issue', {});
+            }}
           >
             {t('help.issue')}
           </a>
@@ -39,7 +43,14 @@ export default function BottomToolbar() {
         title: t('links.twitter'),
         icon: <Twitter className="w-4" />,
         label: (
-          <a href="https://twitter.com/therevezone" target="_blank" rel="noreferrer">
+          <a
+            href="https://twitter.com/therevezone"
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => {
+              submiteUserEvent('bottombar_click_twitter', {});
+            }}
+          >
             {t('links.twitter')}
           </a>
         )
@@ -49,7 +60,14 @@ export default function BottomToolbar() {
         title: t('links.buyMeACoffee'),
         icon: <Coffee className="w-4" />,
         label: (
-          <a href="https://www.buymeacoffee.com/korbinzhao" target="_blank" rel="noreferrer">
+          <a
+            href="https://www.buymeacoffee.com/korbinzhao"
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => {
+              submiteUserEvent('bottombar_click_buycoffee', {});
+            }}
+          >
             {t('links.buyMeACoffee')}
           </a>
         )
@@ -59,7 +77,14 @@ export default function BottomToolbar() {
         title: t('links.feedMyCat'),
         icon: <Cat className="w-4" />,
         label: (
-          <a href="https://afdian.net/a/wantian" target="_blank" rel="noreferrer">
+          <a
+            href="https://afdian.net/a/wantian"
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => {
+              submiteUserEvent('bottombar_click_feedcat', {});
+            }}
+          >
             {t('links.feedMyCat')}
           </a>
         )
@@ -69,7 +94,14 @@ export default function BottomToolbar() {
         title: t('links.authorBilibili'),
         icon: <Bilibili className="w-4 h-4" />,
         label: (
-          <a href="https://space.bilibili.com/393134139" target="_blank" rel="noreferrer">
+          <a
+            href="https://space.bilibili.com/393134139"
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => {
+              submiteUserEvent('bottombar_click_bilibili', {});
+            }}
+          >
             {t('links.authorBilibili')}
           </a>
         )
@@ -79,7 +111,14 @@ export default function BottomToolbar() {
         title: t('links.downloadApp'),
         icon: <DownloadCloud className="w-4 animate-bounce" />,
         label: (
-          <a href="https://github.com/revezone/revezone/releases" target="_blank" rel="noreferrer">
+          <a
+            href="https://github.com/revezone/revezone/releases"
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => {
+              submiteUserEvent('bottombar_click_downloadapp', {});
+            }}
+          >
             {t('links.downloadApp')}
           </a>
         )
@@ -90,7 +129,7 @@ export default function BottomToolbar() {
 
   return (
     <div className="bottom-toolbar absolute h-8 pr-4 bottom-0 right-0 flex items-center text-slate-600">
-      <DownloadApp />
+      <DownloadApp from="bottombar" />
       <a
         className="mr-2 flex items-center"
         href="https://afdian.net/a/wantian"

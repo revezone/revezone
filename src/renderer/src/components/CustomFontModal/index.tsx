@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import './index.css';
 import { useAtom } from 'jotai';
 import { currentFileAtom } from '@renderer/store/jotai';
+import { submiteUserEvent } from '@renderer/statistics';
 
 interface Props {
   open: boolean;
