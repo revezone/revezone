@@ -68,10 +68,12 @@ export const loadCustomFont = async (mainWindow) => {
 
   console.log('--- results ---', results);
 
+  getRegisteredFonts();
+
   mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, results);
 };
 
-export const registerCustomFont = (mainWindow, fontNameWithSuffix) => {
+export const registerCustomFont = (mainWindow, fontName, fontNameWithSuffix) => {
   if (!(mainWindow && fontNameWithSuffix)) {
     return;
   }
@@ -83,10 +85,8 @@ export const registerCustomFont = (mainWindow, fontNameWithSuffix) => {
 
     console.log('--- reigister font ---', fontNameWithSuffix);
 
-    const fontNameWithoutSuffix = removeFileExtension(fontNameWithSuffix);
-
     mainWindow.webContents.insertCSS(
-      `@font-face { font-family: '${fontNameWithoutSuffix}'; src: ${fontUrl}; font-display: 'block' }`
+      `@font-face { font-family: '${fontName}'; src: ${fontUrl}; font-display: 'block' }`
     );
   } catch (err) {
     console.error(err);
@@ -95,11 +95,8 @@ export const registerCustomFont = (mainWindow, fontNameWithSuffix) => {
 
 export const batchRegisterCustomFonts = (mainWindow) => {
   try {
-    const fonts = fs.readdirSync(CUSTOM_FONTS_DIR);
-
-    console.log('--- batchRegisterCustomFonts ---', fonts);
-
-    fonts.forEach((fontNameWithSuffix) => registerCustomFont(mainWindow, fontNameWithSuffix));
+    const fonts = getRegisteredFonts();
+    fonts.forEach((font) => registerCustomFont(mainWindow, font.name, font.nameWithSuffix));
   } catch (err) {
     console.error(err);
   }
@@ -109,4 +106,24 @@ export const ensureDir = (dir: string) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
+};
+
+export const getRegisteredFonts = () => {
+  const fontNamesWithSuffix = fs.readdirSync(CUSTOM_FONTS_DIR);
+
+  console.log('--- batchRegisterCustomFonts ---', fontNamesWithSuffix);
+
+  const fonts = fontNamesWithSuffix.map((fontName) => {
+    const fontNameWithoutSuffix = removeFileExtension(fontName);
+    return {
+      name: fontNameWithoutSuffix,
+      nameWithSuffix: fontName,
+      path: join(CUSTOM_FONTS_DIR, fontName)
+    };
+  });
+
+  // inject registeredFonts to env to enable renderer get custom fonts
+  process.env['registeredFonts'] = JSON.stringify(fonts);
+
+  return fonts;
 };

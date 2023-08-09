@@ -22,6 +22,11 @@ const CustomFontModal = (props: Props) => {
 
   const [fonts, setFonts] = useState<Font[]>([]);
 
+  const registeredFontsStr = window.electron.process.env.registeredFonts;
+  const registeredFonts = registeredFontsStr && JSON.parse(registeredFontsStr);
+
+  console.log('--- registeredFonts ---', registeredFonts);
+
   const loadCustomFonts = useCallback(() => {
     window.api && window.api.loadCustomFonts();
   }, []);
