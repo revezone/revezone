@@ -38,6 +38,10 @@ class BlocksuiteStorage {
     });
   }
 
+  async addPage(pageId: string) {
+    return await this.workspace.createPage({ id: pageId, init: true });
+  }
+
   async deletePage(pageId: string) {
     await this.workspace.removePage(pageId);
   }

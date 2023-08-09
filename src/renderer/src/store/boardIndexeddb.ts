@@ -5,7 +5,7 @@ moment.tz.setDefault('Asia/Shanghai');
 
 export interface RevezoneBoardDBSchema extends DBSchema {
   board: {
-    key: number;
+    key: string;
     value: string;
   };
 }
@@ -53,14 +53,14 @@ class BoardIndexeddbStorage {
     return boardStore;
   }
 
-  async addOrUpdateBoard(id, boardInfo) {
+  async addOrUpdateBoard(id: string, boardData: string) {
     await this.initDB();
-    await this.db?.put(INDEXEDDB_BOARD_FILE_KEY, boardInfo, id);
+    await this.db?.put(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
   }
 
-  async addBoard(id, boardInfo) {
+  async addBoard(id, boardData) {
     await this.initDB();
-    await this.db?.add(INDEXEDDB_BOARD_FILE_KEY, boardInfo, id);
+    await this.db?.add(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
   }
 
   async getBoard(id) {

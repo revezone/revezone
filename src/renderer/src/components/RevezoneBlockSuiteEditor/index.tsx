@@ -11,14 +11,16 @@ interface Props {
 }
 export default class RevezoneBlockSuiteEditor extends LitElement {
   readonly workspace: Workspace = blocksuiteStorage.workspace;
-  readonly page: Page;
+  readonly page: Page | null = null;
 
   constructor({ pageId }: Props) {
     super();
 
-    const pageExsited = this.workspace.getPage(pageId);
+    const page = this.workspace.getPage(pageId);
 
-    this.page = pageExsited || this.workspace.createPage({ id: pageId, init: true });
+    if (!page) return;
+
+    this.page = page;
 
     // @ts-ignore
     window.workspace = RevezoneBlockSuiteEditor.workspace;
@@ -29,6 +31,9 @@ export default class RevezoneBlockSuiteEditor extends LitElement {
 
   override connectedCallback(): void {
     const editor = new EditorContainer();
+
+    if (!this.page) return;
+
     editor.page = this.page;
     this.appendChild(editor);
   }

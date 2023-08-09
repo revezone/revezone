@@ -110,8 +110,6 @@ export default function CustomMenu({ collapsed }: Props) {
 
   const deleteFile = useCallback(
     async (file: RevezoneFile, folderId: string) => {
-      setCurrentFile(undefined);
-
       await menuIndexeddbStorage.deleteFile(file.id);
 
       console.log('--- delete file ---', file);
@@ -124,6 +122,8 @@ export default function CustomMenu({ collapsed }: Props) {
           await blocksuiteStorage.deletePage(file.id);
           break;
       }
+
+      setCurrentFile(undefined);
 
       await getFileTree();
     },

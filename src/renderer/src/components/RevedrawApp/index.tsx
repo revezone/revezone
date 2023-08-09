@@ -41,7 +41,7 @@ export default function RevedrawApp({ file }: Props) {
 
     const data = await boardIndexeddbStorage.getBoard(id);
 
-    setDataSource(data || DEFAULT_DATA_SOURCE);
+    setDataSource(data);
   }, []);
 
   // HACK: fix the custom font not working completely when first render
