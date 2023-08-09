@@ -1,16 +1,18 @@
 import { useEffect, useCallback, useState } from 'react';
-import { Button, Form, Input, Modal, message } from 'antd';
-import { addCustomFontToLocal } from '@renderer/store/localstorage';
+import { Button, Modal } from 'antd';
 import { useTranslation } from 'react-i18next';
 
 import './index.css';
-import { useAtom } from 'jotai';
-import { currentFileAtom } from '@renderer/store/jotai';
-import { submiteUserEvent } from '@renderer/statistics';
 
 interface Props {
   open: boolean;
   closeModal: () => void;
+}
+
+interface Font {
+  name: string;
+  sourcePath: string;
+  fontPath: string;
 }
 
 const CustomFontModal = (props: Props) => {
@@ -18,10 +20,7 @@ const CustomFontModal = (props: Props) => {
 
   const { t } = useTranslation();
 
-  const [fontName, setFontName] = useState();
-  const [fontPath, setFontPath] = useState();
-  const [fontFamilyName, setFontFamilyName] = useState<string>();
-  const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
+  const [fonts, setFonts] = useState<Font[]>([]);
 
   const loadCustomFonts = useCallback(() => {
     window.api && window.api.loadCustomFonts();
@@ -29,37 +28,15 @@ const CustomFontModal = (props: Props) => {
 
   useEffect(() => {
     window.api &&
-      window.api.onLoadCustomFontSuccess(async (event, _fontName, _fontPath) => {
-        setFontName(_fontName);
-        setFontPath(_fontPath);
-        setFontFamilyName(_fontName);
+      window.api.onLoadCustomFontSuccess(async (event, fontsInfo) => {
+        console.log('--- fontsInfo ---', fontsInfo);
+        setFonts(fontsInfo);
       });
   }, []);
 
   const onOk = useCallback(() => {
-    if (!fontPath) {
-      message.error('Please load font file');
-      return;
-    }
-
-    if (!fontFamilyName) {
-      message.error('Font name cannot be empty!');
-      return;
-    }
-
-    window.api.registerCustomFont(fontFamilyName, fontPath);
-
-    addCustomFontToLocal(fontFamilyName);
-
-    const prevFile = currentFile;
-
-    setCurrentFile(undefined);
-    setTimeout(() => {
-      setCurrentFile(prevFile);
-    }, 0);
-
     closeModal();
-  }, [fontPath, fontFamilyName, currentFile]);
+  }, []);
 
   return (
     <Modal
@@ -69,17 +46,25 @@ const CustomFontModal = (props: Props) => {
       onOk={onOk}
       onCancel={() => closeModal()}
     >
-      <Form labelCol={{ span: 6 }} className="mt-6">
-        <Form.Item label={t('customFontModal.fontFile')}>
-          <p>
-            <span className="mr-2">{fontName}</span>
-            <Button onClick={loadCustomFonts}>{t('customFontModal.load')}</Button>
-          </p>
-        </Form.Item>
-        <Form.Item label={t('customFontModal.fontName')}>
-          <Input value={fontFamilyName} onChange={(e) => setFontFamilyName(e.target.value)} />
-        </Form.Item>
-      </Form>
+      <Button onClick={loadCustomFonts}>{t('customFontModal.load')}</Button>
+      <table className="table-auto">
+        <thead>
+          <tr>
+            <th>字体名称</th>
+            <th>原始路径</th>
+            <th>目标路径</th>
+          </tr>
+        </thead>
+        <tbody>
+          {fonts?.map((font) => (
+            <tr key={font.fontPath}>
+              <td>{font.name}</td>
+              <td>{font.sourcePath}</td>
+              <td>{font.fontPath}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </Modal>
   );
 };

@@ -2,12 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { isMacOS } from './utils/platform';
-import {
-  loadCustomFont,
-  registerCustomFont,
-  batchRegisterCustomFonts,
-  storeCustomFontConfig
-} from './utils/customFonts';
+import { loadCustomFont, batchRegisterCustomFonts } from './utils/customFonts';
 import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
 // import { autoUpdater } from 'electron-updater';
@@ -68,11 +63,6 @@ function createWindow(): void {
 
   ipcMain.on(EVENTS.loadCustomFont, async () => {
     loadCustomFont(mainWindow);
-  });
-
-  ipcMain.on(EVENTS.registerCustomFont, async (event, fontName, fontPath) => {
-    storeCustomFontConfig(fontName, fontPath);
-    registerCustomFont(mainWindow, fontName, fontPath);
   });
 }
 

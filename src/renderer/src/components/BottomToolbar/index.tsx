@@ -4,7 +4,9 @@ import {
   HelpCircle,
   ArrowUpRightFromCircle,
   Twitter,
-  DownloadCloud
+  DownloadCloud,
+  Settings,
+  PencilLine
 } from 'lucide-react';
 import { GithubCircle, Bilibili } from '@renderer/icons';
 import { Dropdown } from 'antd';
@@ -14,10 +16,23 @@ import DownloadApp from '../DownloadApp/index';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from '@renderer/store/jotai';
 import { submiteUserEvent } from '@renderer/statistics';
+import CustomFont from '../CustomFont';
 
 export default function BottomToolbar() {
   const { t } = useTranslation();
   const [langCode] = useAtom(langCodeAtom);
+
+  const configMenu = useMemo(
+    () => [
+      {
+        key: 'issue',
+        title: t('help.issue'),
+        icon: <PencilLine className="w-4" />,
+        label: <CustomFont></CustomFont>
+      }
+    ],
+    []
+  );
 
   const helpMenu = useMemo(
     () => [
@@ -129,6 +144,15 @@ export default function BottomToolbar() {
 
   return (
     <div className="bottom-toolbar absolute h-8 pr-4 bottom-0 right-0 flex items-center text-slate-600">
+      <a
+        className="mr-2 flex items-center"
+        href="https://github.com/revezone/revezone"
+        target="_blank"
+        rel="noreferrer"
+        title={t('operation.giveAStar')}
+      >
+        <GithubCircle className="w-4 h-4"></GithubCircle>
+      </a>
       <DownloadApp from="bottombar" />
       <a
         className="mr-2 flex items-center"
@@ -148,15 +172,11 @@ export default function BottomToolbar() {
       >
         <Coffee className="w-4 h-4"></Coffee>
       </a>
-      <a
-        className="mr-2 flex items-center"
-        href="https://github.com/revezone/revezone"
-        target="_blank"
-        rel="noreferrer"
-        title={t('operation.giveAStar')}
-      >
-        <GithubCircle className="w-4 h-4"></GithubCircle>
-      </a>
+      <span title="Setting" className="flex items-center mr-2">
+        <Dropdown menu={{ items: configMenu }}>
+          <Settings className="w-4 h-4 cursor-pointer"></Settings>
+        </Dropdown>
+      </span>
       <span title="Help" className="flex items-center">
         <Dropdown menu={{ items: helpMenu }}>
           <HelpCircle className="w-4 h-4 cursor-pointer"></HelpCircle>
