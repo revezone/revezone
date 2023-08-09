@@ -15,8 +15,9 @@ function WelcomeContent() {
   return (
     <div className="revezone-welcome-page w-full h-full flex pt-10 pb-10 justify-center text-slate-400">
       <div className="content w-2/3 overflow-scroll">
-        <div className="flex items-end mb-6">
+        <div className="flex items-center mb-6">
           <RevezoneLogo size="large" url="https://revezone.com" />
+          <span className="text-xl"> - {t('text.alpha')}</span>
         </div>
         <p className="mb-6 text-sm">{t('welcome.productDesc')}</p>
         <p className="mb-6 text-sm flex items-center">

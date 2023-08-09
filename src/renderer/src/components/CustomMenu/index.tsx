@@ -275,7 +275,10 @@ export default function CustomMenu({ collapsed }: Props) {
   return (
     <div className="revezone-menu-container">
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
-        <RevezoneLogo size="small" onClick={() => resetMenu()} />
+        <div className="flex items-center">
+          <RevezoneLogo size="small" onClick={() => resetMenu()} />
+          <span> - {t('text.alpha')}</span>
+        </div>
         <div className="flex justify-start">
           <div className="mr-2 whitespace-nowrap">
             <Dropdown menu={{ items: storageTypeItems }}>

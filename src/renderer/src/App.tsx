@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import CustomLayout from './components/CustomLayout';
 import NoteEditor from './components/NoteEditor';
 import { useAtom } from 'jotai';
@@ -14,6 +14,7 @@ import { theme } from './utils/theme';
 import { getOSName, isInRevezoneApp } from './utils/navigator';
 
 import './App.css';
+import { submiteUserEvent } from './statistics';
 
 const OS_NAME = getOSName();
 
@@ -21,8 +22,16 @@ function App(): JSX.Element {
   const [currentFile] = useAtom(currentFileAtom);
   const [langCode] = useAtom(langCodeAtom);
 
+  useEffect(() => {
+    try {
+      const { npm_package_version, USER } = window.electron.process.env;
+      submiteUserEvent('enter_app', { app_version: npm_package_version, user: USER });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   const renderContent = useCallback((file) => {
-    console.log('renderContent', currentFile?.id, file);
     switch (file?.type) {
       case 'note':
         return <NoteEditor file={file} />;

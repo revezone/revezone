@@ -49,7 +49,8 @@ export default {
   },
   text: {
     untitled: 'Untitled',
-    defaultFolder: 'Default Folder'
+    defaultFolder: 'Default Folder',
+    alpha: 'alpha'
   },
   storage: {
     cloud: 'Cloud(Comming soon)',
