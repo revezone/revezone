@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 
 moment.tz.setDefault('Asia/Shanghai');
 
-export interface RevenoteBoardDBSchema extends DBSchema {
+export interface RevezoneBoardDBSchema extends DBSchema {
   board: {
     key: number;
     value: string;
@@ -11,7 +11,7 @@ export interface RevenoteBoardDBSchema extends DBSchema {
 }
 
 export const INDEXEDDB_BOARD_FILE_KEY = 'board';
-export const INDEXEDDB_REVENOTE_BOARD = 'revenote_board';
+export const INDEXEDDB_REVEZONE_BOARD = 'revezone_board';
 
 class BoardIndexeddbStorage {
   constructor() {
@@ -27,14 +27,14 @@ class BoardIndexeddbStorage {
   }
 
   static instance: BoardIndexeddbStorage;
-  db: IDBPDatabase<RevenoteBoardDBSchema> | undefined;
+  db: IDBPDatabase<RevezoneBoardDBSchema> | undefined;
 
-  async initDB(): Promise<IDBPDatabase<RevenoteBoardDBSchema>> {
+  async initDB(): Promise<IDBPDatabase<RevezoneBoardDBSchema>> {
     if (this.db) {
       return this.db;
     }
 
-    const db = await openDB<RevenoteBoardDBSchema>(INDEXEDDB_REVENOTE_BOARD, 1, {
+    const db = await openDB<RevezoneBoardDBSchema>(INDEXEDDB_REVEZONE_BOARD, 1, {
       upgrade: async (db) => {
         await this.initBoardFileStore(db);
       }

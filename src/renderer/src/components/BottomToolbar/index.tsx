@@ -26,7 +26,7 @@ export default function BottomToolbar() {
         icon: <ArrowUpRightFromCircle className="w-4" />,
         label: (
           <a
-            href="https://github.com/revenote/revenote/issues/new"
+            href="https://github.com/revezone/revezone/issues/new"
             target="_blank"
             rel="noreferrer"
           >
@@ -39,7 +39,7 @@ export default function BottomToolbar() {
         title: t('links.twitter'),
         icon: <Twitter className="w-4" />,
         label: (
-          <a href="https://twitter.com/therevenote" target="_blank" rel="noreferrer">
+          <a href="https://twitter.com/therevezone" target="_blank" rel="noreferrer">
             {t('links.twitter')}
           </a>
         )
@@ -79,7 +79,7 @@ export default function BottomToolbar() {
         title: t('links.downloadApp'),
         icon: <DownloadCloud className="w-4 animate-bounce" />,
         label: (
-          <a href="https://github.com/revenote/revenote/releases" target="_blank" rel="noreferrer">
+          <a href="https://github.com/revezone/revezone/releases" target="_blank" rel="noreferrer">
             {t('links.downloadApp')}
           </a>
         )
@@ -111,7 +111,7 @@ export default function BottomToolbar() {
       </a>
       <a
         className="mr-2 flex items-center"
-        href="https://github.com/revenote/revenote"
+        href="https://github.com/revezone/revezone"
         target="_blank"
         rel="noreferrer"
         title={t('operation.giveAStar')}

@@ -1,15 +1,15 @@
 import { atom } from 'jotai';
-import { RevenoteFile, RevenoteFolder, FileTree } from '../types/file';
+import { RevezoneFile, RevezoneFolder, FileTree } from '../types/file';
 
 type Theme = 'light' | 'dark';
 
 export const fileTreeAtom = atom<FileTree>([]);
 
-export const currentFileAtom = atom<RevenoteFile | undefined | null>(undefined);
+export const currentFileAtom = atom<RevezoneFile | undefined | null>(undefined);
 
 export const workspaceLoadedAtom = atom(false);
 
-export const folderListAtom = atom<RevenoteFolder[]>([]);
+export const folderListAtom = atom<RevezoneFolder[]>([]);
 
 export const currentFolderIdAtom = atom<string | undefined>(undefined);
 

@@ -3,26 +3,26 @@ import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment-timezone';
 import { FileTree } from '../types/file';
 import {
-  RevenoteFile,
-  RevenoteFolder,
-  RevenoteFileType,
-  RevenoteFolderFileMapping
+  RevezoneFile,
+  RevezoneFolder,
+  RevezoneFileType,
+  RevezoneFolderFileMapping
 } from '../types/file';
 
 moment.tz.setDefault('Asia/Shanghai');
 
-export interface RevenoteDBSchema extends DBSchema {
+export interface RevezoneDBSchema extends DBSchema {
   folder: {
     key: string;
-    value: RevenoteFolder;
+    value: RevezoneFolder;
   };
   file: {
     key: string;
-    value: RevenoteFile;
+    value: RevezoneFile;
   };
   folder_file_mapping: {
     key: number;
-    value: RevenoteFolderFileMapping;
+    value: RevezoneFolderFileMapping;
   };
 }
 
@@ -31,7 +31,7 @@ export const INDEXEDDB_FILE_KEY = 'file';
 export const INDEXEDDB_FOLD_FILE_MAPPING_KEY = 'folder_file_mapping';
 export const LOCALSTORAGE_FIRST_FOLDER_KEY = 'first_forlder_id';
 export const LOCALSTORAGE_FIRST_FILE_KEY = 'first_file_id';
-export const INDEXEDDB_REVENOTE_MENU = 'revenote_menu';
+export const INDEXEDDB_REVEZONE_MENU = 'revezone_menu';
 
 class MenuIndexeddbStorage {
   constructor() {
@@ -47,14 +47,14 @@ class MenuIndexeddbStorage {
   }
 
   static instance: MenuIndexeddbStorage;
-  db: IDBPDatabase<RevenoteDBSchema> | undefined;
+  db: IDBPDatabase<RevezoneDBSchema> | undefined;
 
-  async initDB(): Promise<IDBPDatabase<RevenoteDBSchema>> {
+  async initDB(): Promise<IDBPDatabase<RevezoneDBSchema>> {
     if (this.db) {
       return this.db;
     }
 
-    const db = await openDB<RevenoteDBSchema>(INDEXEDDB_REVENOTE_MENU, 1, {
+    const db = await openDB<RevezoneDBSchema>(INDEXEDDB_REVEZONE_MENU, 1, {
       upgrade: async (db) => {
         await this.initFolderStore(db);
         await this.initFileStore(db);
@@ -122,26 +122,26 @@ class MenuIndexeddbStorage {
     return folderInfo;
   }
 
-  async getFolder(folderId: string): Promise<RevenoteFolder | undefined> {
+  async getFolder(folderId: string): Promise<RevezoneFolder | undefined> {
     await this.initDB();
     // @ts-ignore
     const value = await this.db?.get(INDEXEDDB_FOLDER_KEY, folderId);
     return value;
   }
 
-  async getFolders(): Promise<RevenoteFolder[]> {
+  async getFolders(): Promise<RevezoneFolder[]> {
     await this.initDB();
     const folders = await this.db?.getAll('folder');
-    const sortFn = (a: RevenoteFolder, b: RevenoteFolder) =>
+    const sortFn = (a: RevezoneFolder, b: RevezoneFolder) =>
       new Date(a.gmtCreate).getTime() < new Date(b.gmtCreate).getTime() ? 1 : -1;
     return folders?.sort(sortFn) || [];
   }
 
   async addFile(
     folderId: string,
-    type: RevenoteFileType = 'note',
+    type: RevezoneFileType = 'note',
     name?: string
-  ): Promise<RevenoteFile> {
+  ): Promise<RevezoneFile> {
     await this.initDB();
 
     const fileId = `file_${uuidv4()}`;
@@ -179,7 +179,7 @@ class MenuIndexeddbStorage {
     // await blocksuiteStorage.copyPage();
   }
 
-  async getFile(fileId: string): Promise<RevenoteFile | undefined> {
+  async getFile(fileId: string): Promise<RevezoneFile | undefined> {
     await this.initDB();
     const value = await this.db?.get(INDEXEDDB_FILE_KEY, fileId);
     return value;
@@ -204,15 +204,15 @@ class MenuIndexeddbStorage {
     deleteFolderFileMappingPromises && (await Promise.all(deleteFolderFileMappingPromises));
   }
 
-  async getFiles(): Promise<RevenoteFile[]> {
+  async getFiles(): Promise<RevezoneFile[]> {
     await this.initDB();
     const files = await this.db?.getAll(INDEXEDDB_FILE_KEY);
-    const sortFn = (a: RevenoteFile, b: RevenoteFile) =>
+    const sortFn = (a: RevezoneFile, b: RevezoneFile) =>
       new Date(a.gmtCreate).getTime() < new Date(b.gmtCreate).getTime() ? 1 : -1;
     return files?.sort(sortFn) || [];
   }
 
-  async getAllFileFolderMappings(): Promise<RevenoteFolderFileMapping[]> {
+  async getAllFileFolderMappings(): Promise<RevezoneFolderFileMapping[]> {
     await this.initDB();
     const mappings = await this.db?.getAll(INDEXEDDB_FOLD_FILE_MAPPING_KEY);
     return mappings || [];
@@ -225,7 +225,7 @@ class MenuIndexeddbStorage {
     const mappings = await this.getAllFileFolderMappings();
 
     const tree = folders.map((folder) => {
-      const children: RevenoteFile[] = [];
+      const children: RevezoneFile[] = [];
 
       const mappingsCertainFolder = mappings.filter((map) => map.folderId === folder.id);
 
@@ -242,7 +242,7 @@ class MenuIndexeddbStorage {
     return tree;
   }
 
-  async getFilesInFolder(folderId: string): Promise<RevenoteFile[] | undefined> {
+  async getFilesInFolder(folderId: string): Promise<RevezoneFile[] | undefined> {
     await this.initDB();
 
     const mappings = await this.db?.getAllFromIndex(
@@ -262,7 +262,7 @@ class MenuIndexeddbStorage {
     return files;
   }
 
-  async updateFileName(file: RevenoteFile, name: string) {
+  async updateFileName(file: RevezoneFile, name: string) {
     await this.initDB();
 
     if (name === file?.name) return;
@@ -275,7 +275,7 @@ class MenuIndexeddbStorage {
       ));
   }
 
-  async updateFileGmtModified(file: RevenoteFile) {
+  async updateFileGmtModified(file: RevezoneFile) {
     await this.initDB();
 
     file &&
@@ -286,7 +286,7 @@ class MenuIndexeddbStorage {
       ));
   }
 
-  async updateFolderName(folder: RevenoteFolder, name: string) {
+  async updateFolderName(folder: RevezoneFolder, name: string) {
     await this.initDB();
 
     if (name === folder?.name) return;

@@ -19,7 +19,7 @@ export default {
     addBoard: '新建白闆',
     rename: '重命名',
     delete: '刪除',
-    copyRevenoteLink: '復制 Revenote 鏈接',
+    copyRevezoneLink: '復制 Revezone 鏈接',
     giveAStar: '給個 Star 吧'
   },
   description: {

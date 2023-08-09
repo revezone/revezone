@@ -19,7 +19,7 @@ export default {
     addBoard: 'Add a board',
     rename: 'Rename',
     delete: 'Delete',
-    copyRevenoteLink: 'Copy revenote link',
+    copyRevezoneLink: 'Copy revezone link',
     giveAStar: 'git a star'
   },
   description: {

@@ -29,7 +29,7 @@ export default function LanguageSwitcher() {
       value={langCode}
       onClick={(e) => e.stopPropagation()}
       onChange={onChange}
-      className="revenote-language-select items-center w-auto whitespace-nowrap"
+      className="revezone-language-select items-center w-auto whitespace-nowrap"
       bordered={false}
     >
       {langCodeList.map((item) => {

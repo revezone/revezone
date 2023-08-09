@@ -1,10 +1,10 @@
-import RevenoteLogo from '../RevenoteLogo';
+import RevezoneLogo from '../RevezoneLogo';
 import { Twitter, Github, Coffee, Cat, FolderPlus, FileType, Palette } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bilibili } from '../../icons';
 import DownloadApp from '../DownloadApp';
-import { isInRevenoteApp } from '@renderer/utils/navigator';
+import { isInRevezoneApp } from '@renderer/utils/navigator';
 
 import './index.css';
 
@@ -12,14 +12,14 @@ function WelcomeContent() {
   const { t } = useTranslation();
 
   return (
-    <div className="revenote-welcome-page w-full h-full flex pt-10 pb-10 justify-center text-slate-400">
+    <div className="revezone-welcome-page w-full h-full flex pt-10 pb-10 justify-center text-slate-400">
       <div className="content w-2/3 overflow-scroll">
         <div className="flex items-end mb-6">
-          <RevenoteLogo size="large" url="https://revenote.com" />
+          <RevezoneLogo size="large" url="https://revezone.com" />
         </div>
         <p className="mb-6 text-sm">{t('welcome.productDesc')}</p>
         <p className="mb-6 text-sm flex items-center">
-          {!isInRevenoteApp ? t('welcome.onlineTry') : null} {t('welcome.downloadApp')}{' '}
+          {!isInRevezoneApp ? t('welcome.onlineTry') : null} {t('welcome.downloadApp')}{' '}
           <DownloadApp className="ml-2" />
         </p>
         <p className="mb-6 text-sm  text-slate-600">{t('welcome.operationTip')}</p>
@@ -42,12 +42,12 @@ function WelcomeContent() {
         <div>
           <h2 className="mb-2 text-base">{t('links.title')}</h2>
           <p className="mb-2">
-            <a href="https://github.com/revenote/revenote" target="_blank" rel="noreferrer">
+            <a href="https://github.com/revezone/revezone" target="_blank" rel="noreferrer">
               <Github className="w-4 h-4" /> {t('links.github')}
             </a>
           </p>
           <p className="mb-2">
-            <a href="https://twitter.com/TheReveNote" target="_blank" rel="noreferrer">
+            <a href="https://twitter.com/TheReveZone" target="_blank" rel="noreferrer">
               <Twitter className="w-4 h-4" /> {t('links.twitter')}
             </a>
           </p>

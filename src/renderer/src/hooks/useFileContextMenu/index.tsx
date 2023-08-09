@@ -39,8 +39,8 @@ export default function useFileContextMenu(props: Props) {
         }
       },
       {
-        key: 'copy_revenote_link',
-        label: t('operation.copyRevenoteLink'),
+        key: 'copy_revezone_link',
+        label: t('operation.copyRevezoneLink'),
         icon: <ClipboardCopy className="w-4" />,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();

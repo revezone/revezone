@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { Menu, Dropdown } from 'antd';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import type { RevenoteFile, RevenoteFolder, OnFolderOrFileAddProps } from '@renderer/types/file';
+import type { RevezoneFile, RevezoneFolder, OnFolderOrFileAddProps } from '@renderer/types/file';
 import {
   getOpenKeysFromLocal,
   setCurrentFileIdToLocal,
@@ -14,7 +14,7 @@ import { blocksuiteStorage } from '@renderer/store/blocksuite';
 // import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 import OperationBar from '../OperationBar';
 import moment from 'moment';
-import RevenoteLogo from '../RevenoteLogo';
+import RevezoneLogo from '../RevezoneLogo';
 
 import './index.css';
 import { getFileById, getFolderIdByFileId } from '@renderer/utils/file';
@@ -221,7 +221,7 @@ export default function CustomMenu({ collapsed }: Props) {
   );
 
   const onFileNameChange = useCallback(
-    async (text: string, file: RevenoteFile) => {
+    async (text: string, file: RevezoneFile) => {
       await menuIndexeddbStorage.updateFileName(file, text);
       updateEditableTextState(file.id, true, editableTextState);
 
@@ -235,7 +235,7 @@ export default function CustomMenu({ collapsed }: Props) {
   );
 
   const onFolderNameChange = useCallback(
-    (folder: RevenoteFolder, text: string) => {
+    (folder: RevezoneFolder, text: string) => {
       menuIndexeddbStorage.updateFolderName(folder, text);
       updateEditableTextState(folder.id, true, editableTextState);
     },
@@ -264,9 +264,9 @@ export default function CustomMenu({ collapsed }: Props) {
   ];
 
   return (
-    <div className="revenote-menu-container">
+    <div className="revezone-menu-container">
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
-        <RevenoteLogo size="small" onClick={() => resetMenu()} />
+        <RevezoneLogo size="small" onClick={() => resetMenu()} />
         <div className="flex justify-start">
           <div className="mr-2 whitespace-nowrap">
             <Dropdown menu={{ items: storageTypeItems }}>
