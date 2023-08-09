@@ -1,7 +1,7 @@
-# ReveNote
+# Revezone
 [English](README.md)
 
-ReveNote 正处于公测阶段，功能还有不少不足或者缺陷。如果你有任何问题或者建议，欢迎提交 [issue](https://github.com/revenote/revenote/issues/new) 进行反馈。
+Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果你有任何问题或者建议，欢迎提交 [issue](https://github.com/revezone/revezone/issues/new) 进行反馈。
 
 ---
 
@@ -15,15 +15,15 @@ ReveNote 正处于公测阶段，功能还有不少不足或者缺陷。如果�
 ## 给个 Star
 如果这个仓库对你有帮助，请不要吝惜小手给个 Star 吧
 
-## 使用 ReveNote
-* 线上体验版本（基础功能）: https://revenote.com
-* 桌面应用版本（全量功能）: https://github.com/revenote/revenote/releases
+## 使用 Revezone
+* 线上体验版本（基础功能）: https://revezone.com
+* 桌面应用版本（全量功能）: https://github.com/revezone/revezone/releases
 
 ## 反馈问题
-ReveNote 正处于公测阶段，功能还有不少不足或者缺陷。如果你有任何问题或者建议，欢迎提交 [issue](https://github.com/revenote/revenote/issues/new) 进行反馈。
+Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果你有任何问题或者建议，欢迎提交 [issue](https://github.com/revezone/revezone/issues/new) 进行反馈。
 
 ## 参与公测
-目前 ReveNote 已正式开放公测。如果大家在产品使用过程中有任何问题或者产品上的想法，欢迎参与公测反馈问题或建议，您的建议将直接影响未来产品迭代的方向和节奏。让我们一起打造一个用起来爽的思维管理工具。
+目前 Revezone 已正式开放公测。如果大家在产品使用过程中有任何问题或者产品上的想法，欢迎参与公测反馈问题或建议，您的建议将直接影响未来产品迭代的方向和节奏。让我们一起打造一个用起来爽的思维管理工具。
 
 参与公测方式：扫码添加微信邀请进入公测群
 ![](https://img.alicdn.com/imgextra/i4/O1CN01rXBaQt1bGC8tJAAit_!!6000000003437-0-tps-1074-885.jpg_300x300)
@@ -34,15 +34,15 @@ ReveNote 正处于公测阶段，功能还有不少不足或者缺陷。如果�
 * 文件管理: 你可以通过文件夹的方式管理笔记或者画布
 
 ### 笔记
-ReveNote 中的笔记是一个所见即所得的类 Notion 编辑器，支持 '/' 命令和 Markdown 语法。
+Revezone 中的笔记是一个所见即所得的类 Notion 编辑器，支持 '/' 命令和 Markdown 语法。
 ![](https://img.alicdn.com/imgextra/i3/O1CN01ZtyLi025xBnRgRRZM_!!6000000007592-2-tps-2472-1412.png)
 
 ### 画布
-ReveNote 中的画布是一个基于 Excalidraw 的无限画布白板。你可以在 ReveNote 中以更简单的姿势使用 Excalidraw 功能，可以在桌面应用中自定义字体，也可以通过双链功能有效连接 ReveNote 中的笔记。
+Revezone 中的画布是一个基于 Excalidraw 的无限画布白板。你可以在 Revezone 中以更简单的姿势使用 Excalidraw 功能，可以在桌面应用中自定义字体，也可以通过双链功能有效连接 Revezone 中的笔记。
 ![](https://img.alicdn.com/imgextra/i3/O1CN015e68dL1YngFlaiz9g_!!6000000003104-2-tps-2472-1412.png)
 
 #### 在画布中自定义字体
-ReveNote 的画布支持用户自定义字体，不过目前只有桌面端应用支持画布自定义字体。
+Revezone 的画布支持用户自定义字体，不过目前只有桌面端应用支持画布自定义字体。
 
 操作方法:
 > 选择画布文件 - 点击左上角菜单按钮 - 点击“自定义字体” - 出现弹窗，上传字体 - 点击确定，完成自定义字体。
@@ -54,5 +54,5 @@ ReveNote 的画布支持用户自定义字体，不过目前只有桌面端应�
 ![](https://img.alicdn.com/imgextra/i3/O1CN01nqVYEV1TGdbGbWlFK_!!6000000002355-2-tps-722-804.png)
 
 ## 未来规划
-更多产品特性开发中，敬请期待。你可以通过 [Twitter](https://twitter.com/TheReveNote) 或者 [Bilibili](https://space.bilibili.com/393134139) 获取最新产品信息和开发背后的故事。
+更多产品特性开发中，敬请期待。你可以通过 [Twitter](https://twitter.com/TheRevezone) 或者 [Bilibili](https://space.bilibili.com/393134139) 获取最新产品信息和开发背后的故事。
 

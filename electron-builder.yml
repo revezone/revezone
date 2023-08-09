@@ -1,5 +1,5 @@
 appId: revenote
-productName: ReveNote
+productName: Revenote
 directories:
   buildResources: build
 files:
@@ -13,7 +13,7 @@ asarUnpack:
   - resources/**
 afterSign: build/notarize.js
 win:
-  executableName: ReveNote
+  executableName: Revenote
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

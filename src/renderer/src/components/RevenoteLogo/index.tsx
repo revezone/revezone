@@ -50,7 +50,7 @@ export default function Logo({ size = 'small', className = '', url, onClick }: P
       from-sky-300 to-sky-600 decoration-cyan-100 underline-offset-2  underline font-semibold 
       ${getTextSizeName(size)}`}
       >
-        eveNote
+        evezone
       </span>
     </div>
   );

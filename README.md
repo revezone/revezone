@@ -1,7 +1,7 @@
-# ReveNote
+# Revezone
 [中文](README_zh.md)
 
-ReveNote is currently in a public beta. Please report a [issue](https://github.com/revenote/revenote/issues/new), if you have any suggestions or questions.
+Revezone is currently in a public beta. Please report a [issue](https://github.com/revezone/revezone/issues/new), if you have any suggestions or questions.
 
 ---
 
@@ -15,12 +15,12 @@ A lightweight productivity tool to build your second brain that integrates Notio
 ## Giving a Star
 Please give it a star if this repository is helpful to you.
 
-## Using ReveNote
-* Online Version (Basic function): https://revenote.com
-* Desktop App Version (Full function): https://github.com/revenote/revenote/releases
+## Using Revezone
+* Online Version (Basic function): https://revezone.com
+* Desktop App Version (Full function): https://github.com/revezone/revezone/releases
 
 ## Reporting a Issue
-ReveNote is currently in a public beta. Please report a [issue](https://github.com/revenote/revenote/issues/new), if you have any suggestions or questions.
+Revezone is currently in a public beta. Please report a [issue](https://github.com/revezone/revezone/issues/new), if you have any suggestions or questions.
 
 ## Features
 * Note: A Notion-like note-taking function.
@@ -28,15 +28,15 @@ ReveNote is currently in a public beta. Please report a [issue](https://github.c
 * File Management: You can manage notes or boards based on folder.
 
 ### Note
-Note in ReveNote is a WYSIWYG Notion-like editor，supports '/' Command and Markdown syntax.
+Note in Revezone is a WYSIWYG Notion-like editor，supports '/' Command and Markdown syntax.
 ![](https://img.alicdn.com/imgextra/i3/O1CN01ZtyLi025xBnRgRRZM_!!6000000007592-2-tps-2472-1412.png)
 
 ### Board
-Board in ReveNote is a white board based on Excalidraw. You can use Excalidraw in a new easier way in ReveNote, even customing fonts in desktop app and linking notes in ReveNote through double link.
+Board in Revezone is a white board based on Excalidraw. You can use Excalidraw in a new easier way in Revezone, even customing fonts in desktop app and linking notes in Revezone through double link.
 ![](https://img.alicdn.com/imgextra/i3/O1CN015e68dL1YngFlaiz9g_!!6000000003104-2-tps-2472-1412.png)
 
 #### Custom Fonts in Board
-ReveNote app supports customing fonts in Revenote board. You can upload fonts you like in ReveNote app.
+Revezone app supports customing fonts in Revezone board. You can upload fonts you like in Revezone app.
 
 Operation Method:
 > Open a board -> Click the top left menu button -> Click 'Custom Font' button in menu list -> Upload a font file from local -> Click 'OK' button to complete font customing
@@ -48,5 +48,5 @@ You can create and manage a folder/note/board in the left sidebar, and you can g
 ![](https://img.alicdn.com/imgextra/i3/O1CN01nqVYEV1TGdbGbWlFK_!!6000000002355-2-tps-722-804.png)
 
 ## Future Planning
-More useful features are developing. You can get more information and developing stories from [Twitter](https://twitter.com/TheReveNote) or [Bilibili](https://space.bilibili.com/393134139).
+More useful features are developing. You can get more information and developing stories from [Twitter](https://twitter.com/TheRevezone) or [Bilibili](https://space.bilibili.com/393134139).
 
