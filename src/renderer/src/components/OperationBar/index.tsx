@@ -58,17 +58,6 @@ export default function OperationBar(props: Props) {
         <span className="operation-btn-desc ml-1 transition-all">{t('operation.addFolder')}</span>
       </span>
       <span
-        title={t('operation.addNote')}
-        className="operation-item flex items-center mr-3 cursor-pointer"
-        onClick={(e) => {
-          e.stopPropagation();
-          addFile(folderId, 'note', fileTree);
-        }}
-      >
-        <FileType className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
-        <span className="operation-btn-desc ml-1 transition-all">{t('operation.addNote')}</span>
-      </span>
-      <span
         title={t('operation.addBoard')}
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
@@ -78,6 +67,17 @@ export default function OperationBar(props: Props) {
       >
         <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
         <span className="operation-btn-desc ml-1 transition-all">{t('operation.addBoard')}</span>
+      </span>
+      <span
+        title={t('operation.addNote')}
+        className="operation-item flex items-center mr-3 cursor-pointer"
+        onClick={(e) => {
+          e.stopPropagation();
+          addFile(folderId, 'note', fileTree);
+        }}
+      >
+        <FileType className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
+        <span className="operation-btn-desc ml-1 transition-all">{t('operation.addNote')}</span>
       </span>
     </div>
   );

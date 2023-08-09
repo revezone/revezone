@@ -20,6 +20,7 @@ function WelcomeContent() {
           <span className="text-xl"> - {t('text.alpha')}</span>
         </div>
         <p className="mb-6 text-sm">{t('welcome.productDesc')}</p>
+        <p className="mb-6 text-sm">{t('publicBeta.description')}</p>
         <p className="mb-6 text-sm flex items-center">
           {!isInRevezoneApp ? t('welcome.onlineTry') : null} {t('welcome.downloadApp')}{' '}
           <DownloadApp className="ml-2" from="welcomepage" />
@@ -93,18 +94,6 @@ function WelcomeContent() {
           </p>
           <p className="mb-2">
             <a
-              href="https://www.buymeacoffee.com/korbinzhao"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => {
-                submiteUserEvent('welcomepage_click_buycoffee', {});
-              }}
-            >
-              <Coffee className="w-4 h-4" /> {t('links.buyMeACoffee')}
-            </a>
-          </p>
-          <p className="mb-2">
-            <a
               href="https://afdian.net/a/wantian"
               target="_blank"
               rel="noreferrer"
@@ -113,6 +102,18 @@ function WelcomeContent() {
               }}
             >
               <Cat className="w-4 h-4" /> {t('links.feedMyCat')}
+            </a>
+          </p>
+          <p className="mb-2">
+            <a
+              href="https://www.buymeacoffee.com/korbinzhao"
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => {
+                submiteUserEvent('welcomepage_click_buycoffee', {});
+              }}
+            >
+              <Coffee className="w-4 h-4" /> {t('links.buyMeACoffee')}
             </a>
           </p>
         </div>

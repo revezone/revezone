@@ -22,7 +22,7 @@ function createWindow(): void {
     titleBarStyle: isMacOS() ? 'hiddenInset' : 'default',
     titleBarOverlay: isMacOS() ? false : true,
     width: 1200,
-    height: 670,
+    height: 770,
     show: false,
     frame: true,
     trafficLightPosition: { x: 20, y: 10 },

@@ -3,17 +3,23 @@ import { useTranslation } from 'react-i18next';
 import { HelpCircle } from 'lucide-react';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from '@renderer/store/jotai';
+import { submiteUserEvent } from '@renderer/statistics';
+import { useCallback } from 'react';
 
 const PublicBetaNotice = () => {
   const { t } = useTranslation();
   const [langCode] = useAtom(langCodeAtom);
+
+  const onMouseEnter = useCallback(() => {
+    submiteUserEvent('publicbeta_show_notice', {});
+  }, []);
 
   return (
     <Popconfirm
       trigger={'hover'}
       title={t('publicBeta.title')}
       description={
-        <p className="w-60 whitespace-pre-wrap">
+        <p className="w-60 whitespace-pre-wrap" onMouseEnter={onMouseEnter}>
           <span>{t('publicBeta.description')}</span>
           {langCode.startsWith('zh') ? (
             <img

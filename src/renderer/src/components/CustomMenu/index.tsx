@@ -278,7 +278,7 @@ export default function CustomMenu({ collapsed }: Props) {
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
         <div className="flex items-center">
           <RevezoneLogo size="small" onClick={() => resetMenu()} />
-          <span> - {t('text.alpha')}</span>
+          <span>&nbsp;-&nbsp;{t('text.alpha')}</span>
           <PublicBetaNotice />
         </div>
         <div className="flex justify-start">

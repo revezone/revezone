@@ -23,4 +23,5 @@ export type EventName =
   | 'welcomepage_click_bilibili'
   | 'welcomepage_click_twitter'
   | 'revedraw_click_customfont'
-  | 'enter_app';
+  | 'enter_app'
+  | 'publicbeta_show_notice';
