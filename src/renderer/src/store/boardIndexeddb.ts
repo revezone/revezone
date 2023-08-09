@@ -50,8 +50,6 @@ class BoardIndexeddbStorage {
       autoIncrement: true
     });
 
-    await boardStore.createIndex('id', 'id', { unique: true });
-
     return boardStore;
   }
 
@@ -68,6 +66,14 @@ class BoardIndexeddbStorage {
   async getBoard(id) {
     await this.initDB();
     return await this.db?.get(INDEXEDDB_BOARD_FILE_KEY, id);
+  }
+
+  async deleteBoard(id) {
+    await this.initDB();
+
+    console.log('--- this.db ---', id, this.db);
+
+    await this.db?.delete(INDEXEDDB_BOARD_FILE_KEY, id);
   }
 }
 

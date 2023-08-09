@@ -26,6 +26,7 @@ import { getCurrentFileIdFromLocal } from '@renderer/store/localstorage';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/index';
+import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 
 interface Props {
   collapsed: boolean;
@@ -108,18 +109,23 @@ export default function CustomMenu({ collapsed }: Props) {
   );
 
   const deleteFile = useCallback(
-    async (fileId: string, folderId: string) => {
-      await menuIndexeddbStorage.deleteFile(fileId);
-      await blocksuiteStorage.deletePage(fileId);
+    async (file: RevezoneFile, folderId: string) => {
+      setCurrentFile(undefined);
 
-      const tree = await getFileTree();
+      await menuIndexeddbStorage.deleteFile(file.id);
 
-      // reset current file when current file is removed
-      if (currentFile?.id === fileId) {
-        const filesInFolder = tree.find((folder) => folder.id === folderId)?.children;
+      console.log('--- delete file ---', file);
 
-        setCurrentFile(filesInFolder?.[0]);
+      switch (file.type) {
+        case 'board':
+          await boardIndexeddbStorage.deleteBoard(file.id);
+          break;
+        case 'note':
+          await blocksuiteStorage.deletePage(file.id);
+          break;
       }
+
+      await getFileTree();
     },
     [menuIndexeddbStorage, currentFile]
   );
