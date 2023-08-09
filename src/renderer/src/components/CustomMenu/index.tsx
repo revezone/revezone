@@ -28,6 +28,7 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/index';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { submiteUserEvent } from '@renderer/statistics';
+import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 
 interface Props {
   collapsed: boolean;
@@ -278,6 +279,7 @@ export default function CustomMenu({ collapsed }: Props) {
         <div className="flex items-center">
           <RevezoneLogo size="small" onClick={() => resetMenu()} />
           <span> - {t('text.alpha')}</span>
+          <PublicBetaNotice />
         </div>
         <div className="flex justify-start">
           <div className="mr-2 whitespace-nowrap">

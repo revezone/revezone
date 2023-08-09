@@ -59,5 +59,10 @@ export default {
   help: {
     issue: 'Report a issue',
     contactTheAuthor: 'Contact the author'
+  },
+  publicBeta: {
+    title: 'Public Beta Notice',
+    description:
+      'Revezone is currently in a public beta, there may still be a few bugs in the product. Please submit a github issue or concat my twitter if you have any questions or suggestions.'
   }
 };

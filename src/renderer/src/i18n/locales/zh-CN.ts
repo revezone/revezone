@@ -58,5 +58,10 @@ export default {
   help: {
     issue: '提交问题',
     contactTheAuthor: '联系作者'
+  },
+  publicBeta: {
+    title: '公测公告',
+    description:
+      'Revezone 目前处于公测阶段，产品可能还有少量 bug，如果你有任何问题或建议，欢迎提交 github issue 或者扫码添加微信反馈。'
   }
 };

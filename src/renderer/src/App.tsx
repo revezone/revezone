@@ -12,9 +12,9 @@ import WelcomePage from './components/WelcomePage';
 import { ConfigProvider } from 'antd';
 import { theme } from './utils/theme';
 import { getOSName, isInRevezoneApp } from './utils/navigator';
+import { submiteAppEnterUserEvent } from './utils/statistics';
 
 import './App.css';
-import { submiteUserEvent } from './statistics';
 
 const OS_NAME = getOSName();
 
@@ -23,12 +23,7 @@ function App(): JSX.Element {
   const [langCode] = useAtom(langCodeAtom);
 
   useEffect(() => {
-    try {
-      const { npm_package_version, USER } = window.electron.process.env;
-      submiteUserEvent('enter_app', { app_version: npm_package_version, user: USER });
-    } catch (err) {
-      console.log(err);
-    }
+    submiteAppEnterUserEvent();
   }, []);
 
   const renderContent = useCallback((file) => {
