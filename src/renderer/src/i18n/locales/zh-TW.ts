@@ -62,6 +62,6 @@ export default {
   publicBeta: {
     title: '公測公告',
     description:
-      'Revezone 目前處於公測階段，產品可能還有少量 bug，如果妳有任何問題或建議，歡迎提交 github issue 或者掃碼添加微信反饋。'
+      'Revezone 目前處於公測階段，產品可能還有少量 bug，重要數據請做好備份。如果妳有任何問題或建議，歡迎提交 github issue 或者掃碼添加微信反饋。'
   }
 };

@@ -11,28 +11,17 @@ import {
 import { GithubCircle, Bilibili } from '@renderer/icons';
 import { Dropdown } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import DownloadApp from '../DownloadApp/index';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from '@renderer/store/jotai';
 import { submiteUserEvent } from '@renderer/utils/statistics';
-import CustomFont from '../CustomFont';
+import SystemSettings from '../SystemSettings';
 
 export default function BottomToolbar() {
   const { t } = useTranslation();
   const [langCode] = useAtom(langCodeAtom);
-
-  const configMenu = useMemo(
-    () => [
-      {
-        key: 'issue',
-        title: t('help.issue'),
-        icon: <PencilLine className="w-4" />,
-        label: <CustomFont></CustomFont>
-      }
-    ],
-    []
-  );
+  const [systemSettingVisible, setSystemSettingVisible] = useState(false);
 
   const helpMenu = useMemo(
     () => [
@@ -173,15 +162,20 @@ export default function BottomToolbar() {
         <Coffee className="w-4 h-4"></Coffee>
       </a>
       <span title="Setting" className="flex items-center mr-2">
-        <Dropdown menu={{ items: configMenu }}>
-          <Settings className="w-4 h-4 cursor-pointer"></Settings>
-        </Dropdown>
+        <Settings
+          className="w-4 h-4 cursor-pointer"
+          onClick={() => setSystemSettingVisible(true)}
+        ></Settings>
       </span>
       <span title="Help" className="flex items-center">
         <Dropdown menu={{ items: helpMenu }}>
           <HelpCircle className="w-4 h-4 cursor-pointer"></HelpCircle>
         </Dropdown>
       </span>
+      <SystemSettings
+        visible={systemSettingVisible}
+        onCancel={() => setSystemSettingVisible(false)}
+      ></SystemSettings>
     </div>
   );
 }

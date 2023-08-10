@@ -38,8 +38,6 @@ export const loadCustomFont = async (mainWindow) => {
     filters: [{ name: 'Fonts', extensions: ['ttf', 'woff2'] }]
   });
 
-  notify(`${JSON.stringify(filePaths)}`);
-
   ensureDir(CUSTOM_FONTS_DIR);
 
   console.log('--- openfile ---', filePaths);
@@ -47,13 +45,13 @@ export const loadCustomFont = async (mainWindow) => {
   const promises = filePaths.map(async (filePath) => {
     try {
       const filenameWithSuffix = getFilenameFromPath(filePath);
-      const fontPath = join(CUSTOM_FONTS_DIR, `${filenameWithSuffix}`);
-      await copyFile(filePath, fontPath);
+      const destPath = join(CUSTOM_FONTS_DIR, `${filenameWithSuffix}`);
+      await copyFile(filePath, destPath);
 
       return {
-        name: filenameWithSuffix,
-        sourcePath: filePath,
-        fontPath
+        name: removeFileExtension(filenameWithSuffix),
+        nameWithSuffix: filenameWithSuffix,
+        path: destPath
       };
     } catch (err) {
       console.error('copy file error:', err);
@@ -64,7 +62,9 @@ export const loadCustomFont = async (mainWindow) => {
 
   const fontNames = results.map((item) => item?.name)?.join(',');
 
-  notify(`Fonts ${fontNames} added! `);
+  if (fontNames) {
+    notify(`Fonts ${fontNames} added! `);
+  }
 
   console.log('--- results ---', results);
 
@@ -109,6 +109,8 @@ export const ensureDir = (dir: string) => {
 };
 
 export const getRegisteredFonts = () => {
+  ensureDir(CUSTOM_FONTS_DIR);
+
   const fontNamesWithSuffix = fs.readdirSync(CUSTOM_FONTS_DIR);
 
   console.log('--- batchRegisterCustomFonts ---', fontNamesWithSuffix);

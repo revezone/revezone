@@ -63,6 +63,6 @@ export default {
   publicBeta: {
     title: 'Public Beta Notice',
     description:
-      'Revezone is currently in a public beta, there may still be a few bugs in the product. Please submit a github issue or concat my twitter if you have any questions or suggestions.'
+      'Revezone is currently in a public beta, there may still be a few bugs in the product. Please make sure to backup your important data. Please submit a github issue or concat my twitter if you have any questions or suggestions.'
   }
 };
