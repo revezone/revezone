@@ -17,8 +17,8 @@ Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果�
 如果这个仓库对你有帮助，请不要吝惜小手给个 Star 吧
 
 ## 使用 Revezone
-* 线上体验版本（基础功能）: https://revezone.com
-* 桌面应用版本（全量功能）: https://github.com/revezone/revezone/releases
+* 线上体验版本（数据存储在浏览器）: https://revezone.com
+* 桌面应用版本（数据存储在电脑端）: https://github.com/revezone/revezone/releases
 
 ## 反馈问题
 Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果你有任何问题或者建议，欢迎提交 [issue](https://github.com/revezone/revezone/issues/new) 进行反馈。

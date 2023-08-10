@@ -17,8 +17,8 @@ A lightweight productivity tool to build your second brain that integrates Notio
 Please give it a star if this repository is helpful to you.
 
 ## Using Revezone
-* Online Version (Basic function): https://revezone.com
-* Desktop App Version (Full function): https://github.com/revezone/revezone/releases
+* Online Try Version (Data stored in browser): https://revezone.com
+* Desktop App Version (Data store in local): https://github.com/revezone/revezone/releases
 
 ## Reporting a Issue
 Revezone is currently in a public beta. Please report a [issue](https://github.com/revezone/revezone/issues/new), if you have any suggestions or questions.
