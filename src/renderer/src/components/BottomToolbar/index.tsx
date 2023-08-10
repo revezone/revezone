@@ -15,7 +15,7 @@ import { useMemo } from 'react';
 import DownloadApp from '../DownloadApp/index';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from '@renderer/store/jotai';
-import { submiteUserEvent } from '@renderer/statistics';
+import { submiteUserEvent } from '@renderer/utils/statistics';
 import CustomFont from '../CustomFont';
 
 export default function BottomToolbar() {

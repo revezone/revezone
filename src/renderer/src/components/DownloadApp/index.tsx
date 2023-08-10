@@ -1,7 +1,7 @@
 import { DownloadCloud } from 'lucide-react';
 import { isInRevezoneApp } from '@renderer/utils/navigator';
 import { useTranslation } from 'react-i18next';
-import { submiteUserEvent } from '@renderer/statistics';
+import { submiteUserEvent } from '@renderer/utils/statistics';
 
 interface Props {
   className?: string;

@@ -10,7 +10,7 @@ import { useAtom } from 'jotai';
 import './index.css';
 import { useTranslation } from 'react-i18next';
 import BottomToolbar from '../BottomToolbar/index';
-import { submiteUserEvent } from '@renderer/statistics';
+import { submiteUserEvent } from '@renderer/utils/statistics';
 
 const { Content, Sider } = Layout;
 

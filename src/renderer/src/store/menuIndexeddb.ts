@@ -8,7 +8,7 @@ import {
   RevezoneFileType,
   RevezoneFolderFileMapping
 } from '../types/file';
-import { submiteUserEvent } from '../statistics';
+import { submiteUserEvent } from '../utils/statistics';
 
 moment.tz.setDefault('Asia/Shanghai');
 

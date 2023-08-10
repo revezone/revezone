@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Tooltip } from 'antd';
 import { PencilLine } from 'lucide-react';
-import { submiteUserEvent } from '@renderer/statistics';
+import { submiteUserEvent } from '@renderer/utils/statistics';
 import { isInRevezoneApp } from '@renderer/utils/navigator';
 import { useTranslation } from 'react-i18next';
 import CustomFontModal from '../CustomFontModal';

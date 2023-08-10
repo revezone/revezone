@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { HelpCircle } from 'lucide-react';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from '@renderer/store/jotai';
-import { submiteUserEvent } from '@renderer/statistics';
+import { submiteUserEvent } from '@renderer/utils/statistics';
 import { useCallback } from 'react';
 
 const PublicBetaNotice = () => {

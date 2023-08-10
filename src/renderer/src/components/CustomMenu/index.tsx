@@ -27,7 +27,7 @@ import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/index';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
-import { submiteUserEvent } from '@renderer/statistics';
+import { submiteUserEvent } from '@renderer/utils/statistics';
 import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 
 interface Props {

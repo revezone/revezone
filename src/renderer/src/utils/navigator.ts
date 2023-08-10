@@ -25,4 +25,11 @@ export const getIsInRevezoneApp = () => {
   return navigator.userAgent.includes('revezone');
 };
 
+export const getAppVersion = (): string => {
+  const regex = /revezone\/(\S+)/;
+  return navigator.userAgent.match(regex)?.[1] || 'unkonwn';
+};
+
 export const isInRevezoneApp = getIsInRevezoneApp();
+export const osName = getOSName();
+export const appVersion = getAppVersion();

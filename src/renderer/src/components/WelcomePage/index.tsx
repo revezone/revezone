@@ -7,7 +7,7 @@ import DownloadApp from '../DownloadApp';
 import { isInRevezoneApp } from '@renderer/utils/navigator';
 
 import './index.css';
-import { submiteUserEvent } from '@renderer/statistics';
+import { submiteUserEvent } from '@renderer/utils/statistics';
 
 function WelcomeContent() {
   const { t } = useTranslation();

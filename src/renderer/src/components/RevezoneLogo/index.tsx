@@ -1,4 +1,4 @@
-import { submiteUserEvent } from '@renderer/statistics';
+import { submiteUserEvent } from '@renderer/utils/statistics';
 
 type Size = 'small' | 'middle' | 'large';
 

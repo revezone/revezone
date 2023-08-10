@@ -1,4 +1,12 @@
-import { submiteUserEvent } from '../statistics';
+import { EventName } from '@renderer/types/statistics';
+import { reveGTag } from './reveGTag';
+
+export const submiteUserEvent = (eventName: EventName, data) => {
+  console.log('submiteUserEvent', eventName);
+
+  //   window.gtag('event', eventName, data);
+  reveGTag.event(eventName, data);
+};
 
 export const submiteAppEnterUserEvent = () => {
   try {
