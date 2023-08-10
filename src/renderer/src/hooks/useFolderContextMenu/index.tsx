@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 import { FolderEdit, Trash2, FileType, Palette } from 'lucide-react';
-import { FileTree, RevenoteFolder, RevenoteFileType } from '@renderer/types/file';
+import { FileTree, RevezoneFolder, RevezoneFileType } from '@renderer/types/file';
 import { EditableTextState } from '@renderer/types/menu';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
   fileTree: FileTree;
   editableTextState: EditableTextState;
-  addFile: (folderId: string | undefined, type: RevenoteFileType, fileTree: FileTree) => void;
+  addFile: (folderId: string | undefined, type: RevezoneFileType, fileTree: FileTree) => void;
   updateEditableTextState: (
     id: string,
     value: boolean,
@@ -21,7 +21,7 @@ export default function useFolderContextMenu(props: Props) {
   const { t } = useTranslation();
 
   const getFolderContextMenu = useCallback(
-    (folder: RevenoteFolder) => [
+    (folder: RevezoneFolder) => [
       {
         key: 'addnote',
         label: t('operation.addNote'),

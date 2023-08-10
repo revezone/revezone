@@ -1,4 +1,4 @@
-.revenote-layout {
+.revezone-layout {
   width: 100%;
   height: 100%;
 
@@ -6,9 +6,9 @@
     height: 100%;
   }
 
-  .revenote-topleft-toolbar {
+  .revezone-topleft-toolbar {
 
-    .os-is-macos.is-in-revenote-native-app & {
+    .os-is-macos.is-in-revezone-native-app & {
       position: relative;
     }
 

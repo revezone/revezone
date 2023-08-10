@@ -1,35 +1,35 @@
-export interface RevenoteFolder {
+export interface RevezoneFolder {
   id: string;
   name: string;
   gmtCreate: string;
   gmtModified: string;
 }
 
-export interface RevenoteFolderFileMapping {
+export interface RevezoneFolderFileMapping {
   folderId: string;
   fileId: string;
   gmtCreate: string;
   gmtModified: string;
 }
 
-export type RevenoteFileType = 'note' | 'board';
+export type RevezoneFileType = 'note' | 'board';
 
-export interface RevenoteFile {
+export interface RevezoneFile {
   id: string;
   name: string;
-  type: RevenoteFileType;
+  type: RevezoneFileType;
   gmtCreate: string;
   gmtModified: string;
 }
 
-export interface RevenoteFolder {
+export interface RevezoneFolder {
   id: string;
   name: string;
   gmtCreate: string;
   gmtModified: string;
 }
 
-export type FileTreeItem = RevenoteFolder & { children: RevenoteFile[] };
+export type FileTreeItem = RevezoneFolder & { children: RevezoneFile[] };
 
 export type FileTree = FileTreeItem[];
 

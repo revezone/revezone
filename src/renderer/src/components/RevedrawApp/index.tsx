@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { FileTreeItem, RevenoteFile } from '@renderer/types/file';
+import { FileTreeItem, RevezoneFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
 import { ExcalidrawImperativeAPI, NonDeletedExcalidrawElement } from 'revemate/es/Revedraw/types';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
@@ -10,13 +10,13 @@ import { currentFileAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jot
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { DOUBLE_LINK_REGEX } from '@renderer/utils/constant';
-import { getOSName, isInRevenoteApp } from '@renderer/utils/navigator';
+import { getOSName, isInRevezoneApp } from '@renderer/utils/navigator';
 import { Button, Tooltip } from 'antd';
 
 import './index.css';
 
 interface Props {
-  file: RevenoteFile;
+  file: RevezoneFile;
 }
 
 const DEFAULT_DATA_SOURCE = '{}';
@@ -87,7 +87,7 @@ export default function RevedrawApp({ file }: Props) {
       if (link && DOUBLE_LINK_REGEX.test(link)) {
         const fileIdOrName = link?.match(DOUBLE_LINK_REGEX)?.[1];
 
-        const files = fileTree?.reduce((prev: RevenoteFile[], item: FileTreeItem) => {
+        const files = fileTree?.reduce((prev: RevezoneFile[], item: FileTreeItem) => {
           return [...prev, ...item.children];
         }, []);
 
@@ -123,22 +123,22 @@ export default function RevedrawApp({ file }: Props) {
           onChange={onChangeDebounceFn}
           onLinkOpen={onLinkOpen}
           customMenuItems={[
-            isInRevenoteApp ? (
+            isInRevezoneApp ? (
               <Button
                 key="custom-font"
                 className={`dropdown-menu-item dropdown-menu-item-base`}
                 title={t('menu.loadCustomFont')}
                 onClick={() => setIsModalOpen(true)}
               >
-                <PencilLine className="revenote-app-custom-font-icon" />
+                <PencilLine className="revezone-app-custom-font-icon" />
                 {t('menu.customFont')}
               </Button>
             ) : (
               <p
                 className="flex justify-start items-center cursor-pointer px-3 py-2 text-sm text-gray-400"
-                onClick={() => window.open('https://github.com/revenote/revenote/releases')}
+                onClick={() => window.open('https://github.com/revezone/revezone/releases')}
               >
-                <PencilLine className="revenote-app-custom-font-icon w-3 h-3 " />
+                <PencilLine className="revezone-app-custom-font-icon w-3 h-3 " />
                 <Tooltip title={t('menu.downloadApp')}>
                   <span className="pl-3">{t('menu.customFont')}</span>
                 </Tooltip>

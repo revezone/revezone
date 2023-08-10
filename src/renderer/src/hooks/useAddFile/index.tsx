@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { FileTree, RevenoteFileType, OnFolderOrFileAddProps } from '@renderer/types/file';
+import { FileTree, RevezoneFileType, OnFolderOrFileAddProps } from '@renderer/types/file';
 import { fileTreeAtom, currentFileAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
@@ -15,7 +15,7 @@ export default function useAddFile({ onAdd }: Props) {
   const { t } = useTranslation();
 
   const addFile = useCallback(
-    async (folderId: string | undefined, type: RevenoteFileType, fileTree: FileTree) => {
+    async (folderId: string | undefined, type: RevezoneFileType, fileTree: FileTree) => {
       let _folderId = folderId || fileTree?.[0]?.id;
 
       if (!_folderId) {

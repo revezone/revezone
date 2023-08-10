@@ -1,8 +1,8 @@
-import { FileTree, RevenoteFile } from '@renderer/types/file';
+import { FileTree, RevezoneFile } from '@renderer/types/file';
 
 export const getFileById = (fileId: string, fileTree: FileTree) => {
   const files = fileTree.reduce(
-    (prev: RevenoteFile[], current) => [...prev, ...current.children],
+    (prev: RevezoneFile[], current) => [...prev, ...current.children],
     []
   );
 

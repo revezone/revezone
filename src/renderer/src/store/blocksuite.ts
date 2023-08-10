@@ -5,7 +5,7 @@ import { emitter, events } from './eventemitter';
 
 console.log('AffineSchemas', AffineSchemas);
 
-const REVENOTE_EDITOR_KEY = 'revenote_blocksuite';
+const REVENOTE_EDITOR_KEY = 'revezone_blocksuite';
 
 class BlocksuiteStorage {
   constructor() {

@@ -21,8 +21,8 @@ export const getOSName = () => {
   return os;
 };
 
-export const getIsInRevenoteApp = () => {
-  return navigator.userAgent.includes('revenote');
+export const getIsInRevezoneApp = () => {
+  return navigator.userAgent.includes('revezone');
 };
 
-export const isInRevenoteApp = getIsInRevenoteApp();
+export const isInRevezoneApp = getIsInRevezoneApp();

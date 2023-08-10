@@ -62,7 +62,7 @@ const CustomFontModal = (props: Props) => {
 
   return (
     <Modal
-      className="revenote-custom-font-modal"
+      className="revezone-custom-font-modal"
       title={t('customFontModal.title')}
       open={open}
       onOk={onOk}

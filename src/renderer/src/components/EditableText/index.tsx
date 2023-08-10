@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Input, InputRef } from 'antd';
 import { Palette, FileType } from 'lucide-react';
-import { RevenoteFileType } from '@renderer/types/file';
+import { RevezoneFileType } from '@renderer/types/file';
 
 import './index.css';
 
@@ -9,7 +9,7 @@ interface Props {
   text: string;
   defaultText?: string;
   extraText?: string;
-  type?: RevenoteFileType;
+  type?: RevezoneFileType;
   isPreview: boolean;
   onSave: (text: string) => void;
   onEdit: () => void;
@@ -56,7 +56,7 @@ export default function EditableText({
       console.log('_onEdit', inputRef);
       inputRef.current?.focus();
       // scroll the focused input element into view
-      document.querySelector('.revenote-menu-container')?.scrollIntoView();
+      document.querySelector('.revezone-menu-container')?.scrollIntoView();
     }, 0);
   }, [isPreview]);
 

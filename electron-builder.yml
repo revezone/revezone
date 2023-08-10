@@ -1,5 +1,5 @@
-appId: revenote
-productName: Revenote
+appId: revezone
+productName: Revezone
 directories:
   buildResources: build
 files:
@@ -13,7 +13,7 @@ asarUnpack:
   - resources/**
 afterSign: build/notarize.js
 win:
-  executableName: Revenote
+  executableName: Revezone
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -40,5 +40,5 @@ appImage:
 npmRebuild: false
 publish:
   provider: github
-  owner: revenote
-  repo: revenote
+  owner: revezone
+  repo: revezone

@@ -48,5 +48,5 @@ You can create and manage a folder/note/board in the left sidebar, and you can g
 ![](https://img.alicdn.com/imgextra/i2/O1CN016TUwdy1d0k0ecgo51_!!6000000003674-2-tps-816-822.png)
 
 ## Future Planning
-More useful features are developing. You can get more information and developing stories from [Twitter](https://twitter.com/TheRevezone) or [Bilibili](https://space.bilibili.com/393134139).
+More useful features are developing. You can get more information and developing stories from [Twitter](https://twitter.com/TheReveZone) or [Bilibili](https://space.bilibili.com/393134139).
 

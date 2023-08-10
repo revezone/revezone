@@ -48,7 +48,7 @@ export default function OperationBar(props: Props) {
   }, []);
 
   return (
-    <div className={`revenote-menu-toolbar flex items-center pl-5 h-10 ${className}`}>
+    <div className={`revezone-menu-toolbar flex items-center pl-5 h-10 ${className}`}>
       <span
         title={t('operation.addFolder')}
         className="operation-item flex items-center mr-3 cursor-pointer"

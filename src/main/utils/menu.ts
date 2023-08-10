@@ -10,21 +10,21 @@ export const registerAppMenu = () => {
       label: 'Website',
       click: () => {
         const { shell } = require('electron');
-        shell.openExternal('https://revenote.com');
+        shell.openExternal('https://revezone.com');
       }
     }),
     new MenuItem({
       label: 'Twitter',
       click: () => {
         const { shell } = require('electron');
-        shell.openExternal('https://twitter.com/TheReveNote');
+        shell.openExternal('https://twitter.com/TheReveZone');
       }
     }),
     new MenuItem({
       label: 'Github',
       click: () => {
         const { shell } = require('electron');
-        shell.openExternal('https://github.com/revenote/revenote');
+        shell.openExternal('https://github.com/revezone/revezone');
       }
     })
   ];
