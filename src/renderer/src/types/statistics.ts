@@ -22,6 +22,7 @@ export type EventName =
   | 'welcomepage_click_github'
   | 'welcomepage_click_bilibili'
   | 'welcomepage_click_twitter'
+  | 'systemsetting_click_downloadapp'
   | 'revedraw_click_customfont'
   | 'enter_app'
   | 'publicbeta_show_notice';

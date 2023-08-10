@@ -5,7 +5,7 @@ import { submiteUserEvent } from '@renderer/utils/statistics';
 
 interface Props {
   className?: string;
-  from: 'bottombar' | 'welcomepage';
+  from: 'bottombar' | 'welcomepage' | 'systemsetting';
 }
 
 export default function DownloadApp({ className = '', from }: Props) {

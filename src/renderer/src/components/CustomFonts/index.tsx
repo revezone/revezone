@@ -8,6 +8,8 @@ import {
   getBoardCustomFontFromLocal,
   setBoardCustomFontToLocal
 } from '@renderer/store/localstorage';
+import { isInRevezoneApp } from '@renderer/utils/navigator';
+import DownloadApp from '../DownloadApp/index';
 
 interface Font {
   name: string;
@@ -15,7 +17,7 @@ interface Font {
   path: string;
 }
 
-const registeredFontsStr = window.electron.process.env.registeredFonts;
+const registeredFontsStr = window.electron?.process.env.registeredFonts;
 const registeredFonts = registeredFontsStr && JSON.parse(registeredFontsStr);
 
 const CustomFonts = () => {
@@ -64,11 +66,20 @@ const CustomFonts = () => {
       });
   }, []);
 
+  if (!isInRevezoneApp) {
+    return (
+      <div className="text-gray-500 h-36 flex items-center">
+        <span className="mr-2">线上版只提供体验功能，自定义字体请下载桌面应用</span>
+        <DownloadApp from="systemsetting" />
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="divide-y">
         <div className="w-full py-2">
-          {fonts.length ? (
+          {fonts?.length ? (
             <>
               <p className="mr-2 text-sm font-medium">已加载字体:</p>
               <div className="pl-4 overflow-scroll" style={{ maxHeight: 200 }}>
