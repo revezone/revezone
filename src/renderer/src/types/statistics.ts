@@ -25,4 +25,5 @@ export type EventName =
   | 'systemsetting_click_downloadapp'
   | 'revedraw_click_customfont'
   | 'enter_app'
-  | 'publicbeta_show_notice';
+  | 'publicbeta_show_notice'
+  | 'bottombar_click_systemsetting';

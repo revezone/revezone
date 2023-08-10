@@ -139,6 +139,9 @@ export default function BottomToolbar() {
         target="_blank"
         rel="noreferrer"
         title={t('operation.giveAStar')}
+        onClick={() => {
+          submiteUserEvent('bottombar_click_github', {});
+        }}
       >
         <GithubCircle className="w-4 h-4"></GithubCircle>
       </a>
@@ -149,6 +152,9 @@ export default function BottomToolbar() {
         target="_blank"
         rel="noreferrer"
         title={t('links.feedMyCat')}
+        onClick={() => {
+          submiteUserEvent('bottombar_click_feedcat', {});
+        }}
       >
         <Cat className="w-4 h-4"></Cat>
       </a>
@@ -158,13 +164,19 @@ export default function BottomToolbar() {
         target="_blank"
         rel="noreferrer"
         title={t('links.buyMeACoffee')}
+        onClick={() => {
+          submiteUserEvent('bottombar_click_buycoffee', {});
+        }}
       >
         <Coffee className="w-4 h-4"></Coffee>
       </a>
       <span title="Setting" className="flex items-center mr-2">
         <Settings
           className="w-4 h-4 cursor-pointer"
-          onClick={() => setSystemSettingVisible(true)}
+          onClick={() => {
+            setSystemSettingVisible(true);
+            submiteUserEvent('bottombar_click_systemsetting', {});
+          }}
         ></Settings>
       </span>
       <span title="Help" className="flex items-center">
