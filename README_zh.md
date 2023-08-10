@@ -4,6 +4,7 @@
 Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果你有任何问题或者建议，欢迎提交 [issue](https://github.com/revezone/revezone/issues/new) 进行反馈。
 
 ---
+换个姿势使用 Excalidraw。
 
 一款轻量级本地优先的用于构建第二大脑的效率工具，集成了类 Notion 笔记和增强型 Excalidraw 白板能力。
 
