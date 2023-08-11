@@ -1,4 +1,4 @@
-# Revezone
+# Revezone - 换个姿势使用 Excalidraw
 [English](README.md)
 
 Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果你有任何问题或者建议，欢迎提交 [issue](https://github.com/revezone/revezone/issues/new) 进行反馈。
