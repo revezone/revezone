@@ -14,7 +14,7 @@ Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果�
 [投喂猫粮](https://afdian.net/a/wantian) 或 [买杯咖啡](https://www.buymeacoffee.com/korbinzhao)。
 
 ## 给个 Star
-如果这个仓库对你有帮助，请不要吝惜小手给个 Star 吧
+如果 Revezone 对你有帮助，请不要吝惜小手给个 Star ⭐ 吧 ☝️ 
 
 ## 使用 Revezone
 * 线上体验版本（数据存储在浏览器）: https://revezone.com
