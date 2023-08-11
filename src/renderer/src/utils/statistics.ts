@@ -1,6 +1,6 @@
 import { EventName } from '@renderer/types/statistics';
 import { reveGTag } from './reveGTag';
-import { isInRevezoneApp } from '@renderer/utils/navigator';
+import { isInRevezoneApp, osName } from '@renderer/utils/navigator';
 
 export const submiteUserEvent = (eventName: EventName, data) => {
   console.log('submiteUserEvent', eventName);
@@ -16,7 +16,7 @@ export const submiteAppEnterUserEvent = () => {
   try {
     if (isInRevezoneApp) {
       const { npm_package_version, USER } = window.electron.process.env;
-      submiteUserEvent('enter_app', { app_version: npm_package_version, user: USER });
+      submiteUserEvent('enter_app', { appVersion: npm_package_version, user: USER, osName });
     }
   } catch (err) {
     console.log(err);
