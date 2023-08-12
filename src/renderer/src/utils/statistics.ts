@@ -1,12 +1,14 @@
 import { EventName } from '@renderer/types/statistics';
-import { reveGTag } from './reveGTag';
 import { isInRevezoneApp, osName } from '@renderer/utils/navigator';
+import { reveGTag } from './reveGTag';
 
 export const submiteUserEvent = (eventName: EventName, data) => {
   console.log('submiteUserEvent', eventName);
 
   if (isInRevezoneApp) {
+    console.log('--- window.api ---', window.api);
     reveGTag.event(eventName, data);
+    // window.api?.submiteUserEvent(eventName);
   } else {
     window.gtag('event', eventName, data);
   }

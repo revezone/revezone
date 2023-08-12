@@ -38,6 +38,9 @@ dependencies:
   axios:
     specifier: ^1.4.0
     version: 1.4.0
+  electron-google-analytics4:
+    specifier: ^1.1.1
+    version: 1.1.1
   event-emitter:
     specifier: ^0.3.5
     version: 0.3.5
@@ -62,6 +65,9 @@ dependencies:
   moment-timezone:
     specifier: ^0.5.43
     version: 0.5.43
+  node-machine-id:
+    specifier: ^1.1.12
+    version: 1.1.12
   react-i18next:
     specifier: ^13.0.2
     version: 13.0.2(i18next@23.3.0)(react-dom@18.2.0)(react@18.2.0)
@@ -1688,6 +1694,11 @@ packages:
       toggle-selection: 1.0.6
     dev: false
 
+  /core-js@3.32.0:
+    resolution: {integrity: sha512-rd4rYZNlF3WuoYuRIDEmbR/ga9CeuWX9U05umAvgrrZoHY4Z++cp/xwPQMvUpBB4Ag6J8KfD80G0zwCyaSxDww==}
+    requiresBuild: true
+    dev: false
+
   /core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
 
@@ -1802,6 +1813,17 @@ packages:
 
   /domino@2.1.6:
     resolution: {integrity: sha512-3VdM/SXBZX2omc9JF9nOPCtDaYQ67BGp5CoLpIQlO2KCAPETs8TcDHacF26jXadGbvUteZzRTeos2fhID5+ucQ==}
+    dev: false
+
+  /electron-google-analytics4@1.1.1:
+    resolution: {integrity: sha512-3IzcVfRoRYiVrLfquwns7SpmGd4h3QPYrnOBqnlSvJmLvgpiaayO89qjy2NnFTMlqu//piJa5wZbvJCtA49XGg==}
+    dependencies:
+      axios: 1.4.0
+      core-js: 3.32.0
+      node-machine-id: 1.1.12
+      uuid: 9.0.0
+    transitivePeerDependencies:
+      - debug
     dev: false
 
   /electron-to-chromium@1.4.455:
@@ -2905,6 +2927,10 @@ packages:
 
   /next-tick@1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
+    dev: false
+
+  /node-machine-id@1.1.12:
+    resolution: {integrity: sha512-QNABxbrPa3qEIfrE6GOJ7BYIuignnJw7iQ2YPbc3Nla1HzRJjXzZOiikfF8m7eAMfichLt3M4VgLOetqgDmgGQ==}
     dev: false
 
   /node-releases@2.0.13:

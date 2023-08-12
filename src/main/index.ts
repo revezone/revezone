@@ -5,6 +5,7 @@ import { isMacOS } from './utils/platform';
 import { loadCustomFont, batchRegisterCustomFonts } from './utils/customFonts';
 import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
+import { gtag } from './utils/gtag';
 // import { autoUpdater } from 'electron-updater';
 // import { notify } from './utils/notification';
 
@@ -65,6 +66,11 @@ function createWindow(): void {
 
   ipcMain.on(EVENTS.loadCustomFont, async () => {
     loadCustomFont(mainWindow);
+  });
+
+  ipcMain.on(EVENTS.submiteUserEvent, async (event, eventName: string) => {
+    console.log('--- main subimiteuserevent ---', eventName);
+    gtag(eventName);
   });
 }
 
