@@ -5,7 +5,7 @@ import { reveGTag } from './reveGTag';
 export const submiteUserEvent = (eventName: EventName, data) => {
   console.log('submiteUserEvent', eventName);
 
-  window._hmt.push(['_trackEvent', 'all', eventName, JSON.stringify(data)]);
+  // window._hmt.push(['_trackEvent', 'all', eventName, JSON.stringify(data)]);
 
   if (isInRevezoneApp) {
     console.log('--- window.api ---', window.api);

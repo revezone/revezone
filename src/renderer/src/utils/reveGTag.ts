@@ -1,11 +1,15 @@
 import { osName, appVersion } from './navigator';
-import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
+const GOOGLE_ANALYTICS_TID = 'G-DEMH5X5XXQ';
+
 // const GOOGLE_ANALYTICS_URL = 'https://google-analytics.com/g/collect';
-const GOOGLE_ANALYTICS_URL = 'https://fenav.top/api/collect';
-// const GOOGLE_ANALYTICS_URL = 'http://192.168.0.104:3000/api/collect';
+// const GOOGLE_ANALYTICS_URL = 'https://fenav.top/api/collect';
+// const GOOGLE_ANALYTICS_URL = 'http://192.168.3.2:3000/api/collect';
 // const GOOGLE_ANALYTICS_URL = 'https://dash.deno.com/playground/strong-clam-60/g/collect';
+
+const GOOGLE_ANALYTICS_URL = 'https://www.google-analytics.com/mp/collect';
+
 const LOCALSTORAGE_CLIENT_ID_KEY = 'reve_client_id';
 
 class ReveGTag {
@@ -20,45 +24,35 @@ class ReveGTag {
   async event(eventName: string, data = {}) {
     const clientId = this.getClientId();
 
-    const ep = {};
-    Object.keys(data).forEach((key) => {
-      ep[`ep.${key}`] = data[key];
+    const measurement_id = `G-DEMH5X5XXQ`;
+    const api_secret = `NUJCMdJGTbqx7S0zRaOC4w`;
+
+    return await fetch(
+      `${GOOGLE_ANALYTICS_URL}?measurement_id=${measurement_id}&api_secret=${api_secret}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          client_id: clientId,
+          user_id: 'user_' + clientId,
+          events: [
+            {
+              name: eventName,
+              // params: data
+              params: {
+                engagement_time_msec: '100',
+                session_id: clientId,
+                osName,
+                appVersion,
+                ...data
+              }
+            }
+          ]
+        })
+      }
+    ).then((res) => {
+      console.log('--- res ---', res.status, res.url);
+      return res;
     });
-
-    // https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters?hl=zh-cn
-    const payload = new URLSearchParams({
-      v: '2',
-      t: 'event',
-      tid: this.tid,
-      cid: clientId,
-      gtm: clientId,
-      sid: clientId,
-      _p: clientId,
-      dl: 'https://revenote.app',
-      dr: 'https://revenote.app',
-      dt: document.title,
-      ds: 'app',
-      en: eventName,
-      ul: navigator.language,
-      sr: `${screen.width}x${screen.height}`,
-      uap: osName,
-      uapv: appVersion,
-      uafvl: navigator.userAgent,
-      aip: '0',
-      sct: '32',
-      seg: '1',
-      ...ep
-    });
-
-    const res = await axios.post(GOOGLE_ANALYTICS_URL, '', {
-      params: payload,
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' }
-    });
-
-    console.log('--- res ---', res.status, res.data, res.config);
-
-    // @ts-ignore TEST
-    window.res = res;
   }
 
   getClientId(): string {
@@ -72,7 +66,5 @@ class ReveGTag {
     return clientId;
   }
 }
-
-const GOOGLE_ANALYTICS_TID = 'G-DEMH5X5XXQ';
 
 export const reveGTag = new ReveGTag(GOOGLE_ANALYTICS_TID);

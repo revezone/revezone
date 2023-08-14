@@ -1,7 +1,7 @@
 {
   "name": "revezone",
-  "version": "1.0.0-alpha.3",
-  "description": "A productivity tool to build the Second Brain, Capture-Organize-Distill-Express.",
+  "version": "1.0.0-alpha.4",
+  "description": "A new way to use Excalidraw. A productivity tool to build your second brain",
   "main": "./out/main/index.js",
   "author": "korbinzhao",
   "homepage": "https://www.revezone.com",
@@ -60,7 +60,7 @@
     "@typescript-eslint/parser": "^5.59.8",
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.14",
-    "electron": "^25.3.2",
+    "electron": "^25.5.0",
     "electron-builder": "24.6.3",
     "electron-vite": "^1.0.23",
     "eslint": "^8.42.0",
