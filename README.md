@@ -1,4 +1,4 @@
-# Revezone - A way to use Excalidraw
+# Revezone - A new way to use Excalidraw
 [中文](README_zh.md)
 
 Revezone is currently in a public beta. Please report a [issue](https://github.com/revezone/revezone/issues/new), if you have any suggestions or questions.
