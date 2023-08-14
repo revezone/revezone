@@ -111,7 +111,7 @@ export default function CustomMenu({ collapsed }: Props) {
   );
 
   const deleteFile = useCallback(
-    async (file: RevezoneFile, folderId: string) => {
+    async (file: RevezoneFile) => {
       await menuIndexeddbStorage.deleteFile(file);
 
       console.log('--- delete file ---', file);
