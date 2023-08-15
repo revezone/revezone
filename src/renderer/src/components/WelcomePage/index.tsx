@@ -34,12 +34,12 @@ function WelcomeContent() {
             {t('operation.addFolder')}
           </p>
           <p className="mb-2">
-            <FileType className="mr-2 w-4 h-4" />
-            {t('operation.addNote')}: {t('description.noteDesc')}
-          </p>
-          <p className="mb-2">
             <Palette className="mr-2 w-4 h-4" />
             {t('operation.addBoard')}: {t('description.boardDesc')}
+          </p>
+          <p className="mb-2">
+            <FileType className="mr-2 w-4 h-4" />
+            {t('operation.addNote')}: {t('description.noteDesc')}
           </p>
         </div>
         <div>

@@ -60,6 +60,23 @@ export default function BottomToolbar() {
         )
       },
       {
+        key: 'authorBilibili',
+        title: t('links.authorBilibili'),
+        icon: <Bilibili className="w-4 h-4" />,
+        label: (
+          <a
+            href="https://space.bilibili.com/393134139"
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => {
+              submiteUserEvent('bottombar_click_bilibili', {});
+            }}
+          >
+            {t('links.authorBilibili')}
+          </a>
+        )
+      },
+      {
         key: 'buymeacoffee',
         title: t('links.buyMeACoffee'),
         icon: <Coffee className="w-4" />,
@@ -90,23 +107,6 @@ export default function BottomToolbar() {
             }}
           >
             {t('links.feedMyCat')}
-          </a>
-        )
-      },
-      {
-        key: 'authorBilibili',
-        title: t('links.authorBilibili'),
-        icon: <Bilibili className="w-4 h-4" />,
-        label: (
-          <a
-            href="https://space.bilibili.com/393134139"
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => {
-              submiteUserEvent('bottombar_click_bilibili', {});
-            }}
-          >
-            {t('links.authorBilibili')}
           </a>
         )
       },

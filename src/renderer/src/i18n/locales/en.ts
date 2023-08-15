@@ -28,7 +28,7 @@ export default {
   },
   welcome: {
     productDesc:
-      'A new way to use Excalidraw. A lightweight productivity tool to build your second brain that integrates note-taking and whiteboarding features. Local-first and block-based.',
+      'A new way to use Excalidraw. A lightweight productivity tool to build your second brain that integrates enhanced Excalidraw whiteboard and Notion-like note-taking features. Local-first and block-based.',
     operationTip: 'This is an empty page. Please add or select a file first in the left sidebar.',
     operationGuide: 'Operation Guide',
     operationDetailDesc:
