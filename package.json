@@ -1,7 +1,7 @@
 {
   "name": "revezone",
   "version": "1.0.0-alpha.6",
-  "description": "A new way to use Excalidraw. A productivity tool to build your second brain",
+  "description": "A new way to use Excalidraw. A productivity tool to build your second brain.",
   "main": "./out/main/index.js",
   "author": "korbinzhao",
   "homepage": "https://www.revezone.com",
@@ -44,7 +44,7 @@
     "moment-timezone": "^0.5.43",
     "node-machine-id": "^1.1.12",
     "react-i18next": "^13.0.2",
-    "revemate": "0.0.1-beta.21",
+    "revemate": "0.0.1-beta.25",
     "uuid": "^9.0.0",
     "y-indexeddb": "^9.0.11",
     "yjs": "^13.6.6"
