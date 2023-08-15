@@ -45,7 +45,7 @@ export default function useFileContextMenu(props: Props) {
         icon: <ClipboardCopy className="w-4" />,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
-          navigator.clipboard.writeText(file.id);
+          navigator.clipboard.writeText(`revezone://${file.id}`);
         }
       }
     ],

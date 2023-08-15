@@ -6,8 +6,8 @@ import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
 import { currentFileAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
-import { DOUBLE_LINK_REGEX } from '@renderer/utils/constant';
 import { getOSName } from '@renderer/utils/navigator';
+import { getFileIdOrNameFromLink } from '@renderer/utils/file';
 
 import './index.css';
 
@@ -76,15 +76,15 @@ export default function RevedrawApp({ file }: Props) {
       const { link } = element;
       console.log('link', link);
 
-      if (link && DOUBLE_LINK_REGEX.test(link)) {
-        const fileIdOrName = link?.match(DOUBLE_LINK_REGEX)?.[1];
+      const fileIdOrNameInRevezone = link && getFileIdOrNameFromLink(link);
 
+      if (link && fileIdOrNameInRevezone) {
         const files = fileTree?.reduce((prev: RevezoneFile[], item: FileTreeItem) => {
           return [...prev, ...item.children];
         }, []);
 
         const file = files.find(
-          (_file) => _file.id === fileIdOrName || _file.name === fileIdOrName
+          (_file) => _file.id === fileIdOrNameInRevezone || _file.name === fileIdOrNameInRevezone
         );
 
         if (file) {
