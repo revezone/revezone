@@ -5,6 +5,14 @@ import { notify } from './notification';
 import { EVENTS } from '../../preload/events';
 import fs from 'node:fs';
 
+export interface Font {
+  name: string;
+  nameWithSuffix: string;
+  path: string;
+}
+
+const FONT_SUFFIXES = ['.ttf', '.woff2'];
+
 const USER_DATA_PATH = app.getPath('userData');
 
 const CUSTOM_FONTS_DIR = join(USER_DATA_PATH, 'custom_fonts');
@@ -25,6 +33,17 @@ function removeFileExtension(filename) {
   } else {
     // 否则截取文件名和扩展名之间的部分
     return filename.slice(0, lastDotIdx);
+  }
+}
+
+function getFileSuffix(filename) {
+  const lastDotIdx = filename.lastIndexOf('.');
+  if (lastDotIdx === -1 || lastDotIdx === 0) {
+    // 如果文件名没有扩展名或者以 . 开头，则直接返回原文件名
+    return '';
+  } else {
+    // 否则截取文件名和扩展名之间的部分
+    return filename.slice(lastDotIdx);
   }
 }
 
@@ -108,6 +127,11 @@ export const ensureDir = (dir: string) => {
   }
 };
 
+const isFontFile = (filename) => {
+  const suffix = getFileSuffix(filename);
+  return FONT_SUFFIXES.includes(suffix);
+};
+
 export const getRegisteredFonts = () => {
   ensureDir(CUSTOM_FONTS_DIR);
 
@@ -115,13 +139,19 @@ export const getRegisteredFonts = () => {
 
   console.log('--- batchRegisterCustomFonts ---', fontNamesWithSuffix);
 
-  const fonts = fontNamesWithSuffix.map((fontName) => {
+  const fonts: Font[] = [];
+
+  fontNamesWithSuffix.forEach((fontName) => {
+    if (!isFontFile(fontName)) return;
+
     const fontNameWithoutSuffix = removeFileExtension(fontName);
-    return {
+    const item: Font = {
       name: fontNameWithoutSuffix,
       nameWithSuffix: fontName,
       path: join(CUSTOM_FONTS_DIR, fontName)
     };
+
+    fonts.push(item);
   });
 
   // inject registeredFonts to env to enable renderer get custom fonts

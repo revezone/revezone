@@ -5,19 +5,32 @@ import { isMacOS } from './utils/platform';
 import { loadCustomFont, batchRegisterCustomFonts } from './utils/customFonts';
 import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
+import Store from 'electron-store';
+
 // import { autoUpdater } from 'electron-updater';
 // import { notify } from './utils/notification';
+
+const DEFAULT_WINDOW_WIDTH = 1200;
+const DEFAULT_WINDOW_HEIGHT = 770;
+
+// 创建一个新的存储实例
+const store = new Store();
 
 // IMPORTANT: to fix file save problem in excalidraw: The request is not allowed by the user agent or the platform in the current context
 app.commandLine.appendSwitch('enable-experimental-web-platform-features');
 
 function createWindow(): void {
+  const savedSize = store.get('windowSize', {
+    width: DEFAULT_WINDOW_WIDTH,
+    height: DEFAULT_WINDOW_HEIGHT
+  }) as { width: number; height: number };
+
   // Create the browser window.
   let mainWindow: BrowserWindow | null = new BrowserWindow({
     titleBarStyle: isMacOS() ? 'hiddenInset' : 'default',
     titleBarOverlay: isMacOS() ? false : true,
-    width: 1200,
-    height: 770,
+    width: savedSize.width,
+    height: savedSize.height,
     show: false,
     frame: true,
     trafficLightPosition: { x: 20, y: 10 },
@@ -41,6 +54,12 @@ function createWindow(): void {
     mainWindow?.removeAllListeners();
     mainWindow = null;
     ipcMain.removeAllListeners();
+  });
+
+  mainWindow.on('resize', () => {
+    const [width, height] = mainWindow?.getSize() || [DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT];
+
+    store.set('windowSize', { width, height });
   });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

@@ -38,3 +38,9 @@ export interface OnFolderOrFileAddProps {
   folderId: string;
   type: 'folder' | 'file';
 }
+
+export interface Font {
+  name: string;
+  nameWithSuffix: string;
+  path: string;
+}

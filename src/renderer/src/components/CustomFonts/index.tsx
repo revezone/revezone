@@ -10,12 +10,7 @@ import {
 } from '@renderer/store/localstorage';
 import { isInRevezoneApp } from '@renderer/utils/navigator';
 import DownloadApp from '../DownloadApp/index';
-
-interface Font {
-  name: string;
-  nameWithSuffix: string;
-  path: string;
-}
+import { Font } from '@renderer/types/file';
 
 const registeredFontsStr = window.electron?.process.env.registeredFonts;
 const registeredFonts = registeredFontsStr && JSON.parse(registeredFontsStr);

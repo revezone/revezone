@@ -78,7 +78,7 @@ export default function RevedrawApp({ file }: Props) {
 
       const fileIdOrNameInRevezone = link && getFileIdOrNameFromLink(link);
 
-      if (link && fileIdOrNameInRevezone) {
+      if (fileIdOrNameInRevezone) {
         const files = fileTree?.reduce((prev: RevezoneFile[], item: FileTreeItem) => {
           return [...prev, ...item.children];
         }, []);
