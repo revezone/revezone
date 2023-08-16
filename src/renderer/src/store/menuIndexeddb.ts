@@ -8,7 +8,7 @@ import {
   RevezoneFileType,
   RevezoneFolderFileMapping
 } from '../types/file';
-import { submiteUserEvent } from '../utils/statistics';
+import { submitUserEvent } from '../utils/statistics';
 
 moment.tz.setDefault('Asia/Shanghai');
 
@@ -120,7 +120,7 @@ class MenuIndexeddbStorage {
 
     await this.db?.add(INDEXEDDB_FOLDER_KEY, folderInfo, id);
 
-    submiteUserEvent('create_folder', folderInfo);
+    submitUserEvent('create_folder', folderInfo);
 
     return folderInfo;
   }
@@ -166,7 +166,7 @@ class MenuIndexeddbStorage {
       gmtModified: moment().toLocaleString()
     });
 
-    submiteUserEvent(`create_${type}`, fileInfo);
+    submitUserEvent(`create_${type}`, fileInfo);
 
     return fileInfo;
   }
@@ -208,7 +208,7 @@ class MenuIndexeddbStorage {
 
     deleteFolderFileMappingPromises && (await Promise.all(deleteFolderFileMappingPromises));
 
-    submiteUserEvent(`delete_${file.type}`, file);
+    submitUserEvent(`delete_${file.type}`, file);
   }
 
   async getFiles(): Promise<RevezoneFile[]> {
@@ -314,7 +314,7 @@ class MenuIndexeddbStorage {
 
     deleteFilesPromise && (await Promise.all(deleteFilesPromise));
 
-    submiteUserEvent('delete_folder', { id: folderId });
+    submitUserEvent('delete_folder', { id: folderId });
   }
 }
 

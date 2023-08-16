@@ -6,7 +6,7 @@ import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getLangCodeFromLocal, setLangCodeToLocal } from '../../store/localstorage';
 import { DEFAULT_LANG_CODE } from '@renderer/utils/constant';
-import { submiteUserEvent } from '@renderer/utils/statistics';
+import { submitUserEvent } from '@renderer/utils/statistics';
 
 export default function LanguageSwitcher() {
   const [langCode, setLangCode] = useAtom(langCodeAtom);
@@ -23,7 +23,7 @@ export default function LanguageSwitcher() {
     i18n.changeLanguage(code);
     setLangCodeToLocal(code);
 
-    submiteUserEvent('switch_language', { code });
+    submitUserEvent('switch_language', { code });
   }, []);
 
   return (

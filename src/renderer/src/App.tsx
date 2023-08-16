@@ -12,7 +12,7 @@ import WelcomePage from './components/WelcomePage';
 import { ConfigProvider } from 'antd';
 import { theme } from './utils/theme';
 import { getOSName, isInRevezoneApp } from './utils/navigator';
-import { submiteAppEnterUserEvent } from './utils/statistics';
+import { submitAppEnterUserEvent } from './utils/statistics';
 
 import './App.css';
 
@@ -23,7 +23,7 @@ function App(): JSX.Element {
   const [langCode] = useAtom(langCodeAtom);
 
   useEffect(() => {
-    submiteAppEnterUserEvent();
+    submitAppEnterUserEvent();
   }, []);
 
   const renderContent = useCallback((file) => {

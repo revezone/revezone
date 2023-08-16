@@ -1,6 +1,6 @@
 {
   "name": "revezone",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "description": "A new way to use Excalidraw. A productivity tool to build your second brain.",
   "main": "./out/main/index.js",
   "author": "korbinzhao",

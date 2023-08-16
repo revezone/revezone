@@ -1,4 +1,4 @@
-import { submiteUserEvent } from '@renderer/utils/statistics';
+import { submitUserEvent } from '@renderer/utils/statistics';
 
 type Size = 'small' | 'middle' | 'large';
 
@@ -40,7 +40,7 @@ export default function Logo({ size = 'small', className = '', url, onClick }: P
       onClick={() => {
         onClick?.();
 
-        submiteUserEvent('click_logo', {});
+        submitUserEvent('click_logo', {});
 
         url && window.open(url);
       }}

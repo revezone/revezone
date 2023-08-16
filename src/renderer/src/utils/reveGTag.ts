@@ -17,7 +17,7 @@ class ReveGTag {
 
     const measurement_id = `G-DEMH5X5XXQ`;
     const api_secret = `NUJCMdJGTbqx7S0zRaOC4w`;
-    const ip = window.electron?.process?.env.ipAddresses;
+    const { USER, ipAddresses } = window.electron.process.env;
 
     return await fetch(
       `${GOOGLE_ANALYTICS_URL}?measurement_id=${measurement_id}&api_secret=${api_secret}`,
@@ -34,7 +34,8 @@ class ReveGTag {
                 session_id: clientId,
                 osName,
                 appVersion,
-                uip: ip,
+                uip: ipAddresses,
+                userName: USER,
                 ...data
               }
             }

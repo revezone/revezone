@@ -15,7 +15,7 @@ import { useMemo, useState } from 'react';
 import DownloadApp from '../DownloadApp/index';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from '@renderer/store/jotai';
-import { submiteUserEvent } from '@renderer/utils/statistics';
+import { submitUserEvent } from '@renderer/utils/statistics';
 import SystemSettings from '../SystemSettings';
 
 export default function BottomToolbar() {
@@ -35,7 +35,7 @@ export default function BottomToolbar() {
             target="_blank"
             rel="noreferrer"
             onClick={() => {
-              submiteUserEvent('bottombar_click_issue', {});
+              submitUserEvent('bottombar_click_issue', {});
             }}
           >
             {t('help.issue')}
@@ -52,7 +52,7 @@ export default function BottomToolbar() {
             target="_blank"
             rel="noreferrer"
             onClick={() => {
-              submiteUserEvent('bottombar_click_twitter', {});
+              submitUserEvent('bottombar_click_twitter', {});
             }}
           >
             {t('links.twitter')}
@@ -69,7 +69,7 @@ export default function BottomToolbar() {
             target="_blank"
             rel="noreferrer"
             onClick={() => {
-              submiteUserEvent('bottombar_click_bilibili', {});
+              submitUserEvent('bottombar_click_bilibili', {});
             }}
           >
             {t('links.authorBilibili')}
@@ -86,7 +86,7 @@ export default function BottomToolbar() {
             target="_blank"
             rel="noreferrer"
             onClick={() => {
-              submiteUserEvent('bottombar_click_buycoffee', {});
+              submitUserEvent('bottombar_click_buycoffee', {});
             }}
           >
             {t('links.buyMeACoffee')}
@@ -103,7 +103,7 @@ export default function BottomToolbar() {
             target="_blank"
             rel="noreferrer"
             onClick={() => {
-              submiteUserEvent('bottombar_click_feedcat', {});
+              submitUserEvent('bottombar_click_feedcat', {});
             }}
           >
             {t('links.feedMyCat')}
@@ -120,7 +120,7 @@ export default function BottomToolbar() {
             target="_blank"
             rel="noreferrer"
             onClick={() => {
-              submiteUserEvent('bottombar_click_downloadapp', {});
+              submitUserEvent('bottombar_click_downloadapp', {});
             }}
           >
             {t('links.downloadApp')}
@@ -140,7 +140,7 @@ export default function BottomToolbar() {
         rel="noreferrer"
         title={t('operation.giveAStar')}
         onClick={() => {
-          submiteUserEvent('bottombar_click_github', {});
+          submitUserEvent('bottombar_click_github', {});
         }}
       >
         <GithubCircle className="w-4 h-4"></GithubCircle>
@@ -153,7 +153,7 @@ export default function BottomToolbar() {
         rel="noreferrer"
         title={t('links.feedMyCat')}
         onClick={() => {
-          submiteUserEvent('bottombar_click_feedcat', {});
+          submitUserEvent('bottombar_click_feedcat', {});
         }}
       >
         <Cat className="w-4 h-4"></Cat>
@@ -165,7 +165,7 @@ export default function BottomToolbar() {
         rel="noreferrer"
         title={t('links.buyMeACoffee')}
         onClick={() => {
-          submiteUserEvent('bottombar_click_buycoffee', {});
+          submitUserEvent('bottombar_click_buycoffee', {});
         }}
       >
         <Coffee className="w-4 h-4"></Coffee>
@@ -175,7 +175,7 @@ export default function BottomToolbar() {
           className="w-4 h-4 cursor-pointer"
           onClick={() => {
             setSystemSettingVisible(true);
-            submiteUserEvent('bottombar_click_systemsetting', {});
+            submitUserEvent('bottombar_click_systemsetting', {});
           }}
         ></Settings>
       </span>

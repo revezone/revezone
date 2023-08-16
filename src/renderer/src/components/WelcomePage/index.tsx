@@ -7,7 +7,7 @@ import DownloadApp from '../DownloadApp';
 import { isInRevezoneApp } from '@renderer/utils/navigator';
 
 import './index.css';
-import { submiteUserEvent } from '@renderer/utils/statistics';
+import { submitUserEvent } from '@renderer/utils/statistics';
 
 function WelcomeContent() {
   const { t } = useTranslation();
@@ -50,7 +50,7 @@ function WelcomeContent() {
               target="_blank"
               rel="noreferrer"
               onClick={() => {
-                submiteUserEvent('welcomepage_click_github', {});
+                submitUserEvent('welcomepage_click_github', {});
               }}
             >
               <Github className="w-4 h-4" /> {t('links.github')}
@@ -62,7 +62,7 @@ function WelcomeContent() {
               target="_blank"
               rel="noreferrer"
               onClick={() => {
-                submiteUserEvent('welcomepage_click_twitter', {});
+                submitUserEvent('welcomepage_click_twitter', {});
               }}
             >
               <Twitter className="w-4 h-4" /> {t('links.twitter')}
@@ -74,7 +74,7 @@ function WelcomeContent() {
               target="_blank"
               rel="noreferrer"
               onClick={() => {
-                submiteUserEvent('welcomepage_click_bilibili', {});
+                submitUserEvent('welcomepage_click_bilibili', {});
               }}
             >
               <Bilibili className="w-4 h-4" /> {t('links.authorBilibili')}
@@ -86,7 +86,7 @@ function WelcomeContent() {
               target="_blank"
               rel="noreferrer"
               onClick={() => {
-                submiteUserEvent('welcomepage_click_twitter', {});
+                submitUserEvent('welcomepage_click_twitter', {});
               }}
             >
               <Twitter className="w-4 h-4" /> {t('links.authorTwitter')}
@@ -98,7 +98,7 @@ function WelcomeContent() {
               target="_blank"
               rel="noreferrer"
               onClick={() => {
-                submiteUserEvent('welcomepage_click_feedcat', {});
+                submitUserEvent('welcomepage_click_feedcat', {});
               }}
             >
               <Cat className="w-4 h-4" /> {t('links.feedMyCat')}
@@ -110,7 +110,7 @@ function WelcomeContent() {
               target="_blank"
               rel="noreferrer"
               onClick={() => {
-                submiteUserEvent('welcomepage_click_buycoffee', {});
+                submitUserEvent('welcomepage_click_buycoffee', {});
               }}
             >
               <Coffee className="w-4 h-4" /> {t('links.buyMeACoffee')}
@@ -125,7 +125,7 @@ function WelcomeContent() {
           target="_blank"
           rel="noreferrer"
           onClick={() => {
-            submiteUserEvent('welcomepage_click_twitter', {});
+            submitUserEvent('welcomepage_click_twitter', {});
           }}
         >
           Korbin Zhao
