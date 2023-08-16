@@ -6,6 +6,7 @@ import { loadCustomFont, batchRegisterCustomFonts } from './utils/customFonts';
 import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
 import Store from 'electron-store';
+import './utils/os';
 
 // import { autoUpdater } from 'electron-updater';
 // import { notify } from './utils/notification';

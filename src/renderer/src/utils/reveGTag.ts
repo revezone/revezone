@@ -1,11 +1,6 @@
 import { osName, appVersion } from './navigator';
 import { v4 as uuidv4 } from 'uuid';
 
-// const GOOGLE_ANALYTICS_URL = 'https://google-analytics.com/g/collect';
-// const GOOGLE_ANALYTICS_URL = 'https://fenav.top/api/collect';
-// const GOOGLE_ANALYTICS_URL = 'http://192.168.3.2:3000/api/collect';
-// const GOOGLE_ANALYTICS_URL = 'https://dash.deno.com/playground/strong-clam-60/g/collect';
-
 const GOOGLE_ANALYTICS_URL = 'https://www.google-analytics.com/mp/collect';
 
 const LOCALSTORAGE_CLIENT_ID_KEY = 'reve_client_id';
@@ -22,6 +17,7 @@ class ReveGTag {
 
     const measurement_id = `G-DEMH5X5XXQ`;
     const api_secret = `NUJCMdJGTbqx7S0zRaOC4w`;
+    const ip = window.electron?.process?.env.ipAddresses;
 
     return await fetch(
       `${GOOGLE_ANALYTICS_URL}?measurement_id=${measurement_id}&api_secret=${api_secret}`,
@@ -38,6 +34,7 @@ class ReveGTag {
                 session_id: clientId,
                 osName,
                 appVersion,
+                uip: ip,
                 ...data
               }
             }
