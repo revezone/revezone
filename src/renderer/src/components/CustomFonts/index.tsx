@@ -78,9 +78,9 @@ const CustomFonts = () => {
     <div>
       <div className="divide-y">
         <div className="w-full py-2">
+          <p className="mr-2 font-normal">{t('customFont.fontsLoaded')}:</p>
           {fonts?.length ? (
             <>
-              <p className="mr-2 font-normal">{t('customFont.fontsLoaded')}:</p>
               <div className="pl-4 overflow-scroll" style={{ maxHeight: 200 }}>
                 {fonts?.map((font) => {
                   return (
@@ -99,7 +99,7 @@ const CustomFonts = () => {
                           <XSquare className="w-4 h-4 cursor-pointer ml-2"></XSquare>
                         </Popconfirm>
                       </p>
-                      <p className="text-xs text-gray-500 whitespace-nowrap">{font.path}</p>
+                      <p className="text-xs text-gray-400 whitespace-nowrap">{font.path}</p>
                     </div>
                   );
                 })}
@@ -112,7 +112,7 @@ const CustomFonts = () => {
             <Button size="small" onClick={loadCustomFonts}>
               {t('customFont.loadFontFile')}
             </Button>
-            <p className="mt text-orange-300">{t('customFont.fontFirstLoadTip')}</p>
+            <p className="mt-2 text-orange-300">{t('customFont.fontFirstLoadTip')}</p>
           </div>
         </div>
 

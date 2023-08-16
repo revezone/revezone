@@ -83,11 +83,15 @@ export const loadCustomFont = async (mainWindow) => {
 
   if (fontNames) {
     notify(`Fonts ${fontNames} added! `);
+    const fonts = await getRegisteredFonts();
+
+    mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, fonts);
+
+    // setTimeout(() => {
+    //   app.relaunch();
+    //   app.quit();
+    // }, 500);
   }
-
-  const fonts = getRegisteredFonts();
-
-  mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, fonts);
 };
 
 export const removeCustomFont = async (fontPath: string, mainWindow) => {

@@ -44,7 +44,7 @@
     "moment-timezone": "^0.5.43",
     "node-machine-id": "^1.1.12",
     "react-i18next": "^13.0.2",
-    "revemate": "0.0.1-beta.25",
+    "revemate": "0.0.1-beta.26",
     "uuid": "^9.0.0",
     "y-indexeddb": "^9.0.11",
     "yjs": "^13.6.6"
