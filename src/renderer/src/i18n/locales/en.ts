@@ -20,7 +20,8 @@ export default {
     rename: 'Rename',
     delete: 'Delete',
     copyRevezoneLink: 'Copy revezone link',
-    giveAStar: 'git a star'
+    giveAStar: 'Git a star',
+    switchLanguage: 'Switch Lanugage'
   },
   description: {
     noteDesc: 'A notion-like note function',
@@ -64,5 +65,22 @@ export default {
     title: 'Public Beta Notice',
     description:
       'Revezone is currently in a public beta, there may still be a few bugs in the product. Please make sure to backup your important data. Please submit a github issue or concat my twitter if you have any questions or suggestions.'
+  },
+  customFont: {
+    customFont: 'Custom font',
+    fontsLoaded: 'Fonts loaded',
+    loadFontFile: 'Load font files',
+    enableCustomFontInBoard: 'Enable custom font in board',
+    deleteFont: 'Delete font',
+    confirmDelete: 'Confirm to delete font',
+    onlineVersionTip:
+      'Customing font not supports in online version, please download the desktop app',
+    fontFirstLoadTip:
+      'Note: After the font is loaded for the first time, the application needs to be restarted for the font to take effect within the whiteboard.',
+    emptyTip: 'No custom fonts available'
+  },
+  confirm: {
+    yes: 'Yes',
+    no: 'No'
   }
 };

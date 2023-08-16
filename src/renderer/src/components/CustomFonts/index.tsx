@@ -68,7 +68,7 @@ const CustomFonts = () => {
   if (!isInRevezoneApp) {
     return (
       <div className="text-gray-500 h-36 flex items-center">
-        <span className="mr-2">线上版只提供体验功能，自定义字体请下载桌面应用</span>
+        <span className="mr-2">{t('customFont.onlineVersionTip')}</span>
         <DownloadApp from="systemsetting" />
       </div>
     );
@@ -80,16 +80,16 @@ const CustomFonts = () => {
         <div className="w-full py-2">
           {fonts?.length ? (
             <>
-              <p className="mr-2 text-sm font-medium">已加载字体:</p>
+              <p className="mr-2 font-normal">{t('customFont.fontsLoaded')}:</p>
               <div className="pl-4 overflow-scroll" style={{ maxHeight: 200 }}>
                 {fonts?.map((font) => {
                   return (
                     <div key={font.name} className="py-2">
-                      <p className="text-sm text-gray-700 flex items-center">
+                      <p className=" text-gray-700 flex items-center">
                         <span>{font.name}</span>
                         <Popconfirm
-                          title="删除字体"
-                          description={`确定删除 ${font.name} ?`}
+                          title={t('customFont.deleteFont')}
+                          description={`${t('customFont.confirmDeleteFont')} ${font.name} ?`}
                           onConfirm={() => {
                             removeCustomFont(font.path);
                           }}
@@ -106,20 +106,18 @@ const CustomFonts = () => {
               </div>
             </>
           ) : (
-            <span className="text-gray-500 pl-4">暂无自定义字体</span>
+            <span className="text-gray-500 pl-4">{t('customFont.emptyTip')}</span>
           )}
-          <div className="pl-4 pt-2">
+          <div className="pt-2">
             <Button size="small" onClick={loadCustomFonts}>
-              {t('customFontModal.load')}
+              {t('customFont.loadFontFile')}
             </Button>
-            <span className="ml-2 text-orange-300">
-              注意：初次加载字体后，需要重启应用，字体才会在白板内生效
-            </span>
+            <p className="mt text-orange-300">{t('customFont.fontFirstLoadTip')}</p>
           </div>
         </div>
 
         <div className="py-2">
-          <p className="mr-2 mb-2 text-sm font-medium">开启白板自定义字体:</p>
+          <p className="mr-2 mb-2 font-normal">{t('customFont.enableCustomFontInBoard')}:</p>
           <p className="mb-3">
             <Switch
               className="bg-gray-300"

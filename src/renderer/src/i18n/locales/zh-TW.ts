@@ -20,7 +20,8 @@ export default {
     rename: '重命名',
     delete: '刪除',
     copyRevezoneLink: '復制 Revezone 鏈接',
-    giveAStar: '給個 Star 吧'
+    giveAStar: '給個 Star 吧',
+    switchLanguage: '切換語言'
   },
   description: {
     noteDesc: '類 Notion 筆記',
@@ -63,5 +64,20 @@ export default {
     title: '公測公告',
     description:
       'Revezone 目前處於公測階段，產品可能還有少量 bug，重要數據請做好備份。如果妳有任何問題或建議，歡迎提交 github issue 或者掃碼添加微信反饋。'
+  },
+  customFont: {
+    customFont: '自定義字體',
+    fontsLoaded: '已加載字體',
+    loadFontFile: '加載字體文件',
+    enableCustomFontInBoard: '開啟白闆中的自定義字體',
+    deleteFont: '刪除字體',
+    confirmDelete: '確定刪除字體',
+    onlineVersionTip: '自定義字體僅在桌面應用中支持，請下載桌面應用',
+    fontFirstLoadTip: '註意：初次加載字體後，需要重啟應用，字體才會在白闆內生效',
+    emptyTip: '暫無自定義字體'
+  },
+  confirm: {
+    yes: '是',
+    no: '否'
   }
 };
