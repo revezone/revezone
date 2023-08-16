@@ -13,8 +13,7 @@ export const submitUserEvent = (eventName: EventName, data) => {
 export const submitAppEnterUserEvent = () => {
   try {
     if (isInRevezoneApp) {
-      const { npm_package_version, USER } = window.electron.process.env;
-      submitUserEvent('enter_app', { appVersion: npm_package_version, user: USER, osName });
+      submitUserEvent('enter_app', {});
     }
   } catch (err) {
     console.log(err);
