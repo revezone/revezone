@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState } from 'react';
-import { Button, Select, Switch } from 'antd';
+import { Button, Select, Switch, Popconfirm } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useUpdate } from 'ahooks';
 import {
@@ -11,6 +11,7 @@ import {
 import { isInRevezoneApp } from '@renderer/utils/navigator';
 import DownloadApp from '../DownloadApp/index';
 import { Font } from '@renderer/types/file';
+import { XSquare } from 'lucide-react';
 
 const registeredFontsStr = window.electron?.process.env.registeredFonts;
 const registeredFonts = registeredFontsStr && JSON.parse(registeredFontsStr);
@@ -39,27 +40,30 @@ const CustomFonts = () => {
     setBoardCustomFontToLocal(boardCustomFont);
   }, [boardCustomFont]);
 
-  useEffect(() => {
-    window.api &&
-      window.api.onLoadCustomFontSuccess(async (event, newFonts) => {
-        const _fonts = registeredFonts;
+  const customFontsChanged = useCallback(async (event, newFonts) => {
+    setFonts(newFonts);
 
-        newFonts.forEach((font) => {
-          if (!_fonts.find((_font) => _font.name === font.name)) {
-            _fonts.push(font);
-          }
-        });
+    // clear board custom font if font was removed
+    if (!newFonts.find((font) => font.name === boardCustomFont)) {
+      setBoardCustomFont(null);
+    }
 
-        console.log('--- newFonts ---', newFonts);
-        console.log('_fonts', _fonts);
-
-        setFonts(_fonts);
-
-        setTimeout(() => {
-          update();
-        }, 0);
-      });
+    setTimeout(() => {
+      update();
+    }, 0);
   }, []);
+
+  useEffect(() => {
+    window.api && window.api.onLoadCustomFontSuccess(customFontsChanged);
+  }, []);
+
+  useEffect(() => {
+    window.api && window.api.onRemoveCustomFontSuccess(customFontsChanged);
+  }, []);
+
+  const removeCustomFont = (fontPath: string) => {
+    window.api.removeCustomFont(fontPath);
+  };
 
   if (!isInRevezoneApp) {
     return (
@@ -81,7 +85,20 @@ const CustomFonts = () => {
                 {fonts?.map((font) => {
                   return (
                     <div key={font.name} className="py-2">
-                      <p className="text-sm text-gray-700">{font.name}</p>
+                      <p className="text-sm text-gray-700 flex items-center">
+                        <span>{font.name}</span>
+                        <Popconfirm
+                          title="删除字体"
+                          description={`确定删除 ${font.name} ?`}
+                          onConfirm={() => {
+                            removeCustomFont(font.path);
+                          }}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <XSquare className="w-4 h-4 cursor-pointer ml-2"></XSquare>
+                        </Popconfirm>
+                      </p>
                       <p className="text-xs text-gray-500 whitespace-nowrap">{font.path}</p>
                     </div>
                   );
@@ -95,11 +112,14 @@ const CustomFonts = () => {
             <Button size="small" onClick={loadCustomFonts}>
               {t('customFontModal.load')}
             </Button>
+            <span className="ml-2 text-orange-300">
+              注意：初次加载字体后，需要重启应用，字体才会在白板内生效
+            </span>
           </div>
         </div>
 
         <div className="py-2">
-          <p className="mr-2 mb-2 text-sm font-medium">开启画布自定义字体:</p>
+          <p className="mr-2 mb-2 text-sm font-medium">开启白板自定义字体:</p>
           <p className="mb-3">
             <Switch
               className="bg-gray-300"

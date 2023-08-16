@@ -85,11 +85,19 @@ export const loadCustomFont = async (mainWindow) => {
     notify(`Fonts ${fontNames} added! `);
   }
 
-  console.log('--- results ---', results);
+  const fonts = getRegisteredFonts();
 
-  getRegisteredFonts();
+  mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, fonts);
+};
 
-  mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, results);
+export const removeCustomFont = async (fontPath: string, mainWindow) => {
+  const result = await fs.unlinkSync(fontPath);
+
+  console.log('removeCustomFont result', result);
+
+  const fonts = await getRegisteredFonts();
+
+  mainWindow.webContents.send(EVENTS.removeCustomFontSuccess, fonts);
 };
 
 export const registerCustomFont = (mainWindow, fontName, fontNameWithSuffix) => {
@@ -136,8 +144,6 @@ export const getRegisteredFonts = () => {
   ensureDir(CUSTOM_FONTS_DIR);
 
   const fontNamesWithSuffix = fs.readdirSync(CUSTOM_FONTS_DIR);
-
-  console.log('--- batchRegisterCustomFonts ---', fontNamesWithSuffix);
 
   const fonts: Font[] = [];
 

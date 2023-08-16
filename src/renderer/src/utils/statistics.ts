@@ -1,5 +1,5 @@
 import { EventName } from '@renderer/types/statistics';
-import { isInRevezoneApp, osName } from '@renderer/utils/navigator';
+import { isInRevezoneApp } from '@renderer/utils/navigator';
 import { reveGTag } from './reveGTag';
 
 export const submitUserEvent = (eventName: EventName, data) => {

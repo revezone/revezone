@@ -28,7 +28,7 @@ export const getBoardCustomFontFromLocal = () => {
 };
 
 export const setBoardCustomFontToLocal = (fontName) => {
-  localStorage.setItem(LOCALSTORAGE_BOARD_CUSTOM_FONTS, fontName);
+  fontName && localStorage.setItem(LOCALSTORAGE_BOARD_CUSTOM_FONTS, fontName);
 };
 
 export const addBoardCustomFontToLocal = (fontFamilyName: string) => {

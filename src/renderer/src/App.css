@@ -1,8 +1,16 @@
 .revezone-app-container {
   width: 100%;
   height: 100%;
+
+  .ant-btn-primary {
+    background-color: #0284c7;
+  }
 }
 
-.ant-btn-primary {
-  background-color: #1677ff;
+.ant-popover-content{
+  .ant-btn-primary {
+    background-color: #0284c7;
+  }
 }
+
+
