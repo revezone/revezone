@@ -112,7 +112,6 @@ const CustomFonts = () => {
             <Button size="small" onClick={loadCustomFonts}>
               {t('customFont.loadFontFile')}
             </Button>
-            <p className="mt-2 text-orange-300">{t('customFont.fontFirstLoadTip')}</p>
           </div>
         </div>
 
@@ -145,6 +144,7 @@ const CustomFonts = () => {
               </Select>
             </p>
           ) : null}
+          <p className="mt-2 text-orange-300">{t('customFont.fontFirstLoadTip')}</p>
         </div>
       </div>
     </div>
