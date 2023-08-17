@@ -284,7 +284,7 @@ export default function CustomMenu({ collapsed }: Props) {
         <div className="flex justify-start">
           <div className="mr-2 whitespace-nowrap">
             <Dropdown menu={{ items: storageTypeItems }}>
-              <span className="text-slate-500 flex items-center cursor-pointer">
+              <span className="text-slate-500 flex items-center cursor-pointer text-sm">
                 <HardDrive className="w-4 mr-1"></HardDrive>
                 {t('storage.local')}
               </span>

@@ -1,0 +1,55 @@
+.revezone-layout {
+  width: 100%;
+  height: 100%;
+
+  .ant-layout {
+    height: 100%;
+  }
+
+  .revezone-topleft-toolbar {
+
+    .os-is-macos.is-in-revezone-native-app & {
+      position: relative;
+    }
+
+    position: absolute;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: row-reverse;
+    height: 2rem;
+    font-size: 16px;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+
+    .panel-left-button {
+      margin: 1rem 1rem 0 0;
+      -webkit-app-region: no-drag;
+    }
+  }
+
+
+
+  .ant-menu-title-content {
+    flex: auto;
+  }
+
+  /* .ant-layout-content {
+    position: relative;
+    border-left: 1px solid #e2e2e2;
+
+    .uncollapse-icon {
+      position: absolute;
+      color: #333;
+      top: 20px;
+      left: 10px;
+      z-index: 1001;
+      font-size: 20px;
+    }
+  }
+
+  .ant-layout-sider-children {
+    height: 100%;
+    overflow-y: scroll;
+  } */
+}

@@ -15,6 +15,7 @@ import { getOSName, isInRevezoneApp } from './utils/navigator';
 import { submitAppEnterUserEvent } from './utils/statistics';
 
 import './App.css';
+import ResizableLayout from './components/ResizableLayout/index';
 
 const OS_NAME = getOSName();
 
@@ -55,9 +56,12 @@ function App(): JSX.Element {
           isInRevezoneApp ? 'is-in-revezone-native-app' : 'is-in-browser'
         }`}
       >
-        <CustomLayout>
+        {/* <CustomLayout>
           <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
-        </CustomLayout>
+        </CustomLayout> */}
+        <ResizableLayout>
+          <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
+        </ResizableLayout>
       </div>
     </ConfigProvider>
   );
