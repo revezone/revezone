@@ -1,5 +1,4 @@
 import { useCallback, useEffect } from 'react';
-import CustomLayout from './components/CustomLayout';
 import NoteEditor from './components/NoteEditor';
 import { useAtom } from 'jotai';
 import { currentFileAtom, langCodeAtom } from './store/jotai';

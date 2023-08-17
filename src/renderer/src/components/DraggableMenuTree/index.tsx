@@ -1,3 +1,5 @@
+import { UncontrolledTreeEnvironment, Tree, StaticTreeDataProvider } from 'react-complex-tree';
+import 'react-complex-tree/lib/style-modern.css';
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { Menu, Dropdown } from 'antd';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
@@ -17,7 +19,7 @@ import moment from 'moment';
 import RevezoneLogo from '../RevezoneLogo';
 
 import './index.css';
-import { getFileById, getFolderIdByFileId } from '@renderer/utils/file';
+
 import { Folder, HardDrive, UploadCloud } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import useFileContextMenu from '@renderer/hooks/useFileContextMenu';
@@ -34,7 +36,38 @@ interface Props {
   collapsed: boolean;
 }
 
-export default function CustomMenu({ collapsed }: Props) {
+const items = {
+  root: {
+    index: 'root',
+    isFolder: true,
+    children: ['child1', 'child2', 'child4'],
+    data: 'Root item'
+  },
+  child1: {
+    index: 'child1',
+    children: [],
+    data: 'Child item 1'
+  },
+  child2: {
+    index: 'child2',
+    isFolder: true,
+    children: ['child3'],
+    data: 'Child item 2'
+  },
+  child3: {
+    index: 'child3',
+    children: [],
+    data: 'Child item 3'
+  },
+  child4: {
+    index: 'child4',
+    isFolder: true,
+    children: [],
+    data: 'Child item 4'
+  }
+};
+
+export default function DraggableMenuTree() {
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
@@ -63,19 +96,23 @@ export default function CustomMenu({ collapsed }: Props) {
 
   // const [pageTitle] = useBlocksuitePageTitle({ getFileTree });
 
-  useEffect(() => {
-    !collapsed && getFileTree();
-  }, [menuIndexeddbStorage, collapsed]);
+  // useEffect(() => {
+  //   !collapsed && getFileTree();
+  // }, [menuIndexeddbStorage, collapsed]);
 
   useEffect(() => {
-    if (firstRenderRef.current === true || !fileTree?.length) return;
-    firstRenderRef.current = true;
+    getFileTree();
+  }, []);
 
-    const currentFileIdFromLocal = getCurrentFileIdFromLocal();
-    const file = currentFileIdFromLocal ? getFileById(currentFileIdFromLocal, fileTree) : undefined;
+  //   useEffect(() => {
+  //     if (firstRenderRef.current === true || !fileTree?.length) return;
+  //     firstRenderRef.current = true;
 
-    setCurrentFile(file);
-  }, [fileTree]);
+  //     const currentFileIdFromLocal = getCurrentFileIdFromLocal();
+  //     const file = currentFileIdFromLocal ? getFileById(currentFileIdFromLocal, fileTree) : undefined;
+
+  //     setCurrentFile(file);
+  //   }, [fileTree]);
 
   useEffect(() => {
     if (firstRenderRef.current === false) return;
@@ -83,13 +120,13 @@ export default function CustomMenu({ collapsed }: Props) {
     setSelectedKeys(currentFile?.id ? [currentFile.id] : []);
   }, [currentFile?.id]);
 
-  useEffect(() => {
-    if (!currentFile) {
-      return;
-    }
-    const folderId = getFolderIdByFileId(currentFile.id, fileTree);
-    setCurrentFolderId(folderId);
-  }, [currentFile, fileTree]);
+  //   useEffect(() => {
+  //     if (!currentFile) {
+  //       return;
+  //     }
+  //     const folderId = getFolderIdByFileId(currentFile.id, fileTree);
+  //     setCurrentFolderId(folderId);
+  //   }, [currentFile, fileTree]);
 
   const addSelectedKeys = useCallback(
     (keys: string[] | undefined) => {
@@ -208,22 +245,24 @@ export default function CustomMenu({ collapsed }: Props) {
   );
 
   const onSelect = useCallback(
-    ({ key }) => {
+    async (keys) => {
+      const key = keys?.[0];
+
       const fileId = key?.startsWith('file_') ? key : undefined;
 
       console.log('onSelect', fileId, key);
 
       if (!fileId) return;
 
-      const folderId = getFolderIdByFileId(fileId, fileTree);
+      //   const folderId = getFolderIdByFileId(fileId, fileTree);
 
-      resetMenu();
+      //   resetMenu();
 
-      const file = getFileById(fileId, fileTree);
+      const file = await menuIndexeddbStorage.getFile(fileId);
 
       setCurrentFile(file);
-      setCurrentFolderId(folderId);
-      addSelectedKeys([key, folderId]);
+      //   setCurrentFolderId(folderId);
+      //   addSelectedKeys([key, folderId]);
 
       submitUserEvent('select_menu', { key });
     },
@@ -273,6 +312,8 @@ export default function CustomMenu({ collapsed }: Props) {
     }
   ];
 
+  console.log('--- fileTree ---', fileTree);
+
   return (
     <div className="revezone-menu-container">
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
@@ -295,61 +336,17 @@ export default function CustomMenu({ collapsed }: Props) {
       </div>
       <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
       <div className="menu-list border-t border-slate-100">
-        <Menu
-          theme="light"
-          mode="inline"
-          selectedKeys={selectedKeys}
-          openKeys={openKeys}
-          onOpenChange={onOpenChange}
-          onSelect={onSelect}
-          style={{ border: 'none' }}
-          items={fileTree?.map((folder) => ({
-            key: folder.id,
-            icon: <Folder className="w-3" />,
-            label: (
-              <Dropdown menu={{ items: getFolderContextMenu(folder) }} trigger={['contextMenu']}>
-                <div
-                  className="flex items-center justify-between"
-                  onClick={() => addSelectedKeys([folder.id])}
-                >
-                  <EditableText
-                    isPreview={editableTextState[folder.id]}
-                    text={folder.name}
-                    defaultText="Untitled"
-                    onSave={(text) => onFolderNameChange(folder, text)}
-                    onEdit={() => onEditableTextEdit(folder.id)}
-                  />
-                </div>
-              </Dropdown>
-            ),
-            children: folder?.children?.map((file) => {
-              return {
-                key: file.id,
-                label: (
-                  <Dropdown
-                    menu={{ items: getFileContextMenu(file, folder) }}
-                    trigger={['contextMenu']}
-                  >
-                    <div
-                      className="flex items-center justify-between"
-                      key={`${file.id}_${file.name}`}
-                    >
-                      <EditableText
-                        isPreview={editableTextState[file.id]}
-                        type={file.type}
-                        text={file.name}
-                        extraText={moment(file.gmtModified).format('YYYY-MM-DD HH:mm:ss')}
-                        defaultText="Untitled"
-                        onSave={(text) => onFileNameChange(text, file)}
-                        onEdit={() => onEditableTextEdit(file.id)}
-                      />
-                    </div>
-                  </Dropdown>
-                )
-              };
-            })
-          }))}
-        />
+        <UncontrolledTreeEnvironment
+          dataProvider={new StaticTreeDataProvider(fileTree, (item, data) => ({ ...item, data }))}
+          getItemTitle={(item) => item.data}
+          viewState={{}}
+          canDragAndDrop={true}
+          canDropOnFolder={true}
+          canReorderItems={true}
+          onSelectItems={onSelect}
+        >
+          <Tree treeId="tree-1" rootItem="root" treeLabel="Tree Example" />
+        </UncontrolledTreeEnvironment>
       </div>
     </div>
   );

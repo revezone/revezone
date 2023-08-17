@@ -231,20 +231,57 @@ class MenuIndexeddbStorage {
     const files = await this.getFiles();
     const mappings = await this.getAllFileFolderMappings();
 
-    const tree = folders.map((folder) => {
-      const children: RevezoneFile[] = [];
+    console.log('folders', folders);
+    console.log('files', files);
+
+    const tree = {
+      root: {
+        index: 'root',
+        data: 'root item',
+        isFolder: true,
+        children: folders.map((folder) => folder.id)
+      }
+    };
+
+    folders.forEach((folder) => {
+      const filesInFolder: RevezoneFile[] = [];
 
       const mappingsCertainFolder = mappings.filter((map) => map.folderId === folder.id);
 
       files.forEach((file) => {
         const _file = mappingsCertainFolder.find((map) => map.fileId === file.id);
         if (_file) {
-          children.push(file);
+          filesInFolder.push(file);
         }
       });
 
-      return { ...folder, children };
+      tree[folder.id] = {
+        ...folder,
+        index: folder.id,
+        data: folder.name,
+        isFolder: true,
+        children: filesInFolder.map((file) => file.id)
+      };
     });
+
+    files.forEach((file) => {
+      tree[file.id] = { ...file, index: file.id, data: file.name };
+    });
+
+    // const tree = folders.map((folder) => {
+    //   const children: RevezoneFile[] = [];
+
+    //   const mappingsCertainFolder = mappings.filter((map) => map.folderId === folder.id);
+
+    //   files.forEach((file) => {
+    //     const _file = mappingsCertainFolder.find((map) => map.fileId === file.id);
+    //     if (_file) {
+    //       children.push(file);
+    //     }
+    //   });
+
+    //   return { ...folder, children };
+    // });
 
     return tree;
   }

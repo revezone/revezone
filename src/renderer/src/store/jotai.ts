@@ -3,7 +3,7 @@ import { RevezoneFile, RevezoneFolder, FileTree } from '../types/file';
 
 type Theme = 'light' | 'dark';
 
-export const fileTreeAtom = atom<FileTree>([]);
+export const fileTreeAtom = atom<FileTree>({});
 
 export const currentFileAtom = atom<RevezoneFile | undefined | null>(undefined);
 

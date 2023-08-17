@@ -2,7 +2,6 @@ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { ReactNode, useCallback } from 'react';
 import { Layout } from 'antd';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
-import CustomMenu from '../CustomMenu';
 import { siderbarCollapsedAtom, themeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 // import LanguageSwitcher from '../LanguageSwitcher';
@@ -12,6 +11,7 @@ import './index.css';
 import { useTranslation } from 'react-i18next';
 import BottomToolbar from '../BottomToolbar/index';
 import { submitUserEvent } from '@renderer/utils/statistics';
+import DraggableMenuTree from '../DraggableMenuTree/index';
 
 type Props = {
   children: ReactNode;
@@ -43,7 +43,8 @@ export default function ClientComponent({ children }: Props) {
             onClick={switchCollapse}
           />
         </div>
-        <CustomMenu collapsed={collapsed} />
+        {/* <CustomMenu collapsed={collapsed} /> */}
+        <DraggableMenuTree></DraggableMenuTree>
         <BottomToolbar />
       </Panel>
       <PanelResizeHandle className="w-2 bg-gray-100" />
