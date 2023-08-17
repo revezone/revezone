@@ -15,9 +15,9 @@ interface Props {
   file: RevezoneFile;
 }
 
-const OS_NAME = getOSName();
+// const OS_NAME = getOSName();
 
-let firsRender = true;
+// let firsRender = true;
 
 export default function RevedrawApp({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
@@ -25,7 +25,7 @@ export default function RevedrawApp({ file }: Props) {
   const [fileTree] = useAtom(fileTreeAtom);
   const [, setCurrentFile] = useAtom(currentFileAtom);
   const [systemLangCode] = useAtom(langCodeAtom);
-  const [didRender, setDidRender] = useState(true);
+  // const [didRender, setDidRender] = useState(true);
 
   const getDataSource = useCallback(async (id) => {
     // reset data source for a new canvas file
@@ -36,27 +36,27 @@ export default function RevedrawApp({ file }: Props) {
     setDataSource(data);
   }, []);
 
-  // HACK: fix the custom font not working completely when first render
-  const rerender = useCallback(() => {
-    const WAIT_TIME_WINDWOS = 500;
-    const WAIT_TIME_MACOS = 200;
+  // // HACK: fix the custom font not working completely when first render
+  // const rerender = useCallback(() => {
+  //   const WAIT_TIME_WINDWOS = 500;
+  //   const WAIT_TIME_MACOS = 200;
 
-    const waitTime = OS_NAME === 'MacOS' ? WAIT_TIME_MACOS : WAIT_TIME_WINDWOS;
+  //   const waitTime = OS_NAME === 'MacOS' ? WAIT_TIME_MACOS : WAIT_TIME_WINDWOS;
 
-    setTimeout(() => {
-      setDidRender(false);
-      setTimeout(() => {
-        setDidRender(true);
-      }, 100);
-    }, waitTime);
-  }, []);
+  //   setTimeout(() => {
+  //     setDidRender(false);
+  //     setTimeout(() => {
+  //       setDidRender(true);
+  //     }, 100);
+  //   }, waitTime);
+  // }, []);
 
-  useEffect(() => {
-    if (firsRender) {
-      firsRender = false;
-      rerender();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (firsRender) {
+  //     firsRender = false;
+  //     rerender();
+  //   }
+  // }, []);
 
   const onChangeFn = useCallback(
     async (data) => {
@@ -106,16 +106,16 @@ export default function RevedrawApp({ file }: Props) {
 
   return dataSource ? (
     <>
-      {didRender ? (
-        <Revedraw
-          dataSource={dataSource}
-          canvasName={file.name}
-          getRef={(ref) => setRef(ref)}
-          systemLangCode={systemLangCode}
-          onChange={onChangeDebounceFn}
-          onLinkOpen={onLinkOpen}
-        />
-      ) : null}
+      {/* {didRender ? ( */}
+      <Revedraw
+        dataSource={dataSource}
+        canvasName={file.name}
+        getRef={(ref) => setRef(ref)}
+        systemLangCode={systemLangCode}
+        onChange={onChangeDebounceFn}
+        onLinkOpen={onLinkOpen}
+      />
+      {/* ) : null} */}
     </>
   ) : null;
 }
