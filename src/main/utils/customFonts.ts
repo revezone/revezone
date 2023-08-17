@@ -82,7 +82,7 @@ export const loadCustomFont = async (mainWindow) => {
   const fontNames = results.map((item) => item?.name)?.join(',');
 
   if (fontNames) {
-    notify(`Fonts ${fontNames} added! `);
+    // notify(`Fonts ${fontNames} added! `);
     const fonts = await getRegisteredFonts();
 
     mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, fonts);

@@ -2,6 +2,7 @@ import { Modal, Tabs } from 'antd';
 import { useTranslation } from 'react-i18next';
 import CustomFonts from '../CustomFonts';
 import LanguageSwitcher from '../LanguageSwitcher';
+import { osName } from '@renderer/utils/navigator';
 
 interface Props {
   visible: boolean;
@@ -12,7 +13,13 @@ export default function SystemSettings({ visible, onCancel }: Props) {
   const { t } = useTranslation();
 
   return (
-    <Modal width={800} open={visible} onCancel={onCancel} footer={null}>
+    <Modal
+      width={800}
+      open={visible}
+      onCancel={onCancel}
+      footer={null}
+      wrapClassName={`os-is-${osName.toLowerCase()}`}
+    >
       <Tabs
         tabPosition="left"
         items={[

@@ -48,6 +48,9 @@ function createWindow(): void {
   mainWindow.setMenuBarVisibility(false);
 
   mainWindow.on('ready-to-show', () => {
+    console.log('--- mainwindow ready to show ---');
+    batchRegisterCustomFonts(mainWindow);
+
     mainWindow?.show();
   });
 

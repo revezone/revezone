@@ -132,7 +132,14 @@ const CustomFonts = () => {
               <Select
                 className="w-80"
                 value={boardCustomFont}
-                onChange={(value) => setBoardCustomFont(value)}
+                onChange={(value) => {
+                  setBoardCustomFont(value);
+
+                  // register custom fonts through window reload
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 0);
+                }}
               >
                 {fonts.map((font) => {
                   return (
