@@ -8,6 +8,7 @@ import { currentFileAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jot
 import { useAtom } from 'jotai';
 import { getOSName } from '@renderer/utils/navigator';
 import { getFileIdOrNameFromLink } from '@renderer/utils/file';
+import { emitter } from '@renderer/store/eventemitter';
 
 import './index.css';
 
@@ -56,6 +57,13 @@ export default function RevedrawApp({ file }: Props) {
       firsRender = false;
       rerender();
     }
+  }, []);
+
+  useEffect(() => {
+    emitter.on('switch_font_family', () => {
+      console.log('switch font');
+      rerender();
+    });
   }, []);
 
   const onChangeFn = useCallback(

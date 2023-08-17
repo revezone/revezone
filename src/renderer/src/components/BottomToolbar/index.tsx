@@ -186,6 +186,7 @@ export default function BottomToolbar() {
       </span>
       <SystemSettings
         visible={systemSettingVisible}
+        setSystemSettingVisible={setSystemSettingVisible}
         onCancel={() => setSystemSettingVisible(false)}
       ></SystemSettings>
     </div>

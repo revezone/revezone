@@ -125,6 +125,8 @@ export const registerCustomFont = (mainWindow, fontName, fontNameWithSuffix) => 
 };
 
 export const batchRegisterCustomFonts = (mainWindow) => {
+  console.log('--- batchRegisterCustomFonts ---');
+
   try {
     const fonts = getRegisteredFonts();
     fonts.forEach((font) => registerCustomFont(mainWindow, font.name, font.nameWithSuffix));
@@ -168,4 +170,8 @@ export const getRegisteredFonts = () => {
   process.env['registeredFonts'] = JSON.stringify(fonts);
 
   return fonts;
+};
+
+export const switchFontfamily = (mainWindow) => {
+  batchRegisterCustomFonts(mainWindow);
 };

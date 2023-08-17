@@ -3,5 +3,6 @@ export const EVENTS = {
   loadCustomFont: 'load-custom-font',
   loadCustomFontSuccess: 'load-custom-font-success',
   removeCustomFont: 'remove-custom-font',
-  removeCustomFontSuccess: 'remove-custom-font-success'
+  removeCustomFontSuccess: 'remove-custom-font-success',
+  switchFontfamily: 'switch-fontfamily'
 };

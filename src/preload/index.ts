@@ -9,7 +9,8 @@ const api = {
   loadCustomFonts: (): void => ipcRenderer.send(EVENTS.loadCustomFont),
   removeCustomFont: (fontPath: string) => ipcRenderer.send(EVENTS.removeCustomFont, fontPath),
   onLoadCustomFontSuccess: (cb) => ipcRenderer.on(EVENTS.loadCustomFontSuccess, cb),
-  onRemoveCustomFontSuccess: (cb) => ipcRenderer.on(EVENTS.removeCustomFontSuccess, cb)
+  onRemoveCustomFontSuccess: (cb) => ipcRenderer.on(EVENTS.removeCustomFontSuccess, cb),
+  switchFontfamily: () => ipcRenderer.send(EVENTS.switchFontfamily)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

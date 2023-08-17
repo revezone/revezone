@@ -12,11 +12,16 @@ import { isInRevezoneApp } from '@renderer/utils/navigator';
 import DownloadApp from '../DownloadApp/index';
 import { Font } from '@renderer/types/file';
 import { XSquare } from 'lucide-react';
+import { emitter } from '@renderer/store/eventemitter';
 
 const registeredFontsStr = window.electron?.process.env.registeredFonts;
 const registeredFonts = registeredFontsStr && JSON.parse(registeredFontsStr);
 
-const CustomFonts = () => {
+interface Props {
+  setSystemSettingVisible: (visible) => void;
+}
+
+const CustomFonts = ({ setSystemSettingVisible }: Props) => {
   const { t } = useTranslation();
   const update = useUpdate();
 
@@ -25,8 +30,6 @@ const CustomFonts = () => {
     getBoardCustomFontSwitchFromLocal() === 'true'
   );
   const [boardCustomFont, setBoardCustomFont] = useState(getBoardCustomFontFromLocal());
-
-  console.log('--- registeredFonts ---', registeredFonts);
 
   const loadCustomFonts = useCallback(() => {
     window.api && window.api.loadCustomFonts();
@@ -128,17 +131,23 @@ const CustomFonts = () => {
             ></Switch>
           </p>
           {boardCustomFontSwitch ? (
-            <p className="mb-2">
+            <div className="mb-2">
               <Select
                 className="w-80"
                 value={boardCustomFont}
                 onChange={(value) => {
                   setBoardCustomFont(value);
 
-                  // register custom fonts through window reload
-                  setTimeout(() => {
-                    window.location.reload();
-                  }, 0);
+                  setSystemSettingVisible(false);
+
+                  window.api.switchFontfamily();
+
+                  emitter.emit('switch_font_family');
+
+                  // // register custom fonts through window reload
+                  // setTimeout(() => {
+                  //   window.location.reload();
+                  // }, 0);
                 }}
               >
                 {fonts.map((font) => {
@@ -149,7 +158,7 @@ const CustomFonts = () => {
                   );
                 })}
               </Select>
-            </p>
+            </div>
           ) : null}
           <p className="mt-2 text-orange-300">{t('customFont.fontFirstLoadTip')}</p>
         </div>

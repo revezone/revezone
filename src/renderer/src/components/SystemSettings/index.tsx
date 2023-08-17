@@ -6,10 +6,11 @@ import { osName } from '@renderer/utils/navigator';
 
 interface Props {
   visible: boolean;
+  setSystemSettingVisible: (visible) => void;
   onCancel: () => void;
 }
 
-export default function SystemSettings({ visible, onCancel }: Props) {
+export default function SystemSettings({ visible, setSystemSettingVisible, onCancel }: Props) {
   const { t } = useTranslation();
 
   return (
@@ -26,7 +27,7 @@ export default function SystemSettings({ visible, onCancel }: Props) {
           {
             key: 'custom_fonts',
             label: t('menu.customFont'),
-            children: <CustomFonts></CustomFonts>
+            children: <CustomFonts setSystemSettingVisible={setSystemSettingVisible}></CustomFonts>
           },
           {
             key: 'switch_language',
