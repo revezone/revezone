@@ -7,6 +7,7 @@ const LOCALSTORAGE_BOARD_CUSTOM_FONTS = 'custom_fonts';
 const LOCALSTORAGE_LANG_CODE = 'lang_code';
 const LOCALSTORAGE_BOARD_CUSTOM_FONT_SWITCH = 'board_custom_font_switch';
 const LOCALSTORAGE_TAB_LIST = 'tab_list';
+const LOCALSTORAGE_TAB_INDEX = 'tab_index';
 
 export const getOpenKeysFromLocal = () => {
   const localStr = localStorage.getItem(LOCALSTORAGE_MENU_OPEN_KEYS);
@@ -67,4 +68,12 @@ export const setTabListToLocal = (value: string) => {
 export const getTabListFromLocal = (): TabItem[] => {
   const str = localStorage.getItem(LOCALSTORAGE_TAB_LIST);
   return str && JSON.parse(str);
+};
+
+export const setTabIndexToLocal = (value: number) => {
+  localStorage.setItem(LOCALSTORAGE_TAB_INDEX, String(value));
+};
+
+export const getTabIndexFromLocal = () => {
+  return Number(localStorage.getItem(LOCALSTORAGE_TAB_INDEX));
 };
