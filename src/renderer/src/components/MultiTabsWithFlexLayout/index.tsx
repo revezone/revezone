@@ -43,6 +43,8 @@ export default function MultiTabs() {
   }, [tabIndex, tabList]);
 
   const renderContent = useCallback((file, currentFile) => {
+    // if (file?.id !== currentFile?.id) return;
+
     console.log('--- renderContent ---', file);
 
     switch (file?.type) {
@@ -64,8 +66,8 @@ export default function MultiTabs() {
     [currentFile]
   );
 
-  const onTabDelete = useCallback((fileId: string, tabList) => {
-    deleteTabList(fileId, tabList);
+  const onTabDelete = useCallback((fileId: string, tabList, tabIndex) => {
+    deleteTabList(fileId, tabList, tabIndex);
   }, []);
 
   const onTabSelect = useCallback(async (fileId: string, tabList) => {
@@ -86,7 +88,7 @@ export default function MultiTabs() {
 
       switch (action.type) {
         case 'FlexLayout_DeleteTab':
-          onTabDelete(action.data.node, tabList);
+          onTabDelete(action.data.node, tabList, tabIndex);
           break;
         case 'FlexLayout_SelectTab':
           onTabSelect(action.data.tabNode, tabList);
@@ -94,7 +96,7 @@ export default function MultiTabs() {
       }
       return action;
     },
-    [tabList]
+    [tabList, tabIndex]
   );
 
   return model ? <Layout model={model} factory={factory} onAction={onAction} /> : null;

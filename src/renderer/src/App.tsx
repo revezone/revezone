@@ -49,6 +49,8 @@ function App(): JSX.Element {
     }
   }, [langCode]);
 
+  console.log('--- currentFile ---', currentFile);
+
   return (
     <ConfigProvider locale={getLocale()} theme={theme}>
       <div
@@ -60,7 +62,7 @@ function App(): JSX.Element {
           <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
         </CustomLayout> */}
         <ResizableLayout>
-          <MultiTabs></MultiTabs>
+          <WorkspaceLoaded>{currentFile ? <MultiTabs /> : <WelcomePage />}</WorkspaceLoaded>
           {/* <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded> */}
         </ResizableLayout>
       </div>

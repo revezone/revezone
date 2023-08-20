@@ -1,7 +1,6 @@
 import { atom } from 'jotai';
 import { RevezoneFile, RevezoneFolder, FileTree } from '@renderer/types/file';
 import { TabItem } from '@renderer/types/tabs';
-import { DEFAULT_TAB_LIST } from '@renderer/utils/constant';
 
 type Theme = 'light' | 'dark';
 
@@ -21,6 +20,6 @@ export const langCodeAtom = atom('en');
 
 export const themeAtom = atom<Theme>('light');
 
-export const tabListAtom = atom<TabItem[]>(DEFAULT_TAB_LIST);
+export const tabListAtom = atom<TabItem[]>([]);
 
 export const tabIndexAtom = atom<number>(0);

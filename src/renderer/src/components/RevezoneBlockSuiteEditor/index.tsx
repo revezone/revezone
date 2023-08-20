@@ -18,6 +18,8 @@ export default class RevezoneBlockSuiteEditor extends LitElement {
 
     const page = this.workspace.getPage(pageId);
 
+    console.log('--- page ---', page);
+
     if (!page) return;
 
     this.page = page;

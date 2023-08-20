@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
-import { tabListAtom, tabIndexAtom } from '@renderer/store/jotai';
+import { tabListAtom, tabIndexAtom, currentFileAtom } from '@renderer/store/jotai';
 import { TabItem } from '@renderer/types/tabs';
-import { DEFAULT_EMPTY_TAB_ID, DEFAULT_TAB_LIST } from '@renderer/utils/constant';
+import { DEFAULT_EMPTY_TAB_ID } from '@renderer/utils/constant';
 import {
   getTabListFromLocal,
   setTabListToLocal,
@@ -13,6 +13,7 @@ import {
 export default function useTabList() {
   const [tabList, setTabList] = useAtom(tabListAtom);
   const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
+  const [, setCurrentFile] = useAtom(currentFileAtom);
 
   useEffect(() => {
     const tabListFromLocal = getTabListFromLocal();
@@ -50,20 +51,26 @@ export default function useTabList() {
     }
   }, []);
 
-  const deleteTabList = useCallback(
-    (fileId: string, tabList: TabItem[]) => {
-      let newTabList = tabList.filter((tab) => tab.id !== fileId);
-      newTabList = newTabList?.length === 0 ? DEFAULT_TAB_LIST : newTabList;
+  const deleteTabList = useCallback((fileId: string, tabList: TabItem[], tabIndex: number) => {
+    const newTabList = tabList.filter((tab) => tab.id !== fileId);
 
-      console.log('deleteTabList', fileId, newTabList);
+    console.log('deleteTabList', fileId, newTabList);
 
-      setTabList(newTabList);
+    setTabList(newTabList);
 
-      setTabListToLocal(JSON.stringify(newTabList));
-      setTabIndexToLocal(tabIndex);
-    },
-    [tabIndex]
-  );
+    setTabListToLocal(JSON.stringify(newTabList));
+
+    const _tabIndex = tabIndex > newTabList.length - 1 ? newTabList.length - 1 : tabIndex;
+
+    console.log('_tabIndex', _tabIndex, newTabList.length);
+
+    setTabIndex(_tabIndex);
+    setTabIndexToLocal(_tabIndex);
+
+    if (_tabIndex < 0) {
+      setCurrentFile(undefined);
+    }
+  }, []);
 
   return { tabIndex, tabList, updateTabList, setTabIndex, deleteTabList };
 }
