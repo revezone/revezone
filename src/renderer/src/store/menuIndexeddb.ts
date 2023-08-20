@@ -236,6 +236,7 @@ class MenuIndexeddbStorage {
         index: 'root',
         data: 'root item',
         isFolder: true,
+        canRename: true,
         children: folders.map((folder) => folder.id)
       }
     };
@@ -257,12 +258,13 @@ class MenuIndexeddbStorage {
         index: folder.id,
         data: folder,
         isFolder: true,
+        canRename: true,
         children: filesInFolder.map((file) => file.id)
       };
     });
 
     files.forEach((file) => {
-      tree[file.id] = { ...file, index: file.id, data: file };
+      tree[file.id] = { ...file, index: file.id, data: file, canRename: true };
     });
 
     // const tree = folders.map((folder) => {

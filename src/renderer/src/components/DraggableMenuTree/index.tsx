@@ -2,11 +2,12 @@ import {
   ControlledTreeEnvironment,
   UncontrolledTreeEnvironment,
   Tree,
+  TreeItem,
   StaticTreeDataProvider
 } from 'react-complex-tree';
 import 'react-complex-tree/lib/style-modern.css';
 import { useCallback, useEffect, useState, useRef } from 'react';
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Input } from 'antd';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import type { RevezoneFile, RevezoneFolder, OnFolderOrFileAddProps } from '@renderer/types/file';
 import {
@@ -381,10 +382,25 @@ export default function DraggableMenuTree() {
           canDragAndDrop={true}
           canDropOnFolder={true}
           canReorderItems={true}
+          canRename={true}
+          canSearch={true}
           onSelectItems={onSelect}
           onExpandItem={onExpandItem}
           onCollapseItem={onCollapseItem}
           onFocusItem={onFocusItem}
+          onRenameItem={() => {}}
+          renderRenameInput={({ item }) => (
+            <>
+              <span>aaa</span>
+              <Input value={item.data.name}></Input>
+            </>
+            // <EditableText
+            //   text={item.data.name}
+            //   isPreview={false}
+            //   onSave={() => {}}
+            //   onEdit={() => {}}
+            // />
+          )}
         >
           <Tree treeId="tree" rootItem="root" treeLabel="Tree Example" />
         </ControlledTreeEnvironment>
