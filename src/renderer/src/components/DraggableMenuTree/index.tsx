@@ -1,4 +1,9 @@
-import { UncontrolledTreeEnvironment, Tree, StaticTreeDataProvider } from 'react-complex-tree';
+import {
+  ControlledTreeEnvironment,
+  UncontrolledTreeEnvironment,
+  Tree,
+  StaticTreeDataProvider
+} from 'react-complex-tree';
 import 'react-complex-tree/lib/style-modern.css';
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { Menu, Dropdown } from 'antd';
@@ -206,6 +211,19 @@ export default function DraggableMenuTree() {
     setSelectedKeys([]);
   }, []);
 
+  const onExpandItem = useCallback((item) => {
+    console.log('--- onExpandItem ---', item);
+    const keys = [...openKeys, item.id];
+    setOpenKeys(keys);
+    setOpenKeysToLocal(keys);
+  }, []);
+
+  const onCollapseItem = useCallback((item) => {
+    const keys = openKeys.filter((key) => key !== item.id);
+    setOpenKeys(keys);
+    setOpenKeysToLocal(keys);
+  }, []);
+
   const onOpenChange = useCallback(
     (keys) => {
       const folderKeys = keys.filter((key) => key.startsWith('folder_'));
@@ -339,17 +357,26 @@ export default function DraggableMenuTree() {
       </div>
       <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
       <div className="menu-list border-t border-slate-100">
-        <UncontrolledTreeEnvironment
-          dataProvider={new StaticTreeDataProvider(fileTree, (item, data) => ({ ...item, data }))}
+        <ControlledTreeEnvironment
+          // dataProvider={new StaticTreeDataProvider(fileTree, (item, data) => ({ ...item, data }))}
+          items={fileTree}
           getItemTitle={(item) => `${item.data.name}`}
-          viewState={{}}
+          viewState={{
+            tree: {
+              selectedItems: selectedKeys,
+              expandedItems: openKeys,
+              focusedItem: selectedKeys?.[0]
+            }
+          }}
           canDragAndDrop={true}
           canDropOnFolder={true}
           canReorderItems={true}
           onSelectItems={onSelect}
+          onExpandItem={onExpandItem}
+          onCollapseItem={onCollapseItem}
         >
-          <Tree treeId="tree-1" rootItem="root" treeLabel="Tree Example" />
-        </UncontrolledTreeEnvironment>
+          <Tree treeId="tree" rootItem="root" treeLabel="Tree Example" />
+        </ControlledTreeEnvironment>
       </div>
     </div>
   );
