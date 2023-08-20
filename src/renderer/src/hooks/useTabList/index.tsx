@@ -1,11 +1,17 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import { tabListAtom, tabIndexAtom } from '@renderer/store/jotai';
 import { TabItem } from '@renderer/types/tabs';
+import { DEFAULT_EMPTY_TAB_ID } from '@renderer/utils/constant';
+import { setTabListToLocal } from '@renderer/store/localstorage';
 
 export default function useTabList() {
   const [tabList, setTabList] = useAtom(tabListAtom);
   const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
+
+  useEffect(() => {
+    setTabListToLocal(JSON.stringify(tabList));
+  }, [tabList]);
 
   const updateTabList = useCallback((currentFile, tabList) => {
     if (!currentFile) return;
@@ -23,7 +29,10 @@ export default function useTabList() {
         fileType: currentFile.type,
         config: currentFile
       };
-      const newTabList = [newTab, ...tabList];
+      const newTabList: TabItem[] = [
+        newTab,
+        ...tabList.filter((tab) => tab.id !== DEFAULT_EMPTY_TAB_ID)
+      ];
 
       console.log('--- newTabList ---', newTabList);
 

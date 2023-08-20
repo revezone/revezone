@@ -1,9 +1,12 @@
+import { TabItem } from '@renderer/types/tabs';
+
 const LOCALSTORAGE_MENU_OPEN_KEYS = 'menu_open_keys';
 // const LOCALSTORAGE_MENU_ACTIVE_KEYS = 'menu_active_keys';
 const LOCALSTORAGE_CURRENT_FILE_ID = 'current_file_id';
 const LOCALSTORAGE_BOARD_CUSTOM_FONTS = 'custom_fonts';
 const LOCALSTORAGE_LANG_CODE = 'lang_code';
 const LOCALSTORAGE_BOARD_CUSTOM_FONT_SWITCH = 'board_custom_font_switch';
+const LOCALSTORAGE_TAB_LIST = 'tab_list';
 
 export const getOpenKeysFromLocal = () => {
   const localStr = localStorage.getItem(LOCALSTORAGE_MENU_OPEN_KEYS);
@@ -55,4 +58,13 @@ export const getBoardCustomFontSwitchFromLocal = () => {
 
 export const setBoardCustomFontSwitchToLocal = (value) => {
   localStorage.setItem(LOCALSTORAGE_BOARD_CUSTOM_FONT_SWITCH, value);
+};
+
+export const setTabListToLocal = (value: string) => {
+  localStorage.setItem(LOCALSTORAGE_TAB_LIST, value);
+};
+
+export const getTabListFromLocal = (): TabItem[] => {
+  const str = localStorage.getItem(LOCALSTORAGE_TAB_LIST);
+  return str && JSON.parse(str);
 };

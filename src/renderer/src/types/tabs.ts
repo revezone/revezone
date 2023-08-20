@@ -5,7 +5,7 @@ export type TabItemType = 'tab';
 export interface TabItem {
   id: string;
   type: TabItemType;
-  fileType: 'note' | 'board';
+  fileType: 'note' | 'board' | 'empty';
   name: string;
-  config: RevezoneFile;
+  config?: RevezoneFile;
 }
