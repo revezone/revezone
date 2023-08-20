@@ -16,7 +16,7 @@ import { setTabIndexToLocal } from '@renderer/store/localstorage';
 export default function MultiTabs() {
   const { tabIndex, tabList, deleteTabList, setTabIndex } = useTabList();
   const [model, setModel] = useState<Model>();
-  const [, setCurrentFile] = useAtom(currentFileAtom);
+  const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
 
   console.log('--- tabIndex ---', tabIndex);
 
@@ -42,7 +42,7 @@ export default function MultiTabs() {
     setModel(_model);
   }, [tabIndex, tabList]);
 
-  const renderContent = useCallback((file) => {
+  const renderContent = useCallback((file, currentFile) => {
     console.log('--- renderContent ---', file);
 
     switch (file?.type) {
@@ -55,47 +55,47 @@ export default function MultiTabs() {
     }
   }, []);
 
-  const factory = useCallback((node) => {
-    const file = node.getConfig();
+  const factory = useCallback(
+    (node) => {
+      const file = node.getConfig();
 
-    return <div className="tab_content">{renderContent(file)}</div>;
+      return <div className="tab_content">{renderContent(file, currentFile)}</div>;
+    },
+    [currentFile]
+  );
+
+  const onTabDelete = useCallback((fileId: string, tabList) => {
+    deleteTabList(fileId, tabList);
   }, []);
 
-  const onTabDelete = useCallback(
-    (fileId) => {
-      deleteTabList(fileId, tabList);
+  const onTabSelect = useCallback(async (fileId: string, tabList) => {
+    const _tabIndex = tabList.findIndex((tab) => tab.id === fileId);
+    setTabIndex(_tabIndex);
+
+    setTabIndexToLocal(_tabIndex);
+
+    console.log('--- onTabSelect ---', fileId, _tabIndex, tabList);
+
+    const file = await menuIndexeddbStorage.getFile(fileId);
+    setCurrentFile(file);
+  }, []);
+
+  const onAction = useCallback(
+    (action: Action) => {
+      console.log('--- onAction ---', action);
+
+      switch (action.type) {
+        case 'FlexLayout_DeleteTab':
+          onTabDelete(action.data.node, tabList);
+          break;
+        case 'FlexLayout_SelectTab':
+          onTabSelect(action.data.tabNode, tabList);
+          break;
+      }
+      return action;
     },
     [tabList]
   );
-
-  const onTabSelect = useCallback(
-    async (fileId: string) => {
-      const _tabIndex = tabList.findIndex((tab) => tab.id === fileId);
-      setTabIndex(_tabIndex);
-
-      setTabIndexToLocal(_tabIndex);
-
-      console.log('--- onTabSelect ---', fileId, _tabIndex);
-
-      const file = await menuIndexeddbStorage.getFile(fileId);
-      setCurrentFile(file);
-    },
-    [tabList]
-  );
-
-  const onAction = useCallback((action: Action) => {
-    console.log('--- onAction ---', action);
-
-    switch (action.type) {
-      case 'FlexLayout_DeleteTab':
-        onTabDelete(action.data.node);
-        break;
-      case 'FlexLayout_SelectTab':
-        onTabSelect(action.data.tabNode);
-        break;
-    }
-    return undefined;
-  }, []);
 
   return model ? <Layout model={model} factory={factory} onAction={onAction} /> : null;
 }

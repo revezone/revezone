@@ -12,7 +12,7 @@ import { ConfigProvider } from 'antd';
 import { theme } from './utils/theme';
 import { getOSName, isInRevezoneApp } from './utils/navigator';
 import { submitAppEnterUserEvent } from './utils/statistics';
-import MultiTabs from './components/MultiTabs';
+import MultiTabs from './components/MultiTabsWithFlexLayout';
 
 import './App.css';
 import ResizableLayout from './components/ResizableLayout/index';

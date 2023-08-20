@@ -50,6 +50,9 @@ dependencies:
   flexlayout-react:
     specifier: ^0.7.9
     version: 0.7.9(react-dom@18.2.0)(react@18.2.0)
+  golden-layout:
+    specifier: ^2.6.0
+    version: 2.6.0
   i18next:
     specifier: ^23.3.0
     version: 23.3.0
@@ -2652,6 +2655,10 @@ packages:
       merge2: 1.4.1
       slash: 3.0.0
     dev: true
+
+  /golden-layout@2.6.0:
+    resolution: {integrity: sha512-sIVQCiRWOymHbVD1Aw/T9/ijbPYAVGBlgGYd1N9MRKfcyBNSpjr87Vg9nSHm+RCT8ELrvK8IJYJV0QRJuVUkCQ==}
+    dev: false
 
   /gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
