@@ -10,7 +10,7 @@ import {
   setOpenKeysToLocal
 } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
-import { currentFileAtom, currentFolderIdAtom } from '@renderer/store/jotai';
+import { currentFileAtom, currentFolderIdAtom, tabListAtom } from '@renderer/store/jotai';
 import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 // import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
@@ -31,6 +31,7 @@ import LanguageSwitcher from '../LanguageSwitcher/index';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { submitUserEvent } from '@renderer/utils/statistics';
 import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
+import useTabList from '@renderer/hooks/useTabList';
 
 interface Props {
   collapsed: boolean;
@@ -76,6 +77,8 @@ export default function DraggableMenuTree() {
   const firstRenderRef = useRef(false);
   const { fileTree, getFileTree } = useFileTree();
   const { t } = useTranslation();
+
+  const { updateTabList, tabList } = useTabList();
 
   const onFolderOrFileAdd = useCallback(
     ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
@@ -264,9 +267,11 @@ export default function DraggableMenuTree() {
       //   setCurrentFolderId(folderId);
       //   addSelectedKeys([key, folderId]);
 
+      updateTabList(file, tabList);
+
       submitUserEvent('select_menu', { key });
     },
-    [fileTree]
+    [fileTree, tabList]
   );
 
   const onFileNameChange = useCallback(
@@ -312,8 +317,6 @@ export default function DraggableMenuTree() {
     }
   ];
 
-  console.log('--- fileTree ---', fileTree);
-
   return (
     <div className="revezone-menu-container">
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
@@ -338,7 +341,7 @@ export default function DraggableMenuTree() {
       <div className="menu-list border-t border-slate-100">
         <UncontrolledTreeEnvironment
           dataProvider={new StaticTreeDataProvider(fileTree, (item, data) => ({ ...item, data }))}
-          getItemTitle={(item) => item.data}
+          getItemTitle={(item) => `${item.data.name}`}
           viewState={{}}
           canDragAndDrop={true}
           canDropOnFolder={true}

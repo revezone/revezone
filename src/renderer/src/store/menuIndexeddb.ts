@@ -231,9 +231,6 @@ class MenuIndexeddbStorage {
     const files = await this.getFiles();
     const mappings = await this.getAllFileFolderMappings();
 
-    console.log('folders', folders);
-    console.log('files', files);
-
     const tree = {
       root: {
         index: 'root',
@@ -258,14 +255,14 @@ class MenuIndexeddbStorage {
       tree[folder.id] = {
         ...folder,
         index: folder.id,
-        data: folder.name,
+        data: folder,
         isFolder: true,
         children: filesInFolder.map((file) => file.id)
       };
     });
 
     files.forEach((file) => {
-      tree[file.id] = { ...file, index: file.id, data: file.name };
+      tree[file.id] = { ...file, index: file.id, data: file };
     });
 
     // const tree = folders.map((folder) => {

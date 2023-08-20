@@ -1,5 +1,6 @@
 import { atom } from 'jotai';
-import { RevezoneFile, RevezoneFolder, FileTree } from '../types/file';
+import { RevezoneFile, RevezoneFolder, FileTree } from '@renderer/types/file';
+import { TabItem } from '@renderer/types/tabs';
 
 type Theme = 'light' | 'dark';
 
@@ -18,3 +19,7 @@ export const siderbarCollapsedAtom = atom(false);
 export const langCodeAtom = atom('en');
 
 export const themeAtom = atom<Theme>('light');
+
+export const tabListAtom = atom<TabItem[]>([]);
+
+export const tabIndexAtom = atom<number>(0);

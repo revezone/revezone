@@ -1,0 +1,8 @@
+.flexlayout__layout {
+  position: relative;
+  height: 100%;
+
+  .tab_content{
+    height: 100%;
+  }
+}

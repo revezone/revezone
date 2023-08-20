@@ -47,7 +47,9 @@ export default function ClientComponent({ children }: Props) {
         <DraggableMenuTree></DraggableMenuTree>
         <BottomToolbar />
       </Panel>
-      <PanelResizeHandle className="w-2 bg-gray-100" />
+      <PanelResizeHandle className="w-2 bg-gray-100 flex justify-center items-center">
+        <div className="h-6 w-2/3 bg-gray-400 rounded-md hover:bg-gray-500"></div>
+      </PanelResizeHandle>
       <Panel defaultSize={defaultLayout[1]}>
         {collapsed && (
           <PanelLeftOpen

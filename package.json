@@ -35,6 +35,7 @@
     "electron-google-analytics4": "^1.1.1",
     "electron-store": "^8.1.0",
     "event-emitter": "^0.3.5",
+    "flexlayout-react": "^0.7.9",
     "i18next": "^23.3.0",
     "idb": "^7.1.1",
     "jotai": "^2.2.2",

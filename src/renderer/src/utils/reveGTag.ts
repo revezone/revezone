@@ -42,10 +42,7 @@ class ReveGTag {
           ]
         })
       }
-    ).then((res) => {
-      console.log('--- res ---', res.status, res.url);
-      return res;
-    });
+    ).then((res) => res);
   }
 
   getClientId(): string {

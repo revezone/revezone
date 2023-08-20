@@ -12,6 +12,7 @@ import { ConfigProvider } from 'antd';
 import { theme } from './utils/theme';
 import { getOSName, isInRevezoneApp } from './utils/navigator';
 import { submitAppEnterUserEvent } from './utils/statistics';
+import MultiTabs from './components/MultiTabs';
 
 import './App.css';
 import ResizableLayout from './components/ResizableLayout/index';
@@ -59,7 +60,8 @@ function App(): JSX.Element {
           <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
         </CustomLayout> */}
         <ResizableLayout>
-          <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
+          <MultiTabs></MultiTabs>
+          {/* <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded> */}
         </ResizableLayout>
       </div>
     </ConfigProvider>
