@@ -76,6 +76,7 @@ const items = {
 export default function DraggableMenuTree() {
   const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [focusItem, setFocusItem] = useState();
   const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
   const [currentFolderId, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [editableTextState, setEditableTextState] = useState<{ [key: string]: boolean }>({});
@@ -267,11 +268,11 @@ export default function DraggableMenuTree() {
 
   const onSelect = useCallback(
     async (keys) => {
-      const key = keys?.[0];
+      const key = typeof keys?.[0] === 'string' ? keys?.[0] : keys?.[0].id;
+
+      console.log('onSelect', keys);
 
       const fileId = key?.startsWith('file_') ? key : undefined;
-
-      console.log('onSelect', fileId, key);
 
       if (!fileId) return;
 
@@ -285,12 +286,18 @@ export default function DraggableMenuTree() {
       //   setCurrentFolderId(folderId);
       //   addSelectedKeys([key, folderId]);
 
+      setSelectedKeys([key]);
+
       updateTabList(file, tabList);
 
       submitUserEvent('select_menu', { key });
     },
     [fileTree, tabList]
   );
+
+  const onFocusItem = useCallback((item) => {
+    setFocusItem(item.id);
+  }, []);
 
   const onFileNameChange = useCallback(
     async (text: string, file: RevezoneFile) => {
@@ -335,6 +342,9 @@ export default function DraggableMenuTree() {
     }
   ];
 
+  console.log('focusedItem', focusItem);
+  console.log('selectedKeys', selectedKeys);
+
   return (
     <div className="revezone-menu-container">
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
@@ -362,10 +372,10 @@ export default function DraggableMenuTree() {
           items={fileTree}
           getItemTitle={(item) => `${item.data.name}`}
           viewState={{
-            tree: {
+            ['tree']: {
               selectedItems: selectedKeys,
               expandedItems: openKeys,
-              focusedItem: selectedKeys?.[0]
+              focusedItem: focusItem
             }
           }}
           canDragAndDrop={true}
@@ -374,6 +384,7 @@ export default function DraggableMenuTree() {
           onSelectItems={onSelect}
           onExpandItem={onExpandItem}
           onCollapseItem={onCollapseItem}
+          onFocusItem={onFocusItem}
         >
           <Tree treeId="tree" rootItem="root" treeLabel="Tree Example" />
         </ControlledTreeEnvironment>
