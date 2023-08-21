@@ -306,19 +306,16 @@ export default function DraggableMenuTree() {
     setFocusItem(item.id);
   }, []);
 
-  const onFileNameChange = useCallback(
-    async (text: string, file: RevezoneFile) => {
-      await menuIndexeddbStorage.updateFileName(file, text);
-      updateEditableTextState(file.id, true, editableTextState);
+  const onFileNameChange = useCallback(async (text: string, file: RevezoneFile) => {
+    await menuIndexeddbStorage.updateFileName(file, text);
+    // updateEditableTextState(file.id, true, editableTextState);
 
-      setSelectedKeys([file.id]);
+    // setSelectedKeys([file.id]);
 
-      setCurrentFile({ ...file, name: text });
+    // setCurrentFile({ ...file, name: text });
 
-      await getFileTree();
-    },
-    [editableTextState]
-  );
+    await getFileTree();
+  }, []);
 
   const onFolderNameChange = useCallback(
     (folder: RevezoneFolder, text: string) => {
@@ -407,8 +404,10 @@ export default function DraggableMenuTree() {
           onExpandItem={onExpandItem}
           onCollapseItem={onCollapseItem}
           onFocusItem={onFocusItem}
-          onRenameItem={(item, name) => {
-            console.log('--- rename ---', item, name);
+          onRenameItem={async (item, name) => {
+            console.log('--- rename ---', item.data, name);
+            menuIndexeddbStorage.updateFileName(item.data, name);
+            getFileTree();
           }}
           renderTreeContainer={({ children, containerProps }) => (
             <div {...containerProps}>{children}</div>

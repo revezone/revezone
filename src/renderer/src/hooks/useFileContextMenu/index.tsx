@@ -22,11 +22,6 @@ export default function useFileContextMenu(props: Props) {
     (file: RevezoneFile, context) => [
       {
         key: 'rename',
-        // label: (
-        //   <button onClick={context.startRenamingItem} type="button">
-        //     Rename
-        //   </button>
-        // ),
         label: t('operation.rename'),
         icon: <FileEdit className="w-4" />,
         onClick: ({ domEvent }) => {
