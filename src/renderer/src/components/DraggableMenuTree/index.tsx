@@ -1,37 +1,14 @@
-import { useMemo } from 'react';
-import {
-  ControlledTreeEnvironment,
-  UncontrolledTreeEnvironment,
-  Tree,
-  TreeItem,
-  StaticTreeDataProvider
-} from 'react-complex-tree';
+import { ControlledTreeEnvironment, Tree } from 'react-complex-tree';
 import 'react-complex-tree/lib/style-modern.css';
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { Menu, Dropdown, Input } from 'antd';
-import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
+import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import type { RevezoneFile, RevezoneFolder, OnFolderOrFileAddProps } from '@renderer/types/file';
-import {
-  getOpenKeysFromLocal,
-  setCurrentFileToLocal,
-  setOpenKeysToLocal,
-  setSelectedKeysToLocal,
-  getSelectedKeysFromLocal,
-  getCurrentFileFromLocal
-} from '@renderer/store/localstorage';
+import { setOpenKeysToLocal } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
-import {
-  currentFileAtom,
-  currentFolderIdAtom,
-  openKeysAtom,
-  selectedKeysAtom,
-  tabListAtom
-} from '@renderer/store/jotai';
-import EditableText from '../EditableText';
+import { currentFolderIdAtom, openKeysAtom, selectedKeysAtom } from '@renderer/store/jotai';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
-// import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 import OperationBar from '../OperationBar';
-import moment from 'moment';
 import RevezoneLogo from '../RevezoneLogo';
 
 import './index.css';
@@ -39,7 +16,6 @@ import './index.css';
 import { Folder, HardDrive, UploadCloud, MoreVertical } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import useFileContextMenu from '@renderer/hooks/useFileContextMenu';
-import useFolderContextMenu from '@renderer/hooks/useFolderContextMenu';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/index';
@@ -52,37 +28,6 @@ import useCurrentFile from '@renderer/hooks/useCurrentFile';
 interface Props {
   collapsed: boolean;
 }
-
-const items = {
-  root: {
-    index: 'root',
-    isFolder: true,
-    children: ['child1', 'child2', 'child4'],
-    data: 'Root item'
-  },
-  child1: {
-    index: 'child1',
-    children: [],
-    data: 'Child item 1'
-  },
-  child2: {
-    index: 'child2',
-    isFolder: true,
-    children: ['child3'],
-    data: 'Child item 2'
-  },
-  child3: {
-    index: 'child3',
-    children: [],
-    data: 'Child item 3'
-  },
-  child4: {
-    index: 'child4',
-    isFolder: true,
-    children: [],
-    data: 'Child item 4'
-  }
-};
 
 export default function DraggableMenuTree() {
   const [openKeys, setOpenKeys] = useAtom(openKeysAtom);
@@ -100,7 +45,7 @@ export default function DraggableMenuTree() {
   const onFolderOrFileAdd = useCallback(
     ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
       setOpenKeys([...openKeys, folderId]);
-      updateEditableTextState(fileId || folderId, false, editableTextState);
+      // updateEditableTextState(fileId || folderId, false, editableTextState);
       if (type === 'file') {
         // addSelectedKeys(fileId ? [fileId] : []);
       } else if (type === 'folder') {
@@ -169,7 +114,7 @@ export default function DraggableMenuTree() {
 
   const deleteFile = useCallback(
     async (file: RevezoneFile) => {
-      await menuIndexeddbStorage.deleteFile(file);
+      await fileTreeIndexeddbStorage.deleteFile(file);
 
       console.log('--- delete file ---', file);
 
@@ -186,36 +131,20 @@ export default function DraggableMenuTree() {
 
       await getFileTree();
     },
-    [menuIndexeddbStorage, currentFile]
+    [fileTreeIndexeddbStorage, currentFile]
   );
-
-  const updateEditableTextState = useCallback((id: string, value: boolean, editableTextState) => {
-    const newEditableTextState = { ...editableTextState };
-    newEditableTextState[id] = value;
-    setEditableTextState(newEditableTextState);
-  }, []);
 
   const deleteFolder = useCallback(
     async (folderId: string) => {
-      await menuIndexeddbStorage.deleteFolder(folderId);
+      await fileTreeIndexeddbStorage.deleteFolder(folderId);
       await getFileTree();
     },
-    [menuIndexeddbStorage]
+    [fileTreeIndexeddbStorage]
   );
 
   const [getFileContextMenu] = useFileContextMenu({
-    editableTextState,
-    deleteFile,
-    updateEditableTextState
+    deleteFile
   });
-
-  // const [getFolderContextMenu] = useFolderContextMenu({
-  //   fileTree,
-  //   editableTextState,
-  //   updateEditableTextState,
-  //   addFile,
-  //   deleteFolder
-  // });
 
   const resetMenu = useCallback(() => {
     updateCurrentFile(undefined);
@@ -235,47 +164,6 @@ export default function DraggableMenuTree() {
     setOpenKeys(keys);
     setOpenKeysToLocal(keys);
   }, []);
-
-  // const onOpenChange = useCallback(
-  //   (keys) => {
-  //     const folderKeys = keys.filter((key) => key.startsWith('folder_'));
-  //     const openFolderKeys = openKeys.filter((key) => key.startsWith('folder_'));
-
-  //     const diffNum = folderKeys?.length - openFolderKeys.length;
-
-  //     let changeType;
-
-  //     switch (true) {
-  //       case diffNum === 0:
-  //         changeType = 'unchanged';
-  //         break;
-  //       case diffNum > 0:
-  //         changeType = 'increase';
-  //         break;
-  //       default:
-  //         changeType = 'decrease';
-  //         break;
-  //     }
-
-  //     console.log('onOpenChange', changeType, folderKeys, openFolderKeys);
-
-  //     setOpenKeys(keys);
-  //     setOpenKeysToLocal(keys);
-
-  //     // only while openKeys increase
-  //     if (changeType === 'increase') {
-  //       const folderId = keys?.length ? keys[keys.length - 1] : undefined;
-
-  //       if (currentFolderId !== folderId) {
-  //         resetMenu();
-
-  //         setCurrentFolderId(folderId);
-  //         setSelectedKeys([folderId]);
-  //       }
-  //     }
-  //   },
-  //   [openKeys, currentFolderId]
-  // );
 
   const onSelectItems = useCallback(
     async (items) => {
@@ -306,32 +194,6 @@ export default function DraggableMenuTree() {
     setFocusItem(item.id);
   }, []);
 
-  const onFileNameChange = useCallback(async (text: string, file: RevezoneFile) => {
-    await menuIndexeddbStorage.updateFileName(file, text);
-    // updateEditableTextState(file.id, true, editableTextState);
-
-    // setSelectedKeys([file.id]);
-
-    // setCurrentFile({ ...file, name: text });
-
-    await getFileTree();
-  }, []);
-
-  const onFolderNameChange = useCallback(
-    (folder: RevezoneFolder, text: string) => {
-      menuIndexeddbStorage.updateFolderName(folder, text);
-      updateEditableTextState(folder.id, true, editableTextState);
-    },
-    [editableTextState]
-  );
-
-  const onEditableTextEdit = useCallback(
-    (id: string) => {
-      updateEditableTextState(id, false, editableTextState);
-    },
-    [editableTextState]
-  );
-
   const storageTypeItems = [
     {
       key: 'local',
@@ -345,23 +207,6 @@ export default function DraggableMenuTree() {
       label: t('storage.cloud')
     }
   ];
-
-  const getOperationItems = useCallback(
-    (context) => [
-      {
-        key: 'rename',
-        label: (
-          <button onClick={context.startRenamingItem} type="button">
-            Rename
-          </button>
-        )
-      }
-    ],
-    []
-  );
-
-  console.log('focusedItem', focusItem);
-  console.log('selectedKeys', selectedKeys);
 
   return (
     <div className="revezone-menu-container">
@@ -405,8 +250,7 @@ export default function DraggableMenuTree() {
           onCollapseItem={onCollapseItem}
           onFocusItem={onFocusItem}
           onRenameItem={async (item, name) => {
-            console.log('--- rename ---', item.data, name);
-            menuIndexeddbStorage.updateFileName(item.data, name);
+            fileTreeIndexeddbStorage.updateFileName(item.data, name);
             getFileTree();
           }}
           renderTreeContainer={({ children, containerProps }) => (
@@ -444,7 +288,9 @@ export default function DraggableMenuTree() {
                     {title}
                   </InteractiveComponent>
 
-                  <Dropdown menu={{ items: getFileContextMenu(item.data, context) }}>
+                  <Dropdown
+                    menu={{ items: getFileContextMenu(item.data, context, !!item.isFolder) }}
+                  >
                     <MoreVertical className="w-3 h-3 cursor-pointer text-gray-500" />
                   </Dropdown>
                 </div>

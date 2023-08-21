@@ -5,21 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { RevezoneFile, RevezoneFolder } from '@renderer/types/file';
 
 interface Props {
-  editableTextState: EditableTextState;
-  updateEditableTextState: (
-    id: string,
-    value: boolean,
-    editableTextState: EditableTextState
-  ) => void;
-  deleteFile: (file: RevezoneFile, folderId: string) => void;
+  deleteFile: (file: RevezoneFile) => void;
 }
 
 export default function useFileContextMenu(props: Props) {
-  const { editableTextState, updateEditableTextState, deleteFile } = props;
   const { t } = useTranslation();
+  const { deleteFile } = props;
 
-  const getFileContextMenu = useCallback(
-    (file: RevezoneFile, context) => [
+  const getFileContextMenu = useCallback((file: RevezoneFile, context, isFolder: boolean) => {
+    const folderContextMenu = [
       {
         key: 'rename',
         label: t('operation.rename'),
@@ -27,7 +21,6 @@ export default function useFileContextMenu(props: Props) {
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
           console.log('rename');
-          // updateEditableTextState(file.id, false, editableTextState);
           context.startRenamingItem();
         }
       },
@@ -37,21 +30,28 @@ export default function useFileContextMenu(props: Props) {
         icon: <Trash2 className="w-4"></Trash2>,
         onClick: () => {
           console.log('delete', file, context);
-          // deleteFile(file, folder.id);
-        }
-      },
-      {
-        key: 'copy_revezone_link',
-        label: t('operation.copyRevezoneLink'),
-        icon: <ClipboardCopy className="w-4" />,
-        onClick: ({ domEvent }) => {
-          domEvent.stopPropagation();
-          navigator.clipboard.writeText(`revezone://${file.id}`);
+          // deleteFile(file);
         }
       }
-    ],
-    []
-  );
+    ];
+
+    if (isFolder) {
+      return folderContextMenu;
+    } else {
+      return [
+        ...folderContextMenu,
+        {
+          key: 'copy_revezone_link',
+          label: t('operation.copyRevezoneLink'),
+          icon: <ClipboardCopy className="w-4" />,
+          onClick: ({ domEvent }) => {
+            domEvent.stopPropagation();
+            navigator.clipboard.writeText(`revezone://${file.id}`);
+          }
+        }
+      ];
+    }
+  }, []);
 
   return [getFileContextMenu];
 }

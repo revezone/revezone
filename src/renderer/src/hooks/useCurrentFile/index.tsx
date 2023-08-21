@@ -2,7 +2,7 @@ import { currentFileAtom, selectedKeysAtom } from '@renderer/store/jotai';
 import { setCurrentFileToLocal, setSelectedKeysToLocal } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
 import { useCallback } from 'react';
-import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
+import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 
 export default function useCurrentFile() {
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
@@ -13,7 +13,7 @@ export default function useCurrentFile() {
     setSelectedKeys(keys);
     setSelectedKeysToLocal(keys);
 
-    const file = fileId ? await menuIndexeddbStorage.getFile(fileId) : undefined;
+    const file = fileId ? await fileTreeIndexeddbStorage.getFile(fileId) : undefined;
     setCurrentFileToLocal(file);
     setCurrentFile(file);
 

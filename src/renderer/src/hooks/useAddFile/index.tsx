@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { FileTree, RevezoneFileType, OnFolderOrFileAddProps } from '@renderer/types/file';
 import { fileTreeAtom, currentFileAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
-import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
+import { menuIndexeddbStorage } from '@renderer/store/_menuIndexeddb';
 import { useTranslation } from 'react-i18next';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';

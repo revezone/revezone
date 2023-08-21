@@ -33,7 +33,7 @@ export interface RevezoneFolder {
 
 export type FileTreeItem = RevezoneFolder & { children: RevezoneFile[] };
 
-export type FileTree = { [key: TreeItemIndex]: TreeItem };
+export type RevezoneFileTree = { [key: TreeItemIndex]: TreeItem };
 
 export interface OnFolderOrFileAddProps {
   fileId?: string;

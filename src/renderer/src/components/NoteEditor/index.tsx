@@ -3,7 +3,7 @@ import '@blocksuite/editor';
 import '@blocksuite/editor/themes/affine.css';
 import RevezoneBlockSuiteEditor from '../RevezoneBlockSuiteEditor';
 import { Input } from 'antd';
-import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
+import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { RevezoneFile } from '@renderer/types/file';
 
 import './index.css';
@@ -64,7 +64,7 @@ function NoteEditor({ file }: Props): JSX.Element | null {
     (e) => {
       const newTitle = e.target.value;
       setTitle(newTitle);
-      menuIndexeddbStorage.updateFileName(file, newTitle);
+      fileTreeIndexeddbStorage.updateFileName(file, newTitle);
       getFileTree();
     },
     [file.id]

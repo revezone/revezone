@@ -1,25 +1,33 @@
+/**
+ * TODO: REMOVE THIS FILE, DEADLINE: 2024-6
+ */
+
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment-timezone';
-import { FileTree } from '../types/file';
 import {
   RevezoneFile,
   RevezoneFolder,
   RevezoneFileType,
-  RevezoneFolderFileMapping
+  RevezoneFolderFileMapping,
+  RevezoneFileTree
 } from '../types/file';
 import { submitUserEvent } from '../utils/statistics';
 
 moment.tz.setDefault('Asia/Shanghai');
 
 export interface RevezoneDBSchema extends DBSchema {
-  folder: {
-    key: string;
-    value: RevezoneFolder;
-  };
   file: {
     key: string;
     value: RevezoneFile;
+  };
+  file_tree: {
+    key: string;
+    value: RevezoneFileTree;
+  };
+  folder: {
+    key: string;
+    value: RevezoneFolder;
   };
   folder_file_mapping: {
     key: number;
@@ -33,6 +41,7 @@ export const INDEXEDDB_FOLD_FILE_MAPPING_KEY = 'folder_file_mapping';
 export const LOCALSTORAGE_FIRST_FOLDER_KEY = 'first_forlder_id';
 export const LOCALSTORAGE_FIRST_FILE_KEY = 'first_file_id';
 export const INDEXEDDB_REVEZONE_MENU = 'revezone_menu';
+export const INDEXEDDB_FILE_TREE_KEY = 'file_tree';
 
 class MenuIndexeddbStorage {
   constructor() {
@@ -57,8 +66,9 @@ class MenuIndexeddbStorage {
 
     const db = await openDB<RevezoneDBSchema>(INDEXEDDB_REVEZONE_MENU, 1, {
       upgrade: async (db) => {
-        await this.initFolderStore(db);
         await this.initFileStore(db);
+        await this.initFileTreeStore(db);
+        await this.initFolderStore(db);
         await this.initFolderFileMappingStore(db);
       }
     });
@@ -105,6 +115,14 @@ class MenuIndexeddbStorage {
     await fileStore.createIndex('type', 'type', { unique: false });
 
     return fileStore;
+  }
+
+  async initFileTreeStore(db): Promise<IDBObjectStore> {
+    const fileTreeStore: IDBObjectStore = await db.createObjectStore(INDEXEDDB_FILE_TREE_KEY, {
+      autoIncrement: true
+    });
+
+    return fileTreeStore;
   }
 
   async addFolder(name?: string) {
@@ -225,7 +243,20 @@ class MenuIndexeddbStorage {
     return mappings || [];
   }
 
-  async getFileTree(): Promise<FileTree> {
+  async getFileTree(): Promise<RevezoneFileTree | undefined> {
+    await this.initDB();
+    const fileTree = await this.db?.get(INDEXEDDB_FILE_TREE_KEY, INDEXEDDB_FILE_TREE_KEY);
+
+    let olderFileTree;
+
+    if (!fileTree) {
+      olderFileTree = await this.getFileTreeFromOlderData();
+    }
+
+    return fileTree || olderFileTree;
+  }
+
+  async getFileTreeFromOlderData(): Promise<RevezoneFileTree> {
     await this.initDB();
     const folders = await this.getFolders();
     const files = await this.getFiles();
