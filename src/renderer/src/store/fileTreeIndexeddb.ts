@@ -178,23 +178,20 @@ class FileTreeIndexeddbStorage {
     return value;
   }
 
-  async deleteFile(file: RevezoneFile) {
+  async deleteFile(fileId: string) {
     await this.initDB();
 
-    file && (await this.db?.delete(INDEXEDDB_FILE, file.id));
+    const file = await this.getFile(fileId);
 
-    // const folderFileMappingKeys = await this.db?.getAllKeysFromIndex(
-    //   INDEXEDDB_FOLD_FILE_MAPPING_KEY,
-    //   // @ts-ignore
-    //   'fileId',
-    //   file.id
-    // );
+    if (!file) return;
 
-    // const deleteFolderFileMappingPromises = folderFileMappingKeys?.map(async (key) =>
-    //   this.db?.delete(INDEXEDDB_FOLD_FILE_MAPPING_KEY, key)
-    // );
+    file && (await this.db?.delete(INDEXEDDB_FILE, fileId));
 
-    // deleteFolderFileMappingPromises && (await Promise.all(deleteFolderFileMappingPromises));
+    const fileTree = await this.getFileTree();
+
+    delete fileTree?.[fileId];
+
+    fileTree && this.updateFileTree(fileTree);
 
     submitUserEvent(`delete_${file.type}`, file);
   }
@@ -291,19 +288,31 @@ class FileTreeIndexeddbStorage {
   }
 
   async deleteFolder(folderId: string) {
-    await this.initDB();
-
     if (!folderId) return;
 
-    // await this.db?.delete(INDEXEDDB_FOLDER_KEY, folderId);
+    await this.initDB();
 
-    // const filesInFolder = await this.getFilesInFolder(folderId);
+    const fileTree = await this.getFileTree();
 
-    // const deleteFilesPromise = filesInFolder?.map(async (file) => this.deleteFile(file));
+    if (!fileTree) return;
 
-    // deleteFilesPromise && (await Promise.all(deleteFilesPromise));
+    const filesInFolder = fileTree?.[folderId]?.children as string[];
 
-    // submitUserEvent('delete_folder', { id: folderId });
+    delete fileTree[folderId];
+
+    filesInFolder?.forEach((fileId) => {
+      delete fileTree[fileId];
+    });
+
+    await this.updateFileTree(fileTree);
+
+    const deleteFilesPromise = filesInFolder?.map(async (fileId) =>
+      this.db?.delete(INDEXEDDB_FILE, fileId)
+    );
+
+    deleteFilesPromise && (await Promise.all(deleteFilesPromise));
+
+    submitUserEvent('delete_folder', { id: folderId });
   }
 }
 

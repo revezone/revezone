@@ -285,8 +285,8 @@ class MenuIndexeddbStorage {
       });
 
       tree[folder.id] = {
-        ...folder,
         index: folder.id,
+        id: folder.id,
         data: folder,
         isFolder: true,
         canRename: true,
@@ -295,7 +295,7 @@ class MenuIndexeddbStorage {
     });
 
     files.forEach((file) => {
-      tree[file.id] = { ...file, index: file.id, data: file, canRename: true };
+      tree[file.id] = { index: file.id, id: file.id, data: file, canRename: true };
     });
 
     // const tree = folders.map((folder) => {
