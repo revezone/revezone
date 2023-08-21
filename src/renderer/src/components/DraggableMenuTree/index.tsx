@@ -445,7 +445,7 @@ export default function DraggableMenuTree() {
                     {title}
                   </InteractiveComponent>
 
-                  <Dropdown menu={{ items: getOperationItems(context) }}>
+                  <Dropdown menu={{ items: getFileContextMenu(item.data, context) }}>
                     <MoreVertical className="w-3 h-3 cursor-pointer text-gray-500" />
                   </Dropdown>
                 </div>

@@ -19,15 +19,21 @@ export default function useFileContextMenu(props: Props) {
   const { t } = useTranslation();
 
   const getFileContextMenu = useCallback(
-    (file: RevezoneFile, folder: RevezoneFolder) => [
+    (file: RevezoneFile, context) => [
       {
         key: 'rename',
+        // label: (
+        //   <button onClick={context.startRenamingItem} type="button">
+        //     Rename
+        //   </button>
+        // ),
         label: t('operation.rename'),
         icon: <FileEdit className="w-4" />,
         onClick: ({ domEvent }) => {
           domEvent.stopPropagation();
           console.log('rename');
-          updateEditableTextState(file.id, false, editableTextState);
+          // updateEditableTextState(file.id, false, editableTextState);
+          context.startRenamingItem();
         }
       },
       {
@@ -35,8 +41,8 @@ export default function useFileContextMenu(props: Props) {
         label: t('operation.delete'),
         icon: <Trash2 className="w-4"></Trash2>,
         onClick: () => {
-          console.log('delete', file.id, folder.id);
-          deleteFile(file, folder.id);
+          console.log('delete', file, context);
+          // deleteFile(file, folder.id);
         }
       },
       {
