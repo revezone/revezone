@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   ControlledTreeEnvironment,
   UncontrolledTreeEnvironment,
@@ -26,7 +27,7 @@ import RevezoneLogo from '../RevezoneLogo';
 
 import './index.css';
 
-import { Folder, HardDrive, UploadCloud } from 'lucide-react';
+import { Folder, HardDrive, UploadCloud, MoreVertical } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import useFileContextMenu from '@renderer/hooks/useFileContextMenu';
 import useFolderContextMenu from '@renderer/hooks/useFolderContextMenu';
@@ -343,6 +344,20 @@ export default function DraggableMenuTree() {
     }
   ];
 
+  const getOperationItems = useCallback(
+    (context) => [
+      {
+        key: 'rename',
+        label: (
+          <button onClick={context.startRenamingItem} type="button">
+            Rename
+          </button>
+        )
+      }
+    ],
+    []
+  );
+
   console.log('focusedItem', focusItem);
   console.log('selectedKeys', selectedKeys);
 
@@ -367,7 +382,7 @@ export default function DraggableMenuTree() {
         </div>
       </div>
       <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
-      <div className="menu-list border-t border-slate-100">
+      <div className="menu-list border-t border-slate-100 pl-2 pr-4">
         <ControlledTreeEnvironment
           // dataProvider={new StaticTreeDataProvider(fileTree, (item, data) => ({ ...item, data }))}
           items={fileTree}
@@ -388,19 +403,52 @@ export default function DraggableMenuTree() {
           onExpandItem={onExpandItem}
           onCollapseItem={onCollapseItem}
           onFocusItem={onFocusItem}
-          onRenameItem={() => {}}
-          renderRenameInput={({ item }) => (
-            <>
-              <span>aaa</span>
-              <Input value={item.data.name}></Input>
-            </>
-            // <EditableText
-            //   text={item.data.name}
-            //   isPreview={false}
-            //   onSave={() => {}}
-            //   onEdit={() => {}}
-            // />
+          onRenameItem={(item, name) => {
+            console.log('--- rename ---', item, name);
+          }}
+          renderTreeContainer={({ children, containerProps }) => (
+            <div {...containerProps}>{children}</div>
           )}
+          renderItemsContainer={({ children, containerProps }) => (
+            <ul {...containerProps}>{children}</ul>
+          )}
+          renderItem={({ item, depth, children, title, context, arrow }) => {
+            const InteractiveComponent = context.isRenaming ? 'div' : 'button';
+            const type = context.isRenaming ? undefined : 'button';
+
+            return (
+              <li {...context.itemContainerWithChildrenProps} className="rct-tree-item-li">
+                <div
+                  {...context.itemContainerWithoutChildrenProps}
+                  style={{ paddingLeft: `${(depth + 1) * 4}px` }}
+                  className={[
+                    'rct-tree-item-title-container',
+                    item.isFolder && 'rct-tree-item-title-container-isFolder',
+                    context.isSelected && 'rct-tree-item-title-container-selected',
+                    context.isExpanded && 'rct-tree-item-title-container-expanded',
+                    context.isFocused && 'rct-tree-item-title-container-focused',
+                    context.isDraggingOver && 'rct-tree-item-title-container-dragging-over',
+                    context.isSearchMatching && 'rct-tree-item-title-container-search-match'
+                  ].join(' ')}
+                >
+                  {arrow}
+                  <InteractiveComponent
+                    // @ts-ignore
+                    type={type}
+                    {...context.interactiveElementProps}
+                    className="rct-tree-item-button"
+                  >
+                    {title}
+                  </InteractiveComponent>
+
+                  <Dropdown menu={{ items: getOperationItems(context) }}>
+                    <MoreVertical className="w-3 h-3 cursor-pointer text-gray-500" />
+                  </Dropdown>
+                </div>
+                {children}
+              </li>
+            );
+          }}
         >
           <Tree treeId="tree" rootItem="root" treeLabel="Tree Example" />
         </ControlledTreeEnvironment>

@@ -1,14 +1,12 @@
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { ReactNode, useCallback } from 'react';
-import { Layout } from 'antd';
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { PanelLeftClose, PanelLeftOpen, Grip, GripVertical } from 'lucide-react';
 import { siderbarCollapsedAtom, themeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 // import LanguageSwitcher from '../LanguageSwitcher';
 // import ThemeSwitcher from '../ThemeSwitcher';
 
 import './index.css';
-import { useTranslation } from 'react-i18next';
 import BottomToolbar from '../BottomToolbar/index';
 import { submitUserEvent } from '@renderer/utils/statistics';
 import DraggableMenuTree from '../DraggableMenuTree/index';
@@ -48,7 +46,12 @@ export default function ClientComponent({ children }: Props) {
         <BottomToolbar />
       </Panel>
       <PanelResizeHandle className="w-2 bg-gray-100 flex justify-center items-center">
-        <div className="h-6 w-2/3 bg-gray-400 rounded-md hover:bg-gray-500"></div>
+        {/* <div className="h-6 w-2/3 bg-gray-400 rounded-md hover:bg-gray-500"> */}
+        <div className="flex flex-col">
+          <GripVertical className="w-3 h-3 text-gray-500" />
+        </div>
+
+        {/* </div> */}
       </PanelResizeHandle>
       <Panel defaultSize={defaultLayout[1]}>
         {collapsed && (
