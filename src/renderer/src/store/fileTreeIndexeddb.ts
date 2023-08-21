@@ -50,6 +50,8 @@ class FileTreeIndexeddbStorage {
   }
 
   static instance: FileTreeIndexeddbStorage;
+  static oldDBSynced = false;
+
   db: IDBPDatabase<RevezoneDBSchema> | undefined;
 
   async initDB(): Promise<IDBPDatabase<RevezoneDBSchema>> {
@@ -206,6 +208,10 @@ class FileTreeIndexeddbStorage {
   }
 
   async transferDataFromMenuIndexedDB(oldFileTree) {
+    if (FileTreeIndexeddbStorage.oldDBSynced) return;
+
+    FileTreeIndexeddbStorage.oldDBSynced = true;
+
     this.updateFileTree(oldFileTree);
 
     const oldFiles = await menuIndexeddbStorage.getFiles();
