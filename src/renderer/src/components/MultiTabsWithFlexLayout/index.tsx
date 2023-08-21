@@ -8,15 +8,16 @@ import { useCallback, useEffect, useState } from 'react';
 import useTabList from '@renderer/hooks/useTabList';
 
 import './index.css';
-import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import { currentFileAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { setTabIndexToLocal } from '@renderer/store/localstorage';
+import useSelectedKeys from '@renderer/hooks/useSelectedKeys';
 
 export default function MultiTabs() {
   const { tabIndex, tabList, deleteTabList, setTabIndex } = useTabList();
   const [model, setModel] = useState<Model>();
-  const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
+  const [currentFile] = useAtom(currentFileAtom);
+  const { updateSelectedKeys } = useSelectedKeys();
 
   useEffect(() => {
     console.log('--- tablist ---', tabIndex, tabList);
@@ -78,8 +79,7 @@ export default function MultiTabs() {
 
     console.log('--- onTabSelect ---', fileId, _tabIndex, tabList);
 
-    const file = await menuIndexeddbStorage.getFile(fileId);
-    setCurrentFile(file);
+    updateSelectedKeys(fileId);
   }, []);
 
   const onAction = useCallback(
