@@ -47,6 +47,7 @@ import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { submitUserEvent } from '@renderer/utils/statistics';
 import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 import useTabList from '@renderer/hooks/useTabList';
+import useCurrentFile from '@renderer/hooks/useCurrentFile';
 
 interface Props {
   collapsed: boolean;
@@ -87,7 +88,6 @@ export default function DraggableMenuTree() {
   const [openKeys, setOpenKeys] = useAtom(openKeysAtom);
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
   const [focusItem, setFocusItem] = useState();
-  const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
   const [currentFolderId, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [editableTextState, setEditableTextState] = useState<{ [key: string]: boolean }>({});
   const firstRenderRef = useRef(false);
@@ -95,6 +95,7 @@ export default function DraggableMenuTree() {
   const { t } = useTranslation();
 
   const { updateTabList, tabList } = useTabList();
+  const { currentFile, updateCurrentFile, setCurrentFile } = useCurrentFile();
 
   const onFolderOrFileAdd = useCallback(
     ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
@@ -104,8 +105,8 @@ export default function DraggableMenuTree() {
         // addSelectedKeys(fileId ? [fileId] : []);
       } else if (type === 'folder') {
         resetMenu();
-        setCurrentFile(undefined);
-        setSelectedKeys([folderId]);
+        updateCurrentFile(undefined);
+        // setSelectedKeys([folderId]);
       }
     },
     [openKeys, editableTextState]
@@ -181,7 +182,7 @@ export default function DraggableMenuTree() {
           break;
       }
 
-      setCurrentFile(undefined);
+      updateCurrentFile(undefined);
 
       await getFileTree();
     },
@@ -217,8 +218,8 @@ export default function DraggableMenuTree() {
   // });
 
   const resetMenu = useCallback(() => {
-    setCurrentFile(undefined);
-    setCurrentFolderId(undefined);
+    updateCurrentFile(undefined);
+    // setCurrentFolderId(undefined);
     setSelectedKeys([]);
   }, []);
 
@@ -290,17 +291,9 @@ export default function DraggableMenuTree() {
 
       //   resetMenu();
 
-      const file = await menuIndexeddbStorage.getFile(fileId);
-
-      setCurrentFile(file);
+      const file = await updateCurrentFile(fileId);
       //   setCurrentFolderId(folderId);
       //   addSelectedKeys([key, folderId]);
-
-      setCurrentFileToLocal(file);
-
-      setSelectedKeys([key]);
-
-      setSelectedKeysToLocal([key]);
 
       updateTabList(file, tabList);
 

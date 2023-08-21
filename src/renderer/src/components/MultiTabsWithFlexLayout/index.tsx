@@ -11,13 +11,13 @@ import './index.css';
 import { currentFileAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { setTabIndexToLocal } from '@renderer/store/localstorage';
-import useSelectedKeys from '@renderer/hooks/useSelectedKeys';
+import useCurrentFile from '@renderer/hooks/useCurrentFile';
 
 export default function MultiTabs() {
-  const { tabIndex, tabList, deleteTabList, setTabIndex } = useTabList();
+  const { tabIndex, tabList, deleteTab, setTabIndex } = useTabList();
   const [model, setModel] = useState<Model>();
   const [currentFile] = useAtom(currentFileAtom);
-  const { updateSelectedKeys } = useSelectedKeys();
+  const { updateCurrentFile } = useCurrentFile();
 
   useEffect(() => {
     console.log('--- tablist ---', tabIndex, tabList);
@@ -68,7 +68,7 @@ export default function MultiTabs() {
   );
 
   const onTabDelete = useCallback((fileId: string, tabList, tabIndex) => {
-    deleteTabList(fileId, tabList, tabIndex);
+    deleteTab(fileId, tabList, tabIndex);
   }, []);
 
   const onTabSelect = useCallback(async (fileId: string, tabList) => {
@@ -79,7 +79,7 @@ export default function MultiTabs() {
 
     console.log('--- onTabSelect ---', fileId, _tabIndex, tabList);
 
-    updateSelectedKeys(fileId);
+    updateCurrentFile(fileId);
   }, []);
 
   const onAction = useCallback(

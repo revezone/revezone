@@ -9,11 +9,13 @@ import {
   getTabIndexFromLocal,
   setTabIndexToLocal
 } from '@renderer/store/localstorage';
+import useCurrentFile from '../useCurrentFile';
 
 export default function useTabList() {
   const [tabList, setTabList] = useAtom(tabListAtom);
   const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
   const [, setCurrentFile] = useAtom(currentFileAtom);
+  const { updateCurrentFile } = useCurrentFile();
 
   useEffect(() => {
     const tabListFromLocal = getTabListFromLocal();
@@ -51,7 +53,7 @@ export default function useTabList() {
     }
   }, []);
 
-  const deleteTabList = useCallback((fileId: string, tabList: TabItem[], tabIndex: number) => {
+  const deleteTab = useCallback((fileId: string, tabList: TabItem[], tabIndex: number) => {
     const newTabList = tabList.filter((tab) => tab.id !== fileId);
 
     console.log('deleteTabList', fileId, newTabList);
@@ -67,10 +69,9 @@ export default function useTabList() {
     setTabIndex(_tabIndex);
     setTabIndexToLocal(_tabIndex);
 
-    if (_tabIndex < 0) {
-      setCurrentFile(undefined);
-    }
+    const _file = newTabList[_tabIndex];
+    updateCurrentFile(_file?.id);
   }, []);
 
-  return { tabIndex, tabList, updateTabList, setTabIndex, deleteTabList };
+  return { tabIndex, tabList, updateTabList, setTabIndex, deleteTab };
 }

@@ -4,19 +4,21 @@ import { useAtom } from 'jotai';
 import { useCallback } from 'react';
 import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 
-export default function useSelectedKeys() {
+export default function useCurrentFile() {
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
-  const [, setCurrentFile] = useAtom(currentFileAtom);
+  const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
 
-  const updateSelectedKeys = useCallback(async (fileId: string) => {
+  const updateCurrentFile = useCallback(async (fileId: string | undefined) => {
     const keys = fileId ? [fileId] : [];
     setSelectedKeys(keys);
     setSelectedKeysToLocal(keys);
 
-    const file = await menuIndexeddbStorage.getFile(fileId);
+    const file = fileId ? await menuIndexeddbStorage.getFile(fileId) : undefined;
     setCurrentFileToLocal(file);
     setCurrentFile(file);
+
+    return file;
   }, []);
 
-  return { selectedKeys, updateSelectedKeys };
+  return { currentFile, selectedKeys, updateCurrentFile, setCurrentFile };
 }
