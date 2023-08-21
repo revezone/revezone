@@ -18,9 +18,9 @@ export default function MultiTabs() {
   const [model, setModel] = useState<Model>();
   const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
 
-  console.log('--- tabIndex ---', tabIndex);
-
   useEffect(() => {
+    console.log('--- tablist ---', tabIndex, tabList);
+
     const json: IJsonModel = {
       global: {},
       layout: {

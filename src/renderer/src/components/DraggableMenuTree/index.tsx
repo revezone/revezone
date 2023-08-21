@@ -13,11 +13,20 @@ import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import type { RevezoneFile, RevezoneFolder, OnFolderOrFileAddProps } from '@renderer/types/file';
 import {
   getOpenKeysFromLocal,
-  setCurrentFileIdToLocal,
-  setOpenKeysToLocal
+  setCurrentFileToLocal,
+  setOpenKeysToLocal,
+  setSelectedKeysToLocal,
+  getSelectedKeysFromLocal,
+  getCurrentFileFromLocal
 } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
-import { currentFileAtom, currentFolderIdAtom, tabListAtom } from '@renderer/store/jotai';
+import {
+  currentFileAtom,
+  currentFolderIdAtom,
+  openKeysAtom,
+  selectedKeysAtom,
+  tabListAtom
+} from '@renderer/store/jotai';
 import EditableText from '../EditableText';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 // import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
@@ -31,7 +40,6 @@ import { Folder, HardDrive, UploadCloud, MoreVertical } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import useFileContextMenu from '@renderer/hooks/useFileContextMenu';
 import useFolderContextMenu from '@renderer/hooks/useFolderContextMenu';
-import { getCurrentFileIdFromLocal } from '@renderer/store/localstorage';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/index';
@@ -76,8 +84,8 @@ const items = {
 };
 
 export default function DraggableMenuTree() {
-  const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeysFromLocal());
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [openKeys, setOpenKeys] = useAtom(openKeysAtom);
+  const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
   const [focusItem, setFocusItem] = useState();
   const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
   const [currentFolderId, setCurrentFolderId] = useAtom(currentFolderIdAtom);
@@ -93,7 +101,7 @@ export default function DraggableMenuTree() {
       setOpenKeys([...openKeys, folderId]);
       updateEditableTextState(fileId || folderId, false, editableTextState);
       if (type === 'file') {
-        addSelectedKeys(fileId ? [fileId] : []);
+        // addSelectedKeys(fileId ? [fileId] : []);
       } else if (type === 'folder') {
         resetMenu();
         setCurrentFile(undefined);
@@ -103,7 +111,7 @@ export default function DraggableMenuTree() {
     [openKeys, editableTextState]
   );
 
-  const [addFile] = useAddFile({ onAdd: onFolderOrFileAdd });
+  // const [addFile] = useAddFile({ onAdd: onFolderOrFileAdd });
 
   // const [pageTitle] = useBlocksuitePageTitle({ getFileTree });
 
@@ -115,21 +123,21 @@ export default function DraggableMenuTree() {
     getFileTree();
   }, []);
 
-  //   useEffect(() => {
-  //     if (firstRenderRef.current === true || !fileTree?.length) return;
-  //     firstRenderRef.current = true;
+  // useEffect(() => {
+  //   if (firstRenderRef.current === true || !fileTree?.length) return;
+  //   firstRenderRef.current = true;
 
-  //     const currentFileIdFromLocal = getCurrentFileIdFromLocal();
-  //     const file = currentFileIdFromLocal ? getFileById(currentFileIdFromLocal, fileTree) : undefined;
+  //   // const currentFileIdFromLocal = getCurrentFileIdFromLocal();
+  //   // const file = currentFileIdFromLocal ? getFileById(currentFileIdFromLocal, fileTree) : undefined;
 
-  //     setCurrentFile(file);
-  //   }, [fileTree]);
+  //   // setCurrentFile(file);
+  // }, [fileTree]);
 
-  useEffect(() => {
-    if (firstRenderRef.current === false) return;
-    setCurrentFileIdToLocal(currentFile?.id);
-    setSelectedKeys(currentFile?.id ? [currentFile.id] : []);
-  }, [currentFile?.id]);
+  // useEffect(() => {
+  //   if (firstRenderRef.current === false) return;
+  //   setCurrentFileIdToLocal(currentFile?.id);
+  //   setSelectedKeys(currentFile?.id ? [currentFile.id] : []);
+  // }, [currentFile?.id]);
 
   //   useEffect(() => {
   //     if (!currentFile) {
@@ -139,24 +147,24 @@ export default function DraggableMenuTree() {
   //     setCurrentFolderId(folderId);
   //   }, [currentFile, fileTree]);
 
-  const addSelectedKeys = useCallback(
-    (keys: string[] | undefined) => {
-      if (!keys) return;
+  // const addSelectedKeys = useCallback(
+  //   (keys: string[] | undefined) => {
+  //     if (!keys) return;
 
-      let newKeys = selectedKeys;
+  //     let newKeys = selectedKeys;
 
-      keys.forEach((key: string) => {
-        const type = key?.startsWith('folder_') ? 'folder' : 'file';
+  //     keys.forEach((key: string) => {
+  //       const type = key?.startsWith('folder_') ? 'folder' : 'file';
 
-        newKeys = type ? newKeys.filter((_key) => !_key?.startsWith(type)) : newKeys;
-      });
+  //       newKeys = type ? newKeys.filter((_key) => !_key?.startsWith(type)) : newKeys;
+  //     });
 
-      newKeys = Array.from(new Set([...newKeys, ...keys])).filter((_key) => !!_key);
+  //     newKeys = Array.from(new Set([...newKeys, ...keys])).filter((_key) => !!_key);
 
-      setSelectedKeys(newKeys);
-    },
-    [selectedKeys]
-  );
+  //     setSelectedKeys(newKeys);
+  //   },
+  //   [selectedKeys]
+  // );
 
   const deleteFile = useCallback(
     async (file: RevezoneFile) => {
@@ -200,13 +208,13 @@ export default function DraggableMenuTree() {
     updateEditableTextState
   });
 
-  const [getFolderContextMenu] = useFolderContextMenu({
-    fileTree,
-    editableTextState,
-    updateEditableTextState,
-    addFile,
-    deleteFolder
-  });
+  // const [getFolderContextMenu] = useFolderContextMenu({
+  //   fileTree,
+  //   editableTextState,
+  //   updateEditableTextState,
+  //   addFile,
+  //   deleteFolder
+  // });
 
   const resetMenu = useCallback(() => {
     setCurrentFile(undefined);
@@ -227,52 +235,52 @@ export default function DraggableMenuTree() {
     setOpenKeysToLocal(keys);
   }, []);
 
-  const onOpenChange = useCallback(
-    (keys) => {
-      const folderKeys = keys.filter((key) => key.startsWith('folder_'));
-      const openFolderKeys = openKeys.filter((key) => key.startsWith('folder_'));
+  // const onOpenChange = useCallback(
+  //   (keys) => {
+  //     const folderKeys = keys.filter((key) => key.startsWith('folder_'));
+  //     const openFolderKeys = openKeys.filter((key) => key.startsWith('folder_'));
 
-      const diffNum = folderKeys?.length - openFolderKeys.length;
+  //     const diffNum = folderKeys?.length - openFolderKeys.length;
 
-      let changeType;
+  //     let changeType;
 
-      switch (true) {
-        case diffNum === 0:
-          changeType = 'unchanged';
-          break;
-        case diffNum > 0:
-          changeType = 'increase';
-          break;
-        default:
-          changeType = 'decrease';
-          break;
-      }
+  //     switch (true) {
+  //       case diffNum === 0:
+  //         changeType = 'unchanged';
+  //         break;
+  //       case diffNum > 0:
+  //         changeType = 'increase';
+  //         break;
+  //       default:
+  //         changeType = 'decrease';
+  //         break;
+  //     }
 
-      console.log('onOpenChange', changeType, folderKeys, openFolderKeys);
+  //     console.log('onOpenChange', changeType, folderKeys, openFolderKeys);
 
-      setOpenKeys(keys);
-      setOpenKeysToLocal(keys);
+  //     setOpenKeys(keys);
+  //     setOpenKeysToLocal(keys);
 
-      // only while openKeys increase
-      if (changeType === 'increase') {
-        const folderId = keys?.length ? keys[keys.length - 1] : undefined;
+  //     // only while openKeys increase
+  //     if (changeType === 'increase') {
+  //       const folderId = keys?.length ? keys[keys.length - 1] : undefined;
 
-        if (currentFolderId !== folderId) {
-          resetMenu();
+  //       if (currentFolderId !== folderId) {
+  //         resetMenu();
 
-          setCurrentFolderId(folderId);
-          setSelectedKeys([folderId]);
-        }
-      }
-    },
-    [openKeys, currentFolderId]
-  );
+  //         setCurrentFolderId(folderId);
+  //         setSelectedKeys([folderId]);
+  //       }
+  //     }
+  //   },
+  //   [openKeys, currentFolderId]
+  // );
 
-  const onSelect = useCallback(
-    async (keys) => {
-      const key = typeof keys?.[0] === 'string' ? keys?.[0] : keys?.[0].id;
+  const onSelectItems = useCallback(
+    async (items) => {
+      const key = typeof items?.[0] === 'string' ? items?.[0] : items?.[0].id;
 
-      console.log('onSelect', keys);
+      console.log('onSelect', items);
 
       const fileId = key?.startsWith('file_') ? key : undefined;
 
@@ -288,7 +296,11 @@ export default function DraggableMenuTree() {
       //   setCurrentFolderId(folderId);
       //   addSelectedKeys([key, folderId]);
 
+      setCurrentFileToLocal(file);
+
       setSelectedKeys([key]);
+
+      setSelectedKeysToLocal([key]);
 
       updateTabList(file, tabList);
 
@@ -384,11 +396,10 @@ export default function DraggableMenuTree() {
       <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
       <div className="menu-list border-t border-slate-100 pl-2 pr-4">
         <ControlledTreeEnvironment
-          // dataProvider={new StaticTreeDataProvider(fileTree, (item, data) => ({ ...item, data }))}
           items={fileTree}
           getItemTitle={(item) => `${item.data.name}`}
           viewState={{
-            ['tree']: {
+            ['revezone-file-tree']: {
               selectedItems: selectedKeys,
               expandedItems: openKeys,
               focusedItem: focusItem
@@ -399,7 +410,7 @@ export default function DraggableMenuTree() {
           canReorderItems={true}
           canRename={true}
           canSearch={true}
-          onSelectItems={onSelect}
+          onSelectItems={onSelectItems}
           onExpandItem={onExpandItem}
           onCollapseItem={onCollapseItem}
           onFocusItem={onFocusItem}
@@ -450,7 +461,7 @@ export default function DraggableMenuTree() {
             );
           }}
         >
-          <Tree treeId="tree" rootItem="root" treeLabel="Tree Example" />
+          <Tree treeId="revezone-file-tree" rootItem="root" treeLabel="FileTree" />
         </ControlledTreeEnvironment>
       </div>
     </div>

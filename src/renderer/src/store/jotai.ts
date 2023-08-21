@@ -1,12 +1,17 @@
 import { atom } from 'jotai';
 import { RevezoneFile, RevezoneFolder, FileTree } from '@renderer/types/file';
 import { TabItem } from '@renderer/types/tabs';
+import {
+  getCurrentFileFromLocal,
+  getOpenKeysFromLocal,
+  getSelectedKeysFromLocal
+} from './localstorage';
 
 type Theme = 'light' | 'dark';
 
 export const fileTreeAtom = atom<FileTree>({});
 
-export const currentFileAtom = atom<RevezoneFile | undefined | null>(undefined);
+export const currentFileAtom = atom<RevezoneFile | undefined | null>(getCurrentFileFromLocal());
 
 export const workspaceLoadedAtom = atom(false);
 
@@ -23,3 +28,7 @@ export const themeAtom = atom<Theme>('light');
 export const tabListAtom = atom<TabItem[]>([]);
 
 export const tabIndexAtom = atom<number>(0);
+
+export const selectedKeysAtom = atom<string[]>(getSelectedKeysFromLocal());
+
+export const openKeysAtom = atom<string[]>(getOpenKeysFromLocal());
