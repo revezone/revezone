@@ -127,7 +127,9 @@ export default function DraggableMenuTree() {
           break;
       }
 
-      updateCurrentFile(undefined);
+      if (file.id === currentFile?.id) {
+        updateCurrentFile(undefined);
+      }
 
       await getFileTree();
     },
