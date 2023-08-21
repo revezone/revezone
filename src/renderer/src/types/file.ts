@@ -1,4 +1,4 @@
-import { TreeItem, TreeItemIndex } from 'react-complex-tree';
+import { TreeItem } from 'react-complex-tree';
 
 export interface RevezoneFolder {
   id: string;
@@ -33,7 +33,7 @@ export interface RevezoneFolder {
 
 export type FileTreeItem = RevezoneFolder & { children: RevezoneFile[] };
 
-export type RevezoneFileTree = { [key: TreeItemIndex]: TreeItem };
+export type RevezoneFileTree = { [key: string]: TreeItem };
 
 export interface OnFolderOrFileAddProps {
   fileId?: string;

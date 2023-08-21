@@ -298,21 +298,6 @@ class MenuIndexeddbStorage {
       tree[file.id] = { index: file.id, id: file.id, data: file, canRename: true };
     });
 
-    // const tree = folders.map((folder) => {
-    //   const children: RevezoneFile[] = [];
-
-    //   const mappingsCertainFolder = mappings.filter((map) => map.folderId === folder.id);
-
-    //   files.forEach((file) => {
-    //     const _file = mappingsCertainFolder.find((map) => map.fileId === file.id);
-    //     if (_file) {
-    //       children.push(file);
-    //     }
-    //   });
-
-    //   return { ...folder, children };
-    // });
-
     return tree;
   }
 

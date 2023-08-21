@@ -1,13 +1,7 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment-timezone';
-import {
-  RevezoneFile,
-  RevezoneFolder,
-  RevezoneFileType,
-  RevezoneFolderFileMapping,
-  RevezoneFileTree
-} from '../types/file';
+import { RevezoneFile, RevezoneFolder, RevezoneFileType, RevezoneFileTree } from '../types/file';
 import { submitUserEvent } from '../utils/statistics';
 import { menuIndexeddbStorage } from './_menuIndexeddb';
 
@@ -21,14 +15,6 @@ export interface RevezoneDBSchema extends DBSchema {
   file_tree: {
     key: string;
     value: RevezoneFileTree;
-  };
-  folder: {
-    key: string;
-    value: RevezoneFolder;
-  };
-  folder_file_mapping: {
-    key: number;
-    value: RevezoneFolderFileMapping;
   };
 }
 
@@ -107,21 +93,6 @@ class FileTreeIndexeddbStorage {
     return folderInfo;
   }
 
-  async getFolder(folderId: string): Promise<RevezoneFolder | undefined> {
-    await this.initDB();
-    // @ts-ignore
-    const value = await this.db?.get(INDEXEDDB_FOLDER_KEY, folderId);
-    return value;
-  }
-
-  async getFolders(): Promise<RevezoneFolder[]> {
-    await this.initDB();
-    const folders = await this.db?.getAll('folder');
-    const sortFn = (a: RevezoneFolder, b: RevezoneFolder) =>
-      new Date(a.gmtCreate).getTime() < new Date(b.gmtCreate).getTime() ? 1 : -1;
-    return folders?.sort(sortFn) || [];
-  }
-
   async addFile(
     folderId: string,
     type: RevezoneFileType = 'note',
@@ -140,13 +111,6 @@ class FileTreeIndexeddbStorage {
     };
 
     await this.db?.add(INDEXEDDB_FILE, fileInfo, fileId);
-
-    // await this.db?.add(INDEXEDDB_FOLD_FILE_MAPPING_KEY, {
-    //   folderId,
-    //   fileId,
-    //   gmtCreate: moment().toLocaleString(),
-    //   gmtModified: moment().toLocaleString()
-    // });
 
     submitUserEvent(`create_${type}`, fileInfo);
 
@@ -235,30 +199,16 @@ class FileTreeIndexeddbStorage {
     return fileTree || oldFileTree;
   }
 
-  async getFilesInFolder(folderId: string): Promise<RevezoneFile[] | undefined> {
-    await this.initDB();
-
-    // const mappings = await this.db?.getAllFromIndex(
-    //   INDEXEDDB_FOLD_FILE_MAPPING_KEY,
-    //   // @ts-ignore
-    //   'folderId',
-    //   folderId
-    // );
-
-    // const promises = mappings
-    //   ?.map(async (item) => this.getFile(item.fileId))
-    //   .filter((item) => !!item);
-
-    // const files = mappings && promises && (await Promise.all(promises)).filter((item) => !!item);
-
-    // // @ts-ignore
-    // return files;
-  }
-
   async updateFileName(file: RevezoneFile, name: string) {
     await this.initDB();
 
     if (name === file?.name) return;
+
+    const fileTree = await this.getFileTree();
+
+    if (!fileTree) return;
+
+    fileTree[file.id].data.name = name;
 
     file &&
       (await this.db?.put(
@@ -284,7 +234,11 @@ class FileTreeIndexeddbStorage {
 
     if (name === folder?.name) return;
 
-    // folder && this.db?.put(INDEXEDDB_FOLDER_KEY, { ...folder, name }, folder.id);
+    const fileTree = await this.getFileTree();
+
+    if (!fileTree) return;
+
+    fileTree[folder.id].data.name = name;
   }
 
   async deleteFolder(folderId: string) {

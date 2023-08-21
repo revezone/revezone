@@ -15,7 +15,7 @@ import './index.css';
 
 import { Folder, HardDrive, UploadCloud, MoreVertical } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
-import useFileContextMenu from '@renderer/hooks/useFileContextMenu';
+import useFileTreeContextMenu from '@renderer/hooks/useFileTreeContextMenu';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/index';
@@ -114,7 +114,7 @@ export default function DraggableMenuTree() {
 
   const deleteFile = useCallback(
     async (file: RevezoneFile) => {
-      await fileTreeIndexeddbStorage.deleteFile(file);
+      await fileTreeIndexeddbStorage.deleteFile(file.id);
 
       console.log('--- delete file ---', file);
 
@@ -135,15 +135,16 @@ export default function DraggableMenuTree() {
   );
 
   const deleteFolder = useCallback(
-    async (folderId: string) => {
-      await fileTreeIndexeddbStorage.deleteFolder(folderId);
+    async (folder: RevezoneFolder) => {
+      await fileTreeIndexeddbStorage.deleteFolder(folder.id);
       await getFileTree();
     },
     [fileTreeIndexeddbStorage]
   );
 
-  const [getFileContextMenu] = useFileContextMenu({
-    deleteFile
+  const { getFileTreeContextMenu } = useFileTreeContextMenu({
+    deleteFile,
+    deleteFolder
   });
 
   const resetMenu = useCallback(() => {
@@ -289,7 +290,7 @@ export default function DraggableMenuTree() {
                   </InteractiveComponent>
 
                   <Dropdown
-                    menu={{ items: getFileContextMenu(item.data, context, !!item.isFolder) }}
+                    menu={{ items: getFileTreeContextMenu(item.data, context, !!item.isFolder) }}
                   >
                     <MoreVertical className="w-3 h-3 cursor-pointer text-gray-500" />
                   </Dropdown>

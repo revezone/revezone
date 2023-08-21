@@ -1,18 +1,18 @@
 import { useCallback } from 'react';
 import { FileEdit, Trash2, ClipboardCopy } from 'lucide-react';
-import { EditableTextState } from '@renderer/types/menu';
 import { useTranslation } from 'react-i18next';
 import { RevezoneFile, RevezoneFolder } from '@renderer/types/file';
 
 interface Props {
   deleteFile: (file: RevezoneFile) => void;
+  deleteFolder: (folder: RevezoneFolder) => void;
 }
 
-export default function useFileContextMenu(props: Props) {
+export default function useFileTreeContextMenu(props: Props) {
   const { t } = useTranslation();
-  const { deleteFile } = props;
+  const { deleteFile, deleteFolder } = props;
 
-  const getFileContextMenu = useCallback((file: RevezoneFile, context, isFolder: boolean) => {
+  const getFileTreeContextMenu = useCallback((item, context, isFolder: boolean) => {
     const folderContextMenu = [
       {
         key: 'rename',
@@ -29,8 +29,13 @@ export default function useFileContextMenu(props: Props) {
         label: t('operation.delete'),
         icon: <Trash2 className="w-4"></Trash2>,
         onClick: () => {
-          console.log('delete', file, context);
-          // deleteFile(file);
+          console.log('delete', item, context);
+
+          if (isFolder) {
+            deleteFolder(item);
+          } else {
+            deleteFile(item);
+          }
         }
       }
     ];
@@ -46,12 +51,12 @@ export default function useFileContextMenu(props: Props) {
           icon: <ClipboardCopy className="w-4" />,
           onClick: ({ domEvent }) => {
             domEvent.stopPropagation();
-            navigator.clipboard.writeText(`revezone://${file.id}`);
+            navigator.clipboard.writeText(`revezone://${item.id}`);
           }
         }
       ];
     }
   }, []);
 
-  return [getFileContextMenu];
+  return { getFileTreeContextMenu };
 }

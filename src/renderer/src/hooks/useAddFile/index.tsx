@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import { FileTree, RevezoneFileType, OnFolderOrFileAddProps } from '@renderer/types/file';
+import { RevezoneFileTree, RevezoneFileType, OnFolderOrFileAddProps } from '@renderer/types/file';
 import { fileTreeAtom, currentFileAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
-import { menuIndexeddbStorage } from '@renderer/store/_menuIndexeddb';
+import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { useTranslation } from 'react-i18next';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
@@ -19,14 +19,14 @@ export default function useAddFile({ onAdd }: Props) {
   const { t } = useTranslation();
 
   const addFile = useCallback(
-    async (folderId: string | undefined, type: RevezoneFileType, fileTree: FileTree) => {
+    async (folderId: string | undefined, type: RevezoneFileType, fileTree: RevezoneFileTree) => {
       let _folderId = folderId || fileTree?.[0]?.id;
 
       if (!_folderId) {
-        _folderId = (await menuIndexeddbStorage.addFolder(t('text.defaultFolder')))?.id;
+        _folderId = (await fileTreeIndexeddbStorage.addFolder(t('text.defaultFolder')))?.id;
       }
 
-      const file = await menuIndexeddbStorage.addFile(_folderId, type);
+      const file = await fileTreeIndexeddbStorage.addFile(_folderId, type);
 
       if (type === 'board') {
         await boardIndexeddbStorage.addBoard(file.id, DEFAULT_BORAD_DATA);
@@ -34,7 +34,7 @@ export default function useAddFile({ onAdd }: Props) {
         await blocksuiteStorage.addPage(file.id);
       }
 
-      const tree = await menuIndexeddbStorage.getFileTree();
+      const tree = await fileTreeIndexeddbStorage.getFileTree();
       setFileTree(tree);
 
       setCurrentFile(file);
