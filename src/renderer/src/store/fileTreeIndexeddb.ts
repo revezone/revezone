@@ -75,8 +75,7 @@ class FileTreeIndexeddbStorage {
     return fileTreeStore;
   }
 
-  async addFolder(name?: string) {
-    await this.initDB();
+  async addFolder(name?: string, parentId?: string) {
     const id = `folder_${uuidv4()}`;
 
     const folderInfo = {
@@ -88,18 +87,36 @@ class FileTreeIndexeddbStorage {
 
     // await this.db?.add(INDEXEDDB_FOLDER_KEY, folderInfo, id);
 
+    await this.addFileTreeItem(folderInfo, true, parentId);
+
     submitUserEvent('create_folder', folderInfo);
 
     return folderInfo;
   }
 
-  async addFile(
-    folderId: string,
-    type: RevezoneFileType = 'note',
-    name?: string
-  ): Promise<RevezoneFile> {
+  async addFileTreeItem(info: RevezoneFile | RevezoneFolder, isFolder: boolean, parentId?: string) {
     await this.initDB();
 
+    const fileTree = (await this.getFileTree()) || {};
+
+    fileTree[info.id] = { index: info.id, isFolder, data: info };
+
+    if (parentId) {
+      const children = fileTree[parentId].children || [];
+      fileTree[parentId].children = [...children, info.id];
+    } else {
+      const children = fileTree.root.children || [];
+      fileTree.root.children = [...children, info.id];
+    }
+
+    await this.updateFileTree(fileTree);
+  }
+
+  async addFile(
+    name?: string,
+    type: RevezoneFileType = 'note',
+    parentId?: string
+  ): Promise<RevezoneFile> {
     const fileId = `file_${uuidv4()}`;
 
     const fileInfo = {
@@ -110,7 +127,7 @@ class FileTreeIndexeddbStorage {
       gmtModified: moment().toLocaleString()
     };
 
-    await this.db?.add(INDEXEDDB_FILE, fileInfo, fileId);
+    await this.addFileTreeItem(fileInfo, false, parentId);
 
     submitUserEvent(`create_${type}`, fileInfo);
 

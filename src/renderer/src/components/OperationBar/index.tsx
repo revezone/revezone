@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { OnFolderOrFileAddProps } from '@renderer/types/file';
 import { currentFileAtom, currentFolderIdAtom, fileTreeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
@@ -11,17 +10,15 @@ import { useTranslation } from 'react-i18next';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
-  folderId: string | undefined;
   className?: string;
-  onAdd?: ({ fileId, folderId, type }: OnFolderOrFileAddProps) => void;
 }
 
 export default function OperationBar(props: Props) {
-  const { folderId, size = 'middle', className, onAdd } = props;
+  const { size = 'middle', className } = props;
   const [, setCurrentFile] = useAtom(currentFileAtom);
   const [, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [fileTree, setFileTree] = useAtom(fileTreeAtom);
-  const [addFile] = useAddFile({ onAdd });
+  const { addFile } = useAddFile();
   const { t } = useTranslation();
 
   const getSizeClassName = useCallback(() => {
@@ -43,8 +40,6 @@ export default function OperationBar(props: Props) {
     setFileTree(tree);
     setCurrentFolderId(folder.id);
     setCurrentFile(undefined);
-
-    onAdd?.({ folderId: folder.id, type: 'folder' });
   }, []);
 
   return (
@@ -62,7 +57,7 @@ export default function OperationBar(props: Props) {
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
-          addFile(folderId, 'board', fileTree);
+          addFile('New Board', 'board');
         }}
       >
         <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
@@ -73,7 +68,7 @@ export default function OperationBar(props: Props) {
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
-          addFile(folderId, 'note', fileTree);
+          addFile('New Note', 'note');
         }}
       >
         <FileType className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />

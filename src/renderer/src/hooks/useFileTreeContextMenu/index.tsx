@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
-import { FileEdit, Trash2, ClipboardCopy } from 'lucide-react';
+import { FileEdit, Trash2, ClipboardCopy, FileType, Palette } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { RevezoneFile, RevezoneFolder } from '@renderer/types/file';
+import useAddFile from '../useAddFile';
 
 interface Props {
   deleteFile: (file: RevezoneFile) => void;
@@ -11,9 +12,10 @@ interface Props {
 export default function useFileTreeContextMenu(props: Props) {
   const { t } = useTranslation();
   const { deleteFile, deleteFolder } = props;
+  const { addFile } = useAddFile();
 
   const getFileTreeContextMenu = useCallback((item, context, isFolder: boolean) => {
-    const folderContextMenu = [
+    const commonContextMenu = [
       {
         key: 'rename',
         label: t('operation.rename'),
@@ -41,10 +43,30 @@ export default function useFileTreeContextMenu(props: Props) {
     ];
 
     if (isFolder) {
-      return folderContextMenu;
+      return [
+        ...commonContextMenu,
+        {
+          key: 'addboard',
+          label: t('operation.addBoard'),
+          icon: <Palette className="w-4" />,
+          onClick: async ({ domEvent }) => {
+            domEvent.stopPropagation();
+            addFile('New Board', 'board', item.id);
+          }
+        },
+        {
+          key: 'addnote',
+          label: t('operation.addNote'),
+          icon: <FileType className="w-4" />,
+          onClick: async ({ domEvent }) => {
+            domEvent.stopPropagation();
+            addFile('New Note', 'note', item.id);
+          }
+        }
+      ];
     } else {
       return [
-        ...folderContextMenu,
+        ...commonContextMenu,
         {
           key: 'copy_revezone_link',
           label: t('operation.copyRevezoneLink'),

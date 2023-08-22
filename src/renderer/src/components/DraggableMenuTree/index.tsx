@@ -14,7 +14,6 @@ import RevezoneLogo from '../RevezoneLogo';
 import './index.css';
 
 import { Folder, HardDrive, UploadCloud, MoreVertical } from 'lucide-react';
-import useAddFile from '@renderer/hooks/useAddFile';
 import useFileTreeContextMenu from '@renderer/hooks/useFileTreeContextMenu';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
@@ -42,20 +41,20 @@ export default function DraggableMenuTree() {
   const { updateTabList, tabList } = useTabList();
   const { currentFile, updateCurrentFile, setCurrentFile } = useCurrentFile();
 
-  const onFolderOrFileAdd = useCallback(
-    ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
-      setOpenKeys([...openKeys, folderId]);
-      // updateEditableTextState(fileId || folderId, false, editableTextState);
-      if (type === 'file') {
-        // addSelectedKeys(fileId ? [fileId] : []);
-      } else if (type === 'folder') {
-        resetMenu();
-        updateCurrentFile(undefined);
-        // setSelectedKeys([folderId]);
-      }
-    },
-    [openKeys, editableTextState]
-  );
+  // const onFolderOrFileAdd = useCallback(
+  //   ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
+  //     setOpenKeys([...openKeys, folderId]);
+  //     // updateEditableTextState(fileId || folderId, false, editableTextState);
+  //     if (type === 'file') {
+  //       // addSelectedKeys(fileId ? [fileId] : []);
+  //     } else if (type === 'folder') {
+  //       resetMenu();
+  //       updateCurrentFile(undefined);
+  //       // setSelectedKeys([folderId]);
+  //     }
+  //   },
+  //   [openKeys, editableTextState]
+  // );
 
   // const [addFile] = useAddFile({ onAdd: onFolderOrFileAdd });
 
@@ -231,7 +230,7 @@ export default function DraggableMenuTree() {
           <LanguageSwitcher></LanguageSwitcher>
         </div>
       </div>
-      <OperationBar size="small" folderId={currentFolderId} onAdd={onFolderOrFileAdd} />
+      <OperationBar size="small" />
       <div className="menu-list border-t border-slate-100 pl-2 pr-4">
         <ControlledTreeEnvironment
           items={fileTree}
