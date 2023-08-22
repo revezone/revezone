@@ -13,7 +13,15 @@ import RevezoneLogo from '../RevezoneLogo';
 
 import './index.css';
 
-import { Folder, HardDrive, UploadCloud, MoreVertical } from 'lucide-react';
+import {
+  Folder,
+  HardDrive,
+  UploadCloud,
+  MoreVertical,
+  FolderPlus,
+  Palette,
+  FileType
+} from 'lucide-react';
 import useFileTreeContextMenu from '@renderer/hooks/useFileTreeContextMenu';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
@@ -269,7 +277,7 @@ export default function DraggableMenuTree() {
               <li {...context.itemContainerWithChildrenProps} className="rct-tree-item-li">
                 <div
                   {...context.itemContainerWithoutChildrenProps}
-                  style={{ paddingLeft: `${(depth + 1) * 4}px` }}
+                  style={{ paddingLeft: `${(depth + 1) * 0.5}rem` }}
                   className={[
                     'rct-tree-item-title-container',
                     item.isFolder && 'rct-tree-item-title-container-isFolder',
@@ -285,16 +293,23 @@ export default function DraggableMenuTree() {
                     // @ts-ignore
                     type={type}
                     {...context.interactiveElementProps}
-                    className="rct-tree-item-button"
+                    className="rct-tree-item-button flex justify-between"
                   >
-                    {title}
-                  </InteractiveComponent>
+                    <span>{title}</span>
+                    <div>
+                      <Dropdown
+                        menu={{
+                          items: getFileTreeContextMenu(item.data, context, !!item.isFolder)
+                        }}
+                      >
+                        <MoreVertical className="w-3 h-3 mr-2 cursor-pointer text-gray-500" />
+                      </Dropdown>
 
-                  <Dropdown
-                    menu={{ items: getFileTreeContextMenu(item.data, context, !!item.isFolder) }}
-                  >
-                    <MoreVertical className="w-3 h-3 cursor-pointer text-gray-500" />
-                  </Dropdown>
+                      {item.isFolder ? <Folder className="w-4 h-4" /> : null}
+                      {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
+                      {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
+                    </div>
+                  </InteractiveComponent>
                 </div>
                 {children}
               </li>
