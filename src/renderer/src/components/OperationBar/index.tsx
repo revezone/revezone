@@ -8,6 +8,7 @@ import useFileTree from '@renderer/hooks/useFileTree';
 
 import './index.css';
 import { useTranslation } from 'react-i18next';
+import useCurrentFile from '@renderer/hooks/useCurrentFile';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
@@ -16,7 +17,7 @@ interface Props {
 
 export default function OperationBar(props: Props) {
   const { size = 'middle', className } = props;
-  const [, setCurrentFile] = useAtom(currentFileAtom);
+  const { updateCurrentFile } = useCurrentFile();
   const { getFileTree } = useFileTree();
   const { addFile } = useAddFile();
   const { t } = useTranslation();
@@ -36,7 +37,7 @@ export default function OperationBar(props: Props) {
 
   const addFolder = useCallback(async () => {
     await fileTreeIndexeddbStorage.addFolder();
-    setCurrentFile(undefined);
+    updateCurrentFile(undefined);
     getFileTree();
   }, []);
 

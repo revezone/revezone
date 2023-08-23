@@ -6,7 +6,7 @@ import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import type { RevezoneFile, RevezoneFolder, OnFolderOrFileAddProps } from '@renderer/types/file';
 import { setOpenKeysToLocal } from '@renderer/store/localstorage';
 import { useAtom } from 'jotai';
-import { currentFolderIdAtom, openKeysAtom, selectedKeysAtom } from '@renderer/store/jotai';
+import { focusItemAtom, openKeysAtom, selectedKeysAtom } from '@renderer/store/jotai';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import OperationBar from '../OperationBar';
 import RevezoneLogo from '../RevezoneLogo';
@@ -39,13 +39,13 @@ interface Props {
 export default function DraggableMenuTree() {
   const [openKeys, setOpenKeys] = useAtom(openKeysAtom);
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
-  const [focusItem, setFocusItem] = useState<TreeItemIndex>();
+  const [focusItem, setFocusItem] = useAtom(focusItemAtom);
   const firstRenderRef = useRef(false);
   const { fileTree, getFileTree } = useFileTree();
   const { t } = useTranslation();
 
   const { updateTabListWhenCurrentFileChanged, renameTabName, tabList } = useTabList();
-  const { currentFile, updateCurrentFile, setCurrentFile } = useCurrentFile();
+  const { currentFile, updateCurrentFile } = useCurrentFile();
 
   useEffect(() => {
     getFileTree();
@@ -138,7 +138,8 @@ export default function DraggableMenuTree() {
   );
 
   const onFocusItem = useCallback((item: TreeItem) => {
-    setFocusItem(item.index);
+    console.log('--- onFocusItem ---', item);
+    setFocusItem(item.data.id);
   }, []);
 
   const storageTypeItems = [

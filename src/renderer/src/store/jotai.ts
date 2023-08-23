@@ -32,3 +32,5 @@ export const tabIndexAtom = atom<number>(0);
 export const selectedKeysAtom = atom<string[]>(getSelectedKeysFromLocal());
 
 export const openKeysAtom = atom<string[]>(getOpenKeysFromLocal());
+
+export const focusItemAtom = atom<string>('');

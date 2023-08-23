@@ -265,7 +265,7 @@ class MenuIndexeddbStorage {
     const tree = {
       root: {
         index: 'root',
-        data: 'root item',
+        data: { id: 'root', name: 'root' },
         isFolder: true,
         canRename: true,
         children: folders.map((folder) => folder.id)
@@ -286,7 +286,6 @@ class MenuIndexeddbStorage {
 
       tree[folder.id] = {
         index: folder.id,
-        id: folder.id,
         data: folder,
         isFolder: true,
         canRename: true,
@@ -295,7 +294,7 @@ class MenuIndexeddbStorage {
     });
 
     files.forEach((file) => {
-      tree[file.id] = { index: file.id, id: file.id, data: file, canRename: true };
+      tree[file.id] = { index: file.id, data: file, canRename: true };
     });
 
     return tree;
