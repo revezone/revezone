@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { FileEdit, Trash2, ClipboardCopy, FileType, Palette } from 'lucide-react';
+import { FileEdit, Trash2, ClipboardCopy, FileType, Palette, FolderPlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { RevezoneFile, RevezoneFolder } from '@renderer/types/file';
 import useAddFile from '../useAddFile';
@@ -61,6 +61,15 @@ export default function useFileTreeContextMenu(props: Props) {
           onClick: async ({ domEvent }) => {
             domEvent.stopPropagation();
             addFile('New Note', 'note', item.id);
+          }
+        },
+        {
+          key: 'addfolder',
+          label: t('operation.addFolder'),
+          icon: <FolderPlus className="w-4" />,
+          onClick: async ({ domEvent }) => {
+            domEvent.stopPropagation();
+            // addFile('New Note', 'note', item.id);
           }
         }
       ];

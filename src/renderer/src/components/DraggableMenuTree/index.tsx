@@ -1,4 +1,4 @@
-import { ControlledTreeEnvironment, Tree } from 'react-complex-tree';
+import { ControlledTreeEnvironment, Tree, TreeItem, TreeItemIndex } from 'react-complex-tree';
 import 'react-complex-tree/lib/style-modern.css';
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { Menu, Dropdown, Input } from 'antd';
@@ -39,7 +39,7 @@ interface Props {
 export default function DraggableMenuTree() {
   const [openKeys, setOpenKeys] = useAtom(openKeysAtom);
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
-  const [focusItem, setFocusItem] = useState();
+  const [focusItem, setFocusItem] = useState<TreeItemIndex>();
   const [currentFolderId, setCurrentFolderId] = useAtom(currentFolderIdAtom);
   const [editableTextState, setEditableTextState] = useState<{ [key: string]: boolean }>({});
   const firstRenderRef = useRef(false);
@@ -200,8 +200,8 @@ export default function DraggableMenuTree() {
     [fileTree, tabList]
   );
 
-  const onFocusItem = useCallback((item) => {
-    setFocusItem(item.id);
+  const onFocusItem = useCallback((item: TreeItem) => {
+    setFocusItem(item.index);
   }, []);
 
   const storageTypeItems = [
@@ -239,7 +239,7 @@ export default function DraggableMenuTree() {
         </div>
       </div>
       <OperationBar size="small" />
-      <div className="menu-list border-t border-slate-100 pl-2 pr-4">
+      <div className="menu-list border-t border-slate-100 px-1">
         <ControlledTreeEnvironment
           items={fileTree}
           getItemTitle={(item) => `${item.data.name}`}
@@ -295,20 +295,19 @@ export default function DraggableMenuTree() {
                     {...context.interactiveElementProps}
                     className="rct-tree-item-button flex justify-between"
                   >
-                    <span>{title}</span>
                     <div>
-                      <Dropdown
-                        menu={{
-                          items: getFileTreeContextMenu(item.data, context, !!item.isFolder)
-                        }}
-                      >
-                        <MoreVertical className="w-3 h-3 mr-2 cursor-pointer text-gray-500" />
-                      </Dropdown>
-
                       {item.isFolder ? <Folder className="w-4 h-4" /> : null}
                       {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
                       {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
+                      <span className="ml-2">{title}</span>
                     </div>
+                    <Dropdown
+                      menu={{
+                        items: getFileTreeContextMenu(item.data, context, !!item.isFolder)
+                      }}
+                    >
+                      <MoreVertical className="w-3 h-3 cursor-pointer text-gray-500" />
+                    </Dropdown>
                   </InteractiveComponent>
                 </div>
                 {children}
