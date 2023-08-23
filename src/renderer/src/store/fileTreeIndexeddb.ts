@@ -81,12 +81,10 @@ class FileTreeIndexeddbStorage {
 
     const folderInfo = {
       id,
-      name: name || '',
+      name: name || 'New Folder',
       gmtCreate: moment().toLocaleString(),
       gmtModified: moment().toLocaleString()
     };
-
-    // await this.db?.add(INDEXEDDB_FOLDER_KEY, folderInfo, id);
 
     await this.addFileTreeItem(folderInfo, true, parentId);
 
@@ -104,10 +102,10 @@ class FileTreeIndexeddbStorage {
 
     if (parentId) {
       const children = fileTree[parentId].children || [];
-      fileTree[parentId].children = [...children, info.id];
+      fileTree[parentId].children = [info.id, ...children];
     } else {
       const children = fileTree.root.children || [];
-      fileTree.root.children = [...children, info.id];
+      fileTree.root.children = [info.id, ...children];
     }
 
     await this.updateFileTree(fileTree);
@@ -118,6 +116,8 @@ class FileTreeIndexeddbStorage {
     type: RevezoneFileType = 'note',
     parentId?: string
   ): Promise<RevezoneFile> {
+    console.log('--- addFile ---', name, type, parentId);
+
     const fileId = `file_${uuidv4()}`;
 
     const fileInfo = {

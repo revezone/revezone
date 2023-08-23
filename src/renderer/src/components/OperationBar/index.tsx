@@ -4,6 +4,7 @@ import { useAtom } from 'jotai';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { FolderPlus, Palette, FileType } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
+import useFileTree from '@renderer/hooks/useFileTree';
 
 import './index.css';
 import { useTranslation } from 'react-i18next';
@@ -16,8 +17,7 @@ interface Props {
 export default function OperationBar(props: Props) {
   const { size = 'middle', className } = props;
   const [, setCurrentFile] = useAtom(currentFileAtom);
-  const [, setCurrentFolderId] = useAtom(currentFolderIdAtom);
-  const [fileTree, setFileTree] = useAtom(fileTreeAtom);
+  const { getFileTree } = useFileTree();
   const { addFile } = useAddFile();
   const { t } = useTranslation();
 
@@ -35,11 +35,9 @@ export default function OperationBar(props: Props) {
   }, [size]);
 
   const addFolder = useCallback(async () => {
-    const folder = await fileTreeIndexeddbStorage.addFolder();
-    const tree = await fileTreeIndexeddbStorage.getFileTree();
-    setFileTree(tree);
-    setCurrentFolderId(folder.id);
+    await fileTreeIndexeddbStorage.addFolder();
     setCurrentFile(undefined);
+    getFileTree();
   }, []);
 
   return (

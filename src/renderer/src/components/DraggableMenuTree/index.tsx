@@ -94,18 +94,29 @@ export default function DraggableMenuTree() {
     setSelectedKeys([]);
   }, []);
 
-  const onExpandItem = useCallback((item) => {
-    console.log('--- onExpandItem ---', item);
-    const keys = [...openKeys, item.id];
-    setOpenKeys(keys);
-    setOpenKeysToLocal(keys);
-  }, []);
+  const onExpandItem = useCallback(
+    (item: TreeItem) => {
+      const keys = [...openKeys, item.data.id].filter((item) => !!item);
 
-  const onCollapseItem = useCallback((item) => {
-    const keys = openKeys.filter((key) => key !== item.id);
-    setOpenKeys(keys);
-    setOpenKeysToLocal(keys);
-  }, []);
+      console.log('--- onExpandItem ---', keys);
+
+      setOpenKeys(keys);
+      setOpenKeysToLocal(keys);
+    },
+    [openKeys]
+  );
+
+  const onCollapseItem = useCallback(
+    (item) => {
+      const keys = openKeys.filter((key) => key !== item.data.id);
+
+      console.log('--- onCollapseItem ---', keys);
+
+      setOpenKeys(keys);
+      setOpenKeysToLocal(keys);
+    },
+    [openKeys]
+  );
 
   const onSelectItems = useCallback(
     async (items) => {
@@ -117,13 +128,7 @@ export default function DraggableMenuTree() {
 
       if (!fileId) return;
 
-      //   const folderId = getFolderIdByFileId(fileId, fileTree);
-
-      //   resetMenu();
-
       const file = await updateCurrentFile(fileId);
-      //   setCurrentFolderId(folderId);
-      //   addSelectedKeys([key, folderId]);
 
       updateTabListWhenCurrentFileChanged(file, tabList);
 
@@ -214,7 +219,14 @@ export default function DraggableMenuTree() {
             const type = context.isRenaming ? undefined : 'button';
 
             return (
-              <li {...context.itemContainerWithChildrenProps} className="rct-tree-item-li">
+              <li
+                {...context.itemContainerWithChildrenProps}
+                className="rct-tree-item-li"
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  context.startRenamingItem();
+                }}
+              >
                 <div
                   {...context.itemContainerWithoutChildrenProps}
                   style={{ paddingLeft: `${(depth + 1) * 0.5}rem` }}
@@ -227,6 +239,7 @@ export default function DraggableMenuTree() {
                     context.isDraggingOver && 'rct-tree-item-title-container-dragging-over',
                     context.isSearchMatching && 'rct-tree-item-title-container-search-match'
                   ].join(' ')}
+                  onClick={(e) => e.stopPropagation()}
                 >
                   {arrow}
                   <InteractiveComponent
@@ -246,7 +259,10 @@ export default function DraggableMenuTree() {
                         items: getFileTreeContextMenu(item.data, context, !!item.isFolder)
                       }}
                     >
-                      <MoreVertical className="w-3 h-3 cursor-pointer text-gray-500" />
+                      <MoreVertical
+                        className="w-3 h-3 cursor-pointer text-gray-500"
+                        onClick={(e) => e.stopPropagation()}
+                      />
                     </Dropdown>
                   </InteractiveComponent>
                 </div>

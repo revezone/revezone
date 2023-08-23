@@ -30,7 +30,8 @@ export default function useFileTreeContextMenu(props: Props) {
         key: 'delete',
         label: t('operation.delete'),
         icon: <Trash2 className="w-4"></Trash2>,
-        onClick: () => {
+        onClick: ({ domEvent }) => {
+          domEvent.stopPropagation();
           console.log('delete', item, context);
 
           if (isFolder) {
