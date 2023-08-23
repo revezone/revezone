@@ -31,12 +31,13 @@ import { submitUserEvent } from '@renderer/utils/statistics';
 import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 import useTabList from '@renderer/hooks/useTabList';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
+import useOpenKeys from '@renderer/hooks/useOpenKeys';
 
 export default function DraggableMenuTree() {
-  const [openKeys, setOpenKeys] = useAtom(openKeysAtom);
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
   const [focusItem, setFocusItem] = useAtom(focusItemAtom);
   const { fileTree, getFileTree } = useFileTree();
+  const { openKeys, setOpenKeys, addOpenKey, removeOpenKey } = useOpenKeys();
   const { t } = useTranslation();
 
   const { updateTabListWhenCurrentFileChanged, renameTabName, tabList } = useTabList();
@@ -91,24 +92,14 @@ export default function DraggableMenuTree() {
 
   const onExpandItem = useCallback(
     (item: TreeItem) => {
-      const keys = [...openKeys, item.data.id].filter((item) => !!item);
-
-      console.log('--- onExpandItem ---', keys);
-
-      setOpenKeys(keys);
-      setOpenKeysToLocal(keys);
+      addOpenKey(item.data.id);
     },
     [openKeys]
   );
 
   const onCollapseItem = useCallback(
     (item) => {
-      const keys = openKeys.filter((key) => key !== item.data.id);
-
-      console.log('--- onCollapseItem ---', keys);
-
-      setOpenKeys(keys);
-      setOpenKeysToLocal(keys);
+      removeOpenKey(item.data.id);
     },
     [openKeys]
   );

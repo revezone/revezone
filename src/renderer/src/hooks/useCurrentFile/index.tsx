@@ -7,7 +7,7 @@ import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 export default function useCurrentFile() {
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
   const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
-  const [focusItem, setFocusItem] = useAtom(focusItemAtom);
+  const [, setFocusItem] = useAtom(focusItemAtom);
 
   const updateCurrentFile = useCallback(async (fileId: string | undefined) => {
     const keys = fileId ? [fileId] : [];
