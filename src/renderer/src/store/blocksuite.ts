@@ -43,7 +43,11 @@ class BlocksuiteStorage {
   }
 
   async deletePage(pageId: string) {
-    await this.workspace.removePage(pageId);
+    try {
+      await this.workspace.removePage(pageId);
+    } catch (err) {
+      console.warn('delete page error: ', err);
+    }
   }
 
   // TODO: FIGURE OUT THE API OF COPY PAGE IN BLOCKSUITE

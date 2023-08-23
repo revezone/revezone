@@ -40,84 +40,16 @@ export default function DraggableMenuTree() {
   const [openKeys, setOpenKeys] = useAtom(openKeysAtom);
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
   const [focusItem, setFocusItem] = useState<TreeItemIndex>();
-  const [currentFolderId, setCurrentFolderId] = useAtom(currentFolderIdAtom);
-  const [editableTextState, setEditableTextState] = useState<{ [key: string]: boolean }>({});
   const firstRenderRef = useRef(false);
   const { fileTree, getFileTree } = useFileTree();
   const { t } = useTranslation();
 
-  const { updateTabList, tabList } = useTabList();
+  const { updateTabListWhenCurrentFileChanged, renameTabName, tabList } = useTabList();
   const { currentFile, updateCurrentFile, setCurrentFile } = useCurrentFile();
-
-  // const onFolderOrFileAdd = useCallback(
-  //   ({ fileId, folderId, type }: OnFolderOrFileAddProps) => {
-  //     setOpenKeys([...openKeys, folderId]);
-  //     // updateEditableTextState(fileId || folderId, false, editableTextState);
-  //     if (type === 'file') {
-  //       // addSelectedKeys(fileId ? [fileId] : []);
-  //     } else if (type === 'folder') {
-  //       resetMenu();
-  //       updateCurrentFile(undefined);
-  //       // setSelectedKeys([folderId]);
-  //     }
-  //   },
-  //   [openKeys, editableTextState]
-  // );
-
-  // const [addFile] = useAddFile({ onAdd: onFolderOrFileAdd });
-
-  // const [pageTitle] = useBlocksuitePageTitle({ getFileTree });
-
-  // useEffect(() => {
-  //   !collapsed && getFileTree();
-  // }, [menuIndexeddbStorage, collapsed]);
 
   useEffect(() => {
     getFileTree();
   }, []);
-
-  // useEffect(() => {
-  //   if (firstRenderRef.current === true || !fileTree?.length) return;
-  //   firstRenderRef.current = true;
-
-  //   // const currentFileIdFromLocal = getCurrentFileIdFromLocal();
-  //   // const file = currentFileIdFromLocal ? getFileById(currentFileIdFromLocal, fileTree) : undefined;
-
-  //   // setCurrentFile(file);
-  // }, [fileTree]);
-
-  // useEffect(() => {
-  //   if (firstRenderRef.current === false) return;
-  //   setCurrentFileIdToLocal(currentFile?.id);
-  //   setSelectedKeys(currentFile?.id ? [currentFile.id] : []);
-  // }, [currentFile?.id]);
-
-  //   useEffect(() => {
-  //     if (!currentFile) {
-  //       return;
-  //     }
-  //     const folderId = getFolderIdByFileId(currentFile.id, fileTree);
-  //     setCurrentFolderId(folderId);
-  //   }, [currentFile, fileTree]);
-
-  // const addSelectedKeys = useCallback(
-  //   (keys: string[] | undefined) => {
-  //     if (!keys) return;
-
-  //     let newKeys = selectedKeys;
-
-  //     keys.forEach((key: string) => {
-  //       const type = key?.startsWith('folder_') ? 'folder' : 'file';
-
-  //       newKeys = type ? newKeys.filter((_key) => !_key?.startsWith(type)) : newKeys;
-  //     });
-
-  //     newKeys = Array.from(new Set([...newKeys, ...keys])).filter((_key) => !!_key);
-
-  //     setSelectedKeys(newKeys);
-  //   },
-  //   [selectedKeys]
-  // );
 
   const deleteFile = useCallback(
     async (file: RevezoneFile) => {
@@ -193,7 +125,7 @@ export default function DraggableMenuTree() {
       //   setCurrentFolderId(folderId);
       //   addSelectedKeys([key, folderId]);
 
-      updateTabList(file, tabList);
+      updateTabListWhenCurrentFileChanged(file, tabList);
 
       submitUserEvent('select_menu', { key });
     },
@@ -260,7 +192,15 @@ export default function DraggableMenuTree() {
           onCollapseItem={onCollapseItem}
           onFocusItem={onFocusItem}
           onRenameItem={async (item, name) => {
-            fileTreeIndexeddbStorage.updateFileName(item.data, name);
+            console.log('--- onRenameItem ---', item, name);
+
+            if (item.isFolder) {
+              await fileTreeIndexeddbStorage.updateFolderName(item.data, name);
+            } else {
+              await fileTreeIndexeddbStorage.updateFileName(item.data, name);
+              await renameTabName(item.data.id, name, tabList);
+            }
+
             getFileTree();
           }}
           renderTreeContainer={({ children, containerProps }) => (
@@ -293,9 +233,9 @@ export default function DraggableMenuTree() {
                     // @ts-ignore
                     type={type}
                     {...context.interactiveElementProps}
-                    className="rct-tree-item-button flex justify-between"
+                    className="rct-tree-item-button flex justify-between items-center"
                   >
-                    <div>
+                    <div className="flex items-center">
                       {item.isFolder ? <Folder className="w-4 h-4" /> : null}
                       {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
                       {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}

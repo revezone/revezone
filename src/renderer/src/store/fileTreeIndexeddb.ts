@@ -4,6 +4,7 @@ import moment from 'moment-timezone';
 import { RevezoneFile, RevezoneFolder, RevezoneFileType, RevezoneFileTree } from '../types/file';
 import { submitUserEvent } from '../utils/statistics';
 import { menuIndexeddbStorage } from './_menuIndexeddb';
+import { TreeItem } from 'react-complex-tree';
 
 moment.tz.setDefault('Asia/Shanghai');
 
@@ -162,19 +163,33 @@ class FileTreeIndexeddbStorage {
   async deleteFile(fileId: string) {
     await this.initDB();
 
+    await this.deleteItemFromFileTree(fileId);
+
     const file = await this.getFile(fileId);
 
     if (!file) return;
 
     file && (await this.db?.delete(INDEXEDDB_FILE, fileId));
 
-    const fileTree = await this.getFileTree();
-
-    delete fileTree?.[fileId];
-
-    fileTree && this.updateFileTree(fileTree);
-
     submitUserEvent(`delete_${file.type}`, file);
+  }
+
+  async deleteItemFromFileTree(id: string) {
+    const newTree = {};
+
+    const tree: RevezoneFileTree | undefined = await this.getFileTree();
+
+    tree &&
+      Object.entries(tree).forEach(([key, item]) => {
+        if (key !== id) {
+          item.children = item.children?.filter((_key) => _key !== id);
+          newTree[key] = item;
+        }
+      });
+
+    console.log('--- newTree ---', newTree);
+
+    this.updateFileTree(newTree);
   }
 
   async getFiles(): Promise<RevezoneFile[]> {
@@ -227,6 +242,8 @@ class FileTreeIndexeddbStorage {
 
     fileTree[file.id].data.name = name;
 
+    await this.updateFileTree(fileTree);
+
     file &&
       (await this.db?.put(
         INDEXEDDB_FILE,
@@ -256,6 +273,8 @@ class FileTreeIndexeddbStorage {
     if (!fileTree) return;
 
     fileTree[folder.id].data.name = name;
+
+    await this.updateFileTree(fileTree);
   }
 
   async deleteFolder(folderId: string) {

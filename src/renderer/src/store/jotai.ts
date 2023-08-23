@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { RevezoneFile, RevezoneFolder, FileTree } from '@renderer/types/file';
+import { RevezoneFile, RevezoneFolder, RevezoneFileTree } from '@renderer/types/file';
 import { TabItem } from '@renderer/types/tabs';
 import {
   getCurrentFileFromLocal,
@@ -9,7 +9,7 @@ import {
 
 type Theme = 'light' | 'dark';
 
-export const fileTreeAtom = atom<FileTree>({});
+export const fileTreeAtom = atom<RevezoneFileTree>({});
 
 export const currentFileAtom = atom<RevezoneFile | undefined | null>(getCurrentFileFromLocal());
 

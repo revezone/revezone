@@ -44,7 +44,6 @@ export default function useFileTreeContextMenu(props: Props) {
 
     if (isFolder) {
       return [
-        ...commonContextMenu,
         {
           key: 'addboard',
           label: t('operation.addBoard'),
@@ -71,7 +70,8 @@ export default function useFileTreeContextMenu(props: Props) {
             domEvent.stopPropagation();
             // addFile('New Note', 'note', item.id);
           }
-        }
+        },
+        ...commonContextMenu
       ];
     } else {
       return [

@@ -23,33 +23,36 @@ export default function useTabList() {
     setTabIndex(tabIndexFromLocal);
   }, []);
 
-  const updateTabList = useCallback((currentFile, tabList: TabItem[] = []) => {
-    if (!currentFile) return;
+  const updateTabListWhenCurrentFileChanged = useCallback(
+    (currentFile, tabList: TabItem[] = []) => {
+      if (!currentFile) return;
 
-    tabList = tabList || [];
+      tabList = tabList || [];
 
-    const _tabIndex = tabList.findIndex((tab) => tab.id === currentFile.id);
+      const _tabIndex = tabList.findIndex((tab) => tab.id === currentFile.id);
 
-    if (_tabIndex > -1) {
-      setTabIndex(_tabIndex);
-    } else {
-      const newTab: TabItem = {
-        id: currentFile.id,
-        name: currentFile.name,
-        type: 'tab',
-        fileType: currentFile.type,
-        config: currentFile
-      };
-      const newTabList: TabItem[] = [
-        newTab,
-        ...tabList.filter((tab) => tab.id !== DEFAULT_EMPTY_TAB_ID)
-      ];
+      if (_tabIndex > -1) {
+        setTabIndex(_tabIndex);
+      } else {
+        const newTab: TabItem = {
+          id: currentFile.id,
+          name: currentFile.name,
+          type: 'tab',
+          fileType: currentFile.type,
+          config: currentFile
+        };
+        const newTabList: TabItem[] = [
+          newTab,
+          ...tabList.filter((tab) => tab.id !== DEFAULT_EMPTY_TAB_ID)
+        ];
 
-      setTabList(newTabList);
-      setTabListToLocal(JSON.stringify(newTabList));
-      setTabIndexToLocal(_tabIndex > -1 ? _tabIndex : 0);
-    }
-  }, []);
+        setTabList(newTabList);
+        setTabListToLocal(JSON.stringify(newTabList));
+        setTabIndexToLocal(_tabIndex > -1 ? _tabIndex : 0);
+      }
+    },
+    []
+  );
 
   const deleteTab = useCallback((fileId: string, tabList: TabItem[], tabIndex: number) => {
     const newTabList = tabList.filter((tab) => tab.id !== fileId);
@@ -71,5 +74,31 @@ export default function useTabList() {
     updateCurrentFile(_file?.id);
   }, []);
 
-  return { tabIndex, tabList, updateTabList, setTabIndex, deleteTab };
+  const renameTabName = useCallback((fileId: string, name: string, tabList: TabItem[]) => {
+    const newTabList = tabList.map((tab) => {
+      if (tab.id === fileId) {
+        const newTab = { ...tab, name };
+        if (newTab.config) {
+          newTab.config.name = name;
+        }
+        return newTab;
+      }
+      return tab;
+    });
+
+    console.log('--- newTabList ---', newTabList, tabList, fileId, name);
+
+    setTabList(newTabList);
+    // setTabListToLocal(JSON.stringify(newTabList));
+  }, []);
+
+  return {
+    tabIndex,
+    tabList,
+    updateTabListWhenCurrentFileChanged,
+    setTabList,
+    setTabIndex,
+    deleteTab,
+    renameTabName
+  };
 }
