@@ -10,6 +10,7 @@ const LOCALSTORAGE_LANG_CODE = 'lang_code';
 const LOCALSTORAGE_BOARD_CUSTOM_FONT_SWITCH = 'board_custom_font_switch';
 const LOCALSTORAGE_TAB_LIST = 'tab_list';
 const LOCALSTORAGE_TAB_INDEX = 'tab_index';
+const LOCALSTORAGE_RENAMING_MENU_ITEM_ID = 'renaming_menu_item_id';
 
 export const getOpenKeysFromLocal = (): string[] => {
   const localStr = localStorage.getItem(LOCALSTORAGE_MENU_OPEN_KEYS);
@@ -91,4 +92,12 @@ export const setTabIndexToLocal = (value: number) => {
 
 export const getTabIndexFromLocal = () => {
   return Number(localStorage.getItem(LOCALSTORAGE_TAB_INDEX));
+};
+
+export const setRenamingMenuItemIdToLocal = (id: string) => {
+  localStorage.setItem(LOCALSTORAGE_RENAMING_MENU_ITEM_ID, id);
+};
+
+export const getRenamingMenuItemIdFromLocal = () => {
+  return localStorage.getItem(LOCALSTORAGE_RENAMING_MENU_ITEM_ID);
 };

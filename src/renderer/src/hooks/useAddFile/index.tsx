@@ -3,6 +3,8 @@ import useFileTree from '@renderer/hooks/useFileTree';
 import useCurrentFile from '../useCurrentFile';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import useOpenKeys from '../useOpenKeys';
+import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
+import { dbclickMenuTreeItemAfterCreate } from '@renderer/utils/dom';
 
 export default function useAddFile() {
   const { getFileTree } = useFileTree();
@@ -11,10 +13,15 @@ export default function useAddFile() {
 
   const addFile = useCallback(async (name: string, type: 'board' | 'note', parentId?: string) => {
     const file = await fileTreeIndexeddbStorage.addFile(name, type, parentId);
-    updateCurrentFile(file.id);
-    getFileTree();
 
     parentId && addOpenKey(parentId);
+    setRenamingMenuItemIdToLocal(file.id);
+
+    updateCurrentFile(file.id);
+
+    getFileTree();
+
+    dbclickMenuTreeItemAfterCreate();
   }, []);
 
   return { addFile };

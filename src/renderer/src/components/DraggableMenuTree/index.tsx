@@ -19,6 +19,10 @@ import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 import useTabList from '@renderer/hooks/useTabList';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import useOpenKeys from '@renderer/hooks/useOpenKeys';
+import {
+  getRenamingMenuItemIdFromLocal,
+  setRenamingMenuItemIdToLocal
+} from '@renderer/store/localstorage';
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
@@ -76,7 +80,6 @@ export default function DraggableMenuTree() {
 
   const resetMenu = useCallback(() => {
     updateCurrentFile(undefined);
-    // setCurrentFolderId(undefined);
     setSelectedKeys([]);
   }, []);
 
@@ -175,6 +178,7 @@ export default function DraggableMenuTree() {
           onFocusItem={onFocusItem}
           onRenameItem={async (item, name) => {
             console.log('--- onRenameItem ---', item, name);
+            setRenamingMenuItemIdToLocal('');
 
             if (item.isFolder) {
               await fileTreeIndexeddbStorage.updateFolderName(item.data, name);
@@ -183,7 +187,9 @@ export default function DraggableMenuTree() {
               await renameTabName(item.data.id, name, tabList);
             }
 
-            getFileTree();
+            setTimeout(() => {
+              getFileTree();
+            }, 0);
           }}
           renderTreeContainer={({ children, containerProps }) => (
             <div {...containerProps}>{children}</div>
@@ -192,6 +198,20 @@ export default function DraggableMenuTree() {
             <ul {...containerProps}>{children}</ul>
           )}
           renderItem={({ item, depth, children, title, context, arrow }) => {
+            // const isRenaming =
+            //   context.isRenaming || getRenamingMenuItemIdFromLocal() === item.data.id;
+
+            // if (isRenaming) {
+            //   console.log(
+            //     'isRenaming',
+            //     context.isRenaming,
+            //     getRenamingMenuItemIdFromLocal(),
+            //     item.data.id
+            //   );
+            //   context.startRenamingItem();
+            //   context.isRenaming = true;
+            // }
+
             const InteractiveComponent = context.isRenaming ? 'div' : 'button';
             const type = context.isRenaming ? undefined : 'button';
 
@@ -219,10 +239,15 @@ export default function DraggableMenuTree() {
                     className="rct-tree-item-button flex justify-between items-center"
                   >
                     <div
-                      className="flex items-center flex-1"
+                      className={`flex items-center flex-1 menu-tree-item-child ${item.data.id}`}
                       onDoubleClick={(e) => {
                         e.stopPropagation();
                         context.startRenamingItem();
+                      }}
+                      onBlur={() => {
+                        console.log('--- onBlur ---');
+                        setRenamingMenuItemIdToLocal('');
+                        context.stopRenamingItem();
                       }}
                     >
                       {item.isFolder ? <Folder className="w-4 h-4" /> : null}

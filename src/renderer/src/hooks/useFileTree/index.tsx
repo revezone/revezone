@@ -8,7 +8,7 @@ export default function useFileTree() {
 
   const getFileTree = useCallback(async () => {
     const tree = await fileTreeIndexeddbStorage.getFileTree();
-    setFileTree(tree);
+    tree && setFileTree(tree);
     return tree;
   }, []);
 

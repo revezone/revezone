@@ -51,6 +51,7 @@ export default function useFileTreeContextMenu(props: Props) {
           icon: <Palette className="w-4" />,
           onClick: async ({ domEvent }) => {
             domEvent.stopPropagation();
+            domEvent.preventDefault();
             addFile('New Board', 'board', item.id);
           }
         },
@@ -60,6 +61,7 @@ export default function useFileTreeContextMenu(props: Props) {
           icon: <FileType className="w-4" />,
           onClick: async ({ domEvent }) => {
             domEvent.stopPropagation();
+            domEvent.preventDefault();
             addFile('New Note', 'note', item.id);
           }
         },
