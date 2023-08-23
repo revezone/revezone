@@ -1,27 +1,14 @@
-import { ControlledTreeEnvironment, Tree, TreeItem, TreeItemIndex } from 'react-complex-tree';
-import 'react-complex-tree/lib/style-modern.css';
-import { useCallback, useEffect, useState, useRef } from 'react';
-import { Menu, Dropdown, Input } from 'antd';
+import { ControlledTreeEnvironment, Tree, TreeItem } from 'react-complex-tree';
+import { useCallback, useEffect } from 'react';
+import { Dropdown } from 'antd';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
-import type { RevezoneFile, RevezoneFolder, OnFolderOrFileAddProps } from '@renderer/types/file';
-import { setOpenKeysToLocal } from '@renderer/store/localstorage';
+import type { RevezoneFile, RevezoneFolder } from '@renderer/types/file';
 import { useAtom } from 'jotai';
-import { focusItemAtom, openKeysAtom, selectedKeysAtom } from '@renderer/store/jotai';
+import { focusItemAtom, selectedKeysAtom } from '@renderer/store/jotai';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import OperationBar from '../OperationBar';
 import RevezoneLogo from '../RevezoneLogo';
-
-import './index.css';
-
-import {
-  Folder,
-  HardDrive,
-  UploadCloud,
-  MoreVertical,
-  FolderPlus,
-  Palette,
-  FileType
-} from 'lucide-react';
+import { Folder, HardDrive, UploadCloud, MoreVertical, Palette, FileType } from 'lucide-react';
 import useFileTreeContextMenu from '@renderer/hooks/useFileTreeContextMenu';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
@@ -33,11 +20,14 @@ import useTabList from '@renderer/hooks/useTabList';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import useOpenKeys from '@renderer/hooks/useOpenKeys';
 
+import 'react-complex-tree/lib/style-modern.css';
+import './index.css';
+
 export default function DraggableMenuTree() {
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
   const [focusItem, setFocusItem] = useAtom(focusItemAtom);
   const { fileTree, getFileTree } = useFileTree();
-  const { openKeys, setOpenKeys, addOpenKey, removeOpenKey } = useOpenKeys();
+  const { openKeys, addOpenKey, removeOpenKey } = useOpenKeys();
   const { t } = useTranslation();
 
   const { updateTabListWhenCurrentFileChanged, renameTabName, tabList } = useTabList();

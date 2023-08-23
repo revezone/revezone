@@ -1,15 +1,10 @@
 import { useCallback } from 'react';
-import { currentFileAtom, currentFolderIdAtom, fileTreeAtom } from '@renderer/store/jotai';
-import { useAtom } from 'jotai';
-import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { FolderPlus, Palette, FileType } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
-import useFileTree from '@renderer/hooks/useFileTree';
+import { useTranslation } from 'react-i18next';
+import useAddFolder from '@renderer/hooks/useAddFolder';
 
 import './index.css';
-import { useTranslation } from 'react-i18next';
-import useCurrentFile from '@renderer/hooks/useCurrentFile';
-import useAddFolder from '@renderer/hooks/useAddFolder';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
