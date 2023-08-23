@@ -32,15 +32,10 @@ import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 import useTabList from '@renderer/hooks/useTabList';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 
-interface Props {
-  collapsed: boolean;
-}
-
 export default function DraggableMenuTree() {
   const [openKeys, setOpenKeys] = useAtom(openKeysAtom);
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
   const [focusItem, setFocusItem] = useAtom(focusItemAtom);
-  const firstRenderRef = useRef(false);
   const { fileTree, getFileTree } = useFileTree();
   const { t } = useTranslation();
 
@@ -220,14 +215,7 @@ export default function DraggableMenuTree() {
             const type = context.isRenaming ? undefined : 'button';
 
             return (
-              <li
-                {...context.itemContainerWithChildrenProps}
-                className="rct-tree-item-li"
-                onDoubleClick={(e) => {
-                  e.stopPropagation();
-                  context.startRenamingItem();
-                }}
-              >
+              <li {...context.itemContainerWithChildrenProps} className="rct-tree-item-li">
                 <div
                   {...context.itemContainerWithoutChildrenProps}
                   style={{ paddingLeft: `${(depth + 1) * 0.5}rem` }}
@@ -249,7 +237,13 @@ export default function DraggableMenuTree() {
                     {...context.interactiveElementProps}
                     className="rct-tree-item-button flex justify-between items-center"
                   >
-                    <div className="flex items-center">
+                    <div
+                      className="flex items-center flex-1"
+                      onDoubleClick={(e) => {
+                        e.stopPropagation();
+                        context.startRenamingItem();
+                      }}
+                    >
                       {item.isFolder ? <Folder className="w-4 h-4" /> : null}
                       {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
                       {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}

@@ -9,6 +9,7 @@ import useFileTree from '@renderer/hooks/useFileTree';
 import './index.css';
 import { useTranslation } from 'react-i18next';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
+import useAddFolder from '@renderer/hooks/useAddFolder';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
@@ -17,9 +18,8 @@ interface Props {
 
 export default function OperationBar(props: Props) {
   const { size = 'middle', className } = props;
-  const { updateCurrentFile } = useCurrentFile();
-  const { getFileTree } = useFileTree();
   const { addFile } = useAddFile();
+  const { addFolder } = useAddFolder();
   const { t } = useTranslation();
 
   const getSizeClassName = useCallback(() => {
@@ -34,12 +34,6 @@ export default function OperationBar(props: Props) {
         return 'h-5';
     }
   }, [size]);
-
-  const addFolder = useCallback(async () => {
-    await fileTreeIndexeddbStorage.addFolder();
-    updateCurrentFile(undefined);
-    getFileTree();
-  }, []);
 
   return (
     <div className={`revezone-menu-toolbar flex items-center pl-5 h-10 ${className}`}>
