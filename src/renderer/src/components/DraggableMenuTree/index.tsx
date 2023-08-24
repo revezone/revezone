@@ -216,7 +216,7 @@ export default function DraggableMenuTree() {
             const type = context.isRenaming ? undefined : 'button';
 
             return (
-              <li {...context.itemContainerWithChildrenProps} className="rct-tree-item-li">
+              <li {...context.itemContainerWithChildrenProps} className="rct-tree-item-li mt-2">
                 <div
                   {...context.itemContainerWithoutChildrenProps}
                   style={{ paddingLeft: `${(depth + 1) * 0.5}rem` }}
