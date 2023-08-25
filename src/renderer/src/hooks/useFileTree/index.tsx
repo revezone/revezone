@@ -12,5 +12,5 @@ export default function useFileTree() {
     return tree;
   }, []);
 
-  return { fileTree, getFileTree };
+  return { fileTree, getFileTree, setFileTree };
 }

@@ -1,4 +1,4 @@
-import { ControlledTreeEnvironment, Tree, TreeItem } from 'react-complex-tree';
+import { ControlledTreeEnvironment, Tree, TreeItem, DraggingPosition } from 'react-complex-tree';
 import { useCallback, useEffect } from 'react';
 import { Dropdown } from 'antd';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
@@ -19,10 +19,7 @@ import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 import useTabList from '@renderer/hooks/useTabList';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import useOpenKeys from '@renderer/hooks/useOpenKeys';
-import {
-  getRenamingMenuItemIdFromLocal,
-  setRenamingMenuItemIdToLocal
-} from '@renderer/store/localstorage';
+import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
@@ -121,6 +118,59 @@ export default function DraggableMenuTree() {
     setFocusItem(item.data.id);
   }, []);
 
+  const onRenameItem = useCallback(async (item, name) => {
+    console.log('--- onRenameItem ---', item, name);
+    setRenamingMenuItemIdToLocal('');
+
+    if (item.isFolder) {
+      await fileTreeIndexeddbStorage.updateFolderName(item.data, name);
+    } else {
+      await fileTreeIndexeddbStorage.updateFileName(item.data, name);
+      await renameTabName(item.data.id, name, tabList);
+    }
+
+    setTimeout(() => {
+      getFileTree();
+    }, 0);
+  }, []);
+
+  const onDrop = useCallback(
+    async (items: TreeItem[], target: DraggingPosition) => {
+      console.log('--- onDrop ---', items, target);
+      let children;
+      let newChildren;
+
+      const itemIds: string[] = items.map((item) => item.data.id);
+
+      switch (target.targetType) {
+        case 'between-items':
+          children = fileTree[target.parentItem].children;
+          newChildren = children?.filter((child: string) => !itemIds.includes(child));
+
+          newChildren = [
+            ...newChildren.slice(0, target.childIndex),
+            ...itemIds,
+            ...newChildren.slice(target.childIndex)
+          ];
+
+          fileTree[target.parentItem].children = newChildren;
+
+          console.log('--- newChildren ---', newChildren);
+
+          await fileTreeIndexeddbStorage.updateFileTree(fileTree);
+
+          getFileTree();
+
+          break;
+        case 'item':
+          break;
+        case 'root':
+          break;
+      }
+    },
+    [fileTree]
+  );
+
   const storageTypeItems = [
     {
       key: 'local',
@@ -152,7 +202,7 @@ export default function DraggableMenuTree() {
               </span>
             </Dropdown>
           </div>
-          <LanguageSwitcher></LanguageSwitcher>
+          <LanguageSwitcher />
         </div>
       </div>
       <OperationBar size="small" />
@@ -176,21 +226,8 @@ export default function DraggableMenuTree() {
           onExpandItem={onExpandItem}
           onCollapseItem={onCollapseItem}
           onFocusItem={onFocusItem}
-          onRenameItem={async (item, name) => {
-            console.log('--- onRenameItem ---', item, name);
-            setRenamingMenuItemIdToLocal('');
-
-            if (item.isFolder) {
-              await fileTreeIndexeddbStorage.updateFolderName(item.data, name);
-            } else {
-              await fileTreeIndexeddbStorage.updateFileName(item.data, name);
-              await renameTabName(item.data.id, name, tabList);
-            }
-
-            setTimeout(() => {
-              getFileTree();
-            }, 0);
-          }}
+          onDrop={onDrop}
+          onRenameItem={onRenameItem}
           renderTreeContainer={({ children, containerProps }) => (
             <div {...containerProps}>{children}</div>
           )}
@@ -198,20 +235,6 @@ export default function DraggableMenuTree() {
             <ul {...containerProps}>{children}</ul>
           )}
           renderItem={({ item, depth, children, title, context, arrow }) => {
-            // const isRenaming =
-            //   context.isRenaming || getRenamingMenuItemIdFromLocal() === item.data.id;
-
-            // if (isRenaming) {
-            //   console.log(
-            //     'isRenaming',
-            //     context.isRenaming,
-            //     getRenamingMenuItemIdFromLocal(),
-            //     item.data.id
-            //   );
-            //   context.startRenamingItem();
-            //   context.isRenaming = true;
-            // }
-
             const InteractiveComponent = context.isRenaming ? 'div' : 'button';
             const type = context.isRenaming ? undefined : 'button';
 
@@ -229,7 +252,7 @@ export default function DraggableMenuTree() {
                     context.isDraggingOver && 'rct-tree-item-title-container-dragging-over',
                     context.isSearchMatching && 'rct-tree-item-title-container-search-match'
                   ].join(' ')}
-                  onClick={(e) => e.stopPropagation()}
+                  // onClick={(e) => e.stopPropagation()}
                 >
                   {arrow}
                   <InteractiveComponent

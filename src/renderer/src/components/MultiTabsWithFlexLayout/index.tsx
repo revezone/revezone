@@ -46,7 +46,7 @@ export default function MultiTabs() {
   const renderContent = useCallback((file, currentFile) => {
     // if (file?.id !== currentFile?.id) return;
 
-    console.log('--- renderContent ---', file);
+    // console.log('--- renderContent ---', file);
 
     switch (file?.type) {
       case 'note':

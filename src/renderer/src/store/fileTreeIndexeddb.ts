@@ -218,7 +218,9 @@ class FileTreeIndexeddbStorage {
     await this.initDB();
     const fileTree = await this.db?.get(INDEXEDDB_FILE_TREE, INDEXEDDB_FILE_TREE);
 
-    console.log('--- fileTree db ---', fileTree);
+    // DEBUG
+    // @ts-ignore
+    window.fileTree = fileTree;
 
     let oldFileTree;
 
