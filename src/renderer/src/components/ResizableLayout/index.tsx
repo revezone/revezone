@@ -1,6 +1,6 @@
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { ReactNode, useCallback } from 'react';
-import { PanelLeftClose, PanelLeftOpen, Grip, GripVertical } from 'lucide-react';
+import { PanelLeftClose, PanelLeftOpen, GripVertical } from 'lucide-react';
 import { siderbarCollapsedAtom, themeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 // import LanguageSwitcher from '../LanguageSwitcher';
@@ -34,25 +34,26 @@ export default function ClientComponent({ children }: Props) {
 
   return (
     <PanelGroup className="revezone-layout" direction="horizontal" onLayout={onLayout}>
-      <Panel defaultSize={defaultLayout[0]} minSize={0.2} maxSize={50}>
-        <div className="revezone-topleft-toolbar">
-          <PanelLeftClose
-            className="panel-left-button w-5 text-current cursor-pointer"
-            onClick={switchCollapse}
-          />
-        </div>
-        <DraggableMenuTree />
-        <BottomToolbar />
-      </Panel>
-      <PanelResizeHandle className="w-2 bg-gray-100 flex justify-center items-center">
-        {/* <div className="h-6 w-2/3 bg-gray-400 rounded-md hover:bg-gray-500"> */}
-        <div className="flex flex-col">
-          <GripVertical className="w-3 h-3 text-gray-500" />
-        </div>
-
-        {/* </div> */}
-      </PanelResizeHandle>
-      <Panel defaultSize={defaultLayout[1]}>
+      {!collapsed ? (
+        <>
+          <Panel defaultSize={defaultLayout[0]} minSize={0.2} maxSize={50} id="sidebar" order={1}>
+            <div className="revezone-topleft-toolbar">
+              <PanelLeftClose
+                className="panel-left-button w-5 text-current cursor-pointer"
+                onClick={switchCollapse}
+              />
+            </div>
+            <DraggableMenuTree />
+            <BottomToolbar />
+          </Panel>
+          <PanelResizeHandle className="w-2 bg-gray-100 flex justify-center items-center">
+            <div className="flex flex-col">
+              <GripVertical className="w-3 h-3 text-gray-500" />
+            </div>
+          </PanelResizeHandle>
+        </>
+      ) : null}
+      <Panel defaultSize={defaultLayout[1]} order={2}>
         {collapsed && (
           <PanelLeftOpen
             onClick={switchCollapse}
