@@ -57,7 +57,7 @@ export default function ClientComponent({ children }: Props) {
         {collapsed && (
           <PanelLeftOpen
             onClick={switchCollapse}
-            className="w-5 text-current cursor-pointer mt-3 ml-3 absolute z-50"
+            className="w-5 text-current cursor-pointer mt-1 ml-3 absolute z-50"
           />
         )}
         {children}

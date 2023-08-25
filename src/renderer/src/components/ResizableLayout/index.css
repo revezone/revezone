@@ -23,7 +23,7 @@
     -webkit-app-region: drag;
 
     .panel-left-button {
-      margin: 1rem 1rem 0 0;
+      margin: 0.3rem 0.6rem 0 0;
       -webkit-app-region: no-drag;
     }
   }
@@ -33,23 +33,5 @@
   .ant-menu-title-content {
     flex: auto;
   }
-
-  /* .ant-layout-content {
-    position: relative;
-    border-left: 1px solid #e2e2e2;
-
-    .uncollapse-icon {
-      position: absolute;
-      color: #333;
-      top: 20px;
-      left: 10px;
-      z-index: 1001;
-      font-size: 20px;
-    }
-  }
-
-  .ant-layout-sider-children {
-    height: 100%;
-    overflow-y: scroll;
-  } */
+ 
 }

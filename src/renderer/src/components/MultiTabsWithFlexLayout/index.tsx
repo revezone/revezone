@@ -14,12 +14,14 @@ import { setTabIndexToLocal } from '@renderer/store/localstorage';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { TabItem } from '@renderer/types/tabs';
+import { siderbarCollapsedAtom } from '@renderer/store/jotai';
 
 export default function MultiTabs() {
   const { tabIndex, tabList, deleteTab, setTabIndex } = useTabList();
   const [model, setModel] = useState<Model>();
   const [currentFile] = useAtom(currentFileAtom);
   const { updateCurrentFile } = useCurrentFile();
+  const [collapsed] = useAtom(siderbarCollapsedAtom);
 
   useEffect(() => {
     console.log('--- tablist ---', tabIndex, tabList);
@@ -103,5 +105,9 @@ export default function MultiTabs() {
     [tabList, tabIndex]
   );
 
-  return model ? <Layout model={model} factory={factory} onAction={onAction} /> : null;
+  return model ? (
+    <div className={`${collapsed ? 'revezone-siderbar-collapsed' : ''}`}>
+      <Layout model={model} factory={factory} onAction={onAction} />
+    </div>
+  ) : null;
 }

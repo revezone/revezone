@@ -27,3 +27,12 @@
     @apply border-slate-100;
   }
 }
+
+
+.revezone-siderbar-collapsed {
+  height: 100%;
+  
+  .flexlayout__tabset_tabbar_outer_top {
+    @apply pl-10;
+  }
+}
