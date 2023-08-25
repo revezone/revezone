@@ -38,7 +38,7 @@ export default function ClientComponent({ children }: Props) {
         <>
           <Panel
             defaultSize={defaultLayout[0]}
-            minSize={0.2}
+            minSize={10}
             maxSize={50}
             id="sidebar"
             order={1}

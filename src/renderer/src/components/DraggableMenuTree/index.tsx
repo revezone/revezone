@@ -225,7 +225,7 @@ export default function DraggableMenuTree() {
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
         <div className="flex items-center">
           <RevezoneLogo size="small" onClick={() => resetMenu()} />
-          <span className="text-sm">&nbsp;-&nbsp;{t('text.alpha')}</span>
+          <span className="text-sm whitespace-nowrap">&nbsp;-&nbsp;{t('text.alpha')}</span>
           <PublicBetaNotice />
         </div>
         <div className="flex justify-start">
