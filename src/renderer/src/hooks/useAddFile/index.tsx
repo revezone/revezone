@@ -17,11 +17,11 @@ export default function useAddFile() {
     parentId && addOpenKey(parentId);
     setRenamingMenuItemIdToLocal(file.id);
 
-    updateCurrentFile(file.id);
-
     getFileTree();
 
     dbclickMenuTreeItemAfterCreate();
+
+    updateCurrentFile(file);
   }, []);
 
   return { addFile };

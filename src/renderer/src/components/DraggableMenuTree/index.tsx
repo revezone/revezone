@@ -28,7 +28,6 @@ import useTabList from '@renderer/hooks/useTabList';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import useOpenKeys from '@renderer/hooks/useOpenKeys';
 import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
-import moment from 'moment';
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
@@ -104,16 +103,18 @@ export default function DraggableMenuTree() {
   );
 
   const onSelectItems = useCallback(
-    async (items) => {
+    async (items: string[]) => {
       const key = typeof items?.[0] === 'string' ? items?.[0] : items?.[0].id;
 
       console.log('onSelect', items);
 
-      const fileId = key?.startsWith('file_') ? key : undefined;
+      const fileId: string = key?.startsWith('file_') ? key : undefined;
 
       if (!fileId) return;
 
-      const file = await updateCurrentFile(fileId);
+      const file = await fileTreeIndexeddbStorage.getFile(fileId);
+
+      await updateCurrentFile(file);
 
       updateTabListWhenCurrentFileChanged(file, tabList);
 
@@ -228,7 +229,7 @@ export default function DraggableMenuTree() {
         </div>
       </div>
       <OperationBar size="small" />
-      <div className="menu-list border-t border-slate-100 px-1">
+      <div className="menu-list border-t border-slate-100 px-1 pt-2">
         <ControlledTreeEnvironment
           items={fileTree}
           getItemTitle={(item) => `${item.data.name}`}

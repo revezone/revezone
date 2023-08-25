@@ -54,7 +54,7 @@ export default function useTabList() {
     []
   );
 
-  const deleteTab = useCallback((fileId: string, tabList: TabItem[], tabIndex: number) => {
+  const deleteTab = useCallback(async (fileId: string, tabList: TabItem[], tabIndex: number) => {
     const newTabList = tabList.filter((tab) => tab.id !== fileId);
 
     console.log('deleteTabList', fileId, newTabList);
@@ -70,8 +70,9 @@ export default function useTabList() {
     setTabIndex(_tabIndex);
     setTabIndexToLocal(_tabIndex);
 
-    const _file = newTabList[_tabIndex];
-    updateCurrentFile(_file?.id);
+    const fileInfo = newTabList[_tabIndex]?.config;
+
+    updateCurrentFile(fileInfo);
   }, []);
 
   const renameTabName = useCallback((fileId: string, name: string, tabList: TabItem[]) => {

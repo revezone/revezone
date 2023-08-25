@@ -27,13 +27,14 @@ export interface RevezoneFile {
 export interface RevezoneFolder {
   id: string;
   name: string;
+  type?: 'folder';
   gmtCreate: string;
   gmtModified: string;
 }
 
 export type FileTreeItem = RevezoneFolder & { children: RevezoneFile[] };
 
-export type RevezoneFileTree = { [key: string]: TreeItem };
+export type RevezoneFileTree = { [key: string]: TreeItem<RevezoneFile | RevezoneFolder> };
 
 export interface OnFolderOrFileAddProps {
   fileId?: string;

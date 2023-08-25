@@ -4,7 +4,8 @@ import moment from 'moment-timezone';
 import { RevezoneFile, RevezoneFolder, RevezoneFileType, RevezoneFileTree } from '../types/file';
 import { submitUserEvent } from '../utils/statistics';
 import { menuIndexeddbStorage } from './_menuIndexeddb';
-import { TreeItem } from 'react-complex-tree';
+import { blocksuiteStorage } from './blocksuite';
+import { boardIndexeddbStorage } from './boardIndexeddb';
 
 moment.tz.setDefault('Asia/Shanghai');
 
@@ -111,6 +112,8 @@ class FileTreeIndexeddbStorage {
     }
 
     await this.updateFileTree(fileTree);
+
+    return info;
   }
 
   async addFile(
@@ -119,6 +122,12 @@ class FileTreeIndexeddbStorage {
     parentId?: string
   ): Promise<RevezoneFile> {
     const fileId = `file_${uuidv4()}`;
+
+    if (type === 'note') {
+      await blocksuiteStorage.addPage(fileId);
+    } else if (type === 'board') {
+      await boardIndexeddbStorage.addBoard(fileId, '{}');
+    }
 
     const fileInfo = {
       id: fileId,

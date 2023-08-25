@@ -12,6 +12,7 @@ import { currentFileAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { setTabIndexToLocal } from '@renderer/store/localstorage';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
+import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 
 export default function MultiTabs() {
   const { tabIndex, tabList, deleteTab, setTabIndex } = useTabList();
@@ -79,7 +80,9 @@ export default function MultiTabs() {
 
     console.log('--- onTabSelect ---', fileId, _tabIndex, tabList);
 
-    updateCurrentFile(fileId);
+    const file = fileId ? await fileTreeIndexeddbStorage.getFile(fileId) : undefined;
+
+    updateCurrentFile(file);
   }, []);
 
   const onAction = useCallback(
