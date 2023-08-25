@@ -1,21 +1,22 @@
 import { useCallback } from 'react';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
-import useFileTree from '../useFileTree';
 import useCurrentFile from '../useCurrentFile';
 import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
 import { dbclickMenuTreeItemAfterCreate } from '@renderer/utils/dom';
+import useFileTree from '../useFileTree';
 
 export default function useAddFolder() {
-  const { getFileTree } = useFileTree();
   const { updateCurrentFile } = useCurrentFile();
+  const { getFileTree } = useFileTree();
 
-  const addFolder = useCallback(async () => {
-    const folder = await fileTreeIndexeddbStorage.addFolder();
+  const addFolder = useCallback(async (name: string, parentId?: string) => {
+    const folder = await fileTreeIndexeddbStorage.addFolder(name, parentId);
     setRenamingMenuItemIdToLocal(folder.id);
     updateCurrentFile(undefined);
-    getFileTree();
 
     dbclickMenuTreeItemAfterCreate();
+
+    getFileTree();
   }, []);
 
   return { addFolder };

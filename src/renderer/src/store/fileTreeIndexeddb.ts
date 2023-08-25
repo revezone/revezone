@@ -79,6 +79,8 @@ class FileTreeIndexeddbStorage {
   async addFolder(name?: string, parentId?: string) {
     const id = `folder_${uuidv4()}`;
 
+    console.log('--- addFolder ---', name, parentId);
+
     const folderInfo = {
       id,
       name: name || 'New Folder',
@@ -116,8 +118,6 @@ class FileTreeIndexeddbStorage {
     type: RevezoneFileType = 'note',
     parentId?: string
   ): Promise<RevezoneFile> {
-    console.log('--- addFile ---', name, type, parentId);
-
     const fileId = `file_${uuidv4()}`;
 
     const fileInfo = {
@@ -186,8 +186,6 @@ class FileTreeIndexeddbStorage {
           newTree[key] = item;
         }
       });
-
-    console.log('--- newTree ---', newTree);
 
     this.updateFileTree(newTree);
   }

@@ -35,7 +35,10 @@ export default function OperationBar(props: Props) {
       <span
         title={t('operation.addFolder')}
         className="operation-item flex items-center mr-3 cursor-pointer"
-        onClick={addFolder}
+        onClick={(e) => {
+          e.stopPropagation();
+          addFolder('New Folder');
+        }}
       >
         <FolderPlus className={`${getSizeClassName()} text-current`} />
         <span className="operation-btn-desc ml-1 transition-all">{t('operation.addFolder')}</span>

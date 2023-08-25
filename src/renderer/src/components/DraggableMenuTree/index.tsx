@@ -1,4 +1,12 @@
-import { ControlledTreeEnvironment, Tree, TreeItem, DraggingPosition } from 'react-complex-tree';
+import {
+  ControlledTreeEnvironment,
+  Tree,
+  TreeItem,
+  TreeItemIndex,
+  DraggingPosition,
+  DraggingPositionBetweenItems,
+  DraggingPositionItem
+} from 'react-complex-tree';
 import { useCallback, useEffect } from 'react';
 import { Dropdown } from 'antd';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
@@ -135,35 +143,48 @@ export default function DraggableMenuTree() {
     }, 0);
   }, []);
 
-  const onDrop = useCallback(
-    async (items: TreeItem[], target: DraggingPosition) => {
-      console.log('--- onDrop ---', items, target);
-      let children;
+  const onDropBetweenItems = useCallback(
+    async (
+      items: TreeItem<RevezoneFile | RevezoneFolder>[],
+      target: DraggingPositionBetweenItems
+    ) => {
+      const itemIds: string[] = items.map((item) => item.data.id);
+
       let newChildren;
 
-      const itemIds: string[] = items.map((item) => item.data.id);
+      const children = fileTree[target.parentItem].children;
+      newChildren = children?.filter((child) => !itemIds.includes(String(child)));
+
+      newChildren = [
+        ...newChildren.slice(0, target.childIndex),
+        ...itemIds,
+        ...newChildren.slice(target.childIndex)
+      ];
+
+      fileTree[target.parentItem].children = newChildren;
+
+      await fileTreeIndexeddbStorage.updateFileTree(fileTree);
+
+      getFileTree();
+    },
+    []
+  );
+
+  const onDropItem = useCallback(
+    async (items: TreeItem<RevezoneFile | RevezoneFolder>[], target: DraggingPositionItem) => {},
+    []
+  );
+
+  const onDrop = useCallback(
+    async (items: TreeItem<RevezoneFile | RevezoneFolder>[], target: DraggingPosition) => {
+      console.log('--- onDrop ---', items, target);
 
       switch (target.targetType) {
         case 'between-items':
-          children = fileTree[target.parentItem].children;
-          newChildren = children?.filter((child: string) => !itemIds.includes(child));
-
-          newChildren = [
-            ...newChildren.slice(0, target.childIndex),
-            ...itemIds,
-            ...newChildren.slice(target.childIndex)
-          ];
-
-          fileTree[target.parentItem].children = newChildren;
-
-          console.log('--- newChildren ---', newChildren);
-
-          await fileTreeIndexeddbStorage.updateFileTree(fileTree);
-
-          getFileTree();
-
+          onDropBetweenItems(items, target);
           break;
         case 'item':
+          onDropItem(items, target);
           break;
         case 'root':
           break;
@@ -274,12 +295,12 @@ export default function DraggableMenuTree() {
                         context.stopRenamingItem();
                       }}
                     >
-                      <p>
+                      <div>
                         {item.isFolder ? <Folder className="w-4 h-4" /> : null}
                         {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
                         {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
-                      </p>
-                      <p className="flex flex-col ml-2">{title}</p>
+                      </div>
+                      <div className="flex flex-col ml-2">{title}</div>
                     </div>
                     <Dropdown
                       menu={{

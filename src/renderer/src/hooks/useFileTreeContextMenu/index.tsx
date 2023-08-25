@@ -3,6 +3,7 @@ import { FileEdit, Trash2, ClipboardCopy, FileType, Palette, FolderPlus } from '
 import { useTranslation } from 'react-i18next';
 import { RevezoneFile, RevezoneFolder } from '@renderer/types/file';
 import useAddFile from '../useAddFile';
+import useAddFolder from '../useAddFolder';
 
 interface Props {
   deleteFile: (file: RevezoneFile) => void;
@@ -13,6 +14,7 @@ export default function useFileTreeContextMenu(props: Props) {
   const { t } = useTranslation();
   const { deleteFile, deleteFolder } = props;
   const { addFile } = useAddFile();
+  const { addFolder } = useAddFolder();
 
   const getFileTreeContextMenu = useCallback((item, context, isFolder: boolean) => {
     const commonContextMenu = [
@@ -71,7 +73,7 @@ export default function useFileTreeContextMenu(props: Props) {
           icon: <FolderPlus className="w-4" />,
           onClick: async ({ domEvent }) => {
             domEvent.stopPropagation();
-            // addFile('New Note', 'note', item.id);
+            addFolder('New Folder', item.id);
           }
         },
         ...commonContextMenu
