@@ -189,18 +189,18 @@ class MenuIndexeddbStorage {
     return fileInfo;
   }
 
-  // TODO: NOT FINISHED, DO NOT USE
-  async _copyFile(copyFileId: string, folderId: string) {
-    await this.initDB();
+  // // TODO: NOT FINISHED, DO NOT USE
+  // async _copyFile(copyFileId: string, folderId: string) {
+  //   await this.initDB();
 
-    if (!(copyFileId && folderId)) return;
+  //   if (!(copyFileId && folderId)) return;
 
-    const copyFile = await this.db?.get(INDEXEDDB_FILE_KEY, copyFileId);
+  //   const copyFile = await this.db?.get(INDEXEDDB_FILE_KEY, copyFileId);
 
-    await this.addFile(folderId, copyFile?.type);
+  //   await this.addFile(folderId, copyFile?.type);
 
-    // await blocksuiteStorage.copyPage();
-  }
+  //   // await blocksuiteStorage.copyPage();
+  // }
 
   async getFile(fileId: string): Promise<RevezoneFile | undefined> {
     await this.initDB();
@@ -265,7 +265,12 @@ class MenuIndexeddbStorage {
     const tree = {
       root: {
         index: 'root',
-        data: { id: 'root', name: 'root' },
+        data: {
+          id: 'root',
+          name: 'root',
+          gmtCreate: moment().toLocaleString(),
+          gmtModified: moment().toLocaleString()
+        },
         isFolder: true,
         canRename: true,
         children: folders.map((folder) => folder.id)

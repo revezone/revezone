@@ -39,7 +39,8 @@ export default function DraggableMenuTree() {
   const { openKeys, addOpenKey, removeOpenKey } = useOpenKeys();
   const { t } = useTranslation();
 
-  const { updateTabListWhenCurrentFileChanged, renameTabName, tabList } = useTabList();
+  const { updateTabListWhenCurrentFileChanged, renameTabName, tabList, deleteTab, tabIndex } =
+    useTabList();
   const { currentFile, updateCurrentFile } = useCurrentFile();
 
   useEffect(() => {
@@ -61,13 +62,15 @@ export default function DraggableMenuTree() {
           break;
       }
 
+      deleteTab(file.id, tabList, tabIndex);
+
       if (file.id === currentFile?.id) {
         updateCurrentFile(undefined);
       }
 
       await getFileTree();
     },
-    [fileTreeIndexeddbStorage, currentFile]
+    [fileTreeIndexeddbStorage, currentFile, tabList]
   );
 
   const deleteFolder = useCallback(
@@ -103,16 +106,21 @@ export default function DraggableMenuTree() {
   );
 
   const onSelectItems = useCallback(
-    async (items: string[]) => {
-      const key = typeof items?.[0] === 'string' ? items?.[0] : items?.[0].id;
+    async (items: TreeItemIndex[]) => {
+      const key = items?.[0];
+
+      // key must be string
+      if (typeof key === 'number') return;
 
       console.log('onSelect', items);
 
-      const fileId: string = key?.startsWith('file_') ? key : undefined;
+      const fileId = key?.startsWith('file_') ? key : undefined;
 
       if (!fileId) return;
 
-      const file = await fileTreeIndexeddbStorage.getFile(fileId);
+      const file = fileTree[fileId].data as RevezoneFile;
+
+      console.log('--- file ---', file);
 
       await updateCurrentFile(file);
 
@@ -128,21 +136,25 @@ export default function DraggableMenuTree() {
     setFocusItem(item.data.id);
   }, []);
 
-  const onRenameItem = useCallback(async (item, name) => {
-    console.log('--- onRenameItem ---', item, name);
-    setRenamingMenuItemIdToLocal('');
+  const onRenameItem = useCallback(
+    async (item: TreeItem<RevezoneFile | RevezoneFolder>, name: string) => {
+      console.log('--- onRenameItem ---', item, name);
+      setRenamingMenuItemIdToLocal('');
 
-    if (item.isFolder) {
-      await fileTreeIndexeddbStorage.updateFolderName(item.data, name);
-    } else {
-      await fileTreeIndexeddbStorage.updateFileName(item.data, name);
-      await renameTabName(item.data.id, name, tabList);
-    }
+      if (item.isFolder) {
+        await fileTreeIndexeddbStorage.updateFolderName(item.data as RevezoneFolder, name);
+      } else {
+        await fileTreeIndexeddbStorage.updateFileName(item.data as RevezoneFile, name);
 
-    setTimeout(() => {
-      getFileTree();
-    }, 0);
-  }, []);
+        await renameTabName(item.data.id, name, tabList);
+      }
+
+      setTimeout(() => {
+        getFileTree();
+      }, 0);
+    },
+    [tabList]
+  );
 
   const onDropBetweenItems = useCallback(
     async (

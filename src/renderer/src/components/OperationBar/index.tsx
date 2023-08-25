@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import useAddFolder from '@renderer/hooks/useAddFolder';
 
 import './index.css';
+import useTabList from '@renderer/hooks/useTabList';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
@@ -16,6 +17,7 @@ export default function OperationBar(props: Props) {
   const { addFile } = useAddFile();
   const { addFolder } = useAddFolder();
   const { t } = useTranslation();
+  const { tabList } = useTabList();
 
   const getSizeClassName = useCallback(() => {
     switch (size) {
@@ -48,7 +50,7 @@ export default function OperationBar(props: Props) {
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
-          addFile('New Board', 'board');
+          addFile('New Board', 'board', tabList);
         }}
       >
         <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
@@ -59,7 +61,7 @@ export default function OperationBar(props: Props) {
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
-          addFile('New Note', 'note');
+          addFile('New Note', 'note', tabList);
         }}
       >
         <FileType className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />

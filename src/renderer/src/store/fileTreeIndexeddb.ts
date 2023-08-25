@@ -10,10 +10,10 @@ import { boardIndexeddbStorage } from './boardIndexeddb';
 moment.tz.setDefault('Asia/Shanghai');
 
 export interface RevezoneDBSchema extends DBSchema {
-  file: {
-    key: string;
-    value: RevezoneFile;
-  };
+  // file: {
+  //   key: string;
+  //   value: RevezoneFile;
+  // };
   file_tree: {
     key: string;
     value: RevezoneFileTree;
@@ -21,7 +21,7 @@ export interface RevezoneDBSchema extends DBSchema {
 }
 
 export const INDEXEDDB_REVEZONE_FILE_TREE_STORAGE = 'revezone_file_tree';
-export const INDEXEDDB_FILE = 'file';
+// export const INDEXEDDB_FILE = 'file';
 export const INDEXEDDB_FILE_TREE = 'file_tree';
 
 class FileTreeIndexeddbStorage {
@@ -49,7 +49,7 @@ class FileTreeIndexeddbStorage {
 
     const db = await openDB<RevezoneDBSchema>(INDEXEDDB_REVEZONE_FILE_TREE_STORAGE, 1, {
       upgrade: async (db) => {
-        await this.initFileStore(db);
+        // await this.initFileStore(db);
         await this.initFileTreeStore(db);
       }
     });
@@ -59,15 +59,15 @@ class FileTreeIndexeddbStorage {
     return db;
   }
 
-  async initFileStore(db): Promise<IDBObjectStore> {
-    const fileStore: IDBObjectStore = await db.createObjectStore(INDEXEDDB_FILE, {
-      autoIncrement: true
-    });
+  // async initFileStore(db): Promise<IDBObjectStore> {
+  //   const fileStore: IDBObjectStore = await db.createObjectStore(INDEXEDDB_FILE, {
+  //     autoIncrement: true
+  //   });
 
-    await fileStore.createIndex('type', 'type', { unique: false });
+  //   await fileStore.createIndex('type', 'type', { unique: false });
 
-    return fileStore;
-  }
+  //   return fileStore;
+  // }
 
   async initFileTreeStore(db): Promise<IDBObjectStore> {
     const fileTreeStore: IDBObjectStore = await db.createObjectStore(INDEXEDDB_FILE_TREE, {
@@ -150,40 +150,44 @@ class FileTreeIndexeddbStorage {
     return fileTree;
   }
 
-  // TODO: NOT FINISHED, DO NOT USE
-  async _copyFile(copyFileId: string, folderId: string) {
-    await this.initDB();
+  // // TODO: NOT FINISHED, DO NOT USE
+  // async _copyFile(copyFileId: string, folderId: string) {
+  //   await this.initDB();
 
-    if (!(copyFileId && folderId)) return;
+  //   if (!(copyFileId && folderId)) return;
 
-    const copyFile = await this.db?.get(INDEXEDDB_FILE, copyFileId);
+  //   const copyFile = await this.db?.get(INDEXEDDB_FILE, copyFileId);
 
-    await this.addFile(folderId, copyFile?.type);
+  //   await this.addFile(folderId, copyFile?.type);
 
-    // await blocksuiteStorage.copyPage();
-  }
+  //   // await blocksuiteStorage.copyPage();
+  // }
 
   async getFile(fileId: string): Promise<RevezoneFile | undefined> {
     await this.initDB();
-    const value = await this.db?.get(INDEXEDDB_FILE, fileId);
-    return value;
+    const fileTree = (await this.db?.get(INDEXEDDB_FILE_TREE, INDEXEDDB_FILE_TREE)) as
+      | RevezoneFile
+      | undefined;
+    return fileTree?.[fileId].data;
   }
 
   async deleteFile(fileId: string) {
     await this.initDB();
 
-    await this.deleteItemFromFileTree(fileId);
+    const fileTree = await this.deleteItemFromFileTree(fileId);
 
-    const file = await this.getFile(fileId);
+    const file = fileTree[fileId].data as RevezoneFile;
 
-    if (!file) return;
+    // const file = await this.getFile(fileId);
 
-    file && (await this.db?.delete(INDEXEDDB_FILE, fileId));
+    // if (!file) return;
+
+    // file && (await this.db?.delete(INDEXEDDB_FILE, fileId));
 
     submitUserEvent(`delete_${file.type}`, file);
   }
 
-  async deleteItemFromFileTree(id: string) {
+  async deleteItemFromFileTree(id: string): Promise<RevezoneFileTree> {
     const newTree = {};
 
     const tree: RevezoneFileTree | undefined = await this.getFileTree();
@@ -197,15 +201,17 @@ class FileTreeIndexeddbStorage {
       });
 
     this.updateFileTree(newTree);
+
+    return newTree;
   }
 
-  async getFiles(): Promise<RevezoneFile[]> {
-    await this.initDB();
-    const files = await this.db?.getAll(INDEXEDDB_FILE);
-    const sortFn = (a: RevezoneFile, b: RevezoneFile) =>
-      new Date(a.gmtCreate).getTime() < new Date(b.gmtCreate).getTime() ? 1 : -1;
-    return files?.sort(sortFn) || [];
-  }
+  // async getFiles(): Promise<RevezoneFile[]> {
+  //   await this.initDB();
+  //   const files = await this.db?.getAll(INDEXEDDB_FILE);
+  //   const sortFn = (a: RevezoneFile, b: RevezoneFile) =>
+  //     new Date(a.gmtCreate).getTime() < new Date(b.gmtCreate).getTime() ? 1 : -1;
+  //   return files?.sort(sortFn) || [];
+  // }
 
   async transferDataFromMenuIndexedDB(oldFileTree) {
     if (FileTreeIndexeddbStorage.oldDBSynced) return;
@@ -214,11 +220,11 @@ class FileTreeIndexeddbStorage {
 
     this.updateFileTree(oldFileTree);
 
-    const oldFiles = await menuIndexeddbStorage.getFiles();
+    // const oldFiles = await menuIndexeddbStorage.getFiles();
 
-    oldFiles.forEach((oldFile) => {
-      this.db?.add(INDEXEDDB_FILE, oldFile, oldFile.id);
-    });
+    // oldFiles.forEach((oldFile) => {
+    //   this.db?.add(INDEXEDDB_FILE, oldFile, oldFile.id);
+    // });
   }
 
   async getFileTree(): Promise<RevezoneFileTree | undefined> {
@@ -253,23 +259,31 @@ class FileTreeIndexeddbStorage {
 
     await this.updateFileTree(fileTree);
 
-    file &&
-      (await this.db?.put(
-        INDEXEDDB_FILE,
-        { ...file, name, gmtModified: moment().toLocaleString() },
-        file.id
-      ));
+    // file &&
+    //   (await this.db?.put(
+    //     INDEXEDDB_FILE,
+    //     { ...file, name, gmtModified: moment().toLocaleString() },
+    //     file.id
+    //   ));
   }
 
   async updateFileGmtModified(file: RevezoneFile) {
     await this.initDB();
 
-    file &&
-      (await this.db?.put(
-        INDEXEDDB_FILE,
-        { ...file, gmtModified: moment().toLocaleString() },
-        file.id
-      ));
+    const fileTree = await this.getFileTree();
+
+    if (!fileTree) return;
+
+    fileTree[file.id].data.gmtModified = moment().toLocaleString();
+
+    await this.updateFileTree(fileTree);
+
+    // file &&
+    //   (await this.db?.put(
+    //     INDEXEDDB_FILE,
+    //     { ...file, gmtModified: moment().toLocaleString() },
+    //     file.id
+    //   ));
   }
 
   async updateFolderName(folder: RevezoneFolder, name: string) {
@@ -305,11 +319,11 @@ class FileTreeIndexeddbStorage {
 
     await this.updateFileTree(fileTree);
 
-    const deleteFilesPromise = filesInFolder?.map(async (fileId) =>
-      this.db?.delete(INDEXEDDB_FILE, fileId)
-    );
+    // const deleteFilesPromise = filesInFolder?.map(async (fileId) =>
+    //   this.db?.delete(INDEXEDDB_FILE, fileId)
+    // );
 
-    deleteFilesPromise && (await Promise.all(deleteFilesPromise));
+    // deleteFilesPromise && (await Promise.all(deleteFilesPromise));
 
     submitUserEvent('delete_folder', { id: folderId });
   }

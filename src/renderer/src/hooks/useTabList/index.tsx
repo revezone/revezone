@@ -10,6 +10,7 @@ import {
   setTabIndexToLocal
 } from '@renderer/store/localstorage';
 import useCurrentFile from '../useCurrentFile';
+import { RevezoneFile } from '@renderer/types/file';
 
 export default function useTabList() {
   const [tabList, setTabList] = useAtom(tabListAtom);
@@ -24,12 +25,19 @@ export default function useTabList() {
   }, []);
 
   const updateTabListWhenCurrentFileChanged = useCallback(
-    (currentFile, tabList: TabItem[] = []) => {
+    (currentFile: RevezoneFile | undefined | null, tabList: TabItem[] = []) => {
       if (!currentFile) return;
 
       tabList = tabList || [];
 
       const _tabIndex = tabList.findIndex((tab) => tab.id === currentFile.id);
+
+      console.log(
+        '--- updateTabListWhenCurrentFileChanged _tabIndex ---',
+        _tabIndex,
+        currentFile,
+        tabList
+      );
 
       if (_tabIndex > -1) {
         setTabIndex(_tabIndex);
@@ -48,32 +56,37 @@ export default function useTabList() {
 
         setTabList(newTabList);
         setTabListToLocal(JSON.stringify(newTabList));
-        setTabIndexToLocal(_tabIndex > -1 ? _tabIndex : 0);
+        setTabIndex(0);
+        setTabIndexToLocal(0);
       }
     },
     []
   );
 
-  const deleteTab = useCallback(async (fileId: string, tabList: TabItem[], tabIndex: number) => {
-    const newTabList = tabList.filter((tab) => tab.id !== fileId);
+  const deleteTab = useCallback(
+    async (fileId: string, tabList: TabItem[], currentTabIndex: number) => {
+      const newTabList = tabList.filter((tab) => tab.id !== fileId);
 
-    console.log('deleteTabList', fileId, newTabList);
+      console.log('deleteTabList', fileId, newTabList);
 
-    setTabList(newTabList);
+      setTabList(newTabList);
 
-    setTabListToLocal(JSON.stringify(newTabList));
+      setTabListToLocal(JSON.stringify(newTabList));
 
-    const _tabIndex = tabIndex > newTabList.length - 1 ? newTabList.length - 1 : tabIndex;
+      const _tabIndex =
+        currentTabIndex > newTabList.length - 1 ? newTabList.length - 1 : currentTabIndex;
 
-    console.log('_tabIndex', _tabIndex, newTabList.length);
+      console.log('_tabIndex', _tabIndex, currentTabIndex, newTabList.length);
 
-    setTabIndex(_tabIndex);
-    setTabIndexToLocal(_tabIndex);
+      setTabIndex(_tabIndex);
+      setTabIndexToLocal(_tabIndex);
 
-    const fileInfo = newTabList[_tabIndex]?.config;
+      const fileInfo = newTabList[_tabIndex]?.config;
 
-    updateCurrentFile(fileInfo);
-  }, []);
+      updateCurrentFile(fileInfo);
+    },
+    []
+  );
 
   const renameTabName = useCallback((fileId: string, name: string, tabList: TabItem[]) => {
     const newTabList = tabList.map((tab) => {
@@ -90,7 +103,7 @@ export default function useTabList() {
     console.log('--- newTabList ---', newTabList, tabList, fileId, name);
 
     setTabList(newTabList);
-    // setTabListToLocal(JSON.stringify(newTabList));
+    setTabListToLocal(JSON.stringify(newTabList));
   }, []);
 
   return {
