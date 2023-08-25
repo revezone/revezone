@@ -9,6 +9,11 @@
   .flexlayout__tab_button {
     @apply text-neutral-500 text-sm;
 
+    .flexlayout__tab_button_content {
+      @apply truncate inline-block;
+      max-width: 16rem;
+    }
+
     &.flexlayout__tab_button--selected {
       @apply text-neutral-800 bg-slate-200 rounded-t-md border-b-2 border-b-slate-400;
     }

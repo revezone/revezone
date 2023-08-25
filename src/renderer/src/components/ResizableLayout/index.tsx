@@ -41,8 +41,7 @@ export default function ClientComponent({ children }: Props) {
             onClick={switchCollapse}
           />
         </div>
-        {/* <CustomMenu collapsed={collapsed} /> */}
-        <DraggableMenuTree></DraggableMenuTree>
+        <DraggableMenuTree />
         <BottomToolbar />
       </Panel>
       <PanelResizeHandle className="w-2 bg-gray-100 flex justify-center items-center">

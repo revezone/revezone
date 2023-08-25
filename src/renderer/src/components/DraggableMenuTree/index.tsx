@@ -297,7 +297,7 @@ export default function DraggableMenuTree() {
                     className="rct-tree-item-button flex justify-between items-center"
                   >
                     <div
-                      className={`flex items-center flex-1 menu-tree-item-child ${item.data.id}`}
+                      className={`flex items-center flex-1 menu-tree-item-child w-11/12 ${item.data.id}`}
                       onDoubleClick={(e) => {
                         e.stopPropagation();
                         context.startRenamingItem();
@@ -313,7 +313,7 @@ export default function DraggableMenuTree() {
                         {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
                         {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
                       </div>
-                      <div className="flex flex-col ml-2">{title}</div>
+                      <div className="ml-2 truncate pr-2">{title}</div>
                     </div>
                     <Dropdown
                       menu={{
