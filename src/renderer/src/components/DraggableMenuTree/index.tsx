@@ -225,7 +225,7 @@ export default function DraggableMenuTree() {
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
         <div className="flex items-center">
           <RevezoneLogo size="small" onClick={() => resetMenu()} />
-          <span className="text-base">&nbsp;-&nbsp;{t('text.alpha')}</span>
+          <span className="text-sm">&nbsp;-&nbsp;{t('text.alpha')}</span>
           <PublicBetaNotice />
         </div>
         <div className="flex justify-start">
@@ -308,10 +308,10 @@ export default function DraggableMenuTree() {
                         context.stopRenamingItem();
                       }}
                     >
-                      <div>
-                        {item.isFolder ? <Folder className="w-5 h-5" /> : null}
-                        {item.data.type === 'note' ? <FileType className="w-5 h-5" /> : null}
-                        {item.data.type === 'board' ? <Palette className="w-5 h-5" /> : null}
+                      <div className="flex items-center">
+                        {item.isFolder ? <Folder className="w-4 h-4" /> : null}
+                        {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
+                        {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
                       </div>
                       <div className="ml-2 truncate pr-2 text-sm">{title}</div>
                     </div>

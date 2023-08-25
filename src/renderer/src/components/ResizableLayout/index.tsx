@@ -36,7 +36,14 @@ export default function ClientComponent({ children }: Props) {
     <PanelGroup className="revezone-layout" direction="horizontal" onLayout={onLayout}>
       {!collapsed ? (
         <>
-          <Panel defaultSize={defaultLayout[0]} minSize={0.2} maxSize={50} id="sidebar" order={1}>
+          <Panel
+            defaultSize={defaultLayout[0]}
+            minSize={0.2}
+            maxSize={50}
+            id="sidebar"
+            order={1}
+            className="relative"
+          >
             <div className="revezone-topleft-toolbar">
               <PanelLeftClose
                 className="panel-left-button w-5 text-current cursor-pointer"
