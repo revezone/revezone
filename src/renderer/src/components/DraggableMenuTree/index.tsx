@@ -20,6 +20,7 @@ import useTabList from '@renderer/hooks/useTabList';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import useOpenKeys from '@renderer/hooks/useOpenKeys';
 import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
+import moment from 'moment';
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
@@ -239,7 +240,7 @@ export default function DraggableMenuTree() {
             const type = context.isRenaming ? undefined : 'button';
 
             return (
-              <li {...context.itemContainerWithChildrenProps} className="rct-tree-item-li mt-2">
+              <li {...context.itemContainerWithChildrenProps} className="rct-tree-item-li">
                 <div
                   {...context.itemContainerWithoutChildrenProps}
                   style={{ paddingLeft: `${(depth + 1) * 0.5}rem` }}
@@ -273,10 +274,12 @@ export default function DraggableMenuTree() {
                         context.stopRenamingItem();
                       }}
                     >
-                      {item.isFolder ? <Folder className="w-4 h-4" /> : null}
-                      {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
-                      {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
-                      <span className="ml-2">{title}</span>
+                      <p>
+                        {item.isFolder ? <Folder className="w-4 h-4" /> : null}
+                        {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
+                        {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
+                      </p>
+                      <p className="flex flex-col ml-2">{title}</p>
                     </div>
                     <Dropdown
                       menu={{
