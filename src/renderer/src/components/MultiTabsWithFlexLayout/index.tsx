@@ -106,7 +106,9 @@ export default function MultiTabs() {
   );
 
   return model ? (
-    <div className={`${collapsed ? 'revezone-siderbar-collapsed' : ''}`}>
+    <div
+      className={`revezone-layout-wrapper h-full ${collapsed ? 'revezone-siderbar-collapsed' : ''}`}
+    >
       <Layout model={model} factory={factory} onAction={onAction} />
     </div>
   ) : null;
