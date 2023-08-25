@@ -38,7 +38,7 @@ export default function LanguageSwitcher() {
       {langCodeList.map((item) => {
         return (
           <Select.Option key={item.key} value={item.key}>
-            {item.label}
+            <span className="text-sm">{item.label}</span>
           </Select.Option>
         );
       })}
