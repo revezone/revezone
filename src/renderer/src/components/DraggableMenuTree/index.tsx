@@ -27,7 +27,10 @@ import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import useOpenKeys from '@renderer/hooks/useOpenKeys';
-import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
+import {
+  getRenamingMenuItemIdFromLocal,
+  setRenamingMenuItemIdToLocal
+} from '@renderer/store/localstorage';
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
@@ -144,9 +147,7 @@ export default function DraggableMenuTree() {
         await renameTabName(item.data.id, name, model);
       }
 
-      setTimeout(() => {
-        getFileTree();
-      }, 0);
+      getFileTree();
     },
     [model]
   );
@@ -291,6 +292,10 @@ export default function DraggableMenuTree() {
           renderItemsContainer={({ children, containerProps }) => (
             <ul {...containerProps}>{children}</ul>
           )}
+          // renderRenameInput={(props) => {
+          //   console.log('--- renderRenameInput ---', props);
+          //   return <input type="text" />;
+          // }}
           renderItem={({ item, depth, children, title, context, arrow }) => {
             const InteractiveComponent = context.isRenaming ? 'div' : 'button';
             const type = context.isRenaming ? undefined : 'button';
@@ -309,7 +314,6 @@ export default function DraggableMenuTree() {
                     context.isDraggingOver && 'rct-tree-item-title-container-dragging-over',
                     context.isSearchMatching && 'rct-tree-item-title-container-search-match'
                   ].join(' ')}
-                  // onClick={(e) => e.stopPropagation()}
                 >
                   {arrow}
                   <InteractiveComponent
@@ -322,12 +326,16 @@ export default function DraggableMenuTree() {
                       className={`flex items-center flex-1 menu-tree-item-child w-11/12 ${item.data.id}`}
                       onDoubleClick={(e) => {
                         e.stopPropagation();
+                        setRenamingMenuItemIdToLocal(item.data.id);
                         context.startRenamingItem();
                       }}
-                      onBlur={() => {
-                        console.log('--- onBlur ---');
-                        setRenamingMenuItemIdToLocal('');
-                        context.stopRenamingItem();
+                      onBlur={(e) => {
+                        e.stopPropagation();
+
+                        if (getRenamingMenuItemIdFromLocal()) {
+                          const target = e.target as HTMLInputElement;
+                          onRenameItem(item, target.value);
+                        }
                       }}
                     >
                       <div className="flex items-center">

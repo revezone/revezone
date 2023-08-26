@@ -1,4 +1,4 @@
-import { openDB, DBSchema, IDBPDatabase } from 'idb';
+import { openDB, DBSchema, IDBPDatabase, IDBPObjectStore } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment-timezone';
 import { RevezoneFile, RevezoneFolder, RevezoneFileType, RevezoneFileTree } from '../types/file';
@@ -10,10 +10,6 @@ import { boardIndexeddbStorage } from './boardIndexeddb';
 moment.tz.setDefault('Asia/Shanghai');
 
 export interface RevezoneDBSchema extends DBSchema {
-  // file: {
-  //   key: string;
-  //   value: RevezoneFile;
-  // };
   file_tree: {
     key: string;
     value: RevezoneFileTree;
@@ -21,7 +17,6 @@ export interface RevezoneDBSchema extends DBSchema {
 }
 
 export const INDEXEDDB_REVEZONE_FILE_TREE_STORAGE = 'revezone_file_tree';
-// export const INDEXEDDB_FILE = 'file';
 export const INDEXEDDB_FILE_TREE = 'file_tree';
 
 class FileTreeIndexeddbStorage {
@@ -59,18 +54,12 @@ class FileTreeIndexeddbStorage {
     return db;
   }
 
-  // async initFileStore(db): Promise<IDBObjectStore> {
-  //   const fileStore: IDBObjectStore = await db.createObjectStore(INDEXEDDB_FILE, {
-  //     autoIncrement: true
-  //   });
-
-  //   await fileStore.createIndex('type', 'type', { unique: false });
-
-  //   return fileStore;
-  // }
-
-  async initFileTreeStore(db): Promise<IDBObjectStore> {
-    const fileTreeStore: IDBObjectStore = await db.createObjectStore(INDEXEDDB_FILE_TREE, {
+  async initFileTreeStore(
+    db: IDBPDatabase<RevezoneDBSchema>
+  ): Promise<
+    IDBPObjectStore<RevezoneDBSchema, ArrayLike<'file_tree'>, 'file_tree', 'versionchange'>
+  > {
+    const fileTreeStore = await db.createObjectStore(INDEXEDDB_FILE_TREE, {
       autoIncrement: true
     });
 
@@ -101,7 +90,7 @@ class FileTreeIndexeddbStorage {
 
     const fileTree = (await this.getFileTree()) || {};
 
-    fileTree[info.id] = { index: info.id, isFolder, data: info };
+    fileTree[info.id] = { index: info.id, isFolder, data: info, canRename: true };
 
     if (parentId) {
       const children = fileTree[parentId].children || [];
@@ -165,10 +154,11 @@ class FileTreeIndexeddbStorage {
 
   async getFile(fileId: string): Promise<RevezoneFile | undefined> {
     await this.initDB();
-    const fileTree = (await this.db?.get(INDEXEDDB_FILE_TREE, INDEXEDDB_FILE_TREE)) as
-      | RevezoneFile
-      | undefined;
-    return fileTree?.[fileId].data;
+    const fileTree: RevezoneFileTree | undefined = (await this.db?.get(
+      INDEXEDDB_FILE_TREE,
+      INDEXEDDB_FILE_TREE
+    )) as RevezoneFileTree | undefined;
+    return fileTree?.[fileId].data as RevezoneFile;
   }
 
   async deleteFile(fileId: string) {
@@ -180,7 +170,7 @@ class FileTreeIndexeddbStorage {
   }
 
   async deleteItemFromFileTree(id: string): Promise<RevezoneFileTree> {
-    const newTree = {};
+    const newTree: RevezoneFileTree = {};
 
     const tree: RevezoneFileTree | undefined = await this.getFileTree();
 
@@ -206,7 +196,7 @@ class FileTreeIndexeddbStorage {
   //   return files?.sort(sortFn) || [];
   // }
 
-  async transferDataFromMenuIndexedDB(oldFileTree) {
+  async transferDataFromMenuIndexedDB(oldFileTree: RevezoneFileTree) {
     if (FileTreeIndexeddbStorage.oldDBSynced) return;
 
     FileTreeIndexeddbStorage.oldDBSynced = true;
