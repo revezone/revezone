@@ -60,13 +60,14 @@ export default function MultiTabs() {
     if (!model) return;
 
     const file = fileId ? await fileTreeIndexeddbStorage.getFile(fileId) : undefined;
-    setTabJsonModelToLocal(JSON.stringify(model.toJson()));
     updateCurrentFile(file);
   }, []);
 
   const onAction = useCallback(
     (action: Action) => {
       console.log('--- onAction ---', action);
+
+      if (!model) return;
 
       switch (action.type) {
         case 'FlexLayout_DeleteTab':
@@ -76,6 +77,7 @@ export default function MultiTabs() {
           onTabSelect(action.data.tabNode, model);
           break;
       }
+
       return action;
     },
     [model]
@@ -94,11 +96,22 @@ export default function MultiTabs() {
     }
   }, []);
 
+  const onModelChange = useCallback(() => {
+    console.log('--- onModelChange ---');
+    setTabJsonModelToLocal(JSON.stringify(model?.toJson()));
+  }, [model]);
+
   return model ? (
     <div
       className={`revezone-layout-wrapper h-full ${collapsed ? 'revezone-siderbar-collapsed' : ''}`}
     >
-      <Layout model={model} factory={factory} onAction={onAction} iconFactory={iconFactory} />
+      <Layout
+        model={model}
+        factory={factory}
+        onAction={onAction}
+        iconFactory={iconFactory}
+        onModelChange={onModelChange}
+      />
     </div>
   ) : null;
 }
