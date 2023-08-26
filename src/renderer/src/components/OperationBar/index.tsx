@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { FolderPlus, Palette, FileType } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,8 @@ import useAddFolder from '@renderer/hooks/useAddFolder';
 
 import './index.css';
 import useTabList from '@renderer/hooks/useTabList';
+import { useAtom } from 'jotai';
+import { selectedKeysAtom } from '@renderer/store/jotai';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
@@ -18,6 +20,12 @@ export default function OperationBar(props: Props) {
   const { addFolder } = useAddFolder();
   const { t } = useTranslation();
   const { tabList } = useTabList();
+  const [selectedKeys] = useAtom(selectedKeysAtom);
+
+  const currentFolderId = useMemo(() => {
+    const folderIds = selectedKeys.filter((key) => key.startsWith('folder_'));
+    return folderIds?.[0];
+  }, [selectedKeys]);
 
   const getSizeClassName = useCallback(() => {
     switch (size) {
@@ -50,7 +58,7 @@ export default function OperationBar(props: Props) {
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
-          addFile('New Board', 'board', tabList);
+          addFile('New Board', 'board', tabList, currentFolderId);
         }}
       >
         <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
@@ -61,7 +69,7 @@ export default function OperationBar(props: Props) {
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
-          addFile('New Note', 'note', tabList);
+          addFile('New Note', 'note', tabList, currentFolderId);
         }}
       >
         <FileType className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />

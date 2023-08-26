@@ -31,6 +31,7 @@ import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
+import { join } from 'path';
 
 export default function DraggableMenuTree() {
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
@@ -107,26 +108,21 @@ export default function DraggableMenuTree() {
 
   const onSelectItems = useCallback(
     async (items: TreeItemIndex[]) => {
-      const key = items?.[0];
-
-      // key must be string
-      if (typeof key === 'number') return;
-
       console.log('onSelect', items);
 
-      const fileId = key?.startsWith('file_') ? key : undefined;
+      if (items.length === 1 && (items[0] as string).startsWith('file_')) {
+        const file = fileTree[items[0]].data as RevezoneFile;
 
-      if (!fileId) return;
+        console.log('--- file ---', file);
 
-      const file = fileTree[fileId].data as RevezoneFile;
+        await updateCurrentFile(file);
 
-      console.log('--- file ---', file);
+        updateTabListWhenCurrentFileChanged(file, tabList);
+      } else {
+        setSelectedKeys(items as string[]);
+      }
 
-      await updateCurrentFile(file);
-
-      updateTabListWhenCurrentFileChanged(file, tabList);
-
-      submitUserEvent('select_menu', { key });
+      submitUserEvent('select_menu', { key: items.join(',') });
     },
     [fileTree, tabList]
   );
@@ -207,6 +203,10 @@ export default function DraggableMenuTree() {
       const newChildren = [...itemIds, ...children];
 
       fileTree[target.targetItem].children = newChildren;
+
+      await fileTreeIndexeddbStorage.updateFileTree(fileTree);
+
+      getFileTree();
     },
     []
   );
