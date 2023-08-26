@@ -16,6 +16,7 @@
       ]
     },
     "noUnusedLocals": false,
-    "noUnusedParameters": false 
+    "noUnusedParameters": false,
+    "noImplicitAny": true,
   }
 }

@@ -10,7 +10,7 @@ import {
 import { useCallback, useEffect } from 'react';
 import { Dropdown } from 'antd';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
-import type { RevezoneFile, RevezoneFolder } from '@renderer/types/file';
+import type { RevezoneFile, RevezoneFileTree, RevezoneFolder } from '@renderer/types/file';
 import { useAtom } from 'jotai';
 import { focusItemAtom, selectedKeysAtom } from '@renderer/store/jotai';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
@@ -99,7 +99,7 @@ export default function DraggableMenuTree() {
   );
 
   const onCollapseItem = useCallback(
-    (item) => {
+    (item: TreeItem<RevezoneFolder | RevezoneFile>) => {
       removeOpenKey(item.data.id);
     },
     [openKeys]
@@ -156,22 +156,33 @@ export default function DraggableMenuTree() {
     [tabList]
   );
 
+  const clearTargetInChildren = useCallback((itemIds: string[], fileTree: RevezoneFileTree) => {
+    // remove target from all children
+    Object.keys(fileTree).forEach((key) => {
+      fileTree[key].children = fileTree[key].children?.filter(
+        (child) => !itemIds.includes(String(child))
+      );
+    });
+
+    return fileTree;
+  }, []);
+
   const onDropBetweenItems = useCallback(
     async (
       items: TreeItem<RevezoneFile | RevezoneFolder>[],
-      target: DraggingPositionBetweenItems
+      target: DraggingPositionBetweenItems,
+      fileTree: RevezoneFileTree
     ) => {
-      const itemIds: string[] = items.map((item) => item.data.id);
+      const itemIds: string[] = items.map((item) => item.data.id).filter((id) => !!id);
 
-      let newChildren;
+      fileTree = clearTargetInChildren(itemIds, fileTree);
 
-      const children = fileTree[target.parentItem].children;
-      newChildren = children?.filter((child) => !itemIds.includes(String(child)));
+      const children = fileTree[target.parentItem].children || [];
 
-      newChildren = [
-        ...newChildren.slice(0, target.childIndex),
+      const newChildren = [
+        ...children.slice(0, target.childIndex),
         ...itemIds,
-        ...newChildren.slice(target.childIndex)
+        ...children.slice(target.childIndex)
       ];
 
       fileTree[target.parentItem].children = newChildren;
@@ -184,7 +195,19 @@ export default function DraggableMenuTree() {
   );
 
   const onDropItem = useCallback(
-    async (items: TreeItem<RevezoneFile | RevezoneFolder>[], target: DraggingPositionItem) => {},
+    async (
+      items: TreeItem<RevezoneFile | RevezoneFolder>[],
+      target: DraggingPositionItem,
+      fileTree: RevezoneFileTree
+    ) => {
+      const itemIds: string[] = items.map((item) => item.data.id).filter((id) => !!id);
+      fileTree = clearTargetInChildren(itemIds, fileTree);
+
+      const children = fileTree[target.targetItem].children || [];
+      const newChildren = [...itemIds, ...children];
+
+      fileTree[target.targetItem].children = newChildren;
+    },
     []
   );
 
@@ -194,10 +217,10 @@ export default function DraggableMenuTree() {
 
       switch (target.targetType) {
         case 'between-items':
-          onDropBetweenItems(items, target);
+          onDropBetweenItems(items, target, fileTree);
           break;
         case 'item':
-          onDropItem(items, target);
+          onDropItem(items, target, fileTree);
           break;
         case 'root':
           break;

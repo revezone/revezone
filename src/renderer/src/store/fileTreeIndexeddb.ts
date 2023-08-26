@@ -174,17 +174,9 @@ class FileTreeIndexeddbStorage {
   async deleteFile(fileId: string) {
     await this.initDB();
 
-    const fileTree = await this.deleteItemFromFileTree(fileId);
+    await this.deleteItemFromFileTree(fileId);
 
-    const file = fileTree[fileId].data as RevezoneFile;
-
-    // const file = await this.getFile(fileId);
-
-    // if (!file) return;
-
-    // file && (await this.db?.delete(INDEXEDDB_FILE, fileId));
-
-    submitUserEvent(`delete_${file.type}`, file);
+    submitUserEvent(`delete_file`, { fileId });
   }
 
   async deleteItemFromFileTree(id: string): Promise<RevezoneFileTree> {
@@ -192,15 +184,16 @@ class FileTreeIndexeddbStorage {
 
     const tree: RevezoneFileTree | undefined = await this.getFileTree();
 
-    tree &&
+    if (tree) {
       Object.entries(tree).forEach(([key, item]) => {
         if (key !== id) {
           item.children = item.children?.filter((_key) => _key !== id);
           newTree[key] = item;
         }
       });
+    }
 
-    this.updateFileTree(newTree);
+    await this.updateFileTree(newTree);
 
     return newTree;
   }
@@ -305,27 +298,9 @@ class FileTreeIndexeddbStorage {
 
     await this.initDB();
 
-    const fileTree = await this.getFileTree();
+    await this.deleteItemFromFileTree(folderId);
 
-    if (!fileTree) return;
-
-    const filesInFolder = fileTree?.[folderId]?.children as string[];
-
-    delete fileTree[folderId];
-
-    filesInFolder?.forEach((fileId) => {
-      delete fileTree[fileId];
-    });
-
-    await this.updateFileTree(fileTree);
-
-    // const deleteFilesPromise = filesInFolder?.map(async (fileId) =>
-    //   this.db?.delete(INDEXEDDB_FILE, fileId)
-    // );
-
-    // deleteFilesPromise && (await Promise.all(deleteFilesPromise));
-
-    submitUserEvent('delete_folder', { id: folderId });
+    submitUserEvent('delete_folder', { folderId });
   }
 }
 
