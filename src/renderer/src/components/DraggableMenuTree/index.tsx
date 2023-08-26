@@ -31,7 +31,6 @@ import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
-import { join } from 'path';
 
 export default function DraggableMenuTree() {
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);

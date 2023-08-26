@@ -1,5 +1,5 @@
-import { IJsonModel, Layout, Model } from 'flexlayout-react';
-import type { Action } from 'flexlayout-react';
+import { IJsonModel, Layout, Model, ITabRenderValues } from 'flexlayout-react';
+import type { Action, TabNode } from 'flexlayout-react';
 import 'flexlayout-react/style/light.css';
 import NoteEditor from '@renderer/components/NoteEditor';
 import RevedrawApp from '../RevedrawApp';
@@ -8,24 +8,22 @@ import { useCallback, useEffect, useState } from 'react';
 import useTabList from '@renderer/hooks/useTabList';
 
 import './index.css';
-import { currentFileAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { setTabIndexToLocal } from '@renderer/store/localstorage';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { TabItem } from '@renderer/types/tabs';
 import { siderbarCollapsedAtom } from '@renderer/store/jotai';
+import { RevezoneFile, RevezoneFileType } from '@renderer/types/file';
+import { Folder, HardDrive, UploadCloud, MoreVertical, Palette, FileType } from 'lucide-react';
 
 export default function MultiTabs() {
   const { tabIndex, tabList, deleteTab, setTabIndex } = useTabList();
   const [model, setModel] = useState<Model>();
-  const [currentFile] = useAtom(currentFileAtom);
   const { updateCurrentFile } = useCurrentFile();
   const [collapsed] = useAtom(siderbarCollapsedAtom);
 
   useEffect(() => {
-    console.log('--- tablist ---', tabIndex, tabList);
-
     const json: IJsonModel = {
       global: {},
       layout: {
@@ -47,7 +45,7 @@ export default function MultiTabs() {
     setModel(_model);
   }, [tabIndex, tabList]);
 
-  const renderContent = useCallback((file, currentFile) => {
+  const renderContent = useCallback((file: RevezoneFile) => {
     // if (file?.id !== currentFile?.id) return;
 
     // console.log('--- renderContent ---', file);
@@ -62,16 +60,13 @@ export default function MultiTabs() {
     }
   }, []);
 
-  const factory = useCallback(
-    (node) => {
-      const file = node.getConfig();
+  const factory = useCallback((node: TabNode) => {
+    const file = node.getConfig();
 
-      return <div className="tab_content">{renderContent(file, currentFile)}</div>;
-    },
-    [currentFile]
-  );
+    return <div className="tab_content">{renderContent(file)}</div>;
+  }, []);
 
-  const onTabDelete = useCallback((fileId: string, tabList, tabIndex) => {
+  const onTabDelete = useCallback((fileId: string, tabList: TabItem[], tabIndex: number) => {
     deleteTab(fileId, tabList, tabIndex);
   }, []);
 
@@ -105,11 +100,24 @@ export default function MultiTabs() {
     [tabList, tabIndex]
   );
 
+  const iconFactory = useCallback((tabNode: TabNode) => {
+    const fileType: RevezoneFileType = tabNode.getConfig()?.type;
+
+    switch (fileType) {
+      case 'note':
+        return <FileType className="w-4 h-4" />;
+      case 'board':
+        return <Palette className="w-4 h-4" />;
+      default:
+        return null;
+    }
+  }, []);
+
   return model ? (
     <div
       className={`revezone-layout-wrapper h-full ${collapsed ? 'revezone-siderbar-collapsed' : ''}`}
     >
-      <Layout model={model} factory={factory} onAction={onAction} />
+      <Layout model={model} factory={factory} onAction={onAction} iconFactory={iconFactory} />
     </div>
   ) : null;
 }
