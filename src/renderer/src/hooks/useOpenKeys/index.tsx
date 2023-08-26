@@ -6,17 +6,28 @@ import { openKeysAtom } from '@renderer/store/jotai';
 export default function useOpenKeys() {
   const [openKeys, setOpenKeys] = useAtom(openKeysAtom);
 
-  const addOpenKey = useCallback((key) => {
+  const addOpenKeys = useCallback((keys: string[]) => {
     const openKeys = getOpenKeysFromLocal();
-    const keys = [...openKeys, key].filter((item) => !!item);
 
-    console.log('--- onExpandItem ---', keys);
+    let notChanged = true;
 
-    setOpenKeys(keys);
-    setOpenKeysToLocal(keys);
+    keys.forEach((key) => {
+      if (!openKeys.includes(key)) {
+        notChanged = false;
+      }
+    });
+
+    if (notChanged) return;
+
+    const newKeys = [...openKeys, ...keys].filter((item) => !!item);
+
+    console.log('--- onExpandItem ---', newKeys);
+
+    setOpenKeys(newKeys);
+    setOpenKeysToLocal(newKeys);
   }, []);
 
-  const removeOpenKey = useCallback((key) => {
+  const removeOpenKey = useCallback((key: string) => {
     const openKeys = getOpenKeysFromLocal();
     const keys = openKeys.filter((_key) => _key !== key);
 
@@ -26,5 +37,5 @@ export default function useOpenKeys() {
     setOpenKeysToLocal(keys);
   }, []);
 
-  return { openKeys, setOpenKeys, addOpenKey, removeOpenKey };
+  return { openKeys, setOpenKeys, addOpenKeys, removeOpenKey };
 }

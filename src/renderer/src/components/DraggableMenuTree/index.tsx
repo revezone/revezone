@@ -36,7 +36,7 @@ export default function DraggableMenuTree() {
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
   const [focusItem, setFocusItem] = useAtom(focusItemAtom);
   const { fileTree, getFileTree } = useFileTree();
-  const { openKeys, addOpenKey, removeOpenKey } = useOpenKeys();
+  const { openKeys, addOpenKeys, removeOpenKey } = useOpenKeys();
   const { t } = useTranslation();
 
   const { updateTabListWhenCurrentFileChanged, renameTabName, tabList, deleteTab, tabIndex } =
@@ -93,7 +93,7 @@ export default function DraggableMenuTree() {
 
   const onExpandItem = useCallback(
     (item: TreeItem) => {
-      addOpenKey(item.data.id);
+      addOpenKeys([item.data.id]);
     },
     [openKeys]
   );
