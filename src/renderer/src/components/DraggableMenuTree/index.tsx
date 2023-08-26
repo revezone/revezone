@@ -292,10 +292,6 @@ export default function DraggableMenuTree() {
           renderItemsContainer={({ children, containerProps }) => (
             <ul {...containerProps}>{children}</ul>
           )}
-          // renderRenameInput={(props) => {
-          //   console.log('--- renderRenameInput ---', props);
-          //   return <input type="text" />;
-          // }}
           renderItem={({ item, depth, children, title, context, arrow }) => {
             const InteractiveComponent = context.isRenaming ? 'div' : 'button';
             const type = context.isRenaming ? undefined : 'button';
@@ -347,6 +343,7 @@ export default function DraggableMenuTree() {
                     </div>
                     <Dropdown
                       menu={{
+                        // @ts-ignore
                         items: getFileTreeContextMenu(item.data, context, !!item.isFolder)
                       }}
                     >
