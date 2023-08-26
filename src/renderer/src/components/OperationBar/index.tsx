@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import useAddFolder from '@renderer/hooks/useAddFolder';
 
 import './index.css';
-import useTabList from '@renderer/hooks/useTabList';
+import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import { useAtom } from 'jotai';
 import { selectedKeysAtom } from '@renderer/store/jotai';
 
@@ -19,7 +19,7 @@ export default function OperationBar(props: Props) {
   const { addFile } = useAddFile();
   const { addFolder } = useAddFolder();
   const { t } = useTranslation();
-  const { tabList } = useTabList();
+  const { model } = useTabJsonModel();
   const [selectedKeys] = useAtom(selectedKeysAtom);
 
   const currentFolderId = useMemo(() => {
@@ -58,7 +58,7 @@ export default function OperationBar(props: Props) {
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
-          addFile('New Board', 'board', tabList, currentFolderId);
+          addFile('New Board', 'board', model, currentFolderId);
         }}
       >
         <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
@@ -69,7 +69,7 @@ export default function OperationBar(props: Props) {
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
-          addFile('New Note', 'note', tabList, currentFolderId);
+          addFile('New Note', 'note', model, currentFolderId);
         }}
       >
         <FileType className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />

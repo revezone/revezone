@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RevezoneFile, RevezoneFolder } from '@renderer/types/file';
 import useAddFile from '../useAddFile';
 import useAddFolder from '../useAddFolder';
-import useTabList from '../useTabList';
+import useTabList from '../useTabJsonModel';
 
 interface Props {
   deleteFile: (file: RevezoneFile) => void;

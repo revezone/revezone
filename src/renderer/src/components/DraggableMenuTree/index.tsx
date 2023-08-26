@@ -24,7 +24,7 @@ import LanguageSwitcher from '../LanguageSwitcher/index';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { submitUserEvent } from '@renderer/utils/statistics';
 import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
-import useTabList from '@renderer/hooks/useTabList';
+import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import useOpenKeys from '@renderer/hooks/useOpenKeys';
 import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
@@ -39,8 +39,8 @@ export default function DraggableMenuTree() {
   const { openKeys, addOpenKeys, removeOpenKey } = useOpenKeys();
   const { t } = useTranslation();
 
-  const { updateTabListWhenCurrentFileChanged, renameTabName, tabList, deleteTab, tabIndex } =
-    useTabList();
+  const { updateTabJsonModelWhenCurrentFileChanged, renameTabName, model, deleteTab } =
+    useTabJsonModel();
   const { currentFile, updateCurrentFile } = useCurrentFile();
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function DraggableMenuTree() {
           break;
       }
 
-      deleteTab(file.id, tabList, tabIndex);
+      deleteTab(file.id, model);
 
       if (file.id === currentFile?.id) {
         updateCurrentFile(undefined);
@@ -70,7 +70,7 @@ export default function DraggableMenuTree() {
 
       await getFileTree();
     },
-    [fileTreeIndexeddbStorage, currentFile, tabList]
+    [fileTreeIndexeddbStorage, currentFile, model]
   );
 
   const deleteFolder = useCallback(
@@ -116,14 +116,14 @@ export default function DraggableMenuTree() {
 
         await updateCurrentFile(file);
 
-        updateTabListWhenCurrentFileChanged(file, tabList);
+        updateTabJsonModelWhenCurrentFileChanged(file, model);
       } else {
         setSelectedKeys(items as string[]);
       }
 
       submitUserEvent('select_menu', { key: items.join(',') });
     },
-    [fileTree, tabList]
+    [fileTree, model]
   );
 
   const onFocusItem = useCallback((item: TreeItem) => {
@@ -141,14 +141,14 @@ export default function DraggableMenuTree() {
       } else {
         await fileTreeIndexeddbStorage.updateFileName(item.data as RevezoneFile, name);
 
-        await renameTabName(item.data.id, name, tabList);
+        await renameTabName(item.data.id, name, model);
       }
 
       setTimeout(() => {
         getFileTree();
       }, 0);
     },
-    [tabList]
+    [model]
   );
 
   const clearTargetInChildren = useCallback((itemIds: string[], fileTree: RevezoneFileTree) => {

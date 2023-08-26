@@ -5,20 +5,22 @@ import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import useOpenKeys from '../useOpenKeys';
 import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
 import { dbclickMenuTreeItemAfterCreate } from '@renderer/utils/dom';
-import useTabList from '../useTabList';
-import { TabItem } from '@renderer/types/tabs';
+import useTabJsonModel from '../useTabJsonModel';
+import { Model } from 'flexlayout-react';
 
 export default function useAddFile() {
   const { getFileTree } = useFileTree();
   const { updateCurrentFile } = useCurrentFile();
-  const { addOpenKey } = useOpenKeys();
-  const { updateTabListWhenCurrentFileChanged } = useTabList();
+  const { addOpenKeys } = useOpenKeys();
+  const { updateTabJsonModelWhenCurrentFileChanged } = useTabJsonModel();
 
   const addFile = useCallback(
-    async (name: string, type: 'board' | 'note', tabList: TabItem[], parentId?: string) => {
+    async (name: string, type: 'board' | 'note', model: Model | undefined, parentId?: string) => {
+      if (!model) return;
+
       const file = await fileTreeIndexeddbStorage.addFile(name, type, parentId);
 
-      parentId && addOpenKey(parentId);
+      parentId && addOpenKeys([parentId]);
       setRenamingMenuItemIdToLocal(file.id);
 
       getFileTree();
@@ -29,7 +31,7 @@ export default function useAddFile() {
 
       updateCurrentFile(file);
 
-      updateTabListWhenCurrentFileChanged(file, tabList);
+      updateTabJsonModelWhenCurrentFileChanged(file, model);
     },
     []
   );

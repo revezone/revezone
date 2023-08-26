@@ -1,5 +1,6 @@
 import { RevezoneFile } from '@renderer/types/file';
-import { TabItem } from '@renderer/types/tabs';
+import { IJsonModel } from 'flexlayout-react';
+import { DEFAULT_TAB_JSON_MODEL } from '@renderer/utils/constant';
 
 const LOCALSTORAGE_MENU_OPEN_KEYS = 'menu_open_keys';
 const LOCALSTORAGE_MENU_SELECTED_KEYS = 'menu_selected_keys';
@@ -8,7 +9,7 @@ const LOCALSTORAGE_CURRENT_FILE = 'current_file';
 const LOCALSTORAGE_BOARD_CUSTOM_FONTS = 'custom_fonts';
 const LOCALSTORAGE_LANG_CODE = 'lang_code';
 const LOCALSTORAGE_BOARD_CUSTOM_FONT_SWITCH = 'board_custom_font_switch';
-const LOCALSTORAGE_TAB_LIST = 'tab_list';
+const LOCALSTORAGE_TAB_JSON_MODEL = 'tab_json_model';
 const LOCALSTORAGE_TAB_INDEX = 'tab_index';
 const LOCALSTORAGE_RENAMING_MENU_ITEM_ID = 'renaming_menu_item_id';
 
@@ -47,7 +48,7 @@ export const getBoardCustomFontFromLocal = () => {
   return localStorage.getItem(LOCALSTORAGE_BOARD_CUSTOM_FONTS);
 };
 
-export const setBoardCustomFontToLocal = (fontName) => {
+export const setBoardCustomFontToLocal = (fontName: string) => {
   fontName && localStorage.setItem(LOCALSTORAGE_BOARD_CUSTOM_FONTS, fontName);
 };
 
@@ -73,25 +74,17 @@ export const getBoardCustomFontSwitchFromLocal = () => {
   return localStorage.getItem(LOCALSTORAGE_BOARD_CUSTOM_FONT_SWITCH);
 };
 
-export const setBoardCustomFontSwitchToLocal = (value) => {
+export const setBoardCustomFontSwitchToLocal = (value: string) => {
   localStorage.setItem(LOCALSTORAGE_BOARD_CUSTOM_FONT_SWITCH, value);
 };
 
-export const setTabListToLocal = (value: string) => {
-  localStorage.setItem(LOCALSTORAGE_TAB_LIST, value);
+export const setTabJsonModelToLocal = (value: string) => {
+  localStorage.setItem(LOCALSTORAGE_TAB_JSON_MODEL, value);
 };
 
-export const getTabListFromLocal = (): TabItem[] => {
-  const str = localStorage.getItem(LOCALSTORAGE_TAB_LIST);
-  return str && JSON.parse(str);
-};
-
-export const setTabIndexToLocal = (value: number) => {
-  localStorage.setItem(LOCALSTORAGE_TAB_INDEX, String(value));
-};
-
-export const getTabIndexFromLocal = () => {
-  return Number(localStorage.getItem(LOCALSTORAGE_TAB_INDEX));
+export const getTabJsonModelFromLocal = (): IJsonModel => {
+  const str = localStorage.getItem(LOCALSTORAGE_TAB_JSON_MODEL);
+  return (str && JSON.parse(str)) || DEFAULT_TAB_JSON_MODEL;
 };
 
 export const setRenamingMenuItemIdToLocal = (id: string) => {

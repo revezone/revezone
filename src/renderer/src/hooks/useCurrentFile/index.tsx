@@ -52,8 +52,6 @@ export default function useCurrentFile() {
       if (fileId) {
         const parentIds = findFileParentIds(fileId, fileTree);
 
-        console.log('--- parentIds ---', parentIds);
-
         if (parentIds.length) {
           addOpenKeys(parentIds);
         }
