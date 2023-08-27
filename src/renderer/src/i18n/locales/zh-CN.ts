@@ -32,7 +32,7 @@ export default {
       '使用 Excalidraw 的全新姿势。一款轻量级本地优先的用于构建第二大脑的效率工具，集成了增强型 Excalidraw 白板和类 Notion 笔记能力。',
     operationTip: '这是一个空白页，请先在左侧边栏新建或选择某个文件',
     operationGuide: '操作说明',
-    operationDetailDesc: '点击左侧边栏的操作图标来创建一个文件夹、Note 或 Board。',
+    operationDetailDesc: '点击左侧边栏的操作图标来创建一个白板、文件夹、笔记',
     onlineTry: '此为线上体验版，只包含基础功能。',
     downloadApp: '下载桌面应用体验全量功能。'
   },
