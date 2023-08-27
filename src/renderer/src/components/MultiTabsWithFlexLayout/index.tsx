@@ -13,7 +13,7 @@ import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { siderbarCollapsedAtom, tabModelAtom } from '@renderer/store/jotai';
 import { RevezoneFile, RevezoneFileType } from '@renderer/types/file';
-import { Palette, FileType } from 'lucide-react';
+import { Palette, FileType, File } from 'lucide-react';
 import { WELCOME_TAB_ITEM } from '@renderer/utils/constant';
 
 export default function MultiTabs() {
@@ -100,6 +100,8 @@ export default function MultiTabs() {
         return <FileType className="w-4 h-4" />;
       case 'board':
         return <Palette className="w-4 h-4" />;
+      case 'welcome':
+        return <File className="w-4 h-4" />;
       default:
         return null;
     }
