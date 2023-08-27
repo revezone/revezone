@@ -2,6 +2,7 @@ export type EventName =
   | 'create_folder'
   | 'create_board'
   | 'create_note'
+  | 'create_welcome'
   | 'delete_folder'
   | 'delete_file'
   | 'delete_board'

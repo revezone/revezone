@@ -1,4 +1,4 @@
-import { IJsonModel, Layout, Model, Action, TabNode } from 'flexlayout-react';
+import { IJsonModel, Layout, Model, Action, TabNode, IJsonTabSetNode } from 'flexlayout-react';
 import 'flexlayout-react/style/light.css';
 import NoteEditor from '@renderer/components/NoteEditor';
 import RevedrawApp from '../RevedrawApp';
@@ -14,9 +14,10 @@ import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { siderbarCollapsedAtom, tabModelAtom } from '@renderer/store/jotai';
 import { RevezoneFile, RevezoneFileType } from '@renderer/types/file';
 import { Palette, FileType } from 'lucide-react';
+import { WELCOME_TAB_ITEM } from '@renderer/utils/constant';
 
 export default function MultiTabs() {
-  const { tabJsonModel, deleteTab } = useTabJsonModel();
+  const { tabJsonModel, deleteTab, getTabList } = useTabJsonModel();
   const [model, setModel] = useAtom(tabModelAtom);
   const { updateCurrentFile } = useCurrentFile();
   const [collapsed] = useAtom(siderbarCollapsedAtom);
@@ -26,16 +27,24 @@ export default function MultiTabs() {
 
     console.log('--- tabJsonModel ---', tabJsonModel);
 
+    try {
+      const tabList = getTabList(tabJsonModel.layout);
+
+      if (tabList.length === 0) {
+        const tabset = tabJsonModel.layout.children[0] as IJsonTabSetNode;
+        tabset.children.push(WELCOME_TAB_ITEM);
+        tabset.selected = 0;
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+
     const _model = Model.fromJson(tabJsonModel);
 
     setModel(_model);
   }, [tabJsonModel]);
 
   const renderContent = useCallback((file: RevezoneFile) => {
-    // if (file?.id !== currentFile?.id) return;
-
-    // console.log('--- renderContent ---', file);
-
     switch (file?.type) {
       case 'note':
         return <NoteEditor file={file} />;

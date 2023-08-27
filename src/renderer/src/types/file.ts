@@ -14,7 +14,7 @@ export interface RevezoneFolderFileMapping {
   gmtModified: string;
 }
 
-export type RevezoneFileType = 'note' | 'board';
+export type RevezoneFileType = 'note' | 'board' | 'welcome';
 
 export interface RevezoneFile {
   id: string;

@@ -6,6 +6,10 @@
     height: 100%;
   }
 
+  .flexlayout__tabset-selected{
+    @apply bg-white;
+  }
+
   .flexlayout__tab_button {
     @apply text-neutral-500 text-sm;
 

@@ -158,7 +158,7 @@ class FileTreeIndexeddbStorage {
       INDEXEDDB_FILE_TREE,
       INDEXEDDB_FILE_TREE
     )) as RevezoneFileTree | undefined;
-    return fileTree?.[fileId].data as RevezoneFile;
+    return fileTree?.[fileId]?.data as RevezoneFile;
   }
 
   async deleteFile(fileId: string) {

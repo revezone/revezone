@@ -27,17 +27,6 @@ function App(): JSX.Element {
     submitAppEnterUserEvent();
   }, []);
 
-  const renderContent = useCallback((file) => {
-    switch (file?.type) {
-      case 'note':
-        return <NoteEditor file={file} />;
-      case 'board':
-        return <RevedrawApp file={file} />;
-      default:
-        return <WelcomePage />;
-    }
-  }, []);
-
   const getLocale = useCallback(() => {
     switch (langCode) {
       case 'zh-CN':
@@ -49,8 +38,6 @@ function App(): JSX.Element {
     }
   }, [langCode]);
 
-  console.log('--- currentFile ---', currentFile);
-
   return (
     <ConfigProvider locale={getLocale()} theme={theme}>
       <div
@@ -58,12 +45,10 @@ function App(): JSX.Element {
           isInRevezoneApp ? 'is-in-revezone-native-app' : 'is-in-browser'
         }`}
       >
-        {/* <CustomLayout>
-          <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
-        </CustomLayout> */}
         <ResizableLayout>
-          <WorkspaceLoaded>{currentFile ? <MultiTabs /> : <WelcomePage />}</WorkspaceLoaded>
-          {/* <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded> */}
+          <WorkspaceLoaded>
+            <MultiTabs />
+          </WorkspaceLoaded>
         </ResizableLayout>
       </div>
     </ConfigProvider>

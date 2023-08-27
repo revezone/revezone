@@ -2,7 +2,7 @@ import { EventName } from '@renderer/types/statistics';
 import { isInRevezoneApp } from '@renderer/utils/navigator';
 import { reveGTag } from './reveGTag';
 
-export const submitUserEvent = (eventName: EventName, data) => {
+export const submitUserEvent = (eventName: EventName, data: object) => {
   if (isInRevezoneApp) {
     reveGTag.event(eventName, data);
   } else {

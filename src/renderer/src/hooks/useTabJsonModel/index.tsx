@@ -2,7 +2,6 @@ import { useCallback, useEffect, MutableRefObject } from 'react';
 import { useAtom } from 'jotai';
 import { tabJsonModelAtom, tabModelAtom } from '@renderer/store/jotai';
 import { TabItem } from '@renderer/types/tabs';
-import { DEFAULT_EMPTY_TAB_ID } from '@renderer/utils/constant';
 import { getTabJsonModelFromLocal, setTabJsonModelToLocal } from '@renderer/store/localstorage';
 import useCurrentFile from '../useCurrentFile';
 import { RevezoneFile } from '@renderer/types/file';
@@ -109,7 +108,6 @@ export default function useTabJsonModel() {
       id: currentFile.id,
       name: currentFile.name,
       type: 'tab',
-      fileType: currentFile.type,
       config: currentFile
     };
 
@@ -135,7 +133,7 @@ export default function useTabJsonModel() {
 
     const selectedTab = getSelectedTab(newTabJsonModel);
 
-    const currentFile = selectedTab.id
+    const currentFile = selectedTab?.id
       ? await fileTreeIndexeddbStorage.getFile(selectedTab.id)
       : undefined;
 
@@ -146,17 +144,6 @@ export default function useTabJsonModel() {
     if (!model) return;
 
     model.doAction(Actions.renameTab(fileId, name));
-
-    // const newTabJsonModel = tabJsonModel.map((tab) => {
-    //   if (tab.id === fileId) {
-    //     const newTab = { ...tab, name };
-    //     if (newTab.config) {
-    //       newTab.config.name = name;
-    //     }
-    //     return newTab;
-    //   }
-    //   return tab;
-    // });
 
     const newTabJsonModel = model.toJson();
 
@@ -171,6 +158,7 @@ export default function useTabJsonModel() {
     updateTabJsonModelWhenCurrentFileChanged,
     setTabJsonModel,
     deleteTab,
-    renameTabName
+    renameTabName,
+    getTabList
   };
 }
