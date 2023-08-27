@@ -1,9 +1,9 @@
-import { IJsonModel, Layout, Model, Action, TabNode, IJsonTabSetNode } from 'flexlayout-react';
+import { Layout, Model, Action, TabNode, IJsonTabSetNode } from 'flexlayout-react';
 import 'flexlayout-react/style/light.css';
 import NoteEditor from '@renderer/components/NoteEditor';
 import RevedrawApp from '../RevedrawApp';
 import WelcomePage from '../WelcomePage';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 
 import './index.css';

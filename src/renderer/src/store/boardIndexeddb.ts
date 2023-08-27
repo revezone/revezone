@@ -45,8 +45,8 @@ class BoardIndexeddbStorage {
     return db;
   }
 
-  async initBoardFileStore(db): Promise<IDBObjectStore> {
-    const boardStore: IDBObjectStore = await db.createObjectStore(INDEXEDDB_BOARD_FILE_KEY, {
+  async initBoardFileStore(db: IDBPDatabase<RevezoneBoardDBSchema>) {
+    const boardStore = await db.createObjectStore(INDEXEDDB_BOARD_FILE_KEY, {
       autoIncrement: true
     });
 
@@ -58,17 +58,17 @@ class BoardIndexeddbStorage {
     await this.db?.put(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
   }
 
-  async addBoard(id, boardData) {
+  async addBoard(id: string, boardData: string) {
     await this.initDB();
     await this.db?.add(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
   }
 
-  async getBoard(id) {
+  async getBoard(id: string) {
     await this.initDB();
     return await this.db?.get(INDEXEDDB_BOARD_FILE_KEY, id);
   }
 
-  async deleteBoard(id) {
+  async deleteBoard(id: string) {
     await this.initDB();
 
     console.log('--- this.db ---', id, this.db);
