@@ -15,8 +15,15 @@ export default function useAddFile() {
   const { updateTabJsonModelWhenCurrentFileChanged } = useTabJsonModel();
 
   const addFile = useCallback(
-    async (name: string, type: 'board' | 'note', model: Model | undefined, parentId?: string) => {
-      if (!model) return;
+    async (
+      name: string,
+      type: 'board' | 'note',
+      tabModel: Model | undefined,
+      parentId?: string
+    ) => {
+      console.log('--- addfile ---', tabModel);
+
+      if (!tabModel) return;
 
       const file = await fileTreeIndexeddbStorage.addFile(name, type, parentId);
 
@@ -31,7 +38,7 @@ export default function useAddFile() {
 
       updateCurrentFile(file);
 
-      updateTabJsonModelWhenCurrentFileChanged(file, model);
+      updateTabJsonModelWhenCurrentFileChanged(file, tabModel);
     },
     []
   );

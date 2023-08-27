@@ -19,7 +19,7 @@ export default function OperationBar(props: Props) {
   const { addFile } = useAddFile();
   const { addFolder } = useAddFolder();
   const { t } = useTranslation();
-  const { model } = useTabJsonModel();
+  const { model: tabModel } = useTabJsonModel();
   const [selectedKeys] = useAtom(selectedKeysAtom);
 
   const currentFolderId = useMemo(() => {
@@ -41,7 +41,7 @@ export default function OperationBar(props: Props) {
   }, [size]);
 
   return (
-    <div className={`revezone-menu-toolbar flex items-center pl-5 h-10 ${className}`}>
+    <div className={`revezone-menu-toolbar flex items-center pl-5 h-10 text-sm ${className}`}>
       <span
         title={t('operation.addFolder')}
         className="operation-item flex items-center mr-3 cursor-pointer"
@@ -58,7 +58,7 @@ export default function OperationBar(props: Props) {
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
-          addFile('New Board', 'board', model, currentFolderId);
+          addFile('New Board', 'board', tabModel, currentFolderId);
         }}
       >
         <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
@@ -69,7 +69,7 @@ export default function OperationBar(props: Props) {
         className="operation-item flex items-center mr-3 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
-          addFile('New Note', 'note', model, currentFolderId);
+          addFile('New Note', 'note', tabModel, currentFolderId);
         }}
       >
         <FileType className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />

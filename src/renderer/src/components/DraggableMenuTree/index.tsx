@@ -42,8 +42,12 @@ export default function DraggableMenuTree() {
   const { openKeys, addOpenKeys, removeOpenKey } = useOpenKeys();
   const { t } = useTranslation();
 
-  const { updateTabJsonModelWhenCurrentFileChanged, renameTabName, model, deleteTab } =
-    useTabJsonModel();
+  const {
+    updateTabJsonModelWhenCurrentFileChanged,
+    renameTabName,
+    model: tabModel,
+    deleteTab
+  } = useTabJsonModel();
   const { currentFile, updateCurrentFile } = useCurrentFile();
 
   useEffect(() => {
@@ -65,7 +69,7 @@ export default function DraggableMenuTree() {
           break;
       }
 
-      deleteTab(file.id, model);
+      deleteTab(file.id, tabModel);
 
       if (file.id === currentFile?.id) {
         updateCurrentFile(undefined);
@@ -73,7 +77,7 @@ export default function DraggableMenuTree() {
 
       await getFileTree();
     },
-    [fileTreeIndexeddbStorage, currentFile, model]
+    [fileTreeIndexeddbStorage, currentFile, tabModel]
   );
 
   const deleteFolder = useCallback(
@@ -119,14 +123,14 @@ export default function DraggableMenuTree() {
 
         await updateCurrentFile(file);
 
-        updateTabJsonModelWhenCurrentFileChanged(file, model);
+        updateTabJsonModelWhenCurrentFileChanged(file, tabModel);
       } else {
         setSelectedKeys(items as string[]);
       }
 
       submitUserEvent('select_menu', { key: items.join(',') });
     },
-    [fileTree, model]
+    [fileTree, tabModel]
   );
 
   const onFocusItem = useCallback((item: TreeItem) => {
@@ -144,12 +148,12 @@ export default function DraggableMenuTree() {
       } else {
         await fileTreeIndexeddbStorage.updateFileName(item.data as RevezoneFile, name);
 
-        await renameTabName(item.data.id, name, model);
+        await renameTabName(item.data.id, name, tabModel);
       }
 
       getFileTree();
     },
-    [model]
+    [tabModel]
   );
 
   const clearTargetInChildren = useCallback((itemIds: string[], fileTree: RevezoneFileTree) => {
@@ -242,6 +246,8 @@ export default function DraggableMenuTree() {
       label: t('storage.cloud')
     }
   ];
+
+  console.log('--- menutree tabModel ---', tabModel);
 
   return (
     <div className="revezone-menu-container">
@@ -344,7 +350,7 @@ export default function DraggableMenuTree() {
                     <Dropdown
                       menu={{
                         // @ts-ignore
-                        items: getFileTreeContextMenu(item.data, context, !!item.isFolder)
+                        items: getFileTreeContextMenu(item.data, context, !!item.isFolder, tabModel)
                       }}
                     >
                       <MoreVertical

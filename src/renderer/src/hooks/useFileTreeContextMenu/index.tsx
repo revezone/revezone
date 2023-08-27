@@ -5,9 +5,9 @@ import { RevezoneFile, RevezoneFolder } from '@renderer/types/file';
 import useAddFile from '../useAddFile';
 import useAddFolder from '../useAddFolder';
 import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
-import useTabJsonModel from '../useTabJsonModel';
 import { TreeItemRenderContext } from 'react-complex-tree';
 import { Popconfirm } from 'antd';
+import { Model } from 'flexlayout-react';
 
 interface Props {
   deleteFile: (file: RevezoneFile) => void;
@@ -19,10 +19,14 @@ export default function useFileTreeContextMenu(props: Props) {
   const { deleteFile, deleteFolder } = props;
   const { addFile } = useAddFile();
   const { addFolder } = useAddFolder();
-  const { model } = useTabJsonModel();
 
   const getFileTreeContextMenu = useCallback(
-    (item: RevezoneFile | RevezoneFolder, context: TreeItemRenderContext, isFolder: boolean) => {
+    (
+      item: RevezoneFile | RevezoneFolder,
+      context: TreeItemRenderContext,
+      isFolder: boolean,
+      tabModel: Model
+    ) => {
       const commonContextMenu = [
         {
           key: 'rename',
@@ -69,7 +73,7 @@ export default function useFileTreeContextMenu(props: Props) {
             onClick: async ({ domEvent }: { domEvent: Event }) => {
               domEvent.stopPropagation();
               domEvent.preventDefault();
-              addFile('New Board', 'board', model, item.id);
+              addFile('New Board', 'board', tabModel, item.id);
             }
           },
           {
@@ -79,7 +83,7 @@ export default function useFileTreeContextMenu(props: Props) {
             onClick: async ({ domEvent }: { domEvent: Event }) => {
               domEvent.stopPropagation();
               domEvent.preventDefault();
-              addFile('New Note', 'note', model, item.id);
+              addFile('New Note', 'note', tabModel, item.id);
             }
           },
           {

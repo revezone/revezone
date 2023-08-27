@@ -21,7 +21,7 @@ import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 
 export default function useTabJsonModel() {
   const [tabJsonModel, setTabJsonModel] = useAtom(tabJsonModelAtom);
-  const [model, setModel] = useAtom(tabModelAtom);
+  const [model] = useAtom(tabModelAtom);
   const { updateCurrentFile } = useCurrentFile();
 
   useEffect(() => {
