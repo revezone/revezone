@@ -36,11 +36,15 @@ export default class RevezoneBlockSuiteEditor extends LitElement {
 
     if (!this.page) return;
 
+    console.log('--- connectedCallback ---', this);
+
     editor.page = this.page;
     this.appendChild(editor);
   }
 
   override disconnectedCallback(): void {
+    console.log('--- disconnectedCallback ---', this.children[0]);
+
     this.removeChild(this.children[0]);
   }
 }

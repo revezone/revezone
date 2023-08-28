@@ -25,8 +25,6 @@
     "@blocksuite/editor": "^0.6.0",
     "@blocksuite/lit": "^0.6.0",
     "@blocksuite/store": "^0.6.0",
-    "@headlessui/react": "^1.7.15",
-    "@heroicons/react": "^2.0.18",
     "@toeverything/y-indexeddb": "0.7.0-canary.44",
     "ahooks": "^3.7.8",
     "antd": "^5.6.4",
