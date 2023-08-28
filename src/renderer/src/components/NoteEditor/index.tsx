@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import '@blocksuite/editor';
-import '@blocksuite/editor/themes/affine.css';
+import '@revesuite/editor';
+import '@revesuite/editor/themes/affine.css';
 import RevezoneBlockSuiteEditor from '../RevezoneBlockSuiteEditor';
 import { RevezoneFile } from '@renderer/types/file';
 

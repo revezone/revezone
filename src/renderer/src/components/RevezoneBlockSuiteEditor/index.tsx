@@ -1,7 +1,7 @@
-import type { Page } from '@blocksuite/store';
-import { Workspace } from '@blocksuite/store';
+import type { Page } from '@revesuite/store';
+import { Workspace } from '@revesuite/store';
 import { LitElement } from 'lit';
-import { EditorContainer } from '@blocksuite/editor';
+import { EditorContainer } from '@revesuite/editor';
 import { blocksuiteStorage } from '../../store/blocksuite';
 
 const CUSTOM_ELEMENT_NAME = 'revezone-block-suite-editor';
@@ -25,7 +25,10 @@ export default class RevezoneBlockSuiteEditor extends LitElement {
     this.page = page;
 
     // @ts-ignore
-    window.workspace = RevezoneBlockSuiteEditor.workspace;
+    window.workspace = this.workspace;
+
+    // @ts-ignore
+    window.page = page;
 
     // @ts-ignore
     window.editor = this;

@@ -1,5 +1,5 @@
-import { Workspace, createIndexeddbStorage, createMemoryStorage } from '@blocksuite/store';
-import { AffineSchemas } from '@blocksuite/blocks/models';
+import { Workspace, createIndexeddbStorage, createMemoryStorage } from '@revesuite/store';
+import { AffineSchemas } from '@revesuite/blocks/models';
 import { IndexeddbPersistence } from 'y-indexeddb';
 import { emitter, events } from './eventemitter';
 
