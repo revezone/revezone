@@ -6,7 +6,6 @@ import useAddFolder from '@renderer/hooks/useAddFolder';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import { useAtom } from 'jotai';
 import { selectedKeysAtom } from '@renderer/store/jotai';
-import AttentionAnimation from '../AttentionAnimation';
 
 import './index.css';
 
@@ -63,7 +62,7 @@ export default function OperationBar(props: Props) {
         }}
       >
         <Palette
-          className={`${getSizeClassName()} text-current cursor-pointer menu-icon animate-wiggle`}
+          className={`${getSizeClassName()} text-current cursor-pointer menu-icon animate-breath`}
         />
         <span className="operation-btn-desc ml-1 transition-all">{t('operation.addBoard')}</span>
       </span>
