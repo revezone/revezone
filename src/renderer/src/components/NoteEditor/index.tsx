@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import '@blocksuite/editor';
 import '@blocksuite/editor/themes/affine.css';
 import RevezoneBlockSuiteEditor from '../RevezoneBlockSuiteEditor';
