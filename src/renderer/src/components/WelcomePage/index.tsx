@@ -27,18 +27,6 @@ function WelcomeContent() {
         <div className="mb-6 text-sm">
           <h2 className="mb-2 text-base">{t('welcome.operationGuide')}</h2>
           <p className="mb-2">{t('welcome.operationDetailDesc')}</p>
-          <p className="mb-2">
-            <FolderPlus className="mr-2 w-4 h-4" />
-            {t('operation.addFolder')}
-          </p>
-          <p className="mb-2">
-            <Palette className="mr-2 w-4 h-4" />
-            {t('operation.addBoard')}: {t('description.boardDesc')}
-          </p>
-          <p className="mb-2">
-            <FileType className="mr-2 w-4 h-4" />
-            {t('operation.addNote')}: {t('description.noteDesc')}
-          </p>
         </div>
         <div className="text-sm">
           <h2 className="mb-2 text-base">{t('links.title')}</h2>
@@ -116,7 +104,7 @@ function WelcomeContent() {
           </p>
         </div>
       </div>
-      <div className="copyright absolute bottom-0 text-center w-full h-8">
+      <div className="copyright absolute bottom-0 text-center w-full h-8 text-sm">
         Copyright © 2023{' '}
         <a
           href="https://twitter.com/korbinzhao"
