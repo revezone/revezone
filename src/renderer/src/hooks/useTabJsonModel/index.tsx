@@ -5,14 +5,12 @@ import { TabItem } from '@renderer/types/tabs';
 import { getTabJsonModelFromLocal, setTabJsonModelToLocal } from '@renderer/store/localstorage';
 import useCurrentFile from '../useCurrentFile';
 import { RevezoneFile } from '@renderer/types/file';
-
 import {
   IJsonModel,
   IJsonRowNode,
   IJsonTabSetNode,
   IJsonTabNode,
   DockLocation,
-  Layout,
   Model,
   Actions
 } from 'flexlayout-react';

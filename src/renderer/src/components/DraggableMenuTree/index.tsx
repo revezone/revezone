@@ -114,11 +114,6 @@ export default function DraggableMenuTree() {
     deleteFolder
   });
 
-  const resetMenu = useCallback(() => {
-    updateCurrentFile(undefined);
-    setSelectedKeys([]);
-  }, []);
-
   const onExpandItem = useCallback(
     (item: TreeItem) => {
       addOpenKeys([item.data.id]);
@@ -272,7 +267,9 @@ export default function DraggableMenuTree() {
     <div className="revezone-menu-container">
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
         <div className="flex items-center">
-          <RevezoneLogo size="small" onClick={() => resetMenu()} />
+          <a href="https://revezone.com" target="_blank" rel="noreferrer">
+            <RevezoneLogo size="small" />
+          </a>
           <span className="text-sm whitespace-nowrap">&nbsp;-&nbsp;{t('text.alpha')}</span>
           <PublicBetaNotice />
         </div>
