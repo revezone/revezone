@@ -247,8 +247,6 @@ export default function DraggableMenuTree() {
     }
   ];
 
-  console.log('--- menutree tabModel ---', tabModel);
-
   return (
     <div className="revezone-menu-container">
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">

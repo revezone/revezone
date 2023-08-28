@@ -2,13 +2,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import '@blocksuite/editor';
 import '@blocksuite/editor/themes/affine.css';
 import RevezoneBlockSuiteEditor from '../RevezoneBlockSuiteEditor';
-import { Input } from 'antd';
-import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
+// import { Input } from 'antd';
+// import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { RevezoneFile } from '@renderer/types/file';
 
 import './index.css';
-import useFileTree from '@renderer/hooks/useFileTree';
-import { useTranslation } from 'react-i18next';
+// import useFileTree from '@renderer/hooks/useFileTree';
+// import { useTranslation } from 'react-i18next';
 
 interface Props {
   file: RevezoneFile;
@@ -21,9 +21,9 @@ function NoteEditor({ file }: Props): JSX.Element | null {
 
   const editorRef = useRef<HTMLDivElement>(null);
   const editorMountRef = useRef(false);
-  const [title, setTitle] = useState(file.name);
-  const { getFileTree } = useFileTree();
-  const { t } = useTranslation();
+  // const [title, setTitle] = useState(file.name);
+  // const { getFileTree } = useFileTree();
+  // const { t } = useTranslation();
 
   useEffect(() => {
     if (!file || editorMountRef.current) {
@@ -32,7 +32,7 @@ function NoteEditor({ file }: Props): JSX.Element | null {
 
     editorMountRef.current = true;
 
-    let editor;
+    let editor: RevezoneBlockSuiteEditor;
 
     if (editorRef.current) {
       editor = new RevezoneBlockSuiteEditor({
@@ -52,36 +52,36 @@ function NoteEditor({ file }: Props): JSX.Element | null {
     };
   }, [file.id]);
 
-  useEffect(() => {
-    setTitle(file.name);
-  }, [file.name]);
+  // useEffect(() => {
+  //   setTitle(file.name);
+  // }, [file.name]);
 
   useEffect(() => {
     editorMountRef.current = false;
   }, [file.id]);
 
-  const onPageTitleChange = useCallback(
-    (e) => {
-      const newTitle = e.target.value;
-      setTitle(newTitle);
-      fileTreeIndexeddbStorage.updateFileName(file, newTitle);
-      getFileTree();
-    },
-    [file.id]
-  );
+  // const onPageTitleChange = useCallback(
+  //   (e) => {
+  //     const newTitle = e.target.value;
+  //     setTitle(newTitle);
+  //     fileTreeIndexeddbStorage.updateFileName(file, newTitle);
+  //     getFileTree();
+  //   },
+  //   [file.id]
+  // );
 
-  const onPressEnter = useCallback(() => {
-    const richText = document
-      .querySelector('.affine-frame-block-container')
-      ?.querySelector('.affine-rich-text');
+  // const onPressEnter = useCallback(() => {
+  //   const richText = document
+  //     .querySelector('.affine-frame-block-container')
+  //     ?.querySelector('.affine-rich-text');
 
-    // @ts-ignore
-    richText?.focus();
-  }, []);
+  //   // @ts-ignore
+  //   richText?.focus();
+  // }, []);
 
   return (
     <div className="blocksuite-editor-container">
-      <div className="note-editor-title border-slate-100 border-b">
+      {/* <div className="note-editor-title border-slate-100 border-b">
         <Input.TextArea
           className="text-3xl font-bold px-6"
           bordered={false}
@@ -92,7 +92,7 @@ function NoteEditor({ file }: Props): JSX.Element | null {
           onChange={onPageTitleChange}
           onPressEnter={onPressEnter}
         ></Input.TextArea>
-      </div>
+      </div> */}
       <div className="blocksuite-editor-content" ref={editorRef}></div>
     </div>
   );

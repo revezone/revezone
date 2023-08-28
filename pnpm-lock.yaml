@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@ant-design/icons':
-    specifier: ^5.1.4
-    version: 5.1.4(react-dom@18.2.0)(react@18.2.0)
   '@blocksuite/blocks':
     specifier: ^0.6.0
     version: 0.6.0(@blocksuite/lit@0.6.0)(@blocksuite/store@0.6.0)(nanoid@4.0.2)(yjs@13.6.6)
@@ -38,9 +35,6 @@ dependencies:
   axios:
     specifier: ^1.4.0
     version: 1.4.0
-  electron-google-analytics4:
-    specifier: ^1.1.1
-    version: 1.1.1
   electron-store:
     specifier: ^8.1.0
     version: 8.1.0
@@ -50,9 +44,6 @@ dependencies:
   flexlayout-react:
     specifier: ^0.7.9
     version: 0.7.9(react-dom@18.2.0)(react@18.2.0)
-  golden-layout:
-    specifier: ^2.6.0
-    version: 2.6.0
   i18next:
     specifier: ^23.3.0
     version: 23.3.0
@@ -74,9 +65,6 @@ dependencies:
   moment-timezone:
     specifier: ^0.5.43
     version: 0.5.43
-  node-machine-id:
-    specifier: ^1.1.12
-    version: 1.1.12
   react-complex-tree:
     specifier: ^2.2.2
     version: 2.2.2(react@18.2.0)
@@ -1845,11 +1833,6 @@ packages:
       toggle-selection: 1.0.6
     dev: false
 
-  /core-js@3.32.0:
-    resolution: {integrity: sha512-rd4rYZNlF3WuoYuRIDEmbR/ga9CeuWX9U05umAvgrrZoHY4Z++cp/xwPQMvUpBB4Ag6J8KfD80G0zwCyaSxDww==}
-    requiresBuild: true
-    dev: false
-
   /core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
 
@@ -1996,17 +1979,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       is-obj: 2.0.0
-    dev: false
-
-  /electron-google-analytics4@1.1.1:
-    resolution: {integrity: sha512-3IzcVfRoRYiVrLfquwns7SpmGd4h3QPYrnOBqnlSvJmLvgpiaayO89qjy2NnFTMlqu//piJa5wZbvJCtA49XGg==}
-    dependencies:
-      axios: 1.4.0
-      core-js: 3.32.0
-      node-machine-id: 1.1.12
-      uuid: 9.0.0
-    transitivePeerDependencies:
-      - debug
     dev: false
 
   /electron-store@8.1.0:
@@ -2663,10 +2635,6 @@ packages:
       slash: 3.0.0
     dev: true
 
-  /golden-layout@2.6.0:
-    resolution: {integrity: sha512-sIVQCiRWOymHbVD1Aw/T9/ijbPYAVGBlgGYd1N9MRKfcyBNSpjr87Vg9nSHm+RCT8ELrvK8IJYJV0QRJuVUkCQ==}
-    dev: false
-
   /gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
     dependencies:
@@ -3307,10 +3275,6 @@ packages:
 
   /next-tick@1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
-    dev: false
-
-  /node-machine-id@1.1.12:
-    resolution: {integrity: sha512-QNABxbrPa3qEIfrE6GOJ7BYIuignnJw7iQ2YPbc3Nla1HzRJjXzZOiikfF8m7eAMfichLt3M4VgLOetqgDmgGQ==}
     dev: false
 
   /node-releases@2.0.13:
