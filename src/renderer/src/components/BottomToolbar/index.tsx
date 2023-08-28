@@ -134,7 +134,7 @@ export default function BottomToolbar() {
   return (
     <div className="bottom-toolbar absolute h-8 pr-4 bottom-0 right-0 flex items-center text-slate-600">
       <a
-        className="mr-2 flex items-center"
+        className="mr-2 reve-text-link"
         href="https://github.com/revezone/revezone"
         target="_blank"
         rel="noreferrer"
@@ -147,7 +147,7 @@ export default function BottomToolbar() {
       </a>
       <DownloadApp from="bottombar" />
       <a
-        className="mr-2 flex items-center"
+        className="mr-2 reve-text-link "
         href="https://afdian.net/a/wantian"
         target="_blank"
         rel="noreferrer"
@@ -159,7 +159,7 @@ export default function BottomToolbar() {
         <Cat className="w-4 h-4"></Cat>
       </a>
       <a
-        className="mr-2 flex items-center"
+        className="mr-2 reve-text-link"
         href="https://www.buymeacoffee.com/korbinzhao"
         target="_blank"
         rel="noreferrer"
@@ -170,7 +170,7 @@ export default function BottomToolbar() {
       >
         <Coffee className="w-4 h-4"></Coffee>
       </a>
-      <span title="Setting" className="flex items-center mr-2">
+      <span title="Setting" className="reve-text-link mr-2">
         <Settings
           className="w-4 h-4 cursor-pointer"
           onClick={() => {
@@ -179,7 +179,7 @@ export default function BottomToolbar() {
           }}
         ></Settings>
       </span>
-      <span title="Help" className="flex items-center">
+      <span title="Help" className="reve-text-link">
         <Dropdown menu={{ items: helpMenu }}>
           <HelpCircle className="w-4 h-4 cursor-pointer"></HelpCircle>
         </Dropdown>

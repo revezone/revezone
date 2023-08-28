@@ -42,7 +42,7 @@ export default {
     github: '官方 Github (給個 Star 吧)',
     twitter: '官方 Twitter',
     authorTwitter: '關註作者',
-    authorBilibili: '官方 B 站',
+    authorBilibili: '官方 B 站（獲取最新產品動態）',
     buyMeACoffee: '買杯咖啡',
     feedMyCat: '投餵貓糧',
     downloadApp: '下載桌面應用'

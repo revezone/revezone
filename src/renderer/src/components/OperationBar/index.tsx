@@ -3,11 +3,12 @@ import { FolderPlus, Palette, FileType } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import { useTranslation } from 'react-i18next';
 import useAddFolder from '@renderer/hooks/useAddFolder';
-
-import './index.css';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import { useAtom } from 'jotai';
 import { selectedKeysAtom } from '@renderer/store/jotai';
+import AttentionAnimation from '../AttentionAnimation';
+
+import './index.css';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
@@ -55,13 +56,15 @@ export default function OperationBar(props: Props) {
       </span>
       <span
         title={t('operation.addBoard')}
-        className="operation-item flex items-center mr-3 cursor-pointer"
+        className="operation-item flex items-center mr-3 cursor-pointer relative"
         onClick={(e) => {
           e.stopPropagation();
           addFile('New Board', 'board', tabModel, currentFolderId);
         }}
       >
-        <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
+        <Palette
+          className={`${getSizeClassName()} text-current cursor-pointer menu-icon animate-wiggle`}
+        />
         <span className="operation-btn-desc ml-1 transition-all">{t('operation.addBoard')}</span>
       </span>
       <span

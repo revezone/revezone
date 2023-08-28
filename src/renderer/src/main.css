@@ -33,3 +33,8 @@ object {
   display: inline-block;
 }
 
+.reve-text-link {
+  @apply flex items-center cursor-pointer hover:text-sky-500;
+}
+
+
