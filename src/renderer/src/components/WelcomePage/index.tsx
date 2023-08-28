@@ -1,5 +1,5 @@
 import RevezoneLogo from '../RevezoneLogo';
-import { Twitter, Github, Coffee, Cat, FolderPlus, FileType, Palette } from 'lucide-react';
+import { Twitter, Github, Coffee, Cat } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bilibili } from '../../icons';

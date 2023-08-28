@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { FileEdit, Trash2, ClipboardCopy, FileType, Palette, FolderPlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { RevezoneFile, RevezoneFolder } from '@renderer/types/file';
@@ -6,19 +6,23 @@ import useAddFile from '../useAddFile';
 import useAddFolder from '../useAddFolder';
 import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
 import { TreeItemRenderContext } from 'react-complex-tree';
-import { Popconfirm } from 'antd';
+import { Modal } from 'antd';
 import { Model } from 'flexlayout-react';
 
 interface Props {
-  deleteFile: (file: RevezoneFile) => void;
-  deleteFolder: (folder: RevezoneFolder) => void;
+  deleteFile: (file: RevezoneFile, tabModel: Model) => void;
+  deleteFolder: (folder: RevezoneFolder, tabModel: Model) => void;
 }
+
+let currentItem: RevezoneFile | RevezoneFolder;
+let currentIsFolder: boolean;
 
 export default function useFileTreeContextMenu(props: Props) {
   const { t } = useTranslation();
   const { deleteFile, deleteFolder } = props;
   const { addFile } = useAddFile();
   const { addFolder } = useAddFolder();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getFileTreeContextMenu = useCallback(
     (
@@ -41,25 +45,14 @@ export default function useFileTreeContextMenu(props: Props) {
         },
         {
           key: 'delete',
-          label: (
-            <Popconfirm
-              title={`确定删除 ${item.name} ？`}
-              onConfirm={() => {
-                console.log('delete', item, context);
-
-                if (isFolder) {
-                  deleteFolder(item as RevezoneFolder);
-                } else {
-                  deleteFile(item as RevezoneFile);
-                }
-              }}
-            >
-              {t('operation.delete')}
-            </Popconfirm>
-          ),
+          label: t('operation.delete'),
           icon: <Trash2 className="w-4"></Trash2>,
           onClick: ({ domEvent }: { domEvent: Event }) => {
             domEvent.stopPropagation();
+            console.log('click', item);
+            currentItem = item;
+            currentIsFolder = isFolder;
+            setIsModalOpen(true);
           }
         }
       ];
@@ -115,5 +108,24 @@ export default function useFileTreeContextMenu(props: Props) {
     []
   );
 
-  return { getFileTreeContextMenu };
+  const getDeleteFileModal = (tabModel: Model | undefined) => (
+    <Modal
+      title={`${t('confirm.confirmDelete')} ${currentItem?.name} ?`}
+      open={isModalOpen}
+      onOk={async () => {
+        console.log('delete', currentItem);
+
+        if (currentIsFolder) {
+          tabModel && (await deleteFolder(currentItem as RevezoneFolder, tabModel));
+        } else {
+          tabModel && (await deleteFile(currentItem as RevezoneFile, tabModel));
+        }
+
+        setIsModalOpen(false);
+      }}
+      onCancel={() => setIsModalOpen(false)}
+    ></Modal>
+  );
+
+  return { isModalOpen, getFileTreeContextMenu, getDeleteFileModal };
 }

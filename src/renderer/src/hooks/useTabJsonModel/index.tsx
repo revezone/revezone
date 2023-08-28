@@ -121,6 +121,8 @@ export default function useTabJsonModel() {
   }, []);
 
   const deleteTab = useCallback(async (fileId: string, model: Model | undefined) => {
+    console.log('--- deleteTab ---', fileId, model);
+
     if (!model) return;
 
     model.doAction(Actions.deleteTab(fileId));

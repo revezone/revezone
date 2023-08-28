@@ -34,6 +34,7 @@ import {
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
+import { Model } from 'flexlayout-react';
 
 export default function DraggableMenuTree() {
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
@@ -55,10 +56,16 @@ export default function DraggableMenuTree() {
   }, []);
 
   const deleteFile = useCallback(
-    async (file: RevezoneFile) => {
+    async (file: RevezoneFile, tabModel: Model) => {
       await fileTreeIndexeddbStorage.deleteFile(file.id);
 
       console.log('--- delete file ---', file);
+
+      await deleteTab(file.id, tabModel);
+
+      if (file.id === currentFile?.id) {
+        updateCurrentFile(undefined);
+      }
 
       switch (file.type) {
         case 'board':
@@ -69,26 +76,40 @@ export default function DraggableMenuTree() {
           break;
       }
 
-      deleteTab(file.id, tabModel);
-
-      if (file.id === currentFile?.id) {
-        updateCurrentFile(undefined);
-      }
-
       await getFileTree();
     },
-    [fileTreeIndexeddbStorage, currentFile, tabModel]
+    [fileTreeIndexeddbStorage, currentFile]
   );
 
   const deleteFolder = useCallback(
-    async (folder: RevezoneFolder) => {
+    async (folder: RevezoneFolder, tabModel: Model) => {
+      const fileTree = await fileTreeIndexeddbStorage.getFileTree();
+
+      if (!fileTree) return;
+
       await fileTreeIndexeddbStorage.deleteFolder(folder.id);
+
+      const fileIdsInFolder = fileTree?.[folder.id].children || [];
+
+      const fileDeletePromises = fileIdsInFolder.map(async (fileId) => {
+        const file = fileTree[fileId].data;
+        deleteFile(file as RevezoneFile, tabModel);
+      });
+
+      await Promise.all(fileDeletePromises);
+
+      const tabDeletePromises = fileIdsInFolder.map(async (fileId) =>
+        deleteTab(fileId as string, tabModel)
+      );
+
+      await Promise.all(tabDeletePromises);
+
       await getFileTree();
     },
     [fileTreeIndexeddbStorage]
   );
 
-  const { getFileTreeContextMenu } = useFileTreeContextMenu({
+  const { getFileTreeContextMenu, getDeleteFileModal } = useFileTreeContextMenu({
     deleteFile,
     deleteFolder
   });
@@ -346,10 +367,12 @@ export default function DraggableMenuTree() {
                       <div className="ml-2 truncate pr-2 text-sm">{title}</div>
                     </div>
                     <Dropdown
+                      trigger={['click']}
                       menu={{
                         // @ts-ignore
                         items: getFileTreeContextMenu(item.data, context, !!item.isFolder, tabModel)
                       }}
+                      onClick={(e: Event) => e.stopPropagation()}
                     >
                       <MoreVertical
                         className="w-3 h-3 cursor-pointer text-gray-500"
@@ -366,6 +389,7 @@ export default function DraggableMenuTree() {
           <Tree treeId="revezone-file-tree" rootItem="root" treeLabel="FileTree" />
         </ControlledTreeEnvironment>
       </div>
+      {getDeleteFileModal(tabModel)}
     </div>
   );
 }

@@ -33,7 +33,7 @@ export default {
     operationTip: 'This is an empty page. Please add or select a file first in the left sidebar.',
     operationGuide: 'Operation Guide',
     operationDetailDesc:
-      'Click the icons in left sidebar operation toolbar to add a foler/note/board.',
+      'Click the icons in left sidebar operation toolbar to add a board/note/folder.',
     onlineTry: 'This is an online trial version which only supports basic functions.',
     downloadApp: 'Download desktop app to enable full function.'
   },
@@ -81,6 +81,7 @@ export default {
   },
   confirm: {
     yes: 'Yes',
-    no: 'No'
+    no: 'No',
+    confirmDelete: 'Confirm to delete'
   }
 };
