@@ -22,7 +22,7 @@ class BlocksuiteStorage {
     id: REVEZONE_EDITOR_KEY,
     blobStorages: [createIndexeddbStorage, createMemoryStorage]
   }).register(AffineSchemas);
-  indexeddbPersistence;
+  indexeddbPersistence: IndexeddbPersistence | undefined;
 
   async initYIndexeddb() {
     const indexeddbPersistence = new IndexeddbPersistence(REVEZONE_EDITOR_KEY, this.workspace.doc);
@@ -48,6 +48,13 @@ class BlocksuiteStorage {
     } catch (err) {
       console.warn('delete page error: ', err);
     }
+  }
+
+  async getAllPageIds(): Promise<string[]> {
+    const pageNameList = await this.workspace.getPageNameList();
+    const pageIds: string[] = pageNameList.map((name) => name.split('space:')?.[1]);
+    console.log('--- getAllPages ---', pageIds);
+    return pageIds;
   }
 
   // TODO: FIGURE OUT THE API OF COPY PAGE IN BLOCKSUITE

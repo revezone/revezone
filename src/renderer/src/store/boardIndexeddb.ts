@@ -68,6 +68,11 @@ class BoardIndexeddbStorage {
     return await this.db?.get(INDEXEDDB_BOARD_FILE_KEY, id);
   }
 
+  async getAllBoardIds(): Promise<string[]> {
+    await this.initDB();
+    return (await this.db?.getAllKeys(INDEXEDDB_BOARD_FILE_KEY)) || [];
+  }
+
   async deleteBoard(id: string) {
     await this.initDB();
 

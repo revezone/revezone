@@ -288,6 +288,8 @@ class FileTreeIndexeddbStorage {
 
     await this.initDB();
 
+    console.log('--- delete folder ---', folderId);
+
     await this.deleteItemFromFileTree(folderId);
 
     submitUserEvent('delete_folder', { folderId });

@@ -30,11 +30,10 @@ import {
   getRenamingMenuItemIdFromLocal,
   setRenamingMenuItemIdToLocal
 } from '@renderer/store/localstorage';
+import useDeleteFolder from '@renderer/hooks/useDeleteFolder';
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
-import { Model } from 'flexlayout-react';
-import useDeleteFolder from '@renderer/hooks/useDeleteFolder';
 
 export default function DraggableMenuTree() {
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
@@ -318,10 +317,12 @@ export default function DraggableMenuTree() {
                       }}
                       onClick={(e: Event) => e.stopPropagation()}
                     >
-                      <MoreVertical
-                        className="w-3 h-3 cursor-pointer text-gray-500"
+                      <div
+                        className="w-8 h-6 flex items-center justify-center"
                         onClick={(e) => e.stopPropagation()}
-                      />
+                      >
+                        <MoreVertical className="w-3 h-3 cursor-pointer text-gray-500" />
+                      </div>
                     </Dropdown>
                   </InteractiveComponent>
                 </div>
