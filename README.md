@@ -8,7 +8,7 @@ A new way to use Excalidraw.
 
 A lightweight productivity tool to build your second brain that integrates enhanced Excalidraw whiteboarding features and Notion-like note-taking. Local-first and block-based.
 
-![](https://img.alicdn.com/imgextra/i3/O1CN010t2FwH1L2smWHKIxl_!!6000000001242-2-tps-2472-1412.png)
+![](https://img.alicdn.com/imgextra/i1/O1CN01Fg2uUT1xflodGBz7J_!!6000000006471-2-tps-2952-1706.png)
 
 ## Sponsor
 [Buy me a coffee](https://www.buymeacoffee.com/korbinzhao) or [feed my cat](https://afdian.net/a/wantian).
@@ -30,23 +30,27 @@ Revezone is currently in a public beta. Please report a [issue](https://github.c
 
 ### Board
 Board in Revezone is a white board based on Excalidraw. You can use Excalidraw in a new easier way in Revezone, even customing fonts in desktop app and linking notes in Revezone through double link.
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kr2D0x1L8NX5ArXyc_!!6000000001254-2-tps-2472-1412.png)
+![](https://img.alicdn.com/imgextra/i2/O1CN01G0Iq241qsrpVaUmU4_!!6000000005552-2-tps-2952-1706.png)
 
 #### Custom Fonts in Board
 Revezone app supports customing fonts in Revezone board. You can upload fonts you like in Revezone app.
 
 Operation Method:
-> Open a board -> Click the top left menu button -> Click 'Custom Font' button in menu list -> Upload a font file from local -> Click 'OK' button to complete font customing
+> Click setting button at the bottom sidebar to custom a font in boards.
 
-![](https://img.alicdn.com/imgextra/i4/O1CN01o2yg8f1IuWJngoMJt_!!6000000000953-2-tps-2472-1412.png)
+![](https://img.alicdn.com/imgextra/i4/O1CN01kVRfNI1ySmBxpft70_!!6000000006578-2-tps-2952-1706.png)
 
 ### Note
 Note in Revezone is a WYSIWYG Notion-like editor，supports '/' Command and Markdown syntax.
-![](https://img.alicdn.com/imgextra/i2/O1CN012Rp1n21J8GCLvU35i_!!6000000000983-2-tps-2472-1412.png)
+![](https://img.alicdn.com/imgextra/i3/O1CN01UI3FYY1MmVrZslCKI_!!6000000001477-2-tps-2952-1706.png)
 
 ### File Management
-You can create and manage a folder/note/board in the left sidebar, and you can get the operation menu by right click a folder/note/board.
-![](https://img.alicdn.com/imgextra/i2/O1CN016TUwdy1d0k0ecgo51_!!6000000003674-2-tps-816-822.png)
+You can create and manage a folder/note/board in the left sidebar.
+![](https://img.alicdn.com/imgextra/i4/O1CN01ktl8TA1nW1Dy12WEz_!!6000000005096-2-tps-824-638.png)
+
+### Flex layout
+You can sort directories and split screens by dragging and dropping.
+![](https://img.alicdn.com/imgextra/i2/O1CN010t9Wto1cFZDv1zeD1_!!6000000003571-2-tps-2952-1706.png)
 
 ## Future Planning
 More useful features are developing. You can get more information and developing stories from [Twitter](https://twitter.com/TheReveZone) or [Bilibili](https://space.bilibili.com/393134139).

@@ -8,7 +8,7 @@ Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果�
 
 一款轻量级本地优先的用于构建第二大脑的效率工具，集成了增强型 Excalidraw 白板能力和类 Notion 笔记。
 
-![](https://img.alicdn.com/imgextra/i1/O1CN01cwjSLT1aCF70ntVBu_!!6000000003293-2-tps-2286-1492.png)
+![](https://img.alicdn.com/imgextra/i1/O1CN01Fg2uUT1xflodGBz7J_!!6000000006471-2-tps-2952-1706.png)
 
 ## 赞助
 [投喂猫粮](https://afdian.net/a/wantian) 或 [买杯咖啡](https://www.buymeacoffee.com/korbinzhao)。
@@ -36,15 +36,15 @@ Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果�
 
 ### 白板
 Revezone 中的画布是一个基于 Excalidraw 的无限画布白板。你可以在 Revezone 中以更简单的姿势使用 Excalidraw 功能，可以在桌面应用中自定义字体，也可以通过双链功能有效连接 Revezone 中的笔记。
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kr2D0x1L8NX5ArXyc_!!6000000001254-2-tps-2472-1412.png)
+![](https://img.alicdn.com/imgextra/i2/O1CN01G0Iq241qsrpVaUmU4_!!6000000005552-2-tps-2952-1706.png)
 
 #### 在白板中自定义字体
 Revezone 的画布支持用户自定义字体，不过目前只有桌面端应用支持画布自定义字体。
 
 操作方法:
-> 选择画布文件 - 点击左上角菜单按钮 - 点击“自定义字体” - 出现弹窗，上传字体 - 点击确定，完成自定义字体。
+> 点击左侧边栏底部的设置按钮进行白板中的自定义字体设置。
 
-![](https://img.alicdn.com/imgextra/i4/O1CN01o2yg8f1IuWJngoMJt_!!6000000000953-2-tps-2472-1412.png)
+![](https://img.alicdn.com/imgextra/i4/O1CN01kVRfNI1ySmBxpft70_!!6000000006578-2-tps-2952-1706.png)
 
 ### 笔记
 Revezone 中的笔记是一个所见即所得的类 Notion 编辑器，支持 '/' 命令和 Markdown 语法。
@@ -52,7 +52,11 @@ Revezone 中的笔记是一个所见即所得的类 Notion 编辑器，支持 '/
 
 ### 文件管理
 你可以在左侧边栏创建和管理文件夹、笔记和画布，右键使用具体功能菜单。
-![](https://img.alicdn.com/imgextra/i2/O1CN016TUwdy1d0k0ecgo51_!!6000000003674-2-tps-816-822.png)
+![](https://img.alicdn.com/imgextra/i4/O1CN01ktl8TA1nW1Dy12WEz_!!6000000005096-2-tps-824-638.png)
+
+### 灵活布局
+你可以通过拖拽的方式更改目录位置、标签页位置、分屏操作等。
+![](https://img.alicdn.com/imgextra/i2/O1CN010t9Wto1cFZDv1zeD1_!!6000000003571-2-tps-2952-1706.png)
 
 ## 未来规划
 更多产品特性开发中，敬请期待。你可以通过 [Twitter](https://twitter.com/TheRevezone) 或者 [Bilibili](https://space.bilibili.com/393134139) 获取最新产品信息和开发背后的故事。
