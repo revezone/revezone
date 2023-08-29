@@ -27,7 +27,6 @@ import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/index';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
-import { submitUserEvent } from '@renderer/utils/statistics';
 import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 
 interface Props {
@@ -224,8 +223,6 @@ export default function CustomMenu({ collapsed }: Props) {
       setCurrentFile(file);
       setCurrentFolderId(folderId);
       addSelectedKeys([key, folderId]);
-
-      submitUserEvent('select_menu', { key });
     },
     [fileTree]
   );

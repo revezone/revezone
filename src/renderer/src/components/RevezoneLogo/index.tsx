@@ -1,5 +1,3 @@
-import { submitUserEvent } from '@renderer/utils/statistics';
-
 type Size = 'small' | 'middle' | 'large';
 
 interface Props {
@@ -39,9 +37,6 @@ export default function Logo({ size = 'small', className = '', url, onClick }: P
       )} ${className}`}
       onClick={() => {
         onClick?.();
-
-        submitUserEvent('click_logo', {});
-
         url && window.open(url);
       }}
     >

@@ -7,7 +7,6 @@ import DownloadApp from '../DownloadApp';
 import { isInRevezoneApp } from '@renderer/utils/navigator';
 
 import './index.css';
-import { submitUserEvent } from '@renderer/utils/statistics';
 
 function WelcomeContent() {
   const { t } = useTranslation();
@@ -45,74 +44,32 @@ function WelcomeContent() {
         <div>
           <h2 className="mb-2 text-base">{t('links.title')}</h2>
           <p className="mb-2">
-            <a
-              href="https://github.com/revezone/revezone"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => {
-                submitUserEvent('welcomepage_click_github', {});
-              }}
-            >
+            <a href="https://github.com/revezone/revezone" target="_blank" rel="noreferrer">
               <Github className="w-4 h-4" /> {t('links.github')}
             </a>
           </p>
           <p className="mb-2">
-            <a
-              href="https://twitter.com/TheReveZone"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => {
-                submitUserEvent('welcomepage_click_twitter', {});
-              }}
-            >
+            <a href="https://twitter.com/TheReveZone" target="_blank" rel="noreferrer">
               <Twitter className="w-4 h-4" /> {t('links.twitter')}
             </a>
           </p>
           <p className="mb-2">
-            <a
-              href="https://space.bilibili.com/393134139"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => {
-                submitUserEvent('welcomepage_click_bilibili', {});
-              }}
-            >
+            <a href="https://space.bilibili.com/393134139" target="_blank" rel="noreferrer">
               <Bilibili className="w-4 h-4" /> {t('links.authorBilibili')}
             </a>
           </p>
           <p className="mb-2">
-            <a
-              href="https://twitter.com/korbinzhao"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => {
-                submitUserEvent('welcomepage_click_twitter', {});
-              }}
-            >
+            <a href="https://twitter.com/korbinzhao" target="_blank" rel="noreferrer">
               <Twitter className="w-4 h-4" /> {t('links.authorTwitter')}
             </a>
           </p>
           <p className="mb-2">
-            <a
-              href="https://afdian.net/a/wantian"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => {
-                submitUserEvent('welcomepage_click_feedcat', {});
-              }}
-            >
+            <a href="https://afdian.net/a/wantian" target="_blank" rel="noreferrer">
               <Cat className="w-4 h-4" /> {t('links.feedMyCat')}
             </a>
           </p>
           <p className="mb-2">
-            <a
-              href="https://www.buymeacoffee.com/korbinzhao"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => {
-                submitUserEvent('welcomepage_click_buycoffee', {});
-              }}
-            >
+            <a href="https://www.buymeacoffee.com/korbinzhao" target="_blank" rel="noreferrer">
               <Coffee className="w-4 h-4" /> {t('links.buyMeACoffee')}
             </a>
           </p>
@@ -120,14 +77,7 @@ function WelcomeContent() {
       </div>
       <div className="copyright absolute bottom-0 text-center">
         Copyright © 2023{' '}
-        <a
-          href="https://twitter.com/korbinzhao"
-          target="_blank"
-          rel="noreferrer"
-          onClick={() => {
-            submitUserEvent('welcomepage_click_twitter', {});
-          }}
-        >
+        <a href="https://twitter.com/korbinzhao" target="_blank" rel="noreferrer">
           Korbin Zhao
         </a>
         . All rights reserved.

@@ -15,7 +15,6 @@ import { useMemo, useState } from 'react';
 import DownloadApp from '../DownloadApp/index';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from '@renderer/store/jotai';
-import { submitUserEvent } from '@renderer/utils/statistics';
 import SystemSettings from '../SystemSettings';
 
 export default function BottomToolbar() {
@@ -34,9 +33,6 @@ export default function BottomToolbar() {
             href="https://github.com/revezone/revezone/issues/new"
             target="_blank"
             rel="noreferrer"
-            onClick={() => {
-              submitUserEvent('bottombar_click_issue', {});
-            }}
           >
             {t('help.issue')}
           </a>
@@ -47,14 +43,7 @@ export default function BottomToolbar() {
         title: t('links.twitter'),
         icon: <Twitter className="w-4" />,
         label: (
-          <a
-            href="https://twitter.com/therevezone"
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => {
-              submitUserEvent('bottombar_click_twitter', {});
-            }}
-          >
+          <a href="https://twitter.com/therevezone" target="_blank" rel="noreferrer">
             {t('links.twitter')}
           </a>
         )
@@ -64,14 +53,7 @@ export default function BottomToolbar() {
         title: t('links.authorBilibili'),
         icon: <Bilibili className="w-4 h-4" />,
         label: (
-          <a
-            href="https://space.bilibili.com/393134139"
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => {
-              submitUserEvent('bottombar_click_bilibili', {});
-            }}
-          >
+          <a href="https://space.bilibili.com/393134139" target="_blank" rel="noreferrer">
             {t('links.authorBilibili')}
           </a>
         )
@@ -81,14 +63,7 @@ export default function BottomToolbar() {
         title: t('links.buyMeACoffee'),
         icon: <Coffee className="w-4" />,
         label: (
-          <a
-            href="https://www.buymeacoffee.com/korbinzhao"
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => {
-              submitUserEvent('bottombar_click_buycoffee', {});
-            }}
-          >
+          <a href="https://www.buymeacoffee.com/korbinzhao" target="_blank" rel="noreferrer">
             {t('links.buyMeACoffee')}
           </a>
         )
@@ -98,14 +73,7 @@ export default function BottomToolbar() {
         title: t('links.feedMyCat'),
         icon: <Cat className="w-4" />,
         label: (
-          <a
-            href="https://afdian.net/a/wantian"
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => {
-              submitUserEvent('bottombar_click_feedcat', {});
-            }}
-          >
+          <a href="https://afdian.net/a/wantian" target="_blank" rel="noreferrer">
             {t('links.feedMyCat')}
           </a>
         )
@@ -115,14 +83,7 @@ export default function BottomToolbar() {
         title: t('links.downloadApp'),
         icon: <DownloadCloud className="w-4 animate-bounce" />,
         label: (
-          <a
-            href="https://github.com/revezone/revezone/releases"
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => {
-              submitUserEvent('bottombar_click_downloadapp', {});
-            }}
-          >
+          <a href="https://github.com/revezone/revezone/releases" target="_blank" rel="noreferrer">
             {t('links.downloadApp')}
           </a>
         )
@@ -139,9 +100,6 @@ export default function BottomToolbar() {
         target="_blank"
         rel="noreferrer"
         title={t('operation.giveAStar')}
-        onClick={() => {
-          submitUserEvent('bottombar_click_github', {});
-        }}
       >
         <GithubCircle className="w-4 h-4"></GithubCircle>
       </a>
@@ -152,9 +110,6 @@ export default function BottomToolbar() {
         target="_blank"
         rel="noreferrer"
         title={t('links.feedMyCat')}
-        onClick={() => {
-          submitUserEvent('bottombar_click_feedcat', {});
-        }}
       >
         <Cat className="w-4 h-4"></Cat>
       </a>
@@ -164,9 +119,6 @@ export default function BottomToolbar() {
         target="_blank"
         rel="noreferrer"
         title={t('links.buyMeACoffee')}
-        onClick={() => {
-          submitUserEvent('bottombar_click_buycoffee', {});
-        }}
       >
         <Coffee className="w-4 h-4"></Coffee>
       </a>
@@ -175,7 +127,6 @@ export default function BottomToolbar() {
           className="w-4 h-4 cursor-pointer"
           onClick={() => {
             setSystemSettingVisible(true);
-            submitUserEvent('bottombar_click_systemsetting', {});
           }}
         ></Settings>
       </span>

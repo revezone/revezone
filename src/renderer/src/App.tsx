@@ -12,7 +12,6 @@ import WelcomePage from './components/WelcomePage';
 import { ConfigProvider } from 'antd';
 import { theme } from './utils/theme';
 import { getOSName, isInRevezoneApp } from './utils/navigator';
-import { submitAppEnterUserEvent } from './utils/statistics';
 
 import './App.css';
 
@@ -21,10 +20,6 @@ const OS_NAME = getOSName();
 function App(): JSX.Element {
   const [currentFile] = useAtom(currentFileAtom);
   const [langCode] = useAtom(langCodeAtom);
-
-  useEffect(() => {
-    submitAppEnterUserEvent();
-  }, []);
 
   const renderContent = useCallback((file) => {
     switch (file?.type) {
