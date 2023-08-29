@@ -1,13 +1,12 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { FolderPlus, Palette, FileType } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import { useTranslation } from 'react-i18next';
 import useAddFolder from '@renderer/hooks/useAddFolder';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
-import { useAtom } from 'jotai';
-import { selectedKeysAtom } from '@renderer/store/jotai';
 
 import './index.css';
+import useCurrentFolderId from '@renderer/hooks/useCurrentFolderId';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
@@ -20,12 +19,8 @@ export default function OperationBar(props: Props) {
   const { addFolder } = useAddFolder();
   const { t } = useTranslation();
   const { model: tabModel } = useTabJsonModel();
-  const [selectedKeys] = useAtom(selectedKeysAtom);
 
-  const currentFolderId = useMemo(() => {
-    const folderIds = selectedKeys.filter((key) => key.startsWith('folder_'));
-    return folderIds?.[0];
-  }, [selectedKeys]);
+  const { currentFolderId } = useCurrentFolderId();
 
   const getSizeClassName = useCallback(() => {
     switch (size) {
