@@ -13,7 +13,6 @@ import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import type { RevezoneFile, RevezoneFileTree, RevezoneFolder } from '@renderer/types/file';
 import { useAtom } from 'jotai';
 import { focusItemAtom, selectedKeysAtom } from '@renderer/store/jotai';
-import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import OperationBar from '../OperationBar';
 import RevezoneLogo from '../RevezoneLogo';
 import { Folder, HardDrive, UploadCloud, MoreVertical, Palette, FileType } from 'lucide-react';
@@ -21,12 +20,12 @@ import useFileTreeContextMenu from '@renderer/hooks/useFileTreeContextMenu';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/index';
-import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { submitUserEvent } from '@renderer/utils/statistics';
 import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import useOpenKeys from '@renderer/hooks/useOpenKeys';
+import useDeleteFile from '@renderer/hooks/useDeleteFile';
 import {
   getRenamingMenuItemIdFromLocal,
   setRenamingMenuItemIdToLocal
@@ -35,6 +34,7 @@ import {
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
 import { Model } from 'flexlayout-react';
+import useDeleteFolder from '@renderer/hooks/useDeleteFolder';
 
 export default function DraggableMenuTree() {
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
@@ -46,68 +46,15 @@ export default function DraggableMenuTree() {
   const {
     updateTabJsonModelWhenCurrentFileChanged,
     renameTabName,
-    model: tabModel,
-    deleteTab
+    model: tabModel
   } = useTabJsonModel();
-  const { currentFile, updateCurrentFile } = useCurrentFile();
+  const { updateCurrentFile } = useCurrentFile();
+  const { deleteFile } = useDeleteFile();
+  const { deleteFolder } = useDeleteFolder();
 
   useEffect(() => {
     getFileTree();
   }, []);
-
-  const deleteFile = useCallback(
-    async (file: RevezoneFile, tabModel: Model) => {
-      await fileTreeIndexeddbStorage.deleteFile(file.id);
-
-      console.log('--- delete file ---', file);
-
-      await deleteTab(file.id, tabModel);
-
-      if (file.id === currentFile?.id) {
-        updateCurrentFile(undefined);
-      }
-
-      switch (file.type) {
-        case 'board':
-          await boardIndexeddbStorage.deleteBoard(file.id);
-          break;
-        case 'note':
-          await blocksuiteStorage.deletePage(file.id);
-          break;
-      }
-
-      await getFileTree();
-    },
-    [fileTreeIndexeddbStorage, currentFile]
-  );
-
-  const deleteFolder = useCallback(
-    async (folder: RevezoneFolder, tabModel: Model) => {
-      const fileTree = await fileTreeIndexeddbStorage.getFileTree();
-
-      if (!fileTree) return;
-
-      await fileTreeIndexeddbStorage.deleteFolder(folder.id);
-
-      const fileIdsInFolder = fileTree?.[folder.id].children || [];
-
-      const fileDeletePromises = fileIdsInFolder.map(async (fileId) => {
-        const file = fileTree[fileId].data;
-        deleteFile(file as RevezoneFile, tabModel);
-      });
-
-      await Promise.all(fileDeletePromises);
-
-      const tabDeletePromises = fileIdsInFolder.map(async (fileId) =>
-        deleteTab(fileId as string, tabModel)
-      );
-
-      await Promise.all(tabDeletePromises);
-
-      await getFileTree();
-    },
-    [fileTreeIndexeddbStorage]
-  );
 
   const { getFileTreeContextMenu, getDeleteFileModal } = useFileTreeContextMenu({
     deleteFile,
