@@ -1,4 +1,4 @@
-# Revezone
+# Revezone - 换个姿势使用 Excalidraw
 [English](README.md)
 
 Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果你有任何问题或者建议，欢迎提交 [issue](https://github.com/revezone/revezone/issues/new) 进行反馈。
@@ -6,15 +6,15 @@ Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果�
 ---
 换个姿势使用 Excalidraw。
 
-一款轻量级本地优先的用于构建第二大脑的效率工具，集成了类 Notion 笔记和增强型 Excalidraw 白板能力。
+一款轻量级本地优先的用于构建第二大脑的效率工具，集成了增强型 Excalidraw 白板能力和类 Notion 笔记。
 
-![](https://img.alicdn.com/imgextra/i3/O1CN010t2FwH1L2smWHKIxl_!!6000000001242-2-tps-2472-1412.png)
+![](https://img.alicdn.com/imgextra/i1/O1CN01cwjSLT1aCF70ntVBu_!!6000000003293-2-tps-2286-1492.png)
 
 ## 赞助
 [投喂猫粮](https://afdian.net/a/wantian) 或 [买杯咖啡](https://www.buymeacoffee.com/korbinzhao)。
 
 ## 给个 Star
-如果这个仓库对你有帮助，请不要吝惜小手给个 Star 吧
+如果 Revezone 对你有帮助，请不要吝惜小手给个 Star ⭐ 吧 ☝️ 
 
 ## 使用 Revezone
 * 线上体验版本（数据存储在浏览器）: https://revezone.com
