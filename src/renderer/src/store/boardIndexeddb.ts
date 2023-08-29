@@ -5,13 +5,13 @@ moment.tz.setDefault('Asia/Shanghai');
 
 export interface RevezoneBoardDBSchema extends DBSchema {
   board: {
-    key: number;
+    key: string;
     value: string;
   };
 }
 
 export const INDEXEDDB_BOARD_FILE_KEY = 'board';
-export const INDEXEDDB_REVENOTE_BOARD = 'revezone_board';
+export const INDEXEDDB_REVEZONE_BOARD = 'revezone_board';
 
 class BoardIndexeddbStorage {
   constructor() {
@@ -34,7 +34,7 @@ class BoardIndexeddbStorage {
       return this.db;
     }
 
-    const db = await openDB<RevezoneBoardDBSchema>(INDEXEDDB_REVENOTE_BOARD, 1, {
+    const db = await openDB<RevezoneBoardDBSchema>(INDEXEDDB_REVEZONE_BOARD, 1, {
       upgrade: async (db) => {
         await this.initBoardFileStore(db);
       }
@@ -50,24 +50,30 @@ class BoardIndexeddbStorage {
       autoIncrement: true
     });
 
-    await boardStore.createIndex('id', 'id', { unique: true });
-
     return boardStore;
   }
 
-  async addOrUpdateBoard(id, boardInfo) {
+  async addOrUpdateBoard(id: string, boardData: string) {
     await this.initDB();
-    await this.db?.put(INDEXEDDB_BOARD_FILE_KEY, boardInfo, id);
+    await this.db?.put(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
   }
 
-  async addBoard(id, boardInfo) {
+  async addBoard(id, boardData) {
     await this.initDB();
-    await this.db?.add(INDEXEDDB_BOARD_FILE_KEY, boardInfo, id);
+    await this.db?.add(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
   }
 
   async getBoard(id) {
     await this.initDB();
     return await this.db?.get(INDEXEDDB_BOARD_FILE_KEY, id);
+  }
+
+  async deleteBoard(id) {
+    await this.initDB();
+
+    console.log('--- this.db ---', id, this.db);
+
+    await this.db?.delete(INDEXEDDB_BOARD_FILE_KEY, id);
   }
 }
 

@@ -4,19 +4,23 @@ import {
   HelpCircle,
   ArrowUpRightFromCircle,
   Twitter,
-  DownloadCloud
+  DownloadCloud,
+  Settings,
+  PencilLine
 } from 'lucide-react';
 import { GithubCircle, Bilibili } from '@renderer/icons';
 import { Dropdown } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import DownloadApp from '../DownloadApp/index';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from '@renderer/store/jotai';
+import SystemSettings from '../SystemSettings';
 
 export default function BottomToolbar() {
   const { t } = useTranslation();
   const [langCode] = useAtom(langCodeAtom);
+  const [systemSettingVisible, setSystemSettingVisible] = useState(false);
 
   const helpMenu = useMemo(
     () => [
@@ -45,6 +49,16 @@ export default function BottomToolbar() {
         )
       },
       {
+        key: 'authorBilibili',
+        title: t('links.authorBilibili'),
+        icon: <Bilibili className="w-4 h-4" />,
+        label: (
+          <a href="https://space.bilibili.com/393134139" target="_blank" rel="noreferrer">
+            {t('links.authorBilibili')}
+          </a>
+        )
+      },
+      {
         key: 'buymeacoffee',
         title: t('links.buyMeACoffee'),
         icon: <Coffee className="w-4" />,
@@ -65,16 +79,6 @@ export default function BottomToolbar() {
         )
       },
       {
-        key: 'authorBilibili',
-        title: t('links.authorBilibili'),
-        icon: <Bilibili className="w-4 h-4" />,
-        label: (
-          <a href="https://space.bilibili.com/393134139" target="_blank" rel="noreferrer">
-            {t('links.authorBilibili')}
-          </a>
-        )
-      },
-      {
         key: 'downloadApp',
         title: t('links.downloadApp'),
         icon: <DownloadCloud className="w-4 animate-bounce" />,
@@ -90,7 +94,16 @@ export default function BottomToolbar() {
 
   return (
     <div className="bottom-toolbar absolute h-8 pr-4 bottom-0 right-0 flex items-center text-slate-600">
-      <DownloadApp />
+      <a
+        className="mr-2 flex items-center"
+        href="https://github.com/revezone/revezone"
+        target="_blank"
+        rel="noreferrer"
+        title={t('operation.giveAStar')}
+      >
+        <GithubCircle className="w-4 h-4"></GithubCircle>
+      </a>
+      <DownloadApp from="bottombar" />
       <a
         className="mr-2 flex items-center"
         href="https://afdian.net/a/wantian"
@@ -109,20 +122,23 @@ export default function BottomToolbar() {
       >
         <Coffee className="w-4 h-4"></Coffee>
       </a>
-      <a
-        className="mr-2 flex items-center"
-        href="https://github.com/revezone/revezone"
-        target="_blank"
-        rel="noreferrer"
-        title={t('operation.giveAStar')}
-      >
-        <GithubCircle className="w-4 h-4"></GithubCircle>
-      </a>
+      <span title="Setting" className="flex items-center mr-2">
+        <Settings
+          className="w-4 h-4 cursor-pointer"
+          onClick={() => {
+            setSystemSettingVisible(true);
+          }}
+        ></Settings>
+      </span>
       <span title="Help" className="flex items-center">
         <Dropdown menu={{ items: helpMenu }}>
           <HelpCircle className="w-4 h-4 cursor-pointer"></HelpCircle>
         </Dropdown>
       </span>
+      <SystemSettings
+        visible={systemSettingVisible}
+        onCancel={() => setSystemSettingVisible(false)}
+      ></SystemSettings>
     </div>
   );
 }

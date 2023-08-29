@@ -20,7 +20,8 @@ export default {
     rename: '重命名',
     delete: '刪除',
     copyRevezoneLink: '復制 Revezone 鏈接',
-    giveAStar: '給個 Star 吧'
+    giveAStar: '給個 Star 吧',
+    switchLanguage: '切換語言'
   },
   description: {
     noteDesc: '類 Notion 筆記',
@@ -28,7 +29,7 @@ export default {
   },
   welcome: {
     productDesc:
-      '一款輕量級本地優先的用於構建第二大腦的效率工具，集成了類 Notion 筆記和類 Excalidraw 白闆能力。',
+      '使用 Excalidraw 的全新姿勢。一款輕量級本地優先的用於構建第二大腦的效率工具，集成了類 Notion 筆記和類 Excalidraw 白闆能力。',
     operationTip: '這是一個空白頁，請先在左側邊欄新建或選擇某個文件',
     operationGuide: '操作說明',
     operationDetailDesc: '點擊左側邊欄的操作圖標來創建一個文件夾、Note 或 Board。',
@@ -48,7 +49,8 @@ export default {
   },
   text: {
     untitled: '請輸入標題',
-    defaultFolder: '默認文件夾'
+    defaultFolder: '默認文件夾',
+    alpha: '公測版'
   },
   storage: {
     cloud: '雲存儲(敬請期待)',
@@ -57,5 +59,25 @@ export default {
   help: {
     issue: '提交問題',
     contactTheAuthor: '聯繫作者'
+  },
+  publicBeta: {
+    title: '公測公告',
+    description:
+      'Revezone 目前處於公測階段，產品可能還有少量 bug，重要數據請做好備份。如果妳有任何問題或建議，歡迎提交 github issue 或者掃碼添加微信反饋。'
+  },
+  customFont: {
+    customFont: '自定義字體',
+    fontsLoaded: '已加載字體',
+    loadFontFile: '加載字體文件',
+    enableCustomFontInBoard: '開啟白闆中的自定義字體',
+    deleteFont: '刪除字體',
+    confirmDelete: '確定刪除字體',
+    onlineVersionTip: '自定義字體僅在桌面應用中支持，請下載桌面應用',
+    fontFirstLoadTip: '註意：初次加載字體後，需要重啟應用，字體才會在白闆內生效',
+    emptyTip: '暫無自定義字體'
+  },
+  confirm: {
+    yes: '是',
+    no: '否'
   }
 };

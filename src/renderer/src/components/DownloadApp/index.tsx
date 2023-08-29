@@ -2,7 +2,12 @@ import { DownloadCloud } from 'lucide-react';
 import { isInRevezoneApp } from '@renderer/utils/navigator';
 import { useTranslation } from 'react-i18next';
 
-export default function DownloadApp({ className = '' }: { className?: string }) {
+interface Props {
+  className?: string;
+  from: 'bottombar' | 'welcomepage' | 'systemsetting';
+}
+
+export default function DownloadApp({ className = '', from }: Props) {
   const { t } = useTranslation();
 
   return (

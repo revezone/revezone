@@ -2,33 +2,43 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { isMacOS } from './utils/platform';
-import {
-  loadCustomFont,
-  registerCustomFont,
-  batchRegisterCustomFonts,
-  storeCustomFontConfig
-} from './utils/customFonts';
+import { loadCustomFont, batchRegisterCustomFonts, removeCustomFont } from './utils/customFonts';
 import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
-import { autoUpdater } from 'electron-updater';
-import { notify } from './utils/notification';
+import Store from 'electron-store';
+import './utils/os';
+
+// import { autoUpdater } from 'electron-updater';
+// import { notify } from './utils/notification';
+
+const DEFAULT_WINDOW_WIDTH = 1200;
+const DEFAULT_WINDOW_HEIGHT = 770;
+
+// 创建一个新的存储实例
+const store = new Store();
 
 // IMPORTANT: to fix file save problem in excalidraw: The request is not allowed by the user agent or the platform in the current context
 app.commandLine.appendSwitch('enable-experimental-web-platform-features');
 
 function createWindow(): void {
+  const savedSize = store.get('windowSize', {
+    width: DEFAULT_WINDOW_WIDTH,
+    height: DEFAULT_WINDOW_HEIGHT
+  }) as { width: number; height: number };
+
   // Create the browser window.
   let mainWindow: BrowserWindow | null = new BrowserWindow({
     titleBarStyle: isMacOS() ? 'hiddenInset' : 'default',
     titleBarOverlay: isMacOS() ? false : true,
-    width: 1200,
-    height: 670,
+    width: savedSize.width,
+    height: savedSize.height,
     show: false,
     frame: true,
     trafficLightPosition: { x: 20, y: 10 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      webSecurity: false
     }
   });
 
@@ -47,10 +57,18 @@ function createWindow(): void {
     ipcMain.removeAllListeners();
   });
 
+  mainWindow.on('resize', () => {
+    const [width, height] = mainWindow?.getSize() || [DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT];
+
+    store.set('windowSize', { width, height });
+  });
+
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url);
     return { action: 'deny' };
   });
+
+  // mainWindow.webContents.openDevTools();
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
@@ -70,9 +88,8 @@ function createWindow(): void {
     loadCustomFont(mainWindow);
   });
 
-  ipcMain.on(EVENTS.registerCustomFont, async (event, fontName, fontPath) => {
-    storeCustomFontConfig(fontName, fontPath);
-    registerCustomFont(mainWindow, fontName, fontPath);
+  ipcMain.on(EVENTS.removeCustomFont, async (event, fontPath: string) => {
+    removeCustomFont(fontPath, mainWindow);
   });
 }
 
@@ -92,11 +109,11 @@ app.whenReady().then(() => {
 
   createWindow();
 
-  autoUpdater.checkForUpdatesAndNotify();
+  // autoUpdater.checkForUpdatesAndNotify();
 
-  autoUpdater.on('update-available', (info) => {
-    notify(`update avilable: ${info && JSON.stringify(info)} `);
-  });
+  // autoUpdater.on('update-available', (info) => {
+  //   notify(`update avilable: ${info && JSON.stringify(info)} `);
+  // });
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

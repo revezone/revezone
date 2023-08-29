@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import CustomLayout from './components/CustomLayout';
 import NoteEditor from './components/NoteEditor';
 import { useAtom } from 'jotai';
@@ -22,7 +22,6 @@ function App(): JSX.Element {
   const [langCode] = useAtom(langCodeAtom);
 
   const renderContent = useCallback((file) => {
-    console.log('renderContent', currentFile?.id, file);
     switch (file?.type) {
       case 'note':
         return <NoteEditor file={file} />;

@@ -31,7 +31,7 @@ export const INDEXEDDB_FILE_KEY = 'file';
 export const INDEXEDDB_FOLD_FILE_MAPPING_KEY = 'folder_file_mapping';
 export const LOCALSTORAGE_FIRST_FOLDER_KEY = 'first_forlder_id';
 export const LOCALSTORAGE_FIRST_FILE_KEY = 'first_file_id';
-export const INDEXEDDB_REVENOTE_MENU = 'revezone_menu';
+export const INDEXEDDB_REVEZONE_MENU = 'revezone_menu';
 
 class MenuIndexeddbStorage {
   constructor() {
@@ -54,7 +54,7 @@ class MenuIndexeddbStorage {
       return this.db;
     }
 
-    const db = await openDB<RevezoneDBSchema>(INDEXEDDB_REVENOTE_MENU, 1, {
+    const db = await openDB<RevezoneDBSchema>(INDEXEDDB_REVEZONE_MENU, 1, {
       upgrade: async (db) => {
         await this.initFolderStore(db);
         await this.initFileStore(db);
@@ -185,16 +185,16 @@ class MenuIndexeddbStorage {
     return value;
   }
 
-  async deleteFile(fileId: string) {
+  async deleteFile(file: RevezoneFile) {
     await this.initDB();
 
-    fileId && (await this.db?.delete(INDEXEDDB_FILE_KEY, fileId));
+    file && (await this.db?.delete(INDEXEDDB_FILE_KEY, file.id));
 
     const folderFileMappingKeys = await this.db?.getAllKeysFromIndex(
       INDEXEDDB_FOLD_FILE_MAPPING_KEY,
       // @ts-ignore
       'fileId',
-      fileId
+      file.id
     );
 
     const deleteFolderFileMappingPromises = folderFileMappingKeys?.map(async (key) =>
@@ -303,7 +303,7 @@ class MenuIndexeddbStorage {
 
     const filesInFolder = await this.getFilesInFolder(folderId);
 
-    const deleteFilesPromise = filesInFolder?.map(async (file) => this.deleteFile(file.id));
+    const deleteFilesPromise = filesInFolder?.map(async (file) => this.deleteFile(file));
 
     deleteFilesPromise && (await Promise.all(deleteFilesPromise));
   }

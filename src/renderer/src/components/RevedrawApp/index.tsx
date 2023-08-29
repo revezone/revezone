@@ -4,14 +4,10 @@ import { Revedraw } from 'revemate';
 import { ExcalidrawImperativeAPI, NonDeletedExcalidrawElement } from 'revemate/es/Revedraw/types';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
-import { PencilLine } from 'lucide-react';
-import CustomFontModal from '../CustomFontModal';
 import { currentFileAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
-import { useTranslation } from 'react-i18next';
-import { DOUBLE_LINK_REGEX } from '@renderer/utils/constant';
-import { getOSName, isInRevezoneApp } from '@renderer/utils/navigator';
-import { Button, Tooltip } from 'antd';
+import { getOSName } from '@renderer/utils/navigator';
+import { getFileIdOrNameFromLink } from '@renderer/utils/file';
 
 import './index.css';
 
@@ -19,21 +15,17 @@ interface Props {
   file: RevezoneFile;
 }
 
-const DEFAULT_DATA_SOURCE = '{}';
 const OS_NAME = getOSName();
 
 let firsRender = true;
 
 export default function RevedrawApp({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [, setRef] = useState<ExcalidrawImperativeAPI>();
   const [fileTree] = useAtom(fileTreeAtom);
   const [, setCurrentFile] = useAtom(currentFileAtom);
   const [systemLangCode] = useAtom(langCodeAtom);
   const [didRender, setDidRender] = useState(true);
-
-  const { t } = useTranslation();
 
   const getDataSource = useCallback(async (id) => {
     // reset data source for a new canvas file
@@ -41,7 +33,7 @@ export default function RevedrawApp({ file }: Props) {
 
     const data = await boardIndexeddbStorage.getBoard(id);
 
-    setDataSource(data || DEFAULT_DATA_SOURCE);
+    setDataSource(data);
   }, []);
 
   // HACK: fix the custom font not working completely when first render
@@ -84,15 +76,15 @@ export default function RevedrawApp({ file }: Props) {
       const { link } = element;
       console.log('link', link);
 
-      if (link && DOUBLE_LINK_REGEX.test(link)) {
-        const fileIdOrName = link?.match(DOUBLE_LINK_REGEX)?.[1];
+      const fileIdOrNameInRevezone = link && getFileIdOrNameFromLink(link);
 
+      if (fileIdOrNameInRevezone) {
         const files = fileTree?.reduce((prev: RevezoneFile[], item: FileTreeItem) => {
           return [...prev, ...item.children];
         }, []);
 
         const file = files.find(
-          (_file) => _file.id === fileIdOrName || _file.name === fileIdOrName
+          (_file) => _file.id === fileIdOrNameInRevezone || _file.name === fileIdOrNameInRevezone
         );
 
         if (file) {
@@ -122,33 +114,8 @@ export default function RevedrawApp({ file }: Props) {
           systemLangCode={systemLangCode}
           onChange={onChangeDebounceFn}
           onLinkOpen={onLinkOpen}
-          customMenuItems={[
-            isInRevezoneApp ? (
-              <Button
-                key="custom-font"
-                className={`dropdown-menu-item dropdown-menu-item-base`}
-                title={t('menu.loadCustomFont')}
-                onClick={() => setIsModalOpen(true)}
-              >
-                <PencilLine className="revezone-app-custom-font-icon" />
-                {t('menu.customFont')}
-              </Button>
-            ) : (
-              <p
-                className="flex justify-start items-center cursor-pointer px-3 py-2 text-sm text-gray-400"
-                onClick={() => window.open('https://github.com/revezone/revezone/releases')}
-              >
-                <PencilLine className="revezone-app-custom-font-icon w-3 h-3 " />
-                <Tooltip title={t('menu.downloadApp')}>
-                  <span className="pl-3">{t('menu.customFont')}</span>
-                </Tooltip>
-              </p>
-            )
-          ]}
         />
       ) : null}
-
-      <CustomFontModal open={isModalOpen} closeModal={() => setIsModalOpen(false)} />
     </>
   ) : null;
 }

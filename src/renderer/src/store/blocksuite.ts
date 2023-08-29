@@ -5,7 +5,7 @@ import { emitter, events } from './eventemitter';
 
 console.log('AffineSchemas', AffineSchemas);
 
-const REVENOTE_EDITOR_KEY = 'revezone_blocksuite';
+const REVEZONE_EDITOR_KEY = 'revezone_blocksuite';
 
 class BlocksuiteStorage {
   constructor() {
@@ -19,13 +19,13 @@ class BlocksuiteStorage {
 
   static instance: BlocksuiteStorage;
   workspace: Workspace = new Workspace({
-    id: REVENOTE_EDITOR_KEY,
+    id: REVEZONE_EDITOR_KEY,
     blobStorages: [createIndexeddbStorage, createMemoryStorage]
   }).register(AffineSchemas);
   indexeddbPersistence;
 
   async initYIndexeddb() {
-    const indexeddbPersistence = new IndexeddbPersistence(REVENOTE_EDITOR_KEY, this.workspace.doc);
+    const indexeddbPersistence = new IndexeddbPersistence(REVEZONE_EDITOR_KEY, this.workspace.doc);
 
     this.indexeddbPersistence = indexeddbPersistence;
 
@@ -36,6 +36,10 @@ class BlocksuiteStorage {
       console.log('content from the database is loaded');
       emitter.emit(events.WORKSPACE_LOADED);
     });
+  }
+
+  async addPage(pageId: string) {
+    return await this.workspace.createPage({ id: pageId, init: true });
   }
 
   async deletePage(pageId: string) {

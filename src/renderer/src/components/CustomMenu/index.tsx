@@ -26,6 +26,8 @@ import { getCurrentFileIdFromLocal } from '@renderer/store/localstorage';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher/index';
+import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
+import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 
 interface Props {
   collapsed: boolean;
@@ -108,18 +110,23 @@ export default function CustomMenu({ collapsed }: Props) {
   );
 
   const deleteFile = useCallback(
-    async (fileId: string, folderId: string) => {
-      await menuIndexeddbStorage.deleteFile(fileId);
-      await blocksuiteStorage.deletePage(fileId);
+    async (file: RevezoneFile) => {
+      await menuIndexeddbStorage.deleteFile(file);
 
-      const tree = await getFileTree();
+      console.log('--- delete file ---', file);
 
-      // reset current file when current file is removed
-      if (currentFile?.id === fileId) {
-        const filesInFolder = tree.find((folder) => folder.id === folderId)?.children;
-
-        setCurrentFile(filesInFolder?.[0]);
+      switch (file.type) {
+        case 'board':
+          await boardIndexeddbStorage.deleteBoard(file.id);
+          break;
+        case 'note':
+          await blocksuiteStorage.deletePage(file.id);
+          break;
       }
+
+      setCurrentFile(undefined);
+
+      await getFileTree();
     },
     [menuIndexeddbStorage, currentFile]
   );
@@ -268,7 +275,8 @@ export default function CustomMenu({ collapsed }: Props) {
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
         <div className="flex items-center">
           <RevezoneLogo size="small" onClick={() => resetMenu()} />
-          <span> - alpha</span>
+          <span>&nbsp;-&nbsp;{t('text.alpha')}</span>
+          <PublicBetaNotice />
         </div>
         <div className="flex justify-start">
           <div className="mr-2 whitespace-nowrap">

@@ -20,15 +20,16 @@ export default {
     rename: '重命名',
     delete: '删除',
     copyRevezoneLink: '复制 Revezone 链接',
-    giveAStar: '给个 Star 吧'
+    giveAStar: '给个 Star 吧',
+    switchLanguage: '切换语言'
   },
   description: {
     noteDesc: '类 Notion 笔记',
-    boardDesc: '基于 Excalidraw 的白板'
+    boardDesc: '增强型 Excalidraw 白板'
   },
   welcome: {
     productDesc:
-      '一款轻量级本地优先的用于构建第二大脑的效率工具，集成了类 Notion 笔记和类 Excalidraw 白板能力。',
+      '使用 Excalidraw 的全新姿势。一款轻量级本地优先的用于构建第二大脑的效率工具，集成了增强型 Excalidraw 白板和类 Notion 笔记能力。',
     operationTip: '这是一个空白页，请先在左侧边栏新建或选择某个文件',
     operationGuide: '操作说明',
     operationDetailDesc: '点击左侧边栏的操作图标来创建一个文件夹、Note 或 Board。',
@@ -48,7 +49,8 @@ export default {
   },
   text: {
     untitled: '请输入标题',
-    defaultFolder: '默认文件夹'
+    defaultFolder: '默认文件夹',
+    alpha: '公测版'
   },
   storage: {
     cloud: '云存储(敬请期待)',
@@ -57,5 +59,25 @@ export default {
   help: {
     issue: '提交问题',
     contactTheAuthor: '联系作者'
+  },
+  publicBeta: {
+    title: '公测公告',
+    description:
+      'Revezone 目前处于公测阶段，产品可能还有少量 bug，重要数据请做好备份。如果你有任何问题或建议，欢迎提交 github issue 或者扫码添加微信反馈。'
+  },
+  customFont: {
+    customFont: '自定义字体',
+    fontsLoaded: '已加载字体',
+    loadFontFile: '加载字体文件',
+    enableCustomFontInBoard: '开启白板中的自定义字体',
+    deleteFont: '删除字体',
+    confirmDelete: '确定删除字体',
+    onlineVersionTip: '自定义字体仅在桌面应用中支持，请下载桌面应用',
+    fontFirstLoadTip: '注意：初次加载字体后，需要重启应用，字体才会在白板内生效',
+    emptyTip: '暂无自定义字体'
+  },
+  confirm: {
+    yes: '是',
+    no: '否'
   }
 };

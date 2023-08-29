@@ -7,9 +7,9 @@ const api = {
   toggleTrafficLight: (isShow: boolean): void =>
     ipcRenderer.send(EVENTS.toggleTrafficLight, isShow),
   loadCustomFonts: (): void => ipcRenderer.send(EVENTS.loadCustomFont),
+  removeCustomFont: (fontPath: string) => ipcRenderer.send(EVENTS.removeCustomFont, fontPath),
   onLoadCustomFontSuccess: (cb) => ipcRenderer.on(EVENTS.loadCustomFontSuccess, cb),
-  registerCustomFont: (fontName: string, fontPath: string): void =>
-    ipcRenderer.send(EVENTS.registerCustomFont, fontName, fontPath)
+  onRemoveCustomFontSuccess: (cb) => ipcRenderer.on(EVENTS.removeCustomFontSuccess, cb)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
