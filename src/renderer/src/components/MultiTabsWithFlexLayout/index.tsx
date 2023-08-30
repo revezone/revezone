@@ -15,6 +15,7 @@ import { siderbarCollapsedAtom, tabModelAtom } from '@renderer/store/jotai';
 import { RevezoneFile, RevezoneFileType } from '@renderer/types/file';
 import { Palette, FileType, File } from 'lucide-react';
 import { WELCOME_TAB_ITEM } from '@renderer/utils/constant';
+import { activeEditorManager } from '@revesuite/blocks';
 
 export default function MultiTabs() {
   const { tabJsonModel, deleteTab, getTabList } = useTabJsonModel();
@@ -70,6 +71,12 @@ export default function MultiTabs() {
 
     const file = fileId ? await fileTreeIndexeddbStorage.getFile(fileId) : undefined;
     updateCurrentFile(file);
+
+    // FIX: note selection conflix with board in multi tabs scene
+    if (file?.type !== 'note') {
+      // @ts-ignore
+      activeEditorManager.setActive(undefined);
+    }
   }, []);
 
   const onAction = useCallback(
