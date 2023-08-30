@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { FileTreeItem, RevezoneFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
-import { ExcalidrawImperativeAPI, NonDeletedExcalidrawElement } from 'revemate/es/Revedraw/types';
+import {
+  ExcalidrawDataSource,
+  ExcalidrawImperativeAPI,
+  NonDeletedExcalidrawElement
+} from 'revemate/es/Revedraw/types';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
 import { currentFileAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jotai';
@@ -11,6 +15,8 @@ import { getFileIdOrNameFromLink } from '@renderer/utils/file';
 import { emitter } from '@renderer/store/eventemitter';
 
 import './index.css';
+import useCurrentFile from '@renderer/hooks/useCurrentFile';
+import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 
 interface Props {
   file: RevezoneFile;
@@ -24,11 +30,12 @@ export default function RevedrawApp({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
   const [, setRef] = useState<ExcalidrawImperativeAPI>();
   const [fileTree] = useAtom(fileTreeAtom);
-  const [, setCurrentFile] = useAtom(currentFileAtom);
   const [systemLangCode] = useAtom(langCodeAtom);
   const [didRender, setDidRender] = useState(true);
+  const { updateCurrentFile } = useCurrentFile();
+  const { model: tabModel, updateTabJsonModelWhenCurrentFileChanged } = useTabJsonModel();
 
-  const getDataSource = useCallback(async (id) => {
+  const getDataSource = useCallback(async (id: string) => {
     // reset data source for a new canvas file
     setDataSource(undefined);
 
@@ -67,7 +74,7 @@ export default function RevedrawApp({ file }: Props) {
   }, []);
 
   const onChangeFn = useCallback(
-    async (data) => {
+    async (data: ExcalidrawDataSource) => {
       const str = JSON.stringify(data);
 
       await boardIndexeddbStorage.addOrUpdateBoard(file.id, str);
@@ -87,16 +94,16 @@ export default function RevedrawApp({ file }: Props) {
       const fileIdOrNameInRevezone = link && getFileIdOrNameFromLink(link);
 
       if (fileIdOrNameInRevezone) {
-        const files = fileTree?.reduce((prev: RevezoneFile[], item: FileTreeItem) => {
-          return [...prev, ...item.children];
-        }, []);
+        let file: RevezoneFile | undefined = fileTree[fileIdOrNameInRevezone].data as RevezoneFile;
 
-        const file = files.find(
-          (_file) => _file.id === fileIdOrNameInRevezone || _file.name === fileIdOrNameInRevezone
-        );
+        if (!file) {
+          file = Object.values(fileTree).find((item) => item.data.name === fileIdOrNameInRevezone)
+            ?.data as RevezoneFile;
+        }
 
         if (file) {
-          setCurrentFile(file);
+          updateCurrentFile(file);
+          updateTabJsonModelWhenCurrentFileChanged(file, tabModel);
         }
       } else {
         link && window.open(link);

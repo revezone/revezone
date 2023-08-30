@@ -23,7 +23,22 @@ export default defineConfig({
     plugins: [splitVendorChunkPlugin(), react(), bytecodePlugin()],
     build: {
       minify: 'esbuild',
-      rollupOptions: {}
+      rollupOptions: {
+        treeshake: true,
+        output: {
+          manualChunks: {
+            antd: ['antd'],
+            revesuite: [
+              '@revesuite/blocks',
+              '@revesuite/editor',
+              '@revesuite/lit',
+              '@revesuite/store'
+            ],
+            flexlayout: ['flexlayout-react'],
+            revemate: ['revemate']
+          }
+        }
+      }
     },
     server: {
       host: true
