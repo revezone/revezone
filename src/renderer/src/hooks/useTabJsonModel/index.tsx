@@ -85,6 +85,8 @@ export default function useTabJsonModel() {
 
       const _tabIndex = tabList.findIndex((tab) => tab.id === currentFile.id);
 
+      console.log('--- tab ---', tabList, _tabIndex, currentFile, model);
+
       if (_tabIndex < 0) {
         addTab(currentFile, model);
 
@@ -93,6 +95,7 @@ export default function useTabJsonModel() {
         setTabJsonModel(newTabJsonModel);
         setTabJsonModelToLocal(JSON.stringify(newTabJsonModel));
       } else {
+        console.log('doAction');
         model.doAction(Actions.selectTab(currentFile.id));
       }
     },

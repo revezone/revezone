@@ -87,7 +87,7 @@ export default function RevedrawApp({ file }: Props) {
   });
 
   const onLinkOpen = useCallback(
-    (element: NonDeletedExcalidrawElement) => {
+    async (element: NonDeletedExcalidrawElement) => {
       const { link } = element;
       console.log('link', link);
 
@@ -102,14 +102,15 @@ export default function RevedrawApp({ file }: Props) {
         }
 
         if (file) {
-          updateCurrentFile(file);
+          await updateCurrentFile(file);
+
           updateTabJsonModelWhenCurrentFileChanged(file, tabModel);
         }
       } else {
         link && window.open(link);
       }
     },
-    [fileTree]
+    [fileTree, tabModel]
   );
 
   useEffect(() => {
