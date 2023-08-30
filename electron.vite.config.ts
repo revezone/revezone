@@ -1,5 +1,10 @@
 import { resolve } from 'path';
-import { defineConfig, externalizeDepsPlugin, bytecodePlugin } from 'electron-vite';
+import {
+  defineConfig,
+  externalizeDepsPlugin,
+  bytecodePlugin,
+  splitVendorChunkPlugin
+} from 'electron-vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
@@ -15,7 +20,11 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    plugins: [react()],
+    plugins: [splitVendorChunkPlugin(), react(), bytecodePlugin()],
+    build: {
+      minify: 'esbuild',
+      rollupOptions: {}
+    },
     server: {
       host: true
     }

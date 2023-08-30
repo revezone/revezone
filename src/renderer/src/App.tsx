@@ -1,26 +1,22 @@
 import { useCallback, useEffect } from 'react';
-import NoteEditor from './components/NoteEditor';
 import { useAtom } from 'jotai';
-import { currentFileAtom, langCodeAtom } from './store/jotai';
+import { langCodeAtom } from './store/jotai';
 import WorkspaceLoaded from './components/WorkspaceLoaded';
-import RevedrawApp from './components/RevedrawApp';
 import zhCN from 'antd/locale/zh_CN';
 import zhTW from 'antd/locale/zh_TW';
 import enUS from 'antd/locale/en_US';
-import WelcomePage from './components/WelcomePage';
 import { ConfigProvider } from 'antd';
 import { theme } from './utils/theme';
 import { getOSName, isInRevezoneApp } from './utils/navigator';
 import { submitAppEnterUserEvent } from './utils/statistics';
 import MultiTabs from './components/MultiTabsWithFlexLayout';
+import ResizableLayout from './components/ResizableLayout/index';
 
 import './App.css';
-import ResizableLayout from './components/ResizableLayout/index';
 
 const OS_NAME = getOSName();
 
 function App(): JSX.Element {
-  const [currentFile] = useAtom(currentFileAtom);
   const [langCode] = useAtom(langCodeAtom);
 
   useEffect(() => {
