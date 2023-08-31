@@ -44,7 +44,6 @@ class FileTreeIndexeddbStorage {
 
     const db = await openDB<RevezoneDBSchema>(INDEXEDDB_REVEZONE_FILE_TREE_STORAGE, 1, {
       upgrade: async (db) => {
-        // await this.initFileStore(db);
         await this.initFileTreeStore(db);
       }
     });
@@ -188,45 +187,31 @@ class FileTreeIndexeddbStorage {
     return newTree;
   }
 
-  // async getFiles(): Promise<RevezoneFile[]> {
-  //   await this.initDB();
-  //   const files = await this.db?.getAll(INDEXEDDB_FILE);
-  //   const sortFn = (a: RevezoneFile, b: RevezoneFile) =>
-  //     new Date(a.gmtCreate).getTime() < new Date(b.gmtCreate).getTime() ? 1 : -1;
-  //   return files?.sort(sortFn) || [];
-  // }
-
   async transferDataFromMenuIndexedDB(oldFileTree: RevezoneFileTree) {
     if (FileTreeIndexeddbStorage.oldDBSynced) return;
 
     FileTreeIndexeddbStorage.oldDBSynced = true;
 
     this.updateFileTree(oldFileTree);
-
-    // const oldFiles = await menuIndexeddbStorage.getFiles();
-
-    // oldFiles.forEach((oldFile) => {
-    //   this.db?.add(INDEXEDDB_FILE, oldFile, oldFile.id);
-    // });
   }
 
   async getFileTree(): Promise<RevezoneFileTree | undefined> {
     await this.initDB();
-    const fileTree = await this.db?.get(INDEXEDDB_FILE_TREE, INDEXEDDB_FILE_TREE);
+    let fileTree = await this.db?.get(INDEXEDDB_FILE_TREE, INDEXEDDB_FILE_TREE);
 
     // DEBUG
     // @ts-ignore
     window.fileTree = fileTree;
 
-    let oldFileTree;
-
     if (!fileTree) {
-      oldFileTree = await menuIndexeddbStorage.getFileTreeFromOlderData();
+      const oldFileTree = await menuIndexeddbStorage.getFileTreeFromOlderData();
 
       this.transferDataFromMenuIndexedDB(oldFileTree);
+
+      fileTree = oldFileTree;
     }
 
-    return fileTree || oldFileTree;
+    return fileTree;
   }
 
   async updateFileName(file: RevezoneFile, name: string) {
@@ -241,13 +226,6 @@ class FileTreeIndexeddbStorage {
     fileTree[file.id].data.name = name;
 
     await this.updateFileTree(fileTree);
-
-    // file &&
-    //   (await this.db?.put(
-    //     INDEXEDDB_FILE,
-    //     { ...file, name, gmtModified: moment().toLocaleString() },
-    //     file.id
-    //   ));
   }
 
   async updateFileGmtModified(file: RevezoneFile) {
@@ -260,13 +238,6 @@ class FileTreeIndexeddbStorage {
     fileTree[file.id].data.gmtModified = moment().toLocaleString();
 
     await this.updateFileTree(fileTree);
-
-    // file &&
-    //   (await this.db?.put(
-    //     INDEXEDDB_FILE,
-    //     { ...file, gmtModified: moment().toLocaleString() },
-    //     file.id
-    //   ));
   }
 
   async updateFolderName(folder: RevezoneFolder, name: string) {

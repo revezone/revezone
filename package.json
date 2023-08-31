@@ -1,6 +1,6 @@
 {
   "name": "revezone",
-  "version": "1.0.0-alpha.10",
+  "version": "1.0.0-alpha.11",
   "description": "A new way to use Excalidraw. A productivity tool to build your second brain.",
   "main": "./out/main/index.js",
   "author": "korbinzhao",
@@ -51,6 +51,7 @@
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron-toolkit/utils": "^1.0.2",
     "@electron/notarize": "^1.2.3",
+    "@types/event-emitter": "^0.3.3",
     "@types/node": "^18.16.16",
     "@types/react": "^18.2.8",
     "@types/react-dom": "^18.2.4",

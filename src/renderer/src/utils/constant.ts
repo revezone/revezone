@@ -6,11 +6,11 @@ export const DEFAULT_EMPTY_TAB_ID = 'new_tab';
 
 export const WELCOME_TAB_ITEM = {
   id: 'welcome',
-  name: 'welcome page',
+  name: 'Welcome Page',
   type: 'tab',
   config: {
     id: 'welcome',
-    name: 'welcome page',
+    name: 'Welcome Page',
     type: 'welcome'
   }
 };

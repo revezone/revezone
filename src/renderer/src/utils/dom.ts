@@ -11,7 +11,7 @@ export const getPageTitleDom = (): HTMLElement | null | undefined => {
  * fix the problem that not rerender after rename page block's title prop
  * @param title string
  */
-export const hackUpdateTitleDom = (title) => {
+export const hackUpdateTitleDom = (title: string) => {
   setTimeout(() => {
     const titleDom = getPageTitleDom();
 

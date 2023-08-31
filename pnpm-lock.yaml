@@ -91,6 +91,9 @@ devDependencies:
   '@electron/notarize':
     specifier: ^1.2.3
     version: 1.2.3
+  '@types/event-emitter':
+    specifier: ^0.3.3
+    version: 0.3.3
   '@types/node':
     specifier: ^18.16.16
     version: 18.16.16
@@ -1123,6 +1126,10 @@ packages:
       '@types/keyv': 3.1.4
       '@types/node': 18.16.16
       '@types/responselike': 1.0.0
+    dev: true
+
+  /@types/event-emitter@0.3.3:
+    resolution: {integrity: sha512-UfnOK1pIxO7P+EgPRZXD9jMpimd8QEFcEZ5R67R1UhGbv4zghU5+NE7U8M8G9H5Jc8FI51rqDWQs6FtUfq2e/Q==}
     dev: true
 
   /@types/flexsearch@0.7.3:

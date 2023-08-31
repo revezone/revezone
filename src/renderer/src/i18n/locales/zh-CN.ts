@@ -50,7 +50,8 @@ export default {
   text: {
     untitled: '请输入标题',
     defaultFolder: '默认文件夹',
-    alpha: '公测版'
+    alpha: '公测版',
+    welcomePage: '欢迎页'
   },
   storage: {
     cloud: '云存储(敬请期待)',

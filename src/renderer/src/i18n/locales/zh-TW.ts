@@ -50,7 +50,8 @@ export default {
   text: {
     untitled: '請輸入標題',
     defaultFolder: '默認文件夾',
-    alpha: '公測版'
+    alpha: '公測版',
+    welcomePage: '歡迎頁'
   },
   storage: {
     cloud: '雲存儲(敬請期待)',
