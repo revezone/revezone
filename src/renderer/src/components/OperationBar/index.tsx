@@ -1,12 +1,10 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { FolderPlus, Palette, FileType } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import { useTranslation } from 'react-i18next';
 import useAddFolder from '@renderer/hooks/useAddFolder';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import useCurrentFolderId from '@renderer/hooks/useCurrentFolderId';
-import { driver } from 'driver.js';
-import { getIsUserGuideShowed, setIsUserGuideShowed } from '../../store/localstorage';
 
 import 'driver.js/dist/driver.css';
 
@@ -38,25 +36,6 @@ export default function OperationBar(props: Props) {
         return 'h-5';
     }
   }, [size]);
-
-  useEffect(() => {
-    const isUserGuideShowed = getIsUserGuideShowed();
-
-    if (!isUserGuideShowed) {
-      setIsUserGuideShowed(true);
-      const driverObj = driver({
-        popoverClass: 'driverjs-theme',
-        stagePadding: 4
-      });
-      driverObj.highlight({
-        element: '#add-board-button',
-        popover: {
-          title: t('operation.addBoard'),
-          description: t('operation.addBoardDesc')
-        }
-      });
-    }
-  }, []);
 
   return (
     <div className={`revezone-menu-toolbar flex items-center pl-5 h-10 text-sm ${className}`}>

@@ -5,8 +5,7 @@ import {
   ArrowUpRightFromCircle,
   Twitter,
   DownloadCloud,
-  Settings,
-  PencilLine
+  Settings
 } from 'lucide-react';
 import { GithubCircle, Bilibili } from '@renderer/icons';
 import { Dropdown } from 'antd';
@@ -134,6 +133,7 @@ export default function BottomToolbar() {
   return (
     <div className="bottom-toolbar absolute h-8 pr-4 bottom-0 right-0 flex items-center text-slate-600">
       <a
+        id="give-star-button"
         className="mr-2 reve-text-link"
         href="https://github.com/revezone/revezone"
         target="_blank"

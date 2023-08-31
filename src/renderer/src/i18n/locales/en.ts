@@ -22,6 +22,7 @@ export default {
     delete: 'Delete',
     copyRevezoneLink: 'Copy revezone link',
     giveAStar: 'Git a star',
+    giveAStarDesc: 'Please git a star if Revezone is helpful to you.',
     switchLanguage: 'Switch Lanugage'
   },
   description: {
@@ -41,7 +42,7 @@ export default {
   links: {
     title: 'Links',
     website: 'Official website',
-    github: 'Official Github (Give a star)',
+    github: 'Official Github (Give a star if Revezone is helpful to you please)',
     twitter: 'Official Twitter',
     buyMeACoffee: 'By me a coffee',
     feedMyCat: 'Feed my cat',
