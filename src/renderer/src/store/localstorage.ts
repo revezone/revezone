@@ -10,8 +10,8 @@ const LOCALSTORAGE_BOARD_CUSTOM_FONTS = 'custom_fonts';
 const LOCALSTORAGE_LANG_CODE = 'lang_code';
 const LOCALSTORAGE_BOARD_CUSTOM_FONT_SWITCH = 'board_custom_font_switch';
 const LOCALSTORAGE_TAB_JSON_MODEL = 'tab_json_model';
-const LOCALSTORAGE_TAB_INDEX = 'tab_index';
 const LOCALSTORAGE_RENAMING_MENU_ITEM_ID = 'renaming_menu_item_id';
+const LOCALSTORAGE_OLD_MENU_INDEXEDDB_SYNC = 'old_menu_indexeddb_synced';
 
 export const getOpenKeysFromLocal = (): string[] => {
   const localStr = localStorage.getItem(LOCALSTORAGE_MENU_OPEN_KEYS);
@@ -93,4 +93,13 @@ export const setRenamingMenuItemIdToLocal = (id: string) => {
 
 export const getRenamingMenuItemIdFromLocal = () => {
   return localStorage.getItem(LOCALSTORAGE_RENAMING_MENU_ITEM_ID);
+};
+
+export const setOldMenuIndexeddbSynced = (value: string) => {
+  localStorage.setItem(LOCALSTORAGE_OLD_MENU_INDEXEDDB_SYNC, value);
+};
+
+export const getOldMenuIndexeddbSynced = (): boolean => {
+  const str = localStorage.getItem(LOCALSTORAGE_OLD_MENU_INDEXEDDB_SYNC);
+  return Boolean(str);
 };

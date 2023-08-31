@@ -262,7 +262,7 @@ class MenuIndexeddbStorage {
     const files = await this.getFiles();
     const mappings = await this.getAllFileFolderMappings();
 
-    const tree = {
+    const tree: RevezoneFileTree = {
       root: {
         index: 'root',
         data: {

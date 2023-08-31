@@ -6,6 +6,7 @@ import { submitUserEvent } from '../utils/statistics';
 import { menuIndexeddbStorage } from './_menuIndexeddb';
 import { blocksuiteStorage } from './blocksuite';
 import { boardIndexeddbStorage } from './boardIndexeddb';
+import { DEFAULT_FILE_TREE } from '@renderer/utils/constant';
 
 moment.tz.setDefault('Asia/Shanghai');
 
@@ -62,10 +63,22 @@ class FileTreeIndexeddbStorage {
       autoIncrement: true
     });
 
+    await this.syncFromOldMenuIndexedDB();
+
+    const fileTree = await this.getFileTree();
+
+    console.log('--- initFileTreeStore ---', fileTree);
+
+    if (!fileTree) {
+      await this.updateFileTree(DEFAULT_FILE_TREE);
+    }
+
     return fileTreeStore;
   }
 
   async addFolder(name?: string, parentId?: string) {
+    await this.initDB();
+
     const id = `folder_${uuidv4()}`;
 
     console.log('--- addFolder ---', name, parentId);
@@ -109,6 +122,8 @@ class FileTreeIndexeddbStorage {
     type: RevezoneFileType = 'note',
     parentId?: string
   ): Promise<RevezoneFile> {
+    await this.initDB();
+
     const fileId = `file_${uuidv4()}`;
 
     if (type === 'note') {
@@ -133,6 +148,8 @@ class FileTreeIndexeddbStorage {
   }
 
   async updateFileTree(fileTree: RevezoneFileTree) {
+    await this.initDB();
+
     await this.db?.put(INDEXEDDB_FILE_TREE, fileTree, INDEXEDDB_FILE_TREE);
 
     return fileTree;
@@ -153,6 +170,7 @@ class FileTreeIndexeddbStorage {
 
   async getFile(fileId: string): Promise<RevezoneFile | undefined> {
     await this.initDB();
+
     const fileTree: RevezoneFileTree | undefined = (await this.db?.get(
       INDEXEDDB_FILE_TREE,
       INDEXEDDB_FILE_TREE
@@ -169,6 +187,8 @@ class FileTreeIndexeddbStorage {
   }
 
   async deleteItemFromFileTree(id: string): Promise<RevezoneFileTree> {
+    await this.initDB();
+
     const newTree: RevezoneFileTree = {};
 
     const tree: RevezoneFileTree | undefined = await this.getFileTree();
@@ -187,6 +207,16 @@ class FileTreeIndexeddbStorage {
     return newTree;
   }
 
+  async syncFromOldMenuIndexedDB() {
+    await this.initDB();
+
+    const oldFileTree = await menuIndexeddbStorage.getFileTreeFromOlderData();
+
+    this.transferDataFromMenuIndexedDB(oldFileTree);
+
+    return oldFileTree;
+  }
+
   async transferDataFromMenuIndexedDB(oldFileTree: RevezoneFileTree) {
     if (FileTreeIndexeddbStorage.oldDBSynced) return;
 
@@ -197,19 +227,12 @@ class FileTreeIndexeddbStorage {
 
   async getFileTree(): Promise<RevezoneFileTree | undefined> {
     await this.initDB();
-    let fileTree = await this.db?.get(INDEXEDDB_FILE_TREE, INDEXEDDB_FILE_TREE);
+
+    const fileTree = await this.db?.get(INDEXEDDB_FILE_TREE, INDEXEDDB_FILE_TREE);
 
     // DEBUG
     // @ts-ignore
     window.fileTree = fileTree;
-
-    if (!fileTree) {
-      const oldFileTree = await menuIndexeddbStorage.getFileTreeFromOlderData();
-
-      this.transferDataFromMenuIndexedDB(oldFileTree);
-
-      fileTree = oldFileTree;
-    }
 
     return fileTree;
   }
