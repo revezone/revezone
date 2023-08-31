@@ -44,7 +44,10 @@ export default function OperationBar(props: Props) {
 
     if (!isUserGuideShowed) {
       setIsUserGuideShowed(true);
-      const driverObj = driver();
+      const driverObj = driver({
+        popoverClass: 'driverjs-theme',
+        stagePadding: 4
+      });
       driverObj.highlight({
         element: '#add-board-button',
         popover: {

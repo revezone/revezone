@@ -17,7 +17,7 @@ export default {
     addFolder: 'Add a folder',
     addNote: 'Add a note',
     addBoard: 'Add a board',
-    addBoardDesc: 'Add an enhanced Excalidraw board right now',
+    addBoardDesc: 'Click me! Add an enhanced Excalidraw board right now.',
     rename: 'Rename',
     delete: 'Delete',
     copyRevezoneLink: 'Copy revezone link',
