@@ -1,12 +1,16 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { FolderPlus, Palette, FileType } from 'lucide-react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import { useTranslation } from 'react-i18next';
 import useAddFolder from '@renderer/hooks/useAddFolder';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
+import useCurrentFolderId from '@renderer/hooks/useCurrentFolderId';
+import { driver } from 'driver.js';
+import { getIsUserGuideShowed, setIsUserGuideShowed } from '../../store/localstorage';
+
+import 'driver.js/dist/driver.css';
 
 import './index.css';
-import useCurrentFolderId from '@renderer/hooks/useCurrentFolderId';
 
 interface Props {
   size: 'small' | 'middle' | 'large';
@@ -35,6 +39,22 @@ export default function OperationBar(props: Props) {
     }
   }, [size]);
 
+  useEffect(() => {
+    const isUserGuideShowed = getIsUserGuideShowed();
+
+    if (!isUserGuideShowed) {
+      setIsUserGuideShowed(true);
+      const driverObj = driver();
+      driverObj.highlight({
+        element: '#add-board-button',
+        popover: {
+          title: t('operation.addBoard'),
+          description: t('operation.addBoardDesc')
+        }
+      });
+    }
+  }, []);
+
   return (
     <div className={`revezone-menu-toolbar flex items-center pl-5 h-10 text-sm ${className}`}>
       <span
@@ -50,6 +70,7 @@ export default function OperationBar(props: Props) {
       </span>
       <span
         title={t('operation.addBoard')}
+        id="add-board-button"
         className="operation-item flex items-center mr-3 cursor-pointer relative"
         onClick={(e) => {
           e.stopPropagation();

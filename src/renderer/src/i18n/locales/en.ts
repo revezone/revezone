@@ -17,6 +17,7 @@ export default {
     addFolder: 'Add a folder',
     addNote: 'Add a note',
     addBoard: 'Add a board',
+    addBoardDesc: 'Add an enhanced Excalidraw board right now',
     rename: 'Rename',
     delete: 'Delete',
     copyRevezoneLink: 'Copy revezone link',
@@ -51,7 +52,8 @@ export default {
   text: {
     untitled: 'Untitled',
     defaultFolder: 'Default Folder',
-    alpha: 'alpha'
+    alpha: 'alpha',
+    welcomePage: 'Welcome Page'
   },
   storage: {
     cloud: 'Cloud(Comming soon)',

@@ -12,6 +12,7 @@ const LOCALSTORAGE_BOARD_CUSTOM_FONT_SWITCH = 'board_custom_font_switch';
 const LOCALSTORAGE_TAB_JSON_MODEL = 'tab_json_model';
 const LOCALSTORAGE_RENAMING_MENU_ITEM_ID = 'renaming_menu_item_id';
 const LOCALSTORAGE_OLD_MENU_INDEXEDDB_SYNC = 'old_menu_indexeddb_synced';
+const LOCALSTORAGE_IS_USER_GUIDE_SHOWED = 'is_user_guide_showed';
 
 export const getOpenKeysFromLocal = (): string[] => {
   const localStr = localStorage.getItem(LOCALSTORAGE_MENU_OPEN_KEYS);
@@ -102,4 +103,13 @@ export const setOldMenuIndexeddbSynced = (value: string) => {
 export const getOldMenuIndexeddbSynced = (): boolean => {
   const str = localStorage.getItem(LOCALSTORAGE_OLD_MENU_INDEXEDDB_SYNC);
   return Boolean(str);
+};
+
+export const setIsUserGuideShowed = (showed: boolean) => {
+  localStorage.setItem(LOCALSTORAGE_IS_USER_GUIDE_SHOWED, String(showed));
+};
+
+export const getIsUserGuideShowed = (): boolean => {
+  const localStr = localStorage.getItem(LOCALSTORAGE_IS_USER_GUIDE_SHOWED);
+  return Boolean(localStr);
 };

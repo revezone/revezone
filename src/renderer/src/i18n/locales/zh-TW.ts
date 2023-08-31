@@ -17,6 +17,7 @@ export default {
     addFolder: '新建文件夾',
     addNote: '新建筆記',
     addBoard: '新建白闆',
+    addBoardDesc: '立刻新建一個增強版 Excalidraw 白闆吧',
     rename: '重命名',
     delete: '刪除',
     copyRevezoneLink: '復制 Revezone 鏈接',

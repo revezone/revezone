@@ -26,6 +26,9 @@ dependencies:
   antd:
     specifier: ^5.6.4
     version: 5.6.4(moment@2.29.4)(react-dom@18.2.0)(react@18.2.0)
+  driver.js:
+    specifier: ^1.2.1
+    version: 1.2.1
   electron-store:
     specifier: ^8.1.0
     version: 8.1.0
@@ -1938,6 +1941,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       is-obj: 2.0.0
+    dev: false
+
+  /driver.js@1.2.1:
+    resolution: {integrity: sha512-6nDbVnZdjRgTsJOOmGRmMf/t6cHnMyyZK/wLSbdLZp33I7odPglw1cVlX3TMaPnMDYIJUq7h8a0buejOLqM7XQ==}
     dev: false
 
   /electron-store@8.1.0:
