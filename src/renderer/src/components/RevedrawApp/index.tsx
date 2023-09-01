@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { FileTreeItem, RevezoneFile } from '@renderer/types/file';
+import { RevezoneFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
 import {
   ExcalidrawDataSource,
@@ -8,7 +8,7 @@ import {
 } from 'revemate/es/Revedraw/types';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
-import { currentFileAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jotai';
+import { fileTreeAtom, langCodeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { getOSName } from '@renderer/utils/navigator';
 import { getFileIdOrNameFromLink } from '@renderer/utils/file';
