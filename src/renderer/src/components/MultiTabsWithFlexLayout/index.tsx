@@ -3,7 +3,7 @@ import 'flexlayout-react/style/light.css';
 import NoteEditor from '@renderer/components/NoteEditor';
 import RevedrawApp from '../RevedrawApp';
 import WelcomePage from '../WelcomePage';
-import { useCallback, useEffect } from 'react';
+import { lazy, useCallback, useEffect } from 'react';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 
 import './index.css';

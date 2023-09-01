@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { lazy, useCallback, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from './store/jotai';
 import WorkspaceLoaded from './components/WorkspaceLoaded';
@@ -9,8 +9,10 @@ import { ConfigProvider } from 'antd';
 import { theme } from './utils/theme';
 import { getOSName, isInRevezoneApp } from './utils/navigator';
 import { submitAppEnterUserEvent } from './utils/statistics';
-import MultiTabs from './components/MultiTabsWithFlexLayout';
+// import MultiTabs from './components/MultiTabsWithFlexLayout';
 import ResizableLayout from './components/ResizableLayout/index';
+
+const MultiTabs = lazy(() => import('./components/MultiTabsWithFlexLayout'));
 
 import './App.css';
 

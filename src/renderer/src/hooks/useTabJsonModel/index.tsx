@@ -15,7 +15,6 @@ import {
   Actions
 } from 'flexlayout-react';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
-import { nanoid } from 'nanoid';
 import { WELCOME_TAB_ITEM } from '@renderer/utils/constant';
 
 export default function useTabJsonModel() {

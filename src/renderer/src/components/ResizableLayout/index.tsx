@@ -20,7 +20,7 @@ type Props = {
 
 const defaultLayout = [20, 80];
 
-export default function ClientComponent({ children }: Props) {
+export default function ResizableLayout({ children }: Props) {
   const onLayout = (sizes: number[]) => {
     document.cookie = `react-resizable-panels:layout=${JSON.stringify(sizes)}`;
   };
