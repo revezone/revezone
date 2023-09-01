@@ -41,7 +41,7 @@
     "react-complex-tree": "^2.2.2",
     "react-i18next": "^13.0.2",
     "react-resizable-panels": "^0.0.55",
-    "revemate": "0.0.1-beta.26",
+    "revemate": "0.0.1-beta.27",
     "uuid": "^9.0.0",
     "y-indexeddb": "^9.0.11",
     "yjs": "^13.6.6"
