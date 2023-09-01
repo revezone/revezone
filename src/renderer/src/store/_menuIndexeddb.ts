@@ -3,7 +3,7 @@
  */
 
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
 import {
   RevezoneFile,
   RevezoneFolder,
@@ -125,7 +125,7 @@ class MenuIndexeddbStorage {
 
   async addFolder(name?: string) {
     await this.initDB();
-    const id = `folder_${uuidv4()}`;
+    const id = `folder_${nanoid()}`;
 
     const folderInfo = {
       id,
@@ -163,7 +163,7 @@ class MenuIndexeddbStorage {
   ): Promise<RevezoneFile> {
     await this.initDB();
 
-    const fileId = `file_${uuidv4()}`;
+    const fileId = `file_${nanoid()}`;
 
     const fileInfo = {
       id: fileId,

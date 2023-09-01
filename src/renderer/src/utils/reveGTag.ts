@@ -1,5 +1,5 @@
 import { osName, appVersion } from './navigator';
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
 
 const GOOGLE_ANALYTICS_URL = 'https://www.google-analytics.com/mp/collect';
 
@@ -47,7 +47,7 @@ class ReveGTag {
 
   getClientId(): string {
     const clientIdFromLocal = localStorage.getItem(LOCALSTORAGE_CLIENT_ID_KEY);
-    const clientId: string = clientIdFromLocal || uuidv4();
+    const clientId: string = clientIdFromLocal || nanoid();
 
     if (!clientIdFromLocal) {
       localStorage.setItem(LOCALSTORAGE_CLIENT_ID_KEY, clientId);

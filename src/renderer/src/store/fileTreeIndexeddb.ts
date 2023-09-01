@@ -1,5 +1,5 @@
 import { openDB, DBSchema, IDBPDatabase, IDBPObjectStore } from 'idb';
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
 import { RevezoneFile, RevezoneFolder, RevezoneFileType, RevezoneFileTree } from '../types/file';
 import { submitUserEvent } from '../utils/statistics';
 import { menuIndexeddbStorage } from './_menuIndexeddb';
@@ -77,7 +77,7 @@ class FileTreeIndexeddbStorage {
   async addFolder(name?: string, parentId?: string) {
     await this.initDB();
 
-    const id = `folder_${uuidv4()}`;
+    const id = `folder_${nanoid()}`;
 
     console.log('--- addFolder ---', name, parentId);
 
@@ -122,7 +122,7 @@ class FileTreeIndexeddbStorage {
   ): Promise<RevezoneFile> {
     await this.initDB();
 
-    const fileId = `file_${uuidv4()}`;
+    const fileId = `file_${nanoid()}`;
 
     if (type === 'note') {
       await blocksuiteStorage.addPage(fileId);
