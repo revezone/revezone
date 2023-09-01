@@ -56,6 +56,9 @@ dependencies:
   lucide-react:
     specifier: ^0.263.1
     version: 0.263.1(react@18.2.0)
+  nanoid:
+    specifier: ^4.0.2
+    version: 4.0.2
   react-complex-tree:
     specifier: ^2.2.2
     version: 2.2.2(react@18.2.0)

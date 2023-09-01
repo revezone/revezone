@@ -1,19 +1,23 @@
-import { RevezoneFileTree } from '@renderer/types/file';
+import { RevezoneFile, RevezoneFileTree } from '@renderer/types/file';
 import { IJsonModel } from 'flexlayout-react';
 
 export const DOUBLE_LINK_REGEX = /^\[\[(.+)\]\]$/;
 export const DEFAULT_LANG_CODE = 'en';
 export const DEFAULT_EMPTY_TAB_ID = 'new_tab';
 
+export const WELCOME_FILE: RevezoneFile = {
+  id: 'welcome',
+  name: 'Welcome Page',
+  type: 'welcome',
+  gmtCreate: 'Thu Aug 31 2023 21:24:50 GMT+0800',
+  gmtModified: 'Thu Aug 31 2023 21:24:50 GMT+0800'
+};
+
 export const WELCOME_TAB_ITEM = {
   id: 'welcome',
   name: 'Welcome Page',
   type: 'tab',
-  config: {
-    id: 'welcome',
-    name: 'Welcome Page',
-    type: 'welcome'
-  }
+  config: WELCOME_FILE
 };
 
 export const FIRST_DEFAULT_BOARD = {

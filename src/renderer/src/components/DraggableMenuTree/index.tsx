@@ -41,10 +41,11 @@ export default function DraggableMenuTree() {
   const { fileTree, getFileTree } = useFileTree();
   const { openKeys, addOpenKeys, removeOpenKey } = useOpenKeys();
   const { t } = useTranslation();
-
   const {
     updateTabJsonModelWhenCurrentFileChanged,
     renameTabName,
+    addTab,
+    switchToWelcomePage,
     model: tabModel
   } = useTabJsonModel();
   const { updateCurrentFile } = useCurrentFile();
@@ -195,6 +196,10 @@ export default function DraggableMenuTree() {
     [fileTree]
   );
 
+  const onLogoClick = useCallback(() => {
+    switchToWelcomePage();
+  }, [tabModel]);
+
   const storageTypeItems = [
     {
       key: 'local',
@@ -213,9 +218,7 @@ export default function DraggableMenuTree() {
     <div className="revezone-menu-container">
       <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
         <div className="flex items-center">
-          <a href="https://revezone.com" target="_blank" rel="noreferrer">
-            <RevezoneLogo size="small" />
-          </a>
+          <RevezoneLogo size="small" onClick={onLogoClick} />
           <span className="text-sm whitespace-nowrap">&nbsp;-&nbsp;{t('text.alpha')}</span>
           <PublicBetaNotice />
         </div>

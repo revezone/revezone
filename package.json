@@ -38,6 +38,7 @@
     "jotai": "^2.2.2",
     "lit": "^2.7.6",
     "lucide-react": "^0.263.1",
+    "nanoid": "^4.0.2",
     "react-complex-tree": "^2.2.2",
     "react-i18next": "^13.0.2",
     "react-resizable-panels": "^0.0.55",

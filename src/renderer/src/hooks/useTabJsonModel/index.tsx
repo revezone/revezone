@@ -15,6 +15,8 @@ import {
   Actions
 } from 'flexlayout-react';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
+import { nanoid } from 'nanoid';
+import { WELCOME_TAB_ITEM } from '@renderer/utils/constant';
 
 export default function useTabJsonModel() {
   const [tabJsonModel, setTabJsonModel] = useAtom(tabJsonModelAtom);
@@ -121,6 +123,21 @@ export default function useTabJsonModel() {
     );
   }, []);
 
+  const switchToWelcomePage = useCallback(() => {
+    if (!model) return;
+
+    const json = model.toJson();
+    const tabList = json && getTabList(json.layout);
+
+    const welcomeTab = tabList?.find((tab) => tab.config.type === 'welcome');
+
+    if (welcomeTab?.id) {
+      model.doAction(Actions.selectTab(welcomeTab.id));
+    } else {
+      addTab(WELCOME_TAB_ITEM.config, model);
+    }
+  }, [model]);
+
   const deleteTab = useCallback(async (fileId: string, model: Model | undefined) => {
     console.log('--- deleteTab ---', fileId, model);
 
@@ -158,6 +175,8 @@ export default function useTabJsonModel() {
   return {
     tabJsonModel,
     model,
+    addTab,
+    switchToWelcomePage,
     updateTabJsonModelWhenCurrentFileChanged,
     setTabJsonModel,
     deleteTab,
