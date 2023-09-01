@@ -1,8 +1,4 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import moment from 'moment-timezone';
-
-moment.tz.setDefault('Asia/Shanghai');
-
 export interface RevezoneBoardDBSchema extends DBSchema {
   board: {
     key: string;

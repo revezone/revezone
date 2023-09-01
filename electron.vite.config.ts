@@ -6,6 +6,7 @@ import {
   splitVendorChunkPlugin
 } from 'electron-vite';
 import react from '@vitejs/plugin-react';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   main: {
@@ -20,7 +21,15 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    plugins: [splitVendorChunkPlugin(), react(), bytecodePlugin()],
+    plugins: [
+      splitVendorChunkPlugin(),
+      react(),
+      bytecodePlugin(),
+      visualizer({
+        emitFile: true,
+        filename: 'stats.html'
+      })
+    ],
     build: {
       minify: 'esbuild',
       rollupOptions: {

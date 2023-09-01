@@ -1,14 +1,12 @@
 import { openDB, DBSchema, IDBPDatabase, IDBPObjectStore } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
-import moment from 'moment-timezone';
 import { RevezoneFile, RevezoneFolder, RevezoneFileType, RevezoneFileTree } from '../types/file';
 import { submitUserEvent } from '../utils/statistics';
 import { menuIndexeddbStorage } from './_menuIndexeddb';
 import { blocksuiteStorage } from './blocksuite';
 import { boardIndexeddbStorage } from './boardIndexeddb';
 import { DEFAULT_FILE_TREE } from '@renderer/utils/constant';
-
-moment.tz.setDefault('Asia/Shanghai');
+import dayjs from 'dayjs';
 
 export interface RevezoneDBSchema extends DBSchema {
   file_tree: {
@@ -86,8 +84,8 @@ class FileTreeIndexeddbStorage {
     const folderInfo = {
       id,
       name: name || 'New Folder',
-      gmtCreate: moment().toLocaleString(),
-      gmtModified: moment().toLocaleString()
+      gmtCreate: dayjs().toLocaleString(),
+      gmtModified: dayjs().toLocaleString()
     };
 
     await this.addFileTreeItem(folderInfo, true, parentId);
@@ -136,8 +134,8 @@ class FileTreeIndexeddbStorage {
       id: fileId,
       name: name || '',
       type,
-      gmtCreate: moment().toLocaleString(),
-      gmtModified: moment().toLocaleString()
+      gmtCreate: dayjs().toLocaleString(),
+      gmtModified: dayjs().toLocaleString()
     };
 
     await this.addFileTreeItem(fileInfo, false, parentId);
@@ -258,7 +256,7 @@ class FileTreeIndexeddbStorage {
 
     if (!fileTree) return;
 
-    fileTree[file.id].data.gmtModified = moment().toLocaleString();
+    fileTree[file.id].data.gmtModified = dayjs().toLocaleString();
 
     await this.updateFileTree(fileTree);
   }

@@ -4,7 +4,6 @@
 
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
-import moment from 'moment-timezone';
 import {
   RevezoneFile,
   RevezoneFolder,
@@ -13,8 +12,7 @@ import {
   RevezoneFileTree
 } from '../types/file';
 import { submitUserEvent } from '../utils/statistics';
-
-moment.tz.setDefault('Asia/Shanghai');
+import dayjs from 'dayjs';
 
 export interface RevezoneDBSchema extends DBSchema {
   file: {
@@ -132,8 +130,8 @@ class MenuIndexeddbStorage {
     const folderInfo = {
       id,
       name: name || '',
-      gmtCreate: moment().toLocaleString(),
-      gmtModified: moment().toLocaleString()
+      gmtCreate: dayjs().toLocaleString(),
+      gmtModified: dayjs().toLocaleString()
     };
 
     await this.db?.add(INDEXEDDB_FOLDER_KEY, folderInfo, id);
@@ -171,8 +169,8 @@ class MenuIndexeddbStorage {
       id: fileId,
       name: name || '',
       type,
-      gmtCreate: moment().toLocaleString(),
-      gmtModified: moment().toLocaleString()
+      gmtCreate: dayjs().toLocaleString(),
+      gmtModified: dayjs().toLocaleString()
     };
 
     await this.db?.add(INDEXEDDB_FILE_KEY, fileInfo, fileId);
@@ -180,8 +178,8 @@ class MenuIndexeddbStorage {
     await this.db?.add(INDEXEDDB_FOLD_FILE_MAPPING_KEY, {
       folderId,
       fileId,
-      gmtCreate: moment().toLocaleString(),
-      gmtModified: moment().toLocaleString()
+      gmtCreate: dayjs().toLocaleString(),
+      gmtModified: dayjs().toLocaleString()
     });
 
     submitUserEvent(`create_${type}`, fileInfo);
@@ -268,8 +266,8 @@ class MenuIndexeddbStorage {
         data: {
           id: 'root',
           name: 'root',
-          gmtCreate: moment().toLocaleString(),
-          gmtModified: moment().toLocaleString()
+          gmtCreate: dayjs().toLocaleString(),
+          gmtModified: dayjs().toLocaleString()
         },
         isFolder: true,
         canRename: true,
@@ -333,7 +331,7 @@ class MenuIndexeddbStorage {
     file &&
       (await this.db?.put(
         INDEXEDDB_FILE_KEY,
-        { ...file, name, gmtModified: moment().toLocaleString() },
+        { ...file, name, gmtModified: dayjs().toLocaleString() },
         file.id
       ));
   }
@@ -344,7 +342,7 @@ class MenuIndexeddbStorage {
     file &&
       (await this.db?.put(
         INDEXEDDB_FILE_KEY,
-        { ...file, gmtModified: moment().toLocaleString() },
+        { ...file, gmtModified: dayjs().toLocaleString() },
         file.id
       ));
   }
