@@ -172,6 +172,7 @@ export default function BottomToolbar() {
       </a>
       <span title="Setting" className="reve-text-link mr-2">
         <Settings
+          id="system-setting-button"
           className="w-4 h-4 cursor-pointer"
           onClick={() => {
             setSystemSettingVisible(true);

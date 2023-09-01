@@ -1,3 +1,4 @@
+import SystemSettings from '../../components/SystemSettings/index';
 export default {
   menu: {
     customFont: '自定义字体',
@@ -17,16 +18,19 @@ export default {
     addFolder: '新建文件夹',
     addNote: '新建笔记',
     addBoard: '新建白板',
-    addBoardDesc: '点我，体验全新姿势使用 Excalidraw 白板',
     rename: '重命名',
     delete: '删除',
     copyRevezoneLink: '复制 Revezone 链接',
-    giveAStar: '给个 Star 吧',
-    switchLanguage: '切换语言'
+    giveAStar: '给个 Github Star 吧',
+    switchLanguage: '切换语言',
+    systemSetting: '系统设置'
   },
   description: {
     noteDesc: '类 Notion 笔记',
-    boardDesc: '增强型 Excalidraw 白板'
+    boardDesc: '增强型 Excalidraw 白板',
+    addBoardDesc: '点我，创建一个 Excalidraw 白板吧',
+    giveAStarDesc: '动动小手给个 Github Star 吧',
+    systemSettingDesc: '快来在白板中自定义你喜欢的字体吧'
   },
   welcome: {
     productDesc:
@@ -82,5 +86,8 @@ export default {
     yes: '是',
     no: '否',
     confirmDelete: '确定删除'
+  },
+  language: {
+    title: '请先选择你的语言!'
   }
 };

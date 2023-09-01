@@ -17,17 +17,19 @@ export default {
     addFolder: 'Add a folder',
     addNote: 'Add a note',
     addBoard: 'Add a board',
-    addBoardDesc: 'Click me! Add an enhanced Excalidraw board right now.',
     rename: 'Rename',
     delete: 'Delete',
     copyRevezoneLink: 'Copy revezone link',
-    giveAStar: 'Git a star',
-    giveAStarDesc: 'Please git a star if Revezone is helpful to you.',
-    switchLanguage: 'Switch Lanugage'
+    giveAStar: 'Git a Github star',
+    switchLanguage: 'Switch Lanugage',
+    systemSetting: 'System setting'
   },
   description: {
     noteDesc: 'A notion-like note function',
-    boardDesc: 'A whiteboard based on Excalidraw'
+    boardDesc: 'A whiteboard based on Excalidraw',
+    addBoardDesc: 'Click me! Add an enhanced Excalidraw board right now.',
+    giveAStarDesc: 'Please git a star if Revezone is helpful to you.',
+    systemSettingDesc: 'Custom fonts in Revezone board in the system setting.'
   },
   welcome: {
     productDesc:
@@ -86,5 +88,8 @@ export default {
     yes: 'Yes',
     no: 'No',
     confirmDelete: 'Confirm to delete'
+  },
+  language: {
+    title: 'Please choose your language first!'
   }
 };

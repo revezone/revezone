@@ -6,4 +6,5 @@ export const events = {
   SWITCH_FONT_FAMILY: 'switch_font_family'
 };
 
+// @ts-ignore
 export const emitter = new EventEmitter();

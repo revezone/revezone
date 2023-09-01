@@ -17,16 +17,19 @@ export default {
     addFolder: '新建文件夾',
     addNote: '新建筆記',
     addBoard: '新建白闆',
-    addBoardDesc: '立刻新建一個增強版 Excalidraw 白闆吧',
     rename: '重命名',
     delete: '刪除',
     copyRevezoneLink: '復制 Revezone 鏈接',
-    giveAStar: '給個 Star 吧',
-    switchLanguage: '切換語言'
+    giveAStar: '給個 Github Star 吧',
+    switchLanguage: '切換語言',
+    systemSetting: '繫統設置'
   },
   description: {
     noteDesc: '類 Notion 筆記',
-    boardDesc: '基於 Excalidraw 的白闆'
+    boardDesc: '基於 Excalidraw 的白闆',
+    addBoardDesc: '點我，創建一個 Excalidraw 白闆吧',
+    giveAStarDesc: '動動小手給個 Github Star 吧',
+    systemSettingDesc: '快來在白闆中自定義妳喜歡的字體吧'
   },
   welcome: {
     productDesc:
@@ -82,5 +85,8 @@ export default {
     yes: '是',
     no: '否',
     confirmDelete: '確定刪除'
+  },
+  language: {
+    title: '請先選擇妳的語言!'
   }
 };
