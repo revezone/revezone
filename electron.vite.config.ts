@@ -24,7 +24,6 @@ export default defineConfig({
     plugins: [
       splitVendorChunkPlugin(),
       react(),
-      bytecodePlugin(),
       visualizer({
         emitFile: true,
         filename: 'stats.html'
