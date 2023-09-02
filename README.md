@@ -52,6 +52,9 @@ You can create and manage a folder/note/board in the left sidebar.
 You can sort directories and split screens by dragging and dropping.
 ![](https://img.alicdn.com/imgextra/i2/O1CN010t9Wto1cFZDv1zeD1_!!6000000003571-2-tps-2952-1706.png)
 
+## About this repo
+This repository only includes the basic functionality code of Revezone and does not completely correspond to the capabilities provided by revezone.com and the Revezone desktop application.
+
 ## Future Planning
 More useful features are developing. You can get more information and developing stories from [Twitter](https://twitter.com/TheReveZone) or [Bilibili](https://space.bilibili.com/393134139).
 
