@@ -58,6 +58,9 @@ Revezone 中的笔记是一个所见即所得的类 Notion 编辑器，支持 '/
 你可以通过拖拽的方式更改目录位置、标签页位置、分屏操作等。
 ![](https://img.alicdn.com/imgextra/i2/O1CN010t9Wto1cFZDv1zeD1_!!6000000003571-2-tps-2952-1706.png)
 
+## 关于仓库
+该仓库只包含 Revezone 基础功能代码，和 revezone.com 和 Revezone 桌面应用提供的能力并不完全同步。
+
 ## 未来规划
 更多产品特性开发中，敬请期待。你可以通过 [Twitter](https://twitter.com/TheRevezone) 或者 [Bilibili](https://space.bilibili.com/393134139) 获取最新产品信息和开发背后的故事。
 
