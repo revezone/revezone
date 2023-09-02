@@ -14,7 +14,7 @@ A lightweight productivity tool to build your second brain that integrates enhan
 [Buy me a coffee](https://www.buymeacoffee.com/korbinzhao) or [feed my cat](https://afdian.net/a/wantian).
 
 ## Giving a Star
-Please give it a star ⭐ ☝️ if this Revezone is helpful to you.
+Please give it a star ⭐ ☝️ if Revezone is helpful to you.
 
 ## Using Revezone
 * Online Try Version (Data stored in browser): https://revezone.com
