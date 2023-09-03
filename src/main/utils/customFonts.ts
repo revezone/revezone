@@ -1,7 +1,6 @@
 import { dialog, app } from 'electron';
 import { copyFile } from 'node:fs/promises';
 import { join } from 'path';
-import { notify } from './notification';
 import { EVENTS } from '../../preload/events';
 import fs from 'node:fs';
 

@@ -75,11 +75,16 @@ export default function RevedrawApp({ file }: Props) {
 
   const onChangeFn = useCallback(
     async (data: ExcalidrawDataSource) => {
-      const str = JSON.stringify(data);
+      const str = JSON.stringify({
+        type: 'excalidraw',
+        version: 2,
+        source: window.location.href,
+        ...data
+      });
 
-      await boardIndexeddbStorage.addOrUpdateBoard(file.id, str);
+      await boardIndexeddbStorage.addOrUpdateBoard(file.id, str, fileTree);
     },
-    [file.id]
+    [file.id, fileTree]
   );
 
   const { run: onChangeDebounceFn, cancel: cancelDebounceFn } = useDebounceFn(onChangeFn, {

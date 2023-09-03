@@ -4,5 +4,6 @@ export const EVENTS = {
   loadCustomFontSuccess: 'load-custom-font-success',
   removeCustomFont: 'remove-custom-font',
   removeCustomFontSuccess: 'remove-custom-font-success',
-  switchFontfamily: 'switch-fontfamily'
+  switchFontfamily: 'switch-fontfamily',
+  fileDataChange: 'file-data-change'
 };

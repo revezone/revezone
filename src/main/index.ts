@@ -12,6 +12,7 @@ import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
 import Store from 'electron-store';
 import './utils/os';
+import { onFileDataChange } from './utils/localFiles';
 
 // import { autoUpdater } from 'electron-updater';
 // import { notify } from './utils/notification';
@@ -100,6 +101,14 @@ function createWindow(): void {
   ipcMain.on(EVENTS.switchFontfamily, async () => {
     switchFontfamily(mainWindow);
   });
+
+  ipcMain.on(
+    EVENTS.fileDataChange,
+    async (event, fileId: string, fileType: 'board' | 'note', fileName: string, value: string) => {
+      console.log('--- ipcMain fileDataChange ---', fileId, fileType, fileName, value);
+      onFileDataChange(fileId, fileType, fileName, value);
+    }
+  );
 }
 
 // This method will be called when Electron has finished
