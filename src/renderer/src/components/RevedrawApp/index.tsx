@@ -1,22 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { RevezoneFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
-import {
-  ExcalidrawDataSource,
-  ExcalidrawImperativeAPI,
-  NonDeletedExcalidrawElement
-} from 'revemate/es/Revedraw/types';
+import { ExcalidrawDataSource, ExcalidrawImperativeAPI } from 'revemate/es/Revedraw/types';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
-import { fileTreeAtom, langCodeAtom } from '@renderer/store/jotai';
+import { langCodeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { getOSName } from '@renderer/utils/navigator';
-import { getFileIdOrNameFromLink } from '@renderer/utils/file';
 import { emitter } from '@renderer/store/eventemitter';
+import useDoubleLink from '@renderer/hooks/useDoubleLink';
 
 import './index.css';
-import useCurrentFile from '@renderer/hooks/useCurrentFile';
-import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 
 interface Props {
   file: RevezoneFile;
@@ -29,11 +23,9 @@ let firsRender = true;
 export default function RevedrawApp({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
   const [, setRef] = useState<ExcalidrawImperativeAPI>();
-  const [fileTree] = useAtom(fileTreeAtom);
   const [systemLangCode] = useAtom(langCodeAtom);
   const [didRender, setDidRender] = useState(true);
-  const { updateCurrentFile } = useCurrentFile();
-  const { model: tabModel, updateTabJsonModelWhenCurrentFileChanged } = useTabJsonModel();
+  const { onLinkOpen } = useDoubleLink(true);
 
   const getDataSource = useCallback(async (id: string) => {
     // reset data source for a new canvas file
@@ -85,33 +77,6 @@ export default function RevedrawApp({ file }: Props) {
   const { run: onChangeDebounceFn, cancel: cancelDebounceFn } = useDebounceFn(onChangeFn, {
     wait: 200
   });
-
-  const onLinkOpen = useCallback(
-    async (element: NonDeletedExcalidrawElement) => {
-      const { link } = element;
-      console.log('link', link);
-
-      const fileIdOrNameInRevezone = link && getFileIdOrNameFromLink(link);
-
-      if (fileIdOrNameInRevezone) {
-        let file: RevezoneFile | undefined = fileTree[fileIdOrNameInRevezone].data as RevezoneFile;
-
-        if (!file) {
-          file = Object.values(fileTree).find((item) => item.data.name === fileIdOrNameInRevezone)
-            ?.data as RevezoneFile;
-        }
-
-        if (file) {
-          await updateCurrentFile(file);
-
-          updateTabJsonModelWhenCurrentFileChanged(file, tabModel);
-        }
-      } else {
-        link && window.open(link);
-      }
-    },
-    [fileTree, tabModel]
-  );
 
   useEffect(() => {
     getDataSource(file.id);
