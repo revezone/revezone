@@ -11,6 +11,7 @@ import { emitter } from '@renderer/store/eventemitter';
 import useDoubleLink from '@renderer/hooks/useDoubleLink';
 
 import './index.css';
+import useFileTree from '@renderer/hooks/useFileTree';
 
 interface Props {
   file: RevezoneFile;
@@ -26,6 +27,7 @@ export default function RevedrawApp({ file }: Props) {
   const [systemLangCode] = useAtom(langCodeAtom);
   const [didRender, setDidRender] = useState(true);
   const { onLinkOpen } = useDoubleLink(true);
+  const { fileTree } = useFileTree();
 
   const getDataSource = useCallback(async (id: string) => {
     // reset data source for a new canvas file
