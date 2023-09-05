@@ -6,17 +6,17 @@ settings:
 
 dependencies:
   '@revesuite/blocks':
-    specifier: 0.6.1-alpha.3
-    version: 0.6.1-alpha.3(@revesuite/lit@0.6.1-alpha.3)(@revesuite/store@0.6.1-alpha.3)(nanoid@4.0.2)(yjs@13.6.6)
+    specifier: 0.6.1-alpha.8
+    version: 0.6.1-alpha.8(@revesuite/lit@0.6.1-alpha.8)(@revesuite/store@0.6.1-alpha.8)(nanoid@4.0.2)(yjs@13.6.6)
   '@revesuite/editor':
-    specifier: 0.6.1-alpha.3
-    version: 0.6.1-alpha.3(@revesuite/blocks@0.6.1-alpha.3)(@revesuite/lit@0.6.1-alpha.3)(@revesuite/store@0.6.1-alpha.3)
+    specifier: 0.6.1-alpha.8
+    version: 0.6.1-alpha.8(@revesuite/blocks@0.6.1-alpha.8)(@revesuite/lit@0.6.1-alpha.8)(@revesuite/store@0.6.1-alpha.8)
   '@revesuite/lit':
-    specifier: 0.6.1-alpha.3
-    version: 0.6.1-alpha.3(@revesuite/store@0.6.1-alpha.3)
+    specifier: 0.6.1-alpha.8
+    version: 0.6.1-alpha.8(@revesuite/store@0.6.1-alpha.8)
   '@revesuite/store':
-    specifier: 0.6.1-alpha.3
-    version: 0.6.1-alpha.3(lit@2.7.6)(yjs@13.6.6)
+    specifier: 0.6.1-alpha.8
+    version: 0.6.1-alpha.8(lit@2.7.6)(yjs@13.6.6)
   '@toeverything/y-indexeddb':
     specifier: 0.7.0-canary.44
     version: 0.7.0-canary.44(yjs@13.6.6)
@@ -972,20 +972,20 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@revesuite/blocks@0.6.1-alpha.3(@revesuite/lit@0.6.1-alpha.3)(@revesuite/store@0.6.1-alpha.3)(nanoid@4.0.2)(yjs@13.6.6):
-    resolution: {integrity: sha512-1yGLW9Y874nlU2lY6+aEDyc3G2MP9mX4LMZ/QMYi452x2ovbOXS6rh0WXcU9cgH3PN3Ekhe6SWYwdfLj+Al0ZA==}
+  /@revesuite/blocks@0.6.1-alpha.8(@revesuite/lit@0.6.1-alpha.8)(@revesuite/store@0.6.1-alpha.8)(nanoid@4.0.2)(yjs@13.6.6):
+    resolution: {integrity: sha512-Xjx7gIDuN2ofwHpWWzCqWb+Ip2LbNs85kW/yQW/iTks5oFVrlOz+9Y/Aed9tkSocEt527rWK5VYLp5wlkVtuiQ==}
     peerDependencies:
-      '@revesuite/lit': 0.6.1-alpha.3
-      '@revesuite/store': 0.6.1-alpha.3
+      '@revesuite/lit': 0.6.1-alpha.8
+      '@revesuite/store': 0.6.1-alpha.8
       yjs: ^13
     dependencies:
       '@popperjs/core': 2.11.8
-      '@revesuite/connector': 0.6.1-alpha.3
-      '@revesuite/global': 0.6.1-alpha.3(lit@2.7.6)
-      '@revesuite/lit': 0.6.1-alpha.3(@revesuite/store@0.6.1-alpha.3)
-      '@revesuite/phasor': 0.6.1-alpha.3(@revesuite/lit@0.6.1-alpha.3)(@revesuite/store@0.6.1-alpha.3)(lit@2.7.6)(nanoid@4.0.2)(yjs@13.6.6)
-      '@revesuite/store': 0.6.1-alpha.3(lit@2.7.6)(yjs@13.6.6)
-      '@revesuite/virgo': 0.6.1-alpha.3(lit@2.7.6)(yjs@13.6.6)
+      '@revesuite/connector': 0.6.1-alpha.8
+      '@revesuite/global': 0.6.1-alpha.8(lit@2.7.6)
+      '@revesuite/lit': 0.6.1-alpha.8(@revesuite/store@0.6.1-alpha.8)
+      '@revesuite/phasor': 0.6.1-alpha.8(@revesuite/lit@0.6.1-alpha.8)(@revesuite/store@0.6.1-alpha.8)(lit@2.7.6)(nanoid@4.0.2)(yjs@13.6.6)
+      '@revesuite/store': 0.6.1-alpha.8(lit@2.7.6)(yjs@13.6.6)
+      '@revesuite/virgo': 0.6.1-alpha.8(lit@2.7.6)(yjs@13.6.6)
       hotkeys-js: 3.11.1
       html-to-image: 1.11.11
       jszip: 3.10.1
@@ -999,29 +999,29 @@ packages:
       - nanoid
     dev: false
 
-  /@revesuite/connector@0.6.1-alpha.3:
-    resolution: {integrity: sha512-nzQkIdXAsGT92Z4JkcWcAbJ1Sa/e+fgOOgo4b5BAPgaMAAFdkBco3L+3W7fZYwwt9+oiaVTQ48JhrpzqapCJsQ==}
+  /@revesuite/connector@0.6.1-alpha.8:
+    resolution: {integrity: sha512-JF/RC48KmHa5nErX5bbh8LEwJ5/kI+Mm22deCdVaggKzhmeddEfqr+6tYE2cY0RgIXKI5+eoQJiauFgldp9nSA==}
     dev: false
 
-  /@revesuite/editor@0.6.1-alpha.3(@revesuite/blocks@0.6.1-alpha.3)(@revesuite/lit@0.6.1-alpha.3)(@revesuite/store@0.6.1-alpha.3):
-    resolution: {integrity: sha512-jzWMgfF9yZijZUL8IYvl9yGdhz+AhsOSBaGxx/IoIaZ/DaEiB8F4KP3PPWzPO80Q16s0WDp4pY+UzQEMPHEZWw==}
+  /@revesuite/editor@0.6.1-alpha.8(@revesuite/blocks@0.6.1-alpha.8)(@revesuite/lit@0.6.1-alpha.8)(@revesuite/store@0.6.1-alpha.8):
+    resolution: {integrity: sha512-7e42UdXuadv2DRGm9uYUKLPPX6clxEuTKocFuPrmQfwpY+iqZkp3CsdnbcM5suWxrtjp6zKjgfN11xD6dNszeQ==}
     peerDependencies:
-      '@revesuite/blocks': 0.6.1-alpha.3
-      '@revesuite/lit': 0.6.1-alpha.3
-      '@revesuite/store': 0.6.1-alpha.3
+      '@revesuite/blocks': 0.6.1-alpha.8
+      '@revesuite/lit': 0.6.1-alpha.8
+      '@revesuite/store': 0.6.1-alpha.8
     dependencies:
-      '@revesuite/blocks': 0.6.1-alpha.3(@revesuite/lit@0.6.1-alpha.3)(@revesuite/store@0.6.1-alpha.3)(nanoid@4.0.2)(yjs@13.6.6)
-      '@revesuite/global': 0.6.1-alpha.3(lit@2.7.6)
-      '@revesuite/lit': 0.6.1-alpha.3(@revesuite/store@0.6.1-alpha.3)
-      '@revesuite/store': 0.6.1-alpha.3(lit@2.7.6)(yjs@13.6.6)
+      '@revesuite/blocks': 0.6.1-alpha.8(@revesuite/lit@0.6.1-alpha.8)(@revesuite/store@0.6.1-alpha.8)(nanoid@4.0.2)(yjs@13.6.6)
+      '@revesuite/global': 0.6.1-alpha.8(lit@2.7.6)
+      '@revesuite/lit': 0.6.1-alpha.8(@revesuite/store@0.6.1-alpha.8)
+      '@revesuite/store': 0.6.1-alpha.8(lit@2.7.6)(yjs@13.6.6)
       '@toeverything/theme': 0.0.0-20230530064828-8cd3bf6
       lit: 2.7.6
       marked: 4.3.0
       turndown: 7.1.2
     dev: false
 
-  /@revesuite/global@0.6.1-alpha.3(lit@2.7.6):
-    resolution: {integrity: sha512-sag6M2ujO0SFT4VI9BjEHhy4pMnQU7wtchoc/V64wEuc+a/YPYvFxZyHuU0hxmfzZ9ghjIJhzwKC7QnSuW2ERg==}
+  /@revesuite/global@0.6.1-alpha.8(lit@2.7.6):
+    resolution: {integrity: sha512-TCgpeVrZsLZRTdeYKFHFK8Lu+THjLtahs/VhmYzP3R5Bj6Unab8DwaGWKqNgCRX9eqg3T6mRWQgrj5ub46rgyA==}
     peerDependencies:
       lit: ^2.7
     peerDependenciesMeta:
@@ -1033,24 +1033,24 @@ packages:
       zod: 3.21.4
     dev: false
 
-  /@revesuite/lit@0.6.1-alpha.3(@revesuite/store@0.6.1-alpha.3):
-    resolution: {integrity: sha512-LX3oa7lWm0FZPJ0KzWnvRhkHCDDbJm1F1Bg7G6pML5HYNNJ1aL6d8LtGS2rG+s40gJbexwvlg/coWkYdCL+2Iw==}
+  /@revesuite/lit@0.6.1-alpha.8(@revesuite/store@0.6.1-alpha.8):
+    resolution: {integrity: sha512-LBXbdwkU4b6Q7awsyawM3VpxdNbUkRi6jmCC4nsBlls5CmA7TrfIvV2iKB/922sulBJ8+xI0/ikygvIv9A2P6w==}
     peerDependencies:
-      '@revesuite/store': 0.6.1-alpha.3
+      '@revesuite/store': 0.6.1-alpha.8
     dependencies:
-      '@revesuite/global': 0.6.1-alpha.3(lit@2.7.6)
-      '@revesuite/store': 0.6.1-alpha.3(lit@2.7.6)(yjs@13.6.6)
+      '@revesuite/global': 0.6.1-alpha.8(lit@2.7.6)
+      '@revesuite/store': 0.6.1-alpha.8(lit@2.7.6)(yjs@13.6.6)
       lit: 2.7.6
     dev: false
 
-  /@revesuite/phasor@0.6.1-alpha.3(@revesuite/lit@0.6.1-alpha.3)(@revesuite/store@0.6.1-alpha.3)(lit@2.7.6)(nanoid@4.0.2)(yjs@13.6.6):
-    resolution: {integrity: sha512-KpTXqPbbesq8I/LcP/14cyjkVI5Op77Ft9eoXvqvvo0u9M7WNvW2q/+Bgf1vcno3JW5gd4kg0bDUawdBe7s5hA==}
+  /@revesuite/phasor@0.6.1-alpha.8(@revesuite/lit@0.6.1-alpha.8)(@revesuite/store@0.6.1-alpha.8)(lit@2.7.6)(nanoid@4.0.2)(yjs@13.6.6):
+    resolution: {integrity: sha512-9b5MtyEO/9USkHMKfjeSoMwFl1KWu/CWFzYef22wv+Ocjutor6uotL//yT5O7Nab98V9mGq/hShX8SVH6qINWA==}
     peerDependencies:
       nanoid: ^4
       yjs: ^13
     dependencies:
-      '@revesuite/blocks': 0.6.1-alpha.3(@revesuite/lit@0.6.1-alpha.3)(@revesuite/store@0.6.1-alpha.3)(nanoid@4.0.2)(yjs@13.6.6)
-      '@revesuite/global': 0.6.1-alpha.3(lit@2.7.6)
+      '@revesuite/blocks': 0.6.1-alpha.8(@revesuite/lit@0.6.1-alpha.8)(@revesuite/store@0.6.1-alpha.8)(nanoid@4.0.2)(yjs@13.6.6)
+      '@revesuite/global': 0.6.1-alpha.8(lit@2.7.6)
       fractional-indexing: 3.2.0
       nanoid: 4.0.2
       roughjs: 4.5.2
@@ -1061,13 +1061,13 @@ packages:
       - lit
     dev: false
 
-  /@revesuite/store@0.6.1-alpha.3(lit@2.7.6)(yjs@13.6.6):
-    resolution: {integrity: sha512-QSPdukOWvW5IqmufNxnndi426cI+lPu9rcKSrKDOSLEBGRICR8L/VaqfVeuAxzkN09qNhaEKTQu0E6D9J316cg==}
+  /@revesuite/store@0.6.1-alpha.8(lit@2.7.6)(yjs@13.6.6):
+    resolution: {integrity: sha512-eAjEjAeJXbudiiaZFHVhZqxQn5bw7WRWkQYjfbgjE+aTNLFlmmooPjuppcRgOCUL430LRXBz9AMrH3NcnzlT0w==}
     peerDependencies:
       yjs: ^13
     dependencies:
-      '@revesuite/global': 0.6.1-alpha.3(lit@2.7.6)
-      '@revesuite/virgo': 0.6.1-alpha.3(lit@2.7.6)(yjs@13.6.6)
+      '@revesuite/global': 0.6.1-alpha.8(lit@2.7.6)
+      '@revesuite/virgo': 0.6.1-alpha.8(lit@2.7.6)(yjs@13.6.6)
       '@types/flexsearch': 0.7.3
       buffer: 6.0.3
       flexsearch: 0.7.21
@@ -1088,13 +1088,13 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@revesuite/virgo@0.6.1-alpha.3(lit@2.7.6)(yjs@13.6.6):
-    resolution: {integrity: sha512-OjelYUjsJMIEFVmMeZ7Fp1ziSqtepgUUcLlKeirCM9Fs3T/rYSx6+IOuD28FjRHs7dVjXI+IFk/WBizVZUXinw==}
+  /@revesuite/virgo@0.6.1-alpha.8(lit@2.7.6)(yjs@13.6.6):
+    resolution: {integrity: sha512-iI//DvaUf3jyrGPePMTwrAOfTlyeUg875xXBUzSgvY79+KQisYpMmkYx0rD8SZimevceO2W/W3+6vAPXcn/1IA==}
     peerDependencies:
       lit: ^2.7
       yjs: ^13
     dependencies:
-      '@revesuite/global': 0.6.1-alpha.3(lit@2.7.6)
+      '@revesuite/global': 0.6.1-alpha.8(lit@2.7.6)
       lit: 2.7.6
       yjs: 13.6.6
       zod: 3.21.4
