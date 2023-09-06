@@ -2,15 +2,17 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 import { EVENTS } from './events';
 
+type Callback = () => void;
+
 // Custom APIs for renderer
 const api = {
   toggleTrafficLight: (isShow: boolean): void =>
     ipcRenderer.send(EVENTS.toggleTrafficLight, isShow),
   loadCustomFonts: (): void => ipcRenderer.send(EVENTS.loadCustomFont),
   removeCustomFont: (fontPath: string) => ipcRenderer.send(EVENTS.removeCustomFont, fontPath),
-  onLoadCustomFontSuccess: (cb) => ipcRenderer.on(EVENTS.loadCustomFontSuccess, cb),
-  onRemoveCustomFontSuccess: (cb) => ipcRenderer.on(EVENTS.removeCustomFontSuccess, cb),
-  switchFontfamily: () => ipcRenderer.send(EVENTS.switchFontfamily)
+  onLoadCustomFontSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.loadCustomFontSuccess, cb),
+  onRemoveCustomFontSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.removeCustomFontSuccess, cb),
+  switchFontfamily: (fontName: string) => ipcRenderer.send(EVENTS.switchFontfamily, fontName)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
