@@ -43,6 +43,7 @@
     "react-i18next": "^13.0.2",
     "react-resizable-panels": "^0.0.55",
     "revemate": "0.0.1-beta.28",
+    "turndown": "^7.1.2",
     "uuid": "^9.0.0",
     "y-indexeddb": "^9.0.11",
     "yjs": "^13.6.6"
@@ -56,6 +57,7 @@
     "@types/node": "^18.16.16",
     "@types/react": "^18.2.8",
     "@types/react-dom": "^18.2.4",
+    "@types/turndown": "^5.0.1",
     "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",

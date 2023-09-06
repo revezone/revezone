@@ -14,7 +14,7 @@ export default function useDoubleLink(outerJump: boolean) {
   const { model: tabModel, updateTabJsonModelWhenCurrentFileChanged } = useTabJsonModel();
 
   const onLinkOpen = useCallback(
-    async (elementOrLink: NonDeletedExcalidrawElement | string, event: Event) => {
+    async (elementOrLink: NonDeletedExcalidrawElement | string, event?: Event) => {
       if (event) {
         event.preventDefault();
       }

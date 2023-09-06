@@ -3,6 +3,7 @@ import { Workspace } from '@revesuite/store';
 import { LitElement } from 'lit';
 import { EditorContainer } from '@revesuite/editor';
 import { blocksuiteStorage } from '../../store/blocksuite';
+import { convertHtmlToMarkdown } from '@renderer/utils/markdown';
 
 const CUSTOM_ELEMENT_NAME = 'revezone-block-suite-editor';
 
@@ -58,15 +59,24 @@ export default class RevezoneBlockSuiteEditor extends LitElement {
   }
 
   async eventListener() {
-    this.page?.slots.onYEvent.on((event) => {
-      console.log('--- onYEvent ---', event);
-    });
-
     this.page?.slots.linkClicked.on((href) => {
       console.log('--- linkClick ---', href);
       setTimeout(() => {
         this.onLinkOpen(href);
       }, 100);
+    });
+
+    this.page?.slots.historyUpdated.on((...args) => {
+      console.log('--- historyUpdated ---', this.page?.id, ...args);
+
+      if (!this.page?.root?.id) return;
+
+      const id = this.page.root.id;
+
+      const htmlContent = document.querySelector(`[data-block-id=${id}]`)?.innerHTML;
+      const markdown = htmlContent && convertHtmlToMarkdown(htmlContent);
+
+      console.log('--- markdown ---', markdown);
     });
   }
 }

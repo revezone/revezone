@@ -35,6 +35,10 @@ class BlocksuiteStorage {
     indexeddbPersistence.on('synced', async () => {
       console.log('content from the database is loaded');
       emitter.emit(events.WORKSPACE_LOADED);
+
+      this.workspace.slots.pagesUpdated.on((...args) => {
+        console.log('--- pagesUpdated ---', ...args);
+      });
     });
   }
 

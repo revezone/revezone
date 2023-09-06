@@ -71,6 +71,9 @@ dependencies:
   revemate:
     specifier: 0.0.1-beta.28
     version: 0.0.1-beta.28(react-dom@18.2.0)(react@18.2.0)
+  turndown:
+    specifier: ^7.1.2
+    version: 7.1.2
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -106,6 +109,9 @@ devDependencies:
   '@types/react-dom':
     specifier: ^18.2.4
     version: 18.2.4
+  '@types/turndown':
+    specifier: ^5.0.1
+    version: 5.0.1
   '@types/uuid':
     specifier: ^9.0.2
     version: 9.0.2
@@ -1199,6 +1205,10 @@ packages:
   /@types/trusted-types@2.0.3:
     resolution: {integrity: sha512-NfQ4gyz38SL8sDNrSixxU2Os1a5xcdFxipAFxYEuLUlvU2uDwS4NUpsImcf1//SlWItCVMMLiylsxbmNMToV/g==}
     dev: false
+
+  /@types/turndown@5.0.1:
+    resolution: {integrity: sha512-N8Ad4e3oJxh9n9BiZx9cbe/0M3kqDpOTm2wzj13wdDUxDPjfjloWIJaquZzWE1cYTAHpjOH3rcTnXQdpEfS/SQ==}
+    dev: true
 
   /@types/uuid@9.0.2:
     resolution: {integrity: sha512-kNnC1GFBLuhImSnV7w4njQkUiJi0ZXUycu1rUaouPqiKlXkh77JKgdRnTAp1x5eBwcIwbtI+3otwzuIDEuDoxQ==}
