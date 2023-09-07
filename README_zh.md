@@ -1,12 +1,11 @@
-# Revezone - 换个姿势使用 Excalidraw
+# Revezone - 一款以图形为中心的思维管理工具
 [English](README.md)
 
 Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果你有任何问题或者建议，欢迎提交 [issue](https://github.com/revezone/revezone/issues/new) 进行反馈。
 
 ---
-换个姿势使用 Excalidraw。
 
-一款轻量级本地优先的用于构建第二大脑的效率工具，集成了增强型 Excalidraw 白板能力和类 Notion 笔记。
+一款以图形为中心、轻量级、本地优先的用于构建第二大脑的效率工具。
 
 ![](https://img.alicdn.com/imgextra/i1/O1CN01Fg2uUT1xflodGBz7J_!!6000000006471-2-tps-2952-1706.png)
 
