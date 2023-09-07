@@ -76,19 +76,6 @@ function WelcomeContent() {
           </p>
           <p className="mb-2">
             <a
-              href="https://twitter.com/korbinzhao"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => {
-                submitUserEvent('welcomepage_click_twitter', {});
-              }}
-              className="reve-text-link"
-            >
-              <Twitter className="w-4 h-4 mr-2" /> {t('links.authorTwitter')}
-            </a>
-          </p>
-          <p className="mb-2">
-            <a
               href="https://afdian.net/a/wantian"
               target="_blank"
               rel="noreferrer"

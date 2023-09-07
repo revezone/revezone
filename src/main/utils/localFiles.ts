@@ -1,9 +1,6 @@
-import { dialog, app } from 'electron';
-import fs from 'fs';
-import { ensureDir } from './customFonts';
-
-// TODO: user custom path
-const USER_DATA_PATH = app.getPath('userData');
+import { app } from 'electron';
+import fs from 'node:fs';
+import { ensureDir, USER_DATA_PATH } from './io';
 
 export function onFileDataChange(
   fileId: string,

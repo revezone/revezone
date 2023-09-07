@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import CustomFonts from '../CustomFonts';
 import LanguageSwitcher from '../LanguageSwitcher';
 import { osName } from '@renderer/utils/navigator';
+import StoragePathSetting from '@renderer/components/StoragePathSetting';
 
 interface Props {
   visible: boolean;
@@ -35,7 +36,17 @@ export default function SystemSettings({ visible, setSystemSettingVisible, onCan
             children: (
               <div>
                 <span>{t('operation.switchLanguage')}:</span>
-                <LanguageSwitcher></LanguageSwitcher>
+                <LanguageSwitcher />
+              </div>
+            )
+          },
+          {
+            key: 'storage_path',
+            label: t('operation.storagePath'),
+            children: (
+              <div>
+                <span>{t('operation.storagePath')}:</span>
+                <StoragePathSetting />
               </div>
             )
           }

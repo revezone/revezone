@@ -14,6 +14,7 @@ import { EVENTS } from '../preload/events';
 import Store from 'electron-store';
 import './utils/os';
 import { onFileDataChange } from './utils/localFiles';
+import { customStoragePath } from './utils/customStoragePath';
 
 // import { autoUpdater } from 'electron-updater';
 // import { notify } from './utils/notification';
@@ -112,6 +113,10 @@ function createWindow(): void {
       onFileDataChange(fileId, fileType, fileName, value);
     }
   );
+
+  ipcMain.on(EVENTS.customStoragePath, async () => {
+    mainWindow && customStoragePath(mainWindow);
+  });
 }
 
 // This method will be called when Electron has finished

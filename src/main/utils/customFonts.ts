@@ -1,8 +1,9 @@
-import { dialog, app, BrowserWindow } from 'electron';
+import { dialog, BrowserWindow } from 'electron';
 import { copyFile, writeFile } from 'node:fs/promises';
 import { join } from 'path';
 import { EVENTS } from '../../preload/events';
 import fs from 'node:fs';
+import { USER_DATA_PATH, ensureDir } from './io';
 
 export interface Font {
   name: string;
@@ -15,8 +16,6 @@ export interface Manifest {
 }
 
 const FONT_SUFFIXES = ['.ttf', '.woff2', '.otf'];
-
-const USER_DATA_PATH = app.getPath('userData');
 
 const CUSTOM_FONTS_DIR = join(USER_DATA_PATH, 'custom_fonts');
 
@@ -145,12 +144,6 @@ export const batchActiveCustomFonts = (mainWindow: BrowserWindow) => {
     fonts.forEach((font) => activeCustomFont(mainWindow, font.name, font.nameWithSuffix));
   } catch (err) {
     console.error(err);
-  }
-};
-
-export const ensureDir = (dir: string) => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
   }
 };
 

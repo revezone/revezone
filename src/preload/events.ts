@@ -5,5 +5,7 @@ export const EVENTS = {
   removeCustomFont: 'remove-custom-font',
   removeCustomFontSuccess: 'remove-custom-font-success',
   switchFontfamily: 'switch-fontfamily',
-  fileDataChange: 'file-data-change'
+  fileDataChange: 'file-data-change',
+  customStoragePath: 'custom-storage-path',
+  customStoragePathSuccess: 'custom-storage-path-success'
 };
