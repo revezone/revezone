@@ -28,7 +28,7 @@ export default function EditableText({
   const inputRef = useRef<InputRef>(null);
 
   const _onChange = useCallback((e) => {
-    setValue(e.target.value);
+    setValue(e.target?.value);
   }, []);
 
   const _onSave = useCallback(

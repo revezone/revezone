@@ -15,17 +15,17 @@ import { XSquare } from 'lucide-react';
 import { emitter } from '@renderer/store/eventemitter';
 
 const registeredFontsStr = window.electron?.process.env.registeredFonts;
-const registeredFonts = registeredFontsStr && JSON.parse(registeredFontsStr);
+const registeredFonts: Font[] | undefined = registeredFontsStr && JSON.parse(registeredFontsStr);
 
 interface Props {
-  setSystemSettingVisible: (visible) => void;
+  setSystemSettingVisible: (visible: boolean) => void;
 }
 
 const CustomFonts = ({ setSystemSettingVisible }: Props) => {
   const { t } = useTranslation();
   const update = useUpdate();
 
-  const [fonts, setFonts] = useState<Font[]>(registeredFonts);
+  const [fonts, setFonts] = useState<Font[] | undefined>(registeredFonts);
   const [boardCustomFontSwitch, setBoardCustomFontSwitch] = useState(
     getBoardCustomFontSwitchFromLocal() === 'true'
   );
@@ -36,14 +36,14 @@ const CustomFonts = ({ setSystemSettingVisible }: Props) => {
   }, []);
 
   useEffect(() => {
-    setBoardCustomFontSwitchToLocal(boardCustomFontSwitch);
+    setBoardCustomFontSwitchToLocal(String(boardCustomFontSwitch));
   }, [boardCustomFontSwitch]);
 
   useEffect(() => {
-    setBoardCustomFontToLocal(boardCustomFont);
+    boardCustomFont && setBoardCustomFontToLocal(boardCustomFont);
   }, [boardCustomFont]);
 
-  const customFontsChanged = useCallback(async (event, newFonts) => {
+  const customFontsChanged = useCallback(async (event: Event, newFonts: Font[]) => {
     setFonts(newFonts);
 
     // clear board custom font if font was removed
@@ -140,17 +140,14 @@ const CustomFonts = ({ setSystemSettingVisible }: Props) => {
 
                   setSystemSettingVisible(false);
 
-                  window.api.switchFontfamily();
+                  console.log('---  switchfont ---', value);
+
+                  window.api.switchFontfamily(value);
 
                   emitter.emit('switch_font_family');
-
-                  // // register custom fonts through window reload
-                  // setTimeout(() => {
-                  //   window.location.reload();
-                  // }, 0);
                 }}
               >
-                {fonts.map((font) => {
+                {fonts?.map((font) => {
                   return (
                     <Select.Option key={font.name} value={font.name}>
                       {font.name}

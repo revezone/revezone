@@ -110,6 +110,10 @@ export const setIsUserGuideShowed = (showed: boolean) => {
 };
 
 export const getIsUserGuideShowed = (): boolean => {
+  // Do not show user guide in dev mode
+  if (window.location.host.startsWith('localhost')) {
+    return true;
+  }
   const localStr = localStorage.getItem(LOCALSTORAGE_IS_USER_GUIDE_SHOWED);
   return Boolean(localStr);
 };

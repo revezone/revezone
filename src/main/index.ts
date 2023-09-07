@@ -4,7 +4,8 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { isMacOS } from './utils/platform';
 import {
   loadCustomFont,
-  batchRegisterCustomFonts,
+  batchActiveCustomFonts,
+  getRegisteredFonts,
   removeCustomFont,
   switchFontfamily
 } from './utils/customFonts';
@@ -49,7 +50,9 @@ function createWindow(): void {
   });
 
   registerAppMenu();
-  batchRegisterCustomFonts(mainWindow);
+
+  getRegisteredFonts();
+  batchActiveCustomFonts(mainWindow);
 
   mainWindow.setMenuBarVisibility(false);
 
@@ -91,15 +94,15 @@ function createWindow(): void {
   }
 
   ipcMain.on(EVENTS.loadCustomFont, async () => {
-    loadCustomFont(mainWindow);
+    mainWindow && loadCustomFont(mainWindow);
   });
 
   ipcMain.on(EVENTS.removeCustomFont, async (event, fontPath: string) => {
-    removeCustomFont(fontPath, mainWindow);
+    mainWindow && removeCustomFont(fontPath, mainWindow);
   });
 
-  ipcMain.on(EVENTS.switchFontfamily, async () => {
-    switchFontfamily(mainWindow);
+  ipcMain.on(EVENTS.switchFontfamily, async (event, fontName: string) => {
+    mainWindow && switchFontfamily(mainWindow, fontName);
   });
 
   ipcMain.on(

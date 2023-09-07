@@ -9,7 +9,8 @@ import BottomToolbar from '../BottomToolbar/index';
 import { submitUserEvent } from '@renderer/utils/statistics';
 import DraggableMenuTree from '../DraggableMenuTree/index';
 import { driver } from 'driver.js';
-import { getIsUserGuideShowed, setIsUserGuideShowed } from '../../store/localstorage';
+// import { getIsUserGuideShowed, setIsUserGuideShowed } from '../../store/localstorage';
+import { commonIndexeddbStorage } from '@renderer/store/commonIndexeddb';
 import { useTranslation } from 'react-i18next';
 import { Modal } from 'antd';
 import LanguageSwitcher from '../LanguageSwitcher/index';
@@ -17,6 +18,8 @@ import LanguageSwitcher from '../LanguageSwitcher/index';
 type Props = {
   children: ReactNode;
 };
+
+const IS_USER_GUIDE_SHOWED = 'is_user_guide_showed';
 
 const defaultLayout = [20, 80];
 
@@ -31,14 +34,20 @@ export default function ResizableLayout({ children }: Props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [userGuideShow, setUserGuideShow] = useState(false);
 
-  useEffect(() => {
-    const isUserGuideShowed = getIsUserGuideShowed();
+  const userGuideHandler = useCallback(async () => {
+    const isUserGuideShowed = await commonIndexeddbStorage.getCommonData(IS_USER_GUIDE_SHOWED);
 
-    if (!isUserGuideShowed) {
-      setIsUserGuideShowed(true);
+    console.log('--- isUserGuideShowed ---', isUserGuideShowed);
+
+    if (isUserGuideShowed !== 'true') {
+      await commonIndexeddbStorage.updateCommonData(IS_USER_GUIDE_SHOWED, 'true');
 
       setModalVisible(true);
     }
+  }, []);
+
+  useEffect(() => {
+    userGuideHandler();
   }, []);
 
   useEffect(() => {
