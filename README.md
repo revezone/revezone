@@ -4,9 +4,7 @@
 Revezone is currently in a public beta. Please report a [issue](https://github.com/revezone/revezone/issues/new), if you have any suggestions or questions.
 
 ---
-A new way to use Excalidraw.
-
-A lightweight productivity tool to build your second brain that integrates enhanced Excalidraw whiteboarding features and Notion-like note-taking. Local-first and block-based.
+A lightweight graphic-centric productivity tool to build your Second Brain.
 
 ![](https://img.alicdn.com/imgextra/i1/O1CN01Fg2uUT1xflodGBz7J_!!6000000006471-2-tps-2952-1706.png)
 
