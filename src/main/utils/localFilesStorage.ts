@@ -1,24 +1,52 @@
-import { app } from 'electron';
 import fs from 'node:fs';
-import { ensureDir, USER_DATA_PATH } from './io';
-import { getLocalFilesStoragePath } from './customStoragePath';
+import { ensureDir } from './io';
+import { getUserFilesStoragePath } from './customStoragePath';
+import { RevezoneFileTree } from '../../renderer/src/types/file';
+import { join } from 'node:path';
+import { TreeItem } from 'react-complex-tree';
 
-export function onFileDataChange(
-  fileId: string,
-  fileType: 'board' | 'note',
-  fileName: string,
-  value: string
-) {
-  const userFilesStoragePath = getLocalFilesStoragePath();
+/**
+ * ATTENTION: Files's name cannot be same in one directory
+ * @param fileId
+ * @param fileTree
+ * @param filePath
+ */
+export const getFilePath = (itemId: string, fileTree: RevezoneFileTree, filePath = '') => {
+  let parentItem;
 
-  const dir = `${userFilesStoragePath}/${fileType}`;
+  const items = Object.values(fileTree);
 
-  console.log('--- fileDataChange ---', fileId, fileType, fileName, dir);
+  items.forEach((treeItem: TreeItem) => {
+    if (treeItem.children?.includes(itemId)) {
+      parentItem = treeItem.data;
+    }
+  });
 
-  ensureDir(dir);
+  // @ts-ignore
+  filePath = parentItem?.id
+    ? // @ts-ignore
+      getFilePath(parentItem.id, fileTree, filePath)
+    : // @ts-ignore
+      `${parentItem.name}/${filePath}`;
 
-  const suffix = fileType === 'board' ? '.excalidraw' : '.md';
-  const filePath = `${dir}/${fileName}_${fileId}${suffix}`;
+  return filePath ? `${filePath}/` : '';
+};
 
-  fs.writeFileSync(filePath, value);
+export function onFileDataChange(fileId: string, value: string, fileTree: RevezoneFileTree) {
+  const file = fileTree[fileId].data;
+
+  const userFilesStoragePath = getUserFilesStoragePath();
+
+  console.log('--- fileDataChange ---', fileId, file, userFilesStoragePath);
+
+  const filePathInFileTree = getFilePath(fileId, fileTree);
+
+  const fileDir = join(userFilesStoragePath, filePathInFileTree);
+
+  ensureDir(fileDir);
+
+  const suffix = file.type === 'board' ? '.excalidraw' : '.md';
+  const fullFilePath = `${fileDir}/${file.name}${suffix}`;
+
+  fs.writeFileSync(fullFilePath, value);
 }

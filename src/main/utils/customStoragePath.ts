@@ -24,9 +24,9 @@ export const customStoragePath = async (mainWindow: BrowserWindow) => {
 
   ensureDir(REVEZONE_APP_CONFIG_DIR);
 
-  writeFileSync(CONFIG_PATH, JSON.stringify({ local_storage_path: folderPaths }, null, 2));
+  writeFileSync(CONFIG_PATH, JSON.stringify({ local_storage_path: destPath }, null, 2));
 
-  mainWindow.webContents.send(EVENTS.customStoragePathSuccess, folderPaths);
+  mainWindow.webContents.send(EVENTS.customStoragePathSuccess, destPath);
 };
 
 export const openStoragePath = async (mainWindow: BrowserWindow, path: string) => {
@@ -35,8 +35,10 @@ export const openStoragePath = async (mainWindow: BrowserWindow, path: string) =
   });
 };
 
-export const getLocalFilesStoragePath = () => {
+export const getUserFilesStoragePath = () => {
   const config = JSON.parse(readFileSync(CONFIG_PATH).toString());
+
+  console.log('--- getUserFilesStoragePath ---', config);
 
   return config.local_storage_path || DEFAULT_LOCAL_FILES_STORAGE_PATH;
 };

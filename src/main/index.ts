@@ -14,7 +14,12 @@ import { EVENTS } from '../preload/events';
 import Store from 'electron-store';
 import './utils/os';
 import { onFileDataChange } from './utils/localFilesStorage';
-import { customStoragePath, openStoragePath } from './utils/customStoragePath';
+import {
+  customStoragePath,
+  getUserFilesStoragePath,
+  openStoragePath
+} from './utils/customStoragePath';
+import { RevezoneFileTree } from '../renderer/src/types/file';
 
 // import { autoUpdater } from 'electron-updater';
 // import { notify } from './utils/notification';
@@ -54,6 +59,8 @@ function createWindow(): void {
 
   getRegisteredFonts();
   batchActiveCustomFonts(mainWindow);
+
+  process.env['USER_FILES_STORAGE_PATH'] = getUserFilesStoragePath();
 
   mainWindow.setMenuBarVisibility(false);
 
@@ -108,8 +115,8 @@ function createWindow(): void {
 
   ipcMain.on(
     EVENTS.fileDataChange,
-    async (event, fileId: string, fileType: 'board' | 'note', fileName: string, value: string) => {
-      onFileDataChange(fileId, fileType, fileName, value);
+    async (event, fileId: string, value: string, fileTree: RevezoneFileTree) => {
+      onFileDataChange(fileId, value, fileTree);
     }
   );
 

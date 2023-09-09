@@ -56,9 +56,7 @@ class BoardIndexeddbStorage {
     await this.initDB();
     await this.db?.put(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
 
-    const file = fileTree[id].data;
-
-    this.getFileDataChangeFn()(id, file.name, boardData);
+    this.getFileDataChangeDebounceFn()(id, boardData, fileTree);
   }
 
   async addBoard(id: string, boardData: string) {
@@ -84,10 +82,10 @@ class BoardIndexeddbStorage {
     await this.db?.delete(INDEXEDDB_BOARD_FILE_KEY, id);
   }
 
-  getFileDataChangeFn() {
-    return debounce((id, name, boardData) => {
+  getFileDataChangeDebounceFn() {
+    return debounce((id: string, boardData: string, fileTree: RevezoneFileTree) => {
       console.log('--- send fileDataChange ---', id, JSON.parse(boardData));
-      window.api.fileDataChange(id, 'board', name, boardData);
+      window.api.fileDataChange(id, boardData, fileTree);
     }, 1000);
   }
 }

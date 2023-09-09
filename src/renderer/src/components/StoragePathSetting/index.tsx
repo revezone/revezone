@@ -2,7 +2,7 @@ import { Button, Popconfirm } from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const DEFAULT_USER_DATA_STORAGE_PATH = window.electron.process.env['USER_DATA_PATH'];
+const DEFAULT_USER_DATA_STORAGE_PATH = window.electron.process.env['USER_FILES_STORAGE_PATH'];
 
 export default function StoragePathSetting() {
   const [storagePath, setStoragePath] = useState<string | undefined>(
