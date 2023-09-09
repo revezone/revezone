@@ -107,6 +107,8 @@ class FileTreeIndexeddbStorage {
 
     const fileTree = (await this.getFileTree()) || {};
 
+    info.name = this.getUniqueNameInSameTreeLevel(info, fileTree, parentId);
+
     fileTree[info.id] = { index: info.id, isFolder, data: info, canRename: true };
 
     if (parentId) {
@@ -120,6 +122,36 @@ class FileTreeIndexeddbStorage {
     await this.updateFileTree(fileTree);
 
     return info;
+  }
+
+  getUniqueNameInSameTreeLevel(
+    item: RevezoneFile | RevezoneFolder,
+    fileTree: RevezoneFileTree,
+    parentId = 'root'
+  ) {
+    const parent = fileTree[parentId];
+    const itemNamesInSameTreeLevel = parent.children
+      ?.filter((id) => id !== item.id)
+      ?.map((id) => fileTree[id].data.name);
+
+    const isRepeated = !!itemNamesInSameTreeLevel?.find((name) => name === item.name);
+
+    let maxRepeatIndex = 0;
+
+    const repeatIndexRegx = new RegExp(`^${item.name}\\(([1-9]+)\\)$`);
+
+    if (isRepeated) {
+      itemNamesInSameTreeLevel?.forEach((name) => {
+        const repeatIndex = name.match(repeatIndexRegx)?.[1];
+        if (repeatIndex) {
+          maxRepeatIndex =
+            maxRepeatIndex > Number(repeatIndex) ? maxRepeatIndex : Number(repeatIndex);
+        }
+      });
+      return `${item.name}(${maxRepeatIndex + 1})`;
+    }
+
+    return item.name;
   }
 
   async addFile(
@@ -242,20 +274,6 @@ class FileTreeIndexeddbStorage {
     return fileTree;
   }
 
-  async updateFileName(file: RevezoneFile, name: string) {
-    await this.initDB();
-
-    if (name === file?.name) return;
-
-    const fileTree = await this.getFileTree();
-
-    if (!fileTree) return;
-
-    fileTree[file.id].data.name = name;
-
-    await this.updateFileTree(fileTree);
-  }
-
   async updateFileGmtModified(file: RevezoneFile) {
     await this.initDB();
 
@@ -268,16 +286,26 @@ class FileTreeIndexeddbStorage {
     await this.updateFileTree(fileTree);
   }
 
-  async updateFolderName(folder: RevezoneFolder, name: string) {
+  async updateFileOrFolderName(item: RevezoneFolder | RevezoneFile, name: string) {
     await this.initDB();
 
-    if (name === folder?.name) return;
+    if (name === item?.name) return;
 
     const fileTree = await this.getFileTree();
 
     if (!fileTree) return;
 
-    fileTree[folder.id].data.name = name;
+    let parentId;
+
+    Object.values(fileTree).forEach((treeItem) => {
+      if (treeItem.children?.includes(item.id)) {
+        parentId = treeItem.data.id;
+      }
+    });
+
+    const uniqueName = this.getUniqueNameInSameTreeLevel({ ...item, name }, fileTree, parentId);
+
+    fileTree[item.id].data.name = uniqueName;
 
     await this.updateFileTree(fileTree);
   }

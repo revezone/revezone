@@ -106,11 +106,9 @@ export default function DraggableMenuTree() {
       console.log('--- onRenameItem ---', item, name);
       setRenamingMenuItemIdToLocal('');
 
-      if (item.isFolder) {
-        await fileTreeIndexeddbStorage.updateFolderName(item.data as RevezoneFolder, name);
-      } else {
-        await fileTreeIndexeddbStorage.updateFileName(item.data as RevezoneFile, name);
+      await fileTreeIndexeddbStorage.updateFileOrFolderName(item.data, name);
 
+      if (!item.isFolder) {
         await renameTabName(item.data.id, name, tabModel);
       }
 
