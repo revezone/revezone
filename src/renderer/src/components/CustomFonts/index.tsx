@@ -58,9 +58,6 @@ const CustomFonts = ({ setSystemSettingVisible }: Props) => {
 
   useEffect(() => {
     window.api && window.api.onLoadCustomFontSuccess(customFontsChanged);
-  }, []);
-
-  useEffect(() => {
     window.api && window.api.onRemoveCustomFontSuccess(customFontsChanged);
   }, []);
 

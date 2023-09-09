@@ -39,11 +39,13 @@ export default function RevedrawApp({ file }: Props) {
   }, []);
 
   // HACK: fix the custom font not working completely when first render
-  const rerender = useCallback(() => {
+  const rerender = useCallback(async () => {
     const WAIT_TIME_WINDWOS = 500;
     const WAIT_TIME_MACOS = 200;
 
     const waitTime = OS_NAME === 'MacOS' ? WAIT_TIME_MACOS : WAIT_TIME_WINDWOS;
+
+    await getDataSource(file.id);
 
     setTimeout(() => {
       setDidRender(false);
@@ -51,7 +53,7 @@ export default function RevedrawApp({ file }: Props) {
         setDidRender(true);
       }, 100);
     }, waitTime);
-  }, []);
+  }, [file.id]);
 
   useEffect(() => {
     if (firsRender) {
