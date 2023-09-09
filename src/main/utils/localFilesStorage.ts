@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { ensureDir } from './io';
 import { getUserFilesStoragePath } from './customStoragePath';
-import { RevezoneFileTree } from '../../renderer/src/types/file';
+import { RevezoneFileTree, RevezoneFolder } from '../../renderer/src/types/file';
 import { join } from 'node:path';
 import { TreeItem } from 'react-complex-tree';
 
@@ -22,12 +22,10 @@ export const getFilePath = (itemId: string, fileTree: RevezoneFileTree, filePath
     }
   });
 
-  // @ts-ignore
-  filePath = parentItem?.id
-    ? // @ts-ignore
-      getFilePath(parentItem.id, fileTree, filePath)
-    : // @ts-ignore
-      `${parentItem.name}/${filePath}`;
+  if (parentItem) {
+    // @ts-ignore
+    filePath = getFilePath(parentItem.id, fileTree, `${parentItem.name}/${filePath}`);
+  }
 
   return filePath ? `${filePath}/` : '';
 };
