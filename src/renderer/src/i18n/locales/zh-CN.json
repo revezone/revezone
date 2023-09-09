@@ -87,5 +87,10 @@
   },
   "language": {
     "title": "请先选择你的语言!"
+  },
+  "storagePath": {
+    "changePath": "更改存储路径",
+    "openPath": "打开存储路径",
+    "changePathConfirm": "确定修改用户文件存储路径吗？"
   }
 }

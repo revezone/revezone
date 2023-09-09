@@ -1,6 +1,7 @@
 import { app } from 'electron';
 import fs from 'node:fs';
 import { ensureDir, USER_DATA_PATH } from './io';
+import { getLocalFilesStoragePath } from './customStoragePath';
 
 export function onFileDataChange(
   fileId: string,
@@ -8,9 +9,11 @@ export function onFileDataChange(
   fileName: string,
   value: string
 ) {
-  console.log('--- fileDataChange ---', fileId, fileType, fileName, value);
+  const userFilesStoragePath = getLocalFilesStoragePath();
 
-  const dir = `${USER_DATA_PATH}/user_files/${fileType}`;
+  const dir = `${userFilesStoragePath}/${fileType}`;
+
+  console.log('--- fileDataChange ---', fileId, fileType, fileName, dir);
 
   ensureDir(dir);
 

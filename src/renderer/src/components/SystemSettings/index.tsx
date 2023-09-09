@@ -45,7 +45,6 @@ export default function SystemSettings({ visible, setSystemSettingVisible, onCan
             label: t('operation.storagePath'),
             children: (
               <div>
-                <span>{t('operation.storagePath')}:</span>
                 <StoragePathSetting />
               </div>
             )

@@ -13,8 +13,8 @@ import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
 import Store from 'electron-store';
 import './utils/os';
-import { onFileDataChange } from './utils/localFiles';
-import { customStoragePath } from './utils/customStoragePath';
+import { onFileDataChange } from './utils/localFilesStorage';
+import { customStoragePath, openStoragePath } from './utils/customStoragePath';
 
 // import { autoUpdater } from 'electron-updater';
 // import { notify } from './utils/notification';
@@ -109,13 +109,16 @@ function createWindow(): void {
   ipcMain.on(
     EVENTS.fileDataChange,
     async (event, fileId: string, fileType: 'board' | 'note', fileName: string, value: string) => {
-      console.log('--- ipcMain fileDataChange ---', fileId, fileType, fileName, value);
       onFileDataChange(fileId, fileType, fileName, value);
     }
   );
 
   ipcMain.on(EVENTS.customStoragePath, async () => {
     mainWindow && customStoragePath(mainWindow);
+  });
+
+  ipcMain.on(EVENTS.openStoragePath, async (event, storagePath: string) => {
+    mainWindow && openStoragePath(mainWindow, storagePath);
   });
 }
 

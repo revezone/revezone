@@ -87,5 +87,10 @@
   },
   "language": {
     "title": "Please choose your language first!"
+  },
+  "storagePath": {
+    "changePath": "Change storage path",
+    "openPath": "Open storage path",
+    "changePathConfirm": "Are you sure you want to modify the user file storage path?"
   }
 }

@@ -87,5 +87,10 @@
   },
   "language": {
     "title": "請先選擇妳的語言!"
+  },
+  "storagePath": {
+    "changePath": "更改存儲路徑",
+    "openPath": "打開存儲路徑",
+    "changePathConfirm": "確定修改用戶文件存儲路徑嗎？"
   }
 }

@@ -7,5 +7,6 @@ export const EVENTS = {
   switchFontfamily: 'switch-fontfamily',
   fileDataChange: 'file-data-change',
   customStoragePath: 'custom-storage-path',
-  customStoragePathSuccess: 'custom-storage-path-success'
+  customStoragePathSuccess: 'custom-storage-path-success',
+  openStoragePath: 'open-storage-path'
 };
