@@ -1,6 +1,6 @@
-const REVEZONE_LINK_PROTOCOL = 'revezone://';
-import { RevezoneFileTree, RevezoneFile, RevezoneFolder } from '@renderer/types/file';
 import { DOUBLE_LINK_REGEX } from '@renderer/utils/constant';
+
+const REVEZONE_LINK_PROTOCOL = 'revezone://';
 
 export const getFileIdOrNameFromLink = (link: string) => {
   if (link.startsWith(REVEZONE_LINK_PROTOCOL)) {

@@ -95,6 +95,13 @@ class FileTreeIndexeddbStorage {
     return folderInfo;
   }
 
+  /**
+   * TODO: Add identify name control
+   * @param info
+   * @param isFolder
+   * @param parentId
+   * @returns
+   */
   async addFileTreeItem(info: RevezoneFile | RevezoneFolder, isFolder: boolean, parentId?: string) {
     await this.initDB();
 
