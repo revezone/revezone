@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 import { EVENTS } from './events';
+import { RevezoneFileTree } from '../renderer/src/types/file';
 
 type Callback = () => void;
 
@@ -10,14 +11,18 @@ const api = {
     ipcRenderer.send(EVENTS.toggleTrafficLight, isShow),
   loadCustomFonts: (): void => ipcRenderer.send(EVENTS.loadCustomFont),
   removeCustomFont: (fontPath: string) => ipcRenderer.send(EVENTS.removeCustomFont, fontPath),
-  fileDataChange: (fileId: string, fileType: 'note' | 'board', name: string, value: string) =>
-    ipcRenderer.send(EVENTS.fileDataChange, fileId, fileType, name, value),
+  fileDataChange: (fileId: string, value: string, fileTree: RevezoneFileTree) =>
+    ipcRenderer.send(EVENTS.fileDataChange, fileId, value, fileTree),
+  renameFileOrFolder: (fileId: string, newName: string, fileTree: RevezoneFileTree) =>
+    ipcRenderer.send(EVENTS.renameFileOrFolder, fileId, newName, fileTree),
   onLoadCustomFontSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.loadCustomFontSuccess, cb),
   onRemoveCustomFontSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.removeCustomFontSuccess, cb),
   switchFontfamily: (fontName: string) => ipcRenderer.send(EVENTS.switchFontfamily, fontName),
   customStoragePath: () => ipcRenderer.send(EVENTS.customStoragePath),
   customStoragePathSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.customStoragePathSuccess, cb),
-  openStoragePath: () => ipcRenderer.send(EVENTS.openStoragePath)
+  openStoragePath: () => ipcRenderer.send(EVENTS.openStoragePath),
+  deleteFileOrFolder: (fileId: string, fileTree: RevezoneFileTree) =>
+    ipcRenderer.send(EVENTS.deleteFileOrFolder, fileId, fileTree)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -231,6 +231,12 @@ class FileTreeIndexeddbStorage {
     const tree: RevezoneFileTree | undefined = await this.getFileTree();
 
     if (tree) {
+      const clonedItem = JSON.parse(JSON.stringify(tree[id].data));
+      const clonedTree = JSON.parse(JSON.stringify(tree));
+      setTimeout(() => {
+        window.api.deleteFileOrFolder(clonedItem, clonedTree);
+      }, 2000);
+
       Object.entries(tree).forEach(([key, item]) => {
         if (key !== id) {
           item.children = item.children?.filter((_key) => _key !== id);
@@ -295,6 +301,10 @@ class FileTreeIndexeddbStorage {
 
     if (!fileTree) return;
 
+    setTimeout(() => {
+      window.api.deleteFileOrFolder(item, fileTree);
+    }, 2000);
+
     let parentId;
 
     Object.values(fileTree).forEach((treeItem) => {
@@ -308,6 +318,10 @@ class FileTreeIndexeddbStorage {
     fileTree[item.id].data.name = uniqueName;
 
     await this.updateFileTree(fileTree);
+
+    console.log('--- rename ---', item.id, uniqueName, fileTree, window.api);
+
+    // await window.api?.renameFileOrFolder();
   }
 
   async deleteFolder(folderId: string) {

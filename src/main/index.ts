@@ -13,13 +13,17 @@ import { registerAppMenu } from './utils/menu';
 import { EVENTS } from '../preload/events';
 import Store from 'electron-store';
 import './utils/os';
-import { onFileDataChange } from './utils/localFilesStorage';
+import {
+  onFileDataChange,
+  onRenameFileOrFolder,
+  onDeleteFileOrFolder
+} from './utils/localFilesStorage';
 import {
   customStoragePath,
   getUserFilesStoragePath,
   openStoragePath
 } from './utils/customStoragePath';
-import { RevezoneFileTree } from '../renderer/src/types/file';
+import { RevezoneFileTree, RevezoneFolder, RevezoneFile } from '../renderer/src/types/file';
 
 // import { autoUpdater } from 'electron-updater';
 // import { notify } from './utils/notification';
@@ -117,6 +121,20 @@ function createWindow(): void {
     EVENTS.fileDataChange,
     async (event, fileId: string, value: string, fileTree: RevezoneFileTree) => {
       onFileDataChange(fileId, value, fileTree);
+    }
+  );
+
+  ipcMain.on(
+    EVENTS.renameFileOrFolder,
+    async (event, fileId: string, newName: string, fileTree: RevezoneFileTree) => {
+      onRenameFileOrFolder(fileId, newName, fileTree);
+    }
+  );
+
+  ipcMain.on(
+    EVENTS.deleteFileOrFolder,
+    async (event, item: RevezoneFile | RevezoneFolder, fileTree: RevezoneFileTree) => {
+      onDeleteFileOrFolder(item, fileTree);
     }
   );
 

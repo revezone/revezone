@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { ensureDir } from './io';
 import { getUserFilesStoragePath } from './customStoragePath';
-import { RevezoneFileTree, RevezoneFolder } from '../../renderer/src/types/file';
+import { RevezoneFileTree, RevezoneFolder, RevezoneFile } from '../../renderer/src/types/file';
 import { join } from 'node:path';
 import { TreeItem } from 'react-complex-tree';
 
@@ -47,4 +47,33 @@ export function onFileDataChange(fileId: string, value: string, fileTree: Revezo
   const fullFilePath = `${fileDir}/${file.name}${suffix}`;
 
   fs.writeFileSync(fullFilePath, value);
+}
+
+export function onRenameFileOrFolder(fileId: string, newName: string, fileTree: RevezoneFileTree) {
+  console.log('--- rename ---', fileId, newName, fileTree);
+}
+
+export function onDeleteFileOrFolder(
+  item: RevezoneFile | RevezoneFolder,
+  fileTree: RevezoneFileTree
+) {
+  console.log('--- delete ---', item, fileTree);
+
+  const filePathInFileTree = getFilePath(item.id, fileTree);
+
+  console.log('--- filePathInFileTree ---', filePathInFileTree);
+
+  const userFilesStoragePath = getUserFilesStoragePath();
+  const fileDir = join(userFilesStoragePath, filePathInFileTree);
+
+  if (item.type === 'folder') {
+    fs.rmdirSync(fileDir);
+  } else {
+    const suffix = item.type === 'board' ? '.excalidraw' : '.md';
+    const fullFilePath = join(fileDir, `${item.name}${suffix}`);
+
+    console.log('--- delete file path ---', fullFilePath);
+
+    fs.rmSync(fullFilePath);
+  }
 }

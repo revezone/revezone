@@ -8,5 +8,7 @@ export const EVENTS = {
   fileDataChange: 'file-data-change',
   customStoragePath: 'custom-storage-path',
   customStoragePathSuccess: 'custom-storage-path-success',
-  openStoragePath: 'open-storage-path'
+  openStoragePath: 'open-storage-path',
+  renameFileOrFolder: 'rename-file-or-folder',
+  deleteFileOrFolder: 'delete-file-or-folder'
 };
