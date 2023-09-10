@@ -17,7 +17,8 @@ import {
   onFileDataChange,
   onRenameFileOrFolder,
   onDeleteFileOrFolder,
-  onAddFile
+  onAddFile,
+  onDragAndDrop
 } from './utils/localFilesStorage';
 import {
   customStoragePath,
@@ -25,6 +26,7 @@ import {
   openStoragePath
 } from './utils/customStoragePath';
 import { RevezoneFileTree, RevezoneFolder, RevezoneFile } from '../renderer/src/types/file';
+import { TreeItem } from 'react-complex-tree';
 
 // import { autoUpdater } from 'electron-updater';
 // import { notify } from './utils/notification';
@@ -152,6 +154,18 @@ function createWindow(): void {
   ipcMain.on(EVENTS.openStoragePath, async (event, storagePath: string) => {
     mainWindow && openStoragePath(mainWindow, storagePath);
   });
+
+  ipcMain.on(
+    EVENTS.dragAndDrop,
+    async (
+      event,
+      items: TreeItem<RevezoneFile | RevezoneFolder>[],
+      parentId: string,
+      fileTree: RevezoneFileTree
+    ) => {
+      onDragAndDrop(items, parentId, fileTree);
+    }
+  );
 }
 
 // This method will be called when Electron has finished

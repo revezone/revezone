@@ -1,7 +1,8 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 import { EVENTS } from './events';
-import { RevezoneFileTree } from '../renderer/src/types/file';
+import { RevezoneFileTree, RevezoneFolder, RevezoneFile } from '../renderer/src/types/file';
+import { TreeItem } from 'react-complex-tree';
 
 type Callback = () => void;
 
@@ -24,7 +25,14 @@ const api = {
   deleteFileOrFolder: (fileId: string, fileTree: RevezoneFileTree) =>
     ipcRenderer.send(EVENTS.deleteFileOrFolder, fileId, fileTree),
   renameFileOrFolder: (fileId: string, newName: string, fileTree: RevezoneFileTree) =>
-    ipcRenderer.send(EVENTS.renameFileOrFolder, fileId, newName, fileTree)
+    ipcRenderer.send(EVENTS.renameFileOrFolder, fileId, newName, fileTree),
+  dragAndDrop: (
+    items: TreeItem<RevezoneFile | RevezoneFolder>[],
+    parentId: string,
+    fileTree: RevezoneFileTree
+  ) => {
+    ipcRenderer.send(EVENTS.dragAndDrop, items, parentId, fileTree);
+  }
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

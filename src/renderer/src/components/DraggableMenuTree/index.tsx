@@ -134,6 +134,8 @@ export default function DraggableMenuTree() {
       target: DraggingPositionBetweenItems,
       fileTree: RevezoneFileTree
     ) => {
+      const oldFileTree = JSON.parse(JSON.stringify(fileTree));
+
       const itemIds: string[] = items.map((item) => item.data.id).filter((id) => !!id);
 
       fileTree = clearTargetInChildren(itemIds, fileTree);
@@ -150,6 +152,8 @@ export default function DraggableMenuTree() {
 
       await fileTreeIndexeddbStorage.updateFileTree(fileTree);
 
+      window.api.dragAndDrop(items, target.parentItem, oldFileTree);
+
       getFileTree();
     },
     []
@@ -161,6 +165,8 @@ export default function DraggableMenuTree() {
       target: DraggingPositionItem,
       fileTree: RevezoneFileTree
     ) => {
+      const oldFileTree = JSON.parse(JSON.stringify(fileTree));
+
       const itemIds: string[] = items.map((item) => item.data.id).filter((id) => !!id);
       fileTree = clearTargetInChildren(itemIds, fileTree);
 
@@ -170,6 +176,8 @@ export default function DraggableMenuTree() {
       fileTree[target.targetItem].children = newChildren;
 
       await fileTreeIndexeddbStorage.updateFileTree(fileTree);
+
+      window.api.dragAndDrop(items, target.targetItem, oldFileTree);
 
       getFileTree();
     },

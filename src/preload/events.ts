@@ -11,5 +11,6 @@ export const EVENTS = {
   openStoragePath: 'open-storage-path',
   renameFileOrFolder: 'rename-file-or-folder',
   deleteFileOrFolder: 'delete-file-or-folder',
-  addFile: 'add-local-file'
+  addFile: 'add-local-file',
+  dragAndDrop: 'drag-and-drop'
 };

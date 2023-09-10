@@ -18,6 +18,17 @@ interface FullPathInfo {
   parentDirPath: string;
 }
 
+export function getFileSuffix(fileType: string | undefined) {
+  switch (fileType) {
+    case 'board':
+      return '.excalidraw';
+    case 'note':
+      return '.md';
+  }
+
+  return undefined;
+}
+
 /**
  * ATTENTION: Files's name cannot be same in one directory
  * @param fileId
@@ -58,7 +69,7 @@ export function getFullPathInfo(itemId: string, fileTree: RevezoneFileTree): Ful
 
   const parentDirPath = join(userFilesStoragePath, parentPathInFileTree);
 
-  if (item.type === 'folder') {
+  if (item.id.startsWith('folder_')) {
     const folderFullPath = path.join(parentDirPath, item.name);
 
     return {
@@ -67,12 +78,12 @@ export function getFullPathInfo(itemId: string, fileTree: RevezoneFileTree): Ful
       parentDirPath
     };
   } else {
-    const suffix = item.type === 'board' ? '.excalidraw' : '.md';
+    const suffix = getFileSuffix(item.type);
     const fullFilePath = path.join(parentDirPath, `${item.name}${suffix}`);
 
     return {
       type: 'file',
-      fileType: item.type,
+      fileType: item.type as 'note' | 'board',
       suffix,
       path: fullFilePath,
       parentDirPath
@@ -131,4 +142,31 @@ export function onDeleteFileOrFolder(
 
     fs.rmSync(fullFilePath);
   }
+}
+
+export function moveFile(file: RevezoneFile, parentId: string, fileTree: RevezoneFileTree) {
+  const { path: sourcePath } = getFullPathInfo(file.id, fileTree);
+  const { path: parentPath } = getFullPathInfo(parentId, fileTree);
+
+  const destPath = join(parentPath, `${file.name}${getFileSuffix(file.type)}`);
+
+  console.log('--- moveFile ---', sourcePath, destPath);
+
+  if (sourcePath !== destPath) {
+    fs.renameSync(sourcePath, destPath);
+  }
+}
+
+export function onDragAndDrop(
+  items: TreeItem<RevezoneFile | RevezoneFolder>[],
+  parentId: string,
+  fileTree: RevezoneFileTree
+) {
+  items.forEach((item) => {
+    if (item.data.id.startsWith('file_')) {
+      moveFile(item.data as RevezoneFile, parentId, fileTree);
+    } else {
+      // move folder
+    }
+  });
 }
