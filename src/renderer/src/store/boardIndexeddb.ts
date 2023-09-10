@@ -52,11 +52,19 @@ class BoardIndexeddbStorage {
     return boardStore;
   }
 
-  async addOrUpdateBoard(id: string, boardData: string, fileTree: RevezoneFileTree) {
+  async updateBoard(id: string, boardData: string, fileTree: RevezoneFileTree) {
     await this.initDB();
+
+    const board = await this.db?.get(INDEXEDDB_BOARD_FILE_KEY, id);
+
+    if (!board) {
+      console.log('--- board not existed ---', id, board);
+      return;
+    }
+
     await this.db?.put(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
 
-    this.getFileDataChangeDebounceFn()(id, boardData, fileTree);
+    this.fileDataChangeDebounceFn(id, boardData, fileTree);
   }
 
   async addBoard(id: string, boardData: string) {
@@ -80,6 +88,10 @@ class BoardIndexeddbStorage {
     console.log('--- this.db ---', id, this.db);
 
     await this.db?.delete(INDEXEDDB_BOARD_FILE_KEY, id);
+  }
+
+  fileDataChangeDebounceFn(...args) {
+    return this.getFileDataChangeDebounceFn()(...args);
   }
 
   getFileDataChangeDebounceFn() {

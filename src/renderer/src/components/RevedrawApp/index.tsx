@@ -78,7 +78,7 @@ export default function RevedrawApp({ file }: Props) {
         ...data
       });
 
-      await boardIndexeddbStorage.addOrUpdateBoard(file.id, str, fileTree);
+      await boardIndexeddbStorage.updateBoard(file.id, str, fileTree);
     },
     [file.id, fileTree]
   );

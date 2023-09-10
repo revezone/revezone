@@ -121,6 +121,10 @@ class FileTreeIndexeddbStorage {
 
     await this.updateFileTree(fileTree);
 
+    if (info.type === 'board') {
+      window.api.addFile222(info.id, '{}', fileTree);
+    }
+
     return info;
   }
 
@@ -138,16 +142,18 @@ class FileTreeIndexeddbStorage {
 
     let maxRepeatIndex = 0;
 
-    const repeatIndexRegx = new RegExp(`^${item.name}\\(([1-9]+)\\)$`);
+    const repeatIndexRegx = new RegExp(`^${item.name}\\(([0-9]+)\\)$`);
 
     if (isRepeated) {
       itemNamesInSameTreeLevel?.forEach((name) => {
         const repeatIndex = name.match(repeatIndexRegx)?.[1];
+
         if (repeatIndex) {
           maxRepeatIndex =
             maxRepeatIndex > Number(repeatIndex) ? maxRepeatIndex : Number(repeatIndex);
         }
       });
+
       return `${item.name}(${maxRepeatIndex + 1})`;
     }
 
@@ -321,7 +327,7 @@ class FileTreeIndexeddbStorage {
 
     console.log('--- rename ---', item.id, uniqueName, fileTree, window.api);
 
-    // await window.api?.renameFileOrFolder();
+    await window.api?.renameFileOrFolder();
   }
 
   async deleteFolder(folderId: string) {

@@ -16,7 +16,8 @@ import './utils/os';
 import {
   onFileDataChange,
   onRenameFileOrFolder,
-  onDeleteFileOrFolder
+  onDeleteFileOrFolder,
+  onAddFile
 } from './utils/localFilesStorage';
 import {
   customStoragePath,
@@ -117,6 +118,11 @@ function createWindow(): void {
     mainWindow && switchFontfamily(mainWindow, fontName);
   });
 
+  ipcMain.on(EVENTS.addFile, (event, fileId: string, value: string, fileTree: RevezoneFileTree) => {
+    console.log('--- event add file ---', fileId);
+    onAddFile(fileId, value, fileTree);
+  });
+
   ipcMain.on(
     EVENTS.fileDataChange,
     async (event, fileId: string, value: string, fileTree: RevezoneFileTree) => {
@@ -127,6 +133,7 @@ function createWindow(): void {
   ipcMain.on(
     EVENTS.renameFileOrFolder,
     async (event, fileId: string, newName: string, fileTree: RevezoneFileTree) => {
+      console.log('--- event rename file ---', fileId);
       onRenameFileOrFolder(fileId, newName, fileTree);
     }
   );

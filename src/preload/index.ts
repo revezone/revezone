@@ -13,16 +13,18 @@ const api = {
   removeCustomFont: (fontPath: string) => ipcRenderer.send(EVENTS.removeCustomFont, fontPath),
   fileDataChange: (fileId: string, value: string, fileTree: RevezoneFileTree) =>
     ipcRenderer.send(EVENTS.fileDataChange, fileId, value, fileTree),
-  renameFileOrFolder: (fileId: string, newName: string, fileTree: RevezoneFileTree) =>
-    ipcRenderer.send(EVENTS.renameFileOrFolder, fileId, newName, fileTree),
   onLoadCustomFontSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.loadCustomFontSuccess, cb),
   onRemoveCustomFontSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.removeCustomFontSuccess, cb),
   switchFontfamily: (fontName: string) => ipcRenderer.send(EVENTS.switchFontfamily, fontName),
   customStoragePath: () => ipcRenderer.send(EVENTS.customStoragePath),
   customStoragePathSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.customStoragePathSuccess, cb),
   openStoragePath: () => ipcRenderer.send(EVENTS.openStoragePath),
+  addFile222: (fileId: string, value: string, fileTree: RevezoneFileTree) =>
+    ipcRenderer.send(EVENTS.addFile, fileId, value, fileTree),
   deleteFileOrFolder: (fileId: string, fileTree: RevezoneFileTree) =>
-    ipcRenderer.send(EVENTS.deleteFileOrFolder, fileId, fileTree)
+    ipcRenderer.send(EVENTS.deleteFileOrFolder, fileId, fileTree),
+  renameFileOrFolder: (fileId: string, newName: string, fileTree: RevezoneFileTree) =>
+    ipcRenderer.send(EVENTS.renameFileOrFolder, fileId, newName, fileTree)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
