@@ -307,9 +307,7 @@ class FileTreeIndexeddbStorage {
 
     if (!fileTree) return;
 
-    setTimeout(() => {
-      window.api.deleteFileOrFolder(item, fileTree);
-    }, 2000);
+    const oldFileTree = JSON.parse(JSON.stringify(fileTree));
 
     let parentId;
 
@@ -327,7 +325,7 @@ class FileTreeIndexeddbStorage {
 
     console.log('--- rename ---', item.id, uniqueName, fileTree, window.api);
 
-    await window.api?.renameFileOrFolder();
+    window.api?.renameFileOrFolder(item.id, uniqueName, oldFileTree);
   }
 
   async deleteFolder(folderId: string) {

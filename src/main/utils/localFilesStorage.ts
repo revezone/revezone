@@ -109,8 +109,6 @@ export function onFileDataChange(fileId: string, value: string, fileTree: Revezo
 }
 
 export function onRenameFileOrFolder(itemId: string, newName: string, fileTree: RevezoneFileTree) {
-  console.log('--- rename ---', itemId, newName, fileTree);
-
   const { path: fullFilePath, parentDirPath, suffix } = getFullPathInfo(itemId, fileTree);
 
   fs.renameSync(fullFilePath, `${parentDirPath}/${newName}${suffix}`);
@@ -120,11 +118,13 @@ export function onDeleteFileOrFolder(
   item: RevezoneFile | RevezoneFolder,
   fileTree: RevezoneFileTree
 ) {
-  console.log('--- delete ---', item, fileTree);
+  console.log('--- delete ---', item);
 
   const { path: fullFilePath } = getFullPathInfo(item.id, fileTree);
 
-  if (item.type === 'folder') {
+  if (item.id.startsWith('folder_')) {
+    console.log('--- delete folder ---', fullFilePath);
+
     fs.rmdirSync(fullFilePath);
   } else {
     console.log('--- delete file path ---', fullFilePath);
