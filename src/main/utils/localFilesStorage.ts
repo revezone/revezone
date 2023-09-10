@@ -144,13 +144,21 @@ export function onDeleteFileOrFolder(
   }
 }
 
-export function moveFile(file: RevezoneFile, parentId: string, fileTree: RevezoneFileTree) {
-  const { path: sourcePath } = getFullPathInfo(file.id, fileTree);
+export function moveFileOrFolder(
+  item: RevezoneFile | RevezoneFolder,
+  parentId: string,
+  fileTree: RevezoneFileTree
+) {
+  const { path: sourcePath } = getFullPathInfo(item.id, fileTree);
   const { path: parentPath } = getFullPathInfo(parentId, fileTree);
 
-  const destPath = join(parentPath, `${file.name}${getFileSuffix(file.type)}`);
+  let destPath = join(parentPath, item.name);
 
-  console.log('--- moveFile ---', sourcePath, destPath);
+  if (item.id.startsWith('file_')) {
+    destPath = `${destPath}${getFileSuffix(item.type)}`;
+  }
+
+  console.log('--- moveFileOrFolder ---', sourcePath, destPath);
 
   if (sourcePath !== destPath) {
     fs.renameSync(sourcePath, destPath);
@@ -163,10 +171,6 @@ export function onDragAndDrop(
   fileTree: RevezoneFileTree
 ) {
   items.forEach((item) => {
-    if (item.data.id.startsWith('file_')) {
-      moveFile(item.data as RevezoneFile, parentId, fileTree);
-    } else {
-      // move folder
-    }
+    moveFileOrFolder(item.data, parentId, fileTree);
   });
 }
