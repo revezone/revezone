@@ -122,7 +122,7 @@ class FileTreeIndexeddbStorage {
     await this.updateFileTree(fileTree);
 
     if (info.type === 'board') {
-      window.api.addFile222(info.id, '{}', fileTree);
+      window.api.addFile(info.id, '{}', fileTree);
     }
 
     return info;

@@ -19,7 +19,7 @@ const api = {
   customStoragePath: () => ipcRenderer.send(EVENTS.customStoragePath),
   customStoragePathSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.customStoragePathSuccess, cb),
   openStoragePath: () => ipcRenderer.send(EVENTS.openStoragePath),
-  addFile222: (fileId: string, value: string, fileTree: RevezoneFileTree) =>
+  addFile: (fileId: string, value: string, fileTree: RevezoneFileTree) =>
     ipcRenderer.send(EVENTS.addFile, fileId, value, fileTree),
   deleteFileOrFolder: (fileId: string, fileTree: RevezoneFileTree) =>
     ipcRenderer.send(EVENTS.deleteFileOrFolder, fileId, fileTree),

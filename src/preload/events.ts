@@ -10,5 +10,6 @@ export const EVENTS = {
   customStoragePathSuccess: 'custom-storage-path-success',
   openStoragePath: 'open-storage-path',
   renameFileOrFolder: 'rename-file-or-folder',
-  deleteFileOrFolder: 'delete-file-or-folder'
+  deleteFileOrFolder: 'delete-file-or-folder',
+  addFile: 'add-local-file'
 };
