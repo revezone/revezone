@@ -1,4 +1,5 @@
-import { DOUBLE_LINK_REGEX } from '@renderer/utils/constant';
+import { DOUBLE_LINK_REGEX } from './constant';
+import { RevezoneFolder, RevezoneFile, RevezoneFileTree } from '../types/file';
 
 const REVEZONE_LINK_PROTOCOL = 'revezone://';
 
@@ -12,3 +13,35 @@ export const getFileIdOrNameFromLink = (link: string) => {
   }
   return null;
 };
+
+export function getUniqueNameInSameTreeLevel(
+  item: RevezoneFile | RevezoneFolder,
+  fileTree: RevezoneFileTree,
+  parentId = 'root'
+) {
+  const parent = fileTree[parentId];
+  const itemNamesInSameTreeLevel = parent.children
+    ?.filter((id) => id !== item.id)
+    ?.map((id) => fileTree[id].data.name);
+
+  const isRepeated = !!itemNamesInSameTreeLevel?.find((name) => name === item.name);
+
+  let maxRepeatIndex = 0;
+
+  const repeatIndexRegx = new RegExp(`^${item.name}\\(([0-9]+)\\)$`);
+
+  if (isRepeated) {
+    itemNamesInSameTreeLevel?.forEach((name) => {
+      const repeatIndex = name.match(repeatIndexRegx)?.[1];
+
+      if (repeatIndex) {
+        maxRepeatIndex =
+          maxRepeatIndex > Number(repeatIndex) ? maxRepeatIndex : Number(repeatIndex);
+      }
+    });
+
+    return `${item.name}(${maxRepeatIndex + 1})`;
+  }
+
+  return item.name;
+}

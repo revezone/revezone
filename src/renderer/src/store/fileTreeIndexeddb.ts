@@ -7,6 +7,7 @@ import { blocksuiteStorage } from './blocksuite';
 import { boardIndexeddbStorage } from './boardIndexeddb';
 import { DEFAULT_FILE_TREE } from '@renderer/utils/constant';
 import dayjs from 'dayjs';
+import { getUniqueNameInSameTreeLevel } from '../utils/file';
 
 export interface RevezoneDBSchema extends DBSchema {
   file_tree: {
@@ -107,7 +108,7 @@ class FileTreeIndexeddbStorage {
 
     const fileTree = (await this.getFileTree()) || {};
 
-    info.name = this.getUniqueNameInSameTreeLevel(info, fileTree, parentId);
+    info.name = getUniqueNameInSameTreeLevel(info, fileTree, parentId);
 
     fileTree[info.id] = { index: info.id, isFolder, data: info, canRename: true };
 
@@ -126,38 +127,6 @@ class FileTreeIndexeddbStorage {
     }
 
     return info;
-  }
-
-  getUniqueNameInSameTreeLevel(
-    item: RevezoneFile | RevezoneFolder,
-    fileTree: RevezoneFileTree,
-    parentId = 'root'
-  ) {
-    const parent = fileTree[parentId];
-    const itemNamesInSameTreeLevel = parent.children
-      ?.filter((id) => id !== item.id)
-      ?.map((id) => fileTree[id].data.name);
-
-    const isRepeated = !!itemNamesInSameTreeLevel?.find((name) => name === item.name);
-
-    let maxRepeatIndex = 0;
-
-    const repeatIndexRegx = new RegExp(`^${item.name}\\(([0-9]+)\\)$`);
-
-    if (isRepeated) {
-      itemNamesInSameTreeLevel?.forEach((name) => {
-        const repeatIndex = name.match(repeatIndexRegx)?.[1];
-
-        if (repeatIndex) {
-          maxRepeatIndex =
-            maxRepeatIndex > Number(repeatIndex) ? maxRepeatIndex : Number(repeatIndex);
-        }
-      });
-
-      return `${item.name}(${maxRepeatIndex + 1})`;
-    }
-
-    return item.name;
   }
 
   async addFile(
@@ -317,7 +286,7 @@ class FileTreeIndexeddbStorage {
       }
     });
 
-    const uniqueName = this.getUniqueNameInSameTreeLevel({ ...item, name }, fileTree, parentId);
+    const uniqueName = getUniqueNameInSameTreeLevel({ ...item, name }, fileTree, parentId);
 
     fileTree[item.id].data.name = uniqueName;
 

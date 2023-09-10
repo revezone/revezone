@@ -9,6 +9,7 @@ import {
 } from '../../renderer/src/types/file';
 import path, { join } from 'node:path';
 import { TreeItem } from 'react-complex-tree';
+import { getUniqueNameInSameTreeLevel } from '../../renderer/src/utils/file';
 
 interface FullPathInfo {
   type: 'folder' | 'file';
@@ -152,7 +153,11 @@ export function moveFileOrFolder(
   const { path: sourcePath } = getFullPathInfo(item.id, fileTree);
   const { path: parentPath } = getFullPathInfo(parentId, fileTree);
 
-  let destPath = join(parentPath, item.name);
+  const uniqueName = getUniqueNameInSameTreeLevel(item, fileTree);
+
+  console.log('--- uniqueName ---', item.name, uniqueName);
+
+  let destPath = join(parentPath, uniqueName);
 
   if (item.id.startsWith('file_')) {
     destPath = `${destPath}${getFileSuffix(item.type)}`;
