@@ -16,14 +16,16 @@
   "operation": {
     "addFolder": "Add a folder",
     "addNote": "Add a note",
-    "addBoard": "Add a board",
+    "addBoard": "Add a Excalidraw",
     "rename": "Rename",
     "delete": "Delete",
     "copyRevezoneLink": "Copy revezone link",
     "giveAStar": "Git a Github star",
     "switchLanguage": "Switch Lanugage",
     "systemSetting": "System setting",
-    "storagePath": "Storage path"
+    "storagePath": "Storage path",
+    "addMindmap": "Add a mindmap",
+    "addTldraw": "Add a Tldraw"
   },
   "description": {
     "noteDesc": "A notion-like note function",

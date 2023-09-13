@@ -3,6 +3,8 @@ export type EventName =
   | 'create_board'
   | 'create_note'
   | 'create_welcome'
+  | 'create_mindmap'
+  | 'create_tldraw'
   | 'delete_folder'
   | 'delete_file'
   | 'delete_board'

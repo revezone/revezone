@@ -16,6 +16,8 @@ import { RevezoneFile, RevezoneFileType } from '@renderer/types/file';
 import { Palette, FileType, File } from 'lucide-react';
 import { WELCOME_TAB_ITEM } from '@renderer/utils/constant';
 import { activeEditorManager } from '@revesuite/blocks';
+// import MindMap from '../MindMap';
+import ReveTldraw from '../Tldraw';
 
 export default function MultiTabs() {
   const { tabJsonModel, deleteTab, getTabList } = useTabJsonModel();
@@ -51,6 +53,10 @@ export default function MultiTabs() {
         return <NoteEditor file={file} />;
       case 'board':
         return <RevedrawApp file={file} />;
+      case 'tldraw':
+        return <ReveTldraw file={file} />;
+      // case 'mindmap':
+      //   return <MindMap />;
       default:
         return <WelcomePage />;
     }

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import useAddFolder from '@renderer/hooks/useAddFolder';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import useCurrentFolderId from '@renderer/hooks/useCurrentFolderId';
+import { MindMapIcon, TldrawIcon } from '@renderer/icons';
 
 import 'driver.js/dist/driver.css';
 
@@ -56,14 +57,36 @@ export default function OperationBar(props: Props) {
         className="operation-item flex items-center mr-3 cursor-pointer relative"
         onClick={(e) => {
           e.stopPropagation();
-          addFile('New Board', 'board', tabModel, currentFolderId);
+          addFile('New Excalidarw', 'board', tabModel, currentFolderId);
         }}
       >
-        <Palette
-          className={`${getSizeClassName()} text-current cursor-pointer menu-icon animate-breath`}
-        />
+        <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
         <span className="operation-btn-desc ml-1 transition-all">{t('operation.addBoard')}</span>
       </span>
+      <span
+        title={t('operation.addTldraw')}
+        id="add-mindmap-button"
+        className="operation-item flex items-center mr-3 cursor-pointer relative"
+        onClick={(e) => {
+          e.stopPropagation();
+          addFile('New Tldraw', 'tldraw', tabModel, currentFolderId);
+        }}
+      >
+        <TldrawIcon className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
+        <span className="operation-btn-desc ml-1 transition-all">{t('operation.addTldraw')}</span>
+      </span>
+      {/* <span
+        title={t('operation.addMindmap')}
+        id="add-mindmap-button"
+        className="operation-item flex items-center mr-3 cursor-pointer relative"
+        onClick={(e) => {
+          e.stopPropagation();
+          addFile('New Mindmap', 'mindmap', tabModel, currentFolderId);
+        }}
+      >
+        <MindMapIcon className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
+        <span className="operation-btn-desc ml-1 transition-all">{t('operation.addMindmap')}</span>
+      </span> */}
       <span
         title={t('operation.addNote')}
         className="operation-item flex items-center mr-3 cursor-pointer"

@@ -17,7 +17,7 @@ export default function useAddFile() {
   const addFile = useCallback(
     async (
       name: string,
-      type: 'board' | 'note',
+      type: 'board' | 'note' | 'mindmap' | 'tldraw',
       tabModel: Model | undefined,
       parentId?: string
     ) => {

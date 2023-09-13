@@ -16,14 +16,16 @@
   "operation": {
     "addFolder": "新建文件夹",
     "addNote": "新建笔记",
-    "addBoard": "新建白板",
+    "addBoard": "新建 Excalidraw",
     "rename": "重命名",
     "delete": "删除",
     "copyRevezoneLink": "复制 Revezone 链接",
     "giveAStar": "给个 Github Star 吧",
     "switchLanguage": "切换语言",
     "systemSetting": "系统设置",
-    "storagePath": "存储路径"
+    "storagePath": "存储路径",
+    "addMindmap": "新建脑图",
+    "addTldraw": "新建 Tldraw"
   },
   "description": {
     "noteDesc": "类 Notion 笔记",
