@@ -1,6 +1,6 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import { debounce } from '../utils/debounce';
 import { RevezoneFileTree } from '../types/file';
+import { getFileDataChangeDebounceFn } from '../utils/file';
 
 export interface RevezoneBoardDBSchema extends DBSchema {
   board: {
@@ -91,14 +91,7 @@ class BoardIndexeddbStorage {
   }
 
   fileDataChangeDebounceFn(...args) {
-    return this.getFileDataChangeDebounceFn()(...args);
-  }
-
-  getFileDataChangeDebounceFn() {
-    return debounce((id: string, boardData: string, fileTree: RevezoneFileTree) => {
-      console.log('--- send fileDataChange ---', id, JSON.parse(boardData));
-      window.api.fileDataChange(id, boardData, fileTree);
-    }, 1000);
+    return getFileDataChangeDebounceFn()(...args);
   }
 }
 

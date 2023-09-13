@@ -1,47 +1,32 @@
-import { useState, useLayoutEffect, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { RevezoneFile } from '@renderer/types/file';
-import {
-  Tldraw,
-  createTLStore,
-  defaultShapeUtils,
-  throttle,
-  useEditor,
-  Editor
-} from '@tldraw/tldraw';
+import { Tldraw, Editor } from '@tldraw/tldraw';
+import { getFileDataChangeDebounceFn } from '@renderer/utils/file';
 
 import '@tldraw/tldraw/tldraw.css';
+import useFileTree from '@renderer/hooks/useFileTree';
 
 interface Props {
   file: RevezoneFile;
 }
 
+const fileDataChangeDebounceFn = getFileDataChangeDebounceFn();
+
 export default function ReveTldraw(props: Props) {
   const { file } = props;
-  //   const editor = useEditor();
   const [editor, setEditor] = useState<Editor>();
+  const { fileTree } = useFileTree();
 
   useEffect(() => {
     editor?.store?.listen((entry) => {
       //   entry; // { changes, source }
       console.log('--- store change ---', entry, editor.store.getSnapshot());
+
+      const str = JSON.stringify(editor.store.getSnapshot());
+
+      fileDataChangeDebounceFn(file.id, str, fileTree);
     });
-  }, [editor]);
-
-  //   const [store] = useState(() => createTLStore({ shapeUtils: defaultShapeUtils }));
-
-  //   useLayoutEffect(() => {
-  //     // Each time the store changes, run the (debounced) persist function
-  //     const cleanupFn = store.listen(
-  //       throttle(() => {
-  //         const snapshot = store.getSnapshot();
-  //         console.log('--- snapshot ---', snapshot);
-  //       }, 500)
-  //     );
-
-  //     return () => {
-  //       cleanupFn();
-  //     };
-  //   }, [store]);
+  }, [editor, file, fileTree]);
 
   const onUiEvent = (name, data) => {
     console.log('--- onUiEvent ---', name, data);

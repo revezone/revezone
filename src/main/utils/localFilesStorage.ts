@@ -25,6 +25,8 @@ export function getFileSuffix(fileType: string | undefined) {
       return '.excalidraw';
     case 'note':
       return '.md';
+    case 'tldraw':
+      return '.tldraw';
   }
 
   return undefined;

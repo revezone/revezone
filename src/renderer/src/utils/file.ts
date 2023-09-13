@@ -1,5 +1,6 @@
 import { DOUBLE_LINK_REGEX } from './constant';
 import { RevezoneFolder, RevezoneFile, RevezoneFileTree } from '../types/file';
+import { debounce } from './debounce';
 
 const REVEZONE_LINK_PROTOCOL = 'revezone://';
 
@@ -45,3 +46,10 @@ export function getUniqueNameInSameTreeLevel(
 
   return item.name;
 }
+
+export const getFileDataChangeDebounceFn = () => {
+  return debounce((id: string, boardData: string, fileTree: RevezoneFileTree) => {
+    console.log('--- send fileDataChange ---', id, JSON.parse(boardData));
+    window.api.fileDataChange(id, boardData, fileTree);
+  }, 1000);
+};
