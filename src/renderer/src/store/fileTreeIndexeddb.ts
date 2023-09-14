@@ -132,7 +132,8 @@ class FileTreeIndexeddbStorage {
   async addFile(
     name?: string,
     type: RevezoneFileType = 'note',
-    parentId?: string
+    parentId?: string,
+    fileData?: string
   ): Promise<RevezoneFile> {
     await this.initDB();
 
@@ -141,7 +142,7 @@ class FileTreeIndexeddbStorage {
     if (type === 'note') {
       await blocksuiteStorage.addPage(fileId);
     } else if (type === 'board') {
-      await boardIndexeddbStorage.addBoard(fileId, '{}');
+      await boardIndexeddbStorage.addBoard(fileId, fileData || '{}');
     }
 
     const fileInfo = {

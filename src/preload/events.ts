@@ -12,5 +12,6 @@ export const EVENTS = {
   renameFileOrFolder: 'rename-file-or-folder',
   deleteFileOrFolder: 'delete-file-or-folder',
   addFile: 'add-local-file',
-  dragAndDrop: 'drag-and-drop'
+  dragAndDrop: 'drag-and-drop',
+  openFileSuccess: 'open-file-success'
 };

@@ -32,7 +32,8 @@ const api = {
     fileTree: RevezoneFileTree
   ) => {
     ipcRenderer.send(EVENTS.dragAndDrop, items, parentId, fileTree);
-  }
+  },
+  openFileSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.openFileSuccess, cb)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

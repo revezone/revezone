@@ -15,7 +15,15 @@ import { useAtom } from 'jotai';
 import { focusItemAtom, selectedKeysAtom } from '@renderer/store/jotai';
 import OperationBar from '../OperationBar';
 import RevezoneLogo from '../RevezoneLogo';
-import { Folder, HardDrive, UploadCloud, MoreVertical, Palette, FileType } from 'lucide-react';
+import {
+  Folder,
+  HardDrive,
+  UploadCloud,
+  MoreVertical,
+  Palette,
+  FileType,
+  Import
+} from 'lucide-react';
 import useFileTreeContextMenu from '@renderer/hooks/useFileTreeContextMenu';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +39,7 @@ import {
   setRenamingMenuItemIdToLocal
 } from '@renderer/store/localstorage';
 import useDeleteFolder from '@renderer/hooks/useDeleteFolder';
+import ImportFiles from '../ImportFiles';
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
@@ -222,11 +231,27 @@ export default function DraggableMenuTree() {
 
   return (
     <div className="revezone-menu-container">
-      <div className="flex flex-col mb-1 pl-5 pr-8 pt-0 justify-between">
-        <div className="flex items-center">
-          <RevezoneLogo size="small" onClick={onLogoClick} />
-          <span className="text-sm whitespace-nowrap">&nbsp;-&nbsp;{t('text.alpha')}</span>
-          <PublicBetaNotice />
+      <div className="flex flex-col mb-1 pl-5 pr-6 pt-0 justify-between">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <RevezoneLogo size="small" onClick={onLogoClick} />
+            <span className="text-sm whitespace-nowrap">&nbsp;-&nbsp;{t('text.alpha')}</span>
+            <PublicBetaNotice />
+          </div>
+          <Dropdown
+            trigger={['hover']}
+            menu={{
+              items: [
+                {
+                  key: 'import',
+                  label: <ImportFiles />,
+                  icon: <Import className="w-4 h-4" />
+                }
+              ]
+            }}
+          >
+            <MoreVertical className="w-3 h-3 cursor-pointer" />
+          </Dropdown>
         </div>
         <div className="flex justify-start">
           <div className="mr-2 whitespace-nowrap">

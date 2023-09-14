@@ -23,6 +23,9 @@ function App(): JSX.Element {
 
   useEffect(() => {
     submitAppEnterUserEvent();
+    window.api.openFileSuccess((path, fileData) => {
+      console.log('--- openFileSuccess ---', path, fileData);
+    });
   }, []);
 
   const getLocale = useCallback(() => {

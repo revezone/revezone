@@ -25,7 +25,9 @@
     "systemSetting": "System setting",
     "storagePath": "Storage path",
     "addMindmap": "Add a mindmap",
-    "addTldraw": "Add a Tldraw"
+    "addTldraw": "Add a Tldraw",
+    "importFiles": "Import files",
+    "import": "Import Files"
   },
   "description": {
     "noteDesc": "A notion-like note function",

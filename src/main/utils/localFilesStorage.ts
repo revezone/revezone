@@ -11,15 +11,17 @@ import path, { join } from 'node:path';
 import { TreeItem } from 'react-complex-tree';
 import { getUniqueNameInSameTreeLevel } from '../../renderer/src/utils/file';
 
+type RevezoneFileSuffix = '.excalidraw' | '.tldraw' | '.md';
+
 interface FullPathInfo {
   type: 'folder' | 'file';
   fileType?: RevezoneFileType;
-  suffix?: '.excalidraw' | '.md';
+  suffix?: RevezoneFileSuffix;
   path: string;
   parentDirPath: string;
 }
 
-export function getFileSuffix(fileType: string | undefined) {
+export function getFileSuffix(fileType: string | undefined): RevezoneFileSuffix | undefined {
   switch (fileType) {
     case 'board':
       return '.excalidraw';
@@ -86,7 +88,7 @@ export function getFullPathInfo(itemId: string, fileTree: RevezoneFileTree): Ful
 
     return {
       type: 'file',
-      fileType: item.type as 'note' | 'board',
+      fileType: item.type as RevezoneFileType,
       suffix,
       path: fullFilePath,
       parentDirPath

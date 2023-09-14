@@ -10,10 +10,16 @@ import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin(), bytecodePlugin()]
+    plugins: [externalizeDepsPlugin(), bytecodePlugin()],
+    build: {
+      minify: true
+    }
   },
   preload: {
-    plugins: [externalizeDepsPlugin(), bytecodePlugin()]
+    plugins: [externalizeDepsPlugin(), bytecodePlugin()],
+    build: {
+      minify: true
+    }
   },
   renderer: {
     resolve: {
@@ -42,7 +48,8 @@ export default defineConfig({
               '@revesuite/lit',
               '@revesuite/store'
             ],
-            revemate: ['revemate']
+            revemate: ['revemate'],
+            tldraw: ['@tldraw/tldraw']
           }
         }
       }

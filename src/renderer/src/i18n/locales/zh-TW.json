@@ -25,7 +25,9 @@
     "systemSetting": "繫統設置",
     "storagePath": "存儲路徑",
     "addMindmap": "新建腦圖",
-    "addTldraw": "新建 Tldraw"
+    "addTldraw": "新建 Tldraw",
+    "importFiles": "導入文件",
+    "import": "導入文件"
   },
   "description": {
     "noteDesc": "類 Notion 筆記",
