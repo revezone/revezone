@@ -15,27 +15,30 @@ export default function ImportFiles() {
 
   const onClick = useCallback(async () => {
     // Destructure the one-element array.
-    const [fileHandle] = await window.showOpenFilePicker();
+    // @ts-ignore
+    const fileHandles = await window.showOpenFilePicker({ multiple: true });
     // Do something with the file handle.
 
-    const localFile = await fileHandle.getFile();
+    fileHandles.map(async (fileHandle) => {
+      const localFile = await fileHandle.getFile();
 
-    const fileData = await localFile.text();
+      const fileData = await localFile.text();
 
-    console.log(localFile, fileData);
+      console.log(localFile, fileData);
 
-    const matches = localFile.name.match(FILE_NAME_REGEX);
-    const fileName = matches?.[1];
-    const fileSuffix = matches?.[2];
+      const matches = localFile.name.match(FILE_NAME_REGEX);
+      const fileName = matches?.[1];
+      const fileSuffix = matches?.[2];
 
-    switch (fileSuffix) {
-      case '.excalidraw':
-        await addFile(fileName, 'board', tabModel, 'root', fileData);
-        break;
-      case '.tldraw':
-        await addFile(fileName, 'tldraw', tabModel, 'root', fileData);
-        break;
-    }
+      switch (fileSuffix) {
+        case '.excalidraw':
+          await addFile(fileName, 'board', tabModel, 'root', fileData);
+          break;
+        case '.tldraw':
+          await addFile(fileName, 'tldraw', tabModel, 'root', fileData);
+          break;
+      }
+    });
   }, [fileTree, tabModel]);
 
   return <div onClick={onClick}>{t('operation.import')}</div>;

@@ -8,6 +8,7 @@ import { boardIndexeddbStorage } from './boardIndexeddb';
 import { DEFAULT_FILE_TREE } from '@renderer/utils/constant';
 import dayjs from 'dayjs';
 import { getUniqueNameInSameTreeLevel } from '../utils/file';
+import { tldrawIndexeddbStorage } from './tldrawIndexeddb';
 
 export interface RevezoneDBSchema extends DBSchema {
   file_tree: {
@@ -143,6 +144,8 @@ class FileTreeIndexeddbStorage {
       await blocksuiteStorage.addPage(fileId);
     } else if (type === 'board') {
       await boardIndexeddbStorage.addBoard(fileId, fileData || '{}');
+    } else if (type === 'tldraw') {
+      await tldrawIndexeddbStorage.addTldraw(fileId, fileData || '{}');
     }
 
     const fileInfo = {
