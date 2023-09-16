@@ -2,7 +2,7 @@ import { Button, Popconfirm } from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const DEFAULT_USER_DATA_STORAGE_PATH = window.electron.process.env['USER_FILES_STORAGE_PATH'];
+const DEFAULT_USER_DATA_STORAGE_PATH = window.electron?.process.env['USER_FILES_STORAGE_PATH'];
 
 export default function StoragePathSetting() {
   const [storagePath, setStoragePath] = useState<string | undefined>(
@@ -11,7 +11,7 @@ export default function StoragePathSetting() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    window.api.customStoragePathSuccess((event, path: string) => {
+    window.api?.customStoragePathSuccess((event, path: string) => {
       console.log('--- storagePath ---', path);
       setStoragePath(path);
     });
@@ -29,7 +29,7 @@ export default function StoragePathSetting() {
           title={t('storagePath.changePath')}
           description={t('storagePath.changePathConfirm')}
           onConfirm={() => {
-            window.api.customStoragePath();
+            window.api?.customStoragePath();
           }}
         >
           <Button size="small" className="mr-2">
@@ -40,7 +40,7 @@ export default function StoragePathSetting() {
         <Button
           size="small"
           onClick={() => {
-            window.api.openStoragePath();
+            window.api?.openStoragePath();
           }}
         >
           {t('storagePath.openPath')}

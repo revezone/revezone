@@ -37,8 +37,6 @@ export default function RevedrawApp({ file }: Props) {
 
     const dataStr = !data || typeof data === 'string' ? data : JSON.stringify(data);
 
-    console.log('--- excalidraw ---', dataStr);
-
     setDataSource(dataStr);
   }, []);
 

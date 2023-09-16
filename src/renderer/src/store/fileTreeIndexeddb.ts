@@ -124,7 +124,7 @@ class FileTreeIndexeddbStorage {
     await this.updateFileTree(fileTree);
 
     if (info.type && ['board', 'tldraw'].includes(info.type)) {
-      window.api.addFile(info.id, '{}', fileTree);
+      window.api?.addFile(info.id, '{}', fileTree);
     }
 
     return info;
@@ -213,7 +213,7 @@ class FileTreeIndexeddbStorage {
       const clonedItem = JSON.parse(JSON.stringify(tree[id].data));
       const clonedTree = JSON.parse(JSON.stringify(tree));
       setTimeout(() => {
-        window.api.deleteFileOrFolder(clonedItem, clonedTree);
+        window.api?.deleteFileOrFolder(clonedItem, clonedTree);
       }, 2000);
 
       Object.entries(tree).forEach(([key, item]) => {

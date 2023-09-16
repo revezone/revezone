@@ -62,7 +62,7 @@ const CustomFonts = ({ setSystemSettingVisible }: Props) => {
   }, []);
 
   const removeCustomFont = (fontPath: string) => {
-    window.api.removeCustomFont(fontPath);
+    window.api?.removeCustomFont(fontPath);
   };
 
   if (!isInRevezoneApp) {
@@ -139,7 +139,7 @@ const CustomFonts = ({ setSystemSettingVisible }: Props) => {
 
                   console.log('---  switchfont ---', value);
 
-                  window.api.switchFontfamily(value);
+                  window.api?.switchFontfamily(value);
 
                   emitter.emit('switch_font_family');
                 }}
