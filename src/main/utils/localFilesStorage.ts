@@ -51,7 +51,7 @@ export const getParentPathInFileTree = (
 
   items.forEach((treeItem: TreeItem) => {
     if (treeItem.children?.includes(itemId)) {
-      parentItem = treeItem.data;
+      parentItem = treeItem?.data;
     }
   });
 
@@ -72,13 +72,20 @@ export const getParentPathInFileTree = (
 };
 
 export function getFullPathInfo(itemId: string, fileTree: RevezoneFileTree): FullPathInfo {
-  const item = fileTree[itemId].data;
+  const item = fileTree[itemId]?.data;
 
   const userFilesStoragePath = getUserFilesStoragePath();
 
-  const parentPathInFileTree = getParentPathInFileTree(itemId, fileTree);
+  if (!item) {
+    console.error(`getFullPathInfo: File item ${itemId} not found`);
+    return {
+      type: itemId.startsWith('file_') ? 'file' : 'folder',
+      path: userFilesStoragePath,
+      parentDirPath: userFilesStoragePath
+    };
+  }
 
-  console.log('--- parentPathInFileTree ---', parentPathInFileTree);
+  const parentPathInFileTree = getParentPathInFileTree(itemId, fileTree);
 
   const parentDirPath = join(userFilesStoragePath, parentPathInFileTree);
 
