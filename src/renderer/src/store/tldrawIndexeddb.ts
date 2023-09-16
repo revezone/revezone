@@ -13,6 +13,15 @@ export interface RevezoneTldrawDBSchema extends DBSchema {
 export const INDEXEDDB_TLDRAW_FILE_KEY = 'tldraw';
 export const INDEXEDDB_REVEZONE_TLDRAW = 'revezone_tldraw';
 
+const TLDRAW_INITIAL_DATA: StoreSnapshot<TLRecord> = {
+  store: {},
+  schema: {
+    schemaVersion: 1,
+    storeVersion: 4,
+    recordVersions: {}
+  }
+};
+
 class TldrawIndexeddbStorage {
   constructor() {
     if (TldrawIndexeddbStorage.instance) {
@@ -68,7 +77,7 @@ class TldrawIndexeddbStorage {
     this.fileDataChangeDebounceFn(id, tldrawData, fileTree);
   }
 
-  async addTldraw(id: string, tldrawData: StoreSnapshot<TLRecord>) {
+  async addTldraw(id: string, tldrawData: StoreSnapshot<TLRecord> = TLDRAW_INITIAL_DATA) {
     await this.initDB();
     await this.db?.add(INDEXEDDB_TLDRAW_FILE_KEY, tldrawData, id);
   }
