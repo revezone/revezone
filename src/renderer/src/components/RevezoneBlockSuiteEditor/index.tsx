@@ -66,18 +66,18 @@ export default class RevezoneBlockSuiteEditor extends LitElement {
       }, 100);
     });
 
-    this.page?.slots.historyUpdated.on((...args) => {
-      console.log('--- historyUpdated ---', this.page?.id, ...args);
+    // this.page?.slots.historyUpdated.on((...args) => {
+    //   console.log('--- historyUpdated ---', this.page?.id, ...args);
 
-      if (!this.page?.root?.id) return;
+    //   // if (!this.page?.root?.id) return;
 
-      const id = this.page.root.id;
+    //   // const id = this.page.root.id;
 
-      const htmlContent = document.querySelector(`[data-block-id=${id}]`)?.innerHTML;
-      const markdown = htmlContent && convertHtmlToMarkdown(htmlContent);
+    //   // const htmlContent = document.querySelector(`[data-block-id=${id}]`)?.innerHTML;
+    //   // const markdown = htmlContent && convertHtmlToMarkdown(htmlContent);
 
-      console.log('--- markdown ---', markdown);
-    });
+    //   // console.log('--- markdown ---', markdown);
+    // });
   }
 }
 

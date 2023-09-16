@@ -28,8 +28,6 @@ export default function MultiTabs() {
   useEffect(() => {
     if (!tabJsonModel) return;
 
-    console.log('--- tabJsonModel ---', tabJsonModel);
-
     try {
       const tabList = getTabList(tabJsonModel.layout);
 
