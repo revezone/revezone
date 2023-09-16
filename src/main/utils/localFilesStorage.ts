@@ -56,8 +56,16 @@ export const getParentPathInFileTree = (
   });
 
   if (parentItem) {
+    let _filePath;
     // @ts-ignore
-    filePath = getParentPathInFileTree(parentItem.id, fileTree, `${parentItem.name}/${filePath}`);
+    if (parentItem.id === 'root') {
+      _filePath = filePath;
+    } else {
+      // @ts-ignore
+      _filePath = `${parentItem.name}/${filePath}`;
+    }
+    // @ts-ignore
+    filePath = getParentPathInFileTree(parentItem.id, fileTree, _filePath);
   }
 
   return filePath;
@@ -105,10 +113,6 @@ export function addOrUpdateFile(
   const { path: fullFilePath, parentDirPath } = getFullPathInfo(fileId, fileTree);
 
   console.log('--- addOrUpdateFile ---', fullFilePath, type);
-
-  if (type === 'update' && !fs.existsSync(fullFilePath)) {
-    return;
-  }
 
   ensureDir(parentDirPath);
 
