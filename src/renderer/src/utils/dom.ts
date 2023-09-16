@@ -7,27 +7,6 @@ export const getPageTitleDom = (): HTMLElement | null | undefined => {
 };
 
 /**
- * the hack method to update blocksuite editor title dom
- * fix the problem that not rerender after rename page block's title prop
- * @param title string
- */
-export const hackUpdateTitleDom = (title: string) => {
-  setTimeout(() => {
-    const titleDom = getPageTitleDom();
-
-    if (titleDom) {
-      titleDom.innerHTML = title;
-    }
-  }, 0);
-};
-
-export const getPageTitleFromDom = (): string => {
-  const titleDom = getPageTitleDom();
-
-  return titleDom?.innerHTML || '';
-};
-
-/**
  * HACK: show renaming status when menu tree item first created
  */
 export const dbclickMenuTreeItemAfterCreate = () => {

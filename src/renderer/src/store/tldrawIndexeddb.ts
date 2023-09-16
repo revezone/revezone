@@ -1,11 +1,12 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { RevezoneFileTree } from '../types/file';
 import { getFileDataChangeDebounceFn } from '../utils/file';
+import type { StoreSnapshot, TLRecord } from '@tldraw/tldraw';
 
 export interface RevezoneTldrawDBSchema extends DBSchema {
   tldraw: {
     key: string;
-    value: string;
+    value: StoreSnapshot<TLRecord>;
   };
 }
 
@@ -52,7 +53,7 @@ class TldrawIndexeddbStorage {
     return tldrawStore;
   }
 
-  async updateTldraw(id: string, tldrawData: string, fileTree: RevezoneFileTree) {
+  async updateTldraw(id: string, tldrawData: StoreSnapshot<TLRecord>, fileTree: RevezoneFileTree) {
     await this.initDB();
 
     const tldraw = await this.db?.get(INDEXEDDB_TLDRAW_FILE_KEY, id);
@@ -67,7 +68,7 @@ class TldrawIndexeddbStorage {
     this.fileDataChangeDebounceFn(id, tldrawData, fileTree);
   }
 
-  async addTldraw(id: string, tldrawData: string) {
+  async addTldraw(id: string, tldrawData: StoreSnapshot<TLRecord>) {
     await this.initDB();
     await this.db?.add(INDEXEDDB_TLDRAW_FILE_KEY, tldrawData, id);
   }

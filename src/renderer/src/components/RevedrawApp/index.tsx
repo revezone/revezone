@@ -35,7 +35,11 @@ export default function RevedrawApp({ file }: Props) {
 
     const data = await boardIndexeddbStorage.getBoard(id);
 
-    setDataSource(data);
+    const dataStr = !data || typeof data === 'string' ? data : JSON.stringify(data);
+
+    console.log('--- excalidraw ---', dataStr);
+
+    setDataSource(dataStr);
   }, []);
 
   // HACK: fix the custom font not working completely when first render
@@ -71,14 +75,14 @@ export default function RevedrawApp({ file }: Props) {
 
   const onChangeFn = useCallback(
     async (data: ExcalidrawDataSource) => {
-      const str = JSON.stringify({
+      const _data = {
         type: 'excalidraw',
         version: 2,
         source: window.location.href,
         ...data
-      });
+      };
 
-      await boardIndexeddbStorage.updateBoard(file.id, str, fileTree);
+      await boardIndexeddbStorage.updateBoard(file.id, _data, fileTree);
     },
     [file.id, fileTree]
   );

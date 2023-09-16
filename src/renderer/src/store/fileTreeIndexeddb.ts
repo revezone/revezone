@@ -143,9 +143,9 @@ class FileTreeIndexeddbStorage {
     if (type === 'note') {
       await blocksuiteStorage.addPage(fileId);
     } else if (type === 'board') {
-      await boardIndexeddbStorage.addBoard(fileId, fileData || '{}');
+      await boardIndexeddbStorage.addBoard(fileId, fileData && JSON.parse(fileData));
     } else if (type === 'tldraw') {
-      await tldrawIndexeddbStorage.addTldraw(fileId, fileData || '{}');
+      await tldrawIndexeddbStorage.addTldraw(fileId, fileData && JSON.parse(fileData));
     }
 
     const fileInfo = {

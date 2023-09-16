@@ -48,8 +48,12 @@ export function getUniqueNameInSameTreeLevel(
 }
 
 export const getFileDataChangeDebounceFn = () => {
-  return debounce((id: string, boardData: string, fileTree: RevezoneFileTree) => {
-    console.log('--- send fileDataChange ---', id, JSON.parse(boardData));
-    window.api.fileDataChange(id, boardData, fileTree);
+  return debounce((id: string, data: string, fileTree: RevezoneFileTree) => {
+    if (typeof data !== 'string') {
+      data = JSON.stringify(data);
+    }
+
+    console.log('--- send fileDataChange ---', id, JSON.parse(data));
+    window.api.fileDataChange(id, data, fileTree);
   }, 1000);
 };

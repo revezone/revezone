@@ -22,9 +22,13 @@ export default function ReveTldraw(props: Props) {
   const [store] = useState(() => createTLStore({ shapeUtils: defaultShapeUtils }));
 
   const getData = async () => {
-    const dataStr = (await tldrawIndexeddbStorage.getTldraw(file.id)) || '{}';
-    const dataObj = JSON.parse(dataStr);
-    store.loadSnapshot(dataObj);
+    const data = await tldrawIndexeddbStorage.getTldraw(file.id);
+
+    if (!data) return;
+
+    console.log('data', data);
+
+    store.loadSnapshot(data);
   };
 
   useLayoutEffect(() => {
@@ -33,12 +37,15 @@ export default function ReveTldraw(props: Props) {
 
   useEffect(() => {
     editor?.store?.listen((entry) => {
-      //   entry; // { changes, source }
-      console.log('--- store change ---', entry, editor.store.getSnapshot());
+      const snapshot = editor.store.getSnapshot();
 
-      const str = JSON.stringify(editor.store.getSnapshot());
+      tldrawIndexeddbStorage.updateTldraw(file.id, snapshot, fileTree);
 
-      fileDataChangeDebounceFn(file.id, str, fileTree);
+      const snapshotStr = JSON.stringify(snapshot);
+
+      console.log('--- store change ---', entry, snapshot);
+
+      fileDataChangeDebounceFn(file.id, snapshotStr, fileTree);
     });
   }, [editor, file, fileTree]);
 

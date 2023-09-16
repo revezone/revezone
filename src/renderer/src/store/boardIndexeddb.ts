@@ -1,11 +1,12 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { RevezoneFileTree } from '../types/file';
 import { getFileDataChangeDebounceFn } from '../utils/file';
+import { ExcalidrawDataSource } from 'revemate/es/Revedraw/types';
 
 export interface RevezoneBoardDBSchema extends DBSchema {
   board: {
     key: string;
-    value: string;
+    value: ExcalidrawDataSource;
   };
 }
 
@@ -52,7 +53,7 @@ class BoardIndexeddbStorage {
     return boardStore;
   }
 
-  async updateBoard(id: string, boardData: string, fileTree: RevezoneFileTree) {
+  async updateBoard(id: string, boardData: ExcalidrawDataSource, fileTree: RevezoneFileTree) {
     await this.initDB();
 
     const board = await this.db?.get(INDEXEDDB_BOARD_FILE_KEY, id);
@@ -64,10 +65,10 @@ class BoardIndexeddbStorage {
 
     await this.db?.put(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
 
-    this.fileDataChangeDebounceFn(id, boardData, fileTree);
+    this.fileDataChangeDebounceFn(id, JSON.stringify(boardData), fileTree);
   }
 
-  async addBoard(id: string, boardData: string) {
+  async addBoard(id: string, boardData: ExcalidrawDataSource) {
     await this.initDB();
     await this.db?.add(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
   }
