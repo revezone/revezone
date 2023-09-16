@@ -13,6 +13,10 @@ export interface RevezoneBoardDBSchema extends DBSchema {
 export const INDEXEDDB_BOARD_FILE_KEY = 'board';
 export const INDEXEDDB_REVEZONE_BOARD = 'revezone_board';
 
+const EXCALIDRAW_INITIAL_DATA: ExcalidrawDataSource = {
+  elements: []
+};
+
 class BoardIndexeddbStorage {
   constructor() {
     if (BoardIndexeddbStorage.instance) {
@@ -68,7 +72,7 @@ class BoardIndexeddbStorage {
     this.fileDataChangeDebounceFn(id, JSON.stringify(boardData), fileTree);
   }
 
-  async addBoard(id: string, boardData: ExcalidrawDataSource) {
+  async addBoard(id: string, boardData: ExcalidrawDataSource = EXCALIDRAW_INITIAL_DATA) {
     await this.initDB();
     await this.db?.add(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
   }

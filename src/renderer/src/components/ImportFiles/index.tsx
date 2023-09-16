@@ -13,32 +13,35 @@ export default function ImportFiles() {
   const { model: tabModel } = useTabJsonModel();
   const { fileTree } = useFileTree();
 
+  const importFile = useCallback(async (fileHandle) => {
+    const localFile = await fileHandle.getFile();
+
+    const fileData = await localFile.text();
+
+    console.log('--- import file ---', localFile, fileData);
+
+    const matches = localFile.name.match(FILE_NAME_REGEX);
+    const fileName = matches?.[1];
+    const fileSuffix = matches?.[2];
+
+    switch (fileSuffix) {
+      case '.excalidraw':
+        await addFile(fileName, 'board', tabModel, 'root', fileData);
+        break;
+      case '.tldraw':
+        await addFile(fileName, 'tldraw', tabModel, 'root', fileData);
+        break;
+    }
+  }, []);
+
   const onClick = useCallback(async () => {
     // Destructure the one-element array.
     // @ts-ignore
     const fileHandles = await window.showOpenFilePicker({ multiple: true });
-    // Do something with the file handle.
 
-    fileHandles.map(async (fileHandle) => {
-      const localFile = await fileHandle.getFile();
-
-      const fileData = await localFile.text();
-
-      console.log('--- import file ---', localFile, fileData);
-
-      const matches = localFile.name.match(FILE_NAME_REGEX);
-      const fileName = matches?.[1];
-      const fileSuffix = matches?.[2];
-
-      switch (fileSuffix) {
-        case '.excalidraw':
-          await addFile(fileName, 'board', tabModel, 'root', fileData);
-          break;
-        case '.tldraw':
-          await addFile(fileName, 'tldraw', tabModel, 'root', fileData);
-          break;
-      }
-    });
+    for await (const fileHandle of fileHandles) {
+      await importFile(fileHandle);
+    }
   }, [fileTree, tabModel]);
 
   return <div onClick={onClick}>{t('operation.import')}</div>;

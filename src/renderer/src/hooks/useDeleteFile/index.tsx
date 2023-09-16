@@ -7,6 +7,7 @@ import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useCurrentFile from '../useCurrentFile';
 import useTabJsonModel from '../useTabJsonModel';
 import useFileTree from '../useFileTree';
+import { tldrawIndexeddbStorage } from '@renderer/store/tldrawIndexeddb';
 
 export default function useDeleteFile() {
   const { currentFile, updateCurrentFile } = useCurrentFile();
@@ -28,6 +29,9 @@ export default function useDeleteFile() {
       switch (file.type) {
         case 'board':
           await boardIndexeddbStorage.deleteBoard(file.id);
+          break;
+        case 'tldraw':
+          await tldrawIndexeddbStorage.deleteTldraw(file.id);
           break;
         case 'note':
           await blocksuiteStorage.deletePage(file.id);
