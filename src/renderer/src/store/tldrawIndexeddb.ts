@@ -65,13 +65,6 @@ class TldrawIndexeddbStorage {
   async updateTldraw(id: string, tldrawData: StoreSnapshot<TLRecord>, fileTree: RevezoneFileTree) {
     await this.initDB();
 
-    // const tldraw = await this.db?.get(INDEXEDDB_TLDRAW_FILE_KEY, id);
-
-    // if (!tldraw) {
-    //   console.log('--- tldraw not existed ---', id, tldraw);
-    //   return;
-    // }
-
     await this.db?.put(INDEXEDDB_TLDRAW_FILE_KEY, tldrawData, id);
 
     this.fileDataChangeDebounceFn(id, tldrawData, fileTree);

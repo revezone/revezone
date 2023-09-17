@@ -60,13 +60,6 @@ class BoardIndexeddbStorage {
   async updateBoard(id: string, boardData: ExcalidrawDataSource, fileTree: RevezoneFileTree) {
     await this.initDB();
 
-    const board = await this.db?.get(INDEXEDDB_BOARD_FILE_KEY, id);
-
-    if (!board) {
-      console.log('--- board not existed ---', id, board);
-      return;
-    }
-
     await this.db?.put(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
 
     this.fileDataChangeDebounceFn(id, JSON.stringify(boardData), fileTree);
