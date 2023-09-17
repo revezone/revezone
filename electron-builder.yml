@@ -15,7 +15,6 @@ afterSign: build/notarize.js
 fileAssociations:
   - name: excalidraw
     ext: excalidraw
-    icon: build/icon.icns
   - name: tldraw
     ext: tldraw
   - name: markdown
