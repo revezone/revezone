@@ -7,7 +7,7 @@ import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
 import { dbclickMenuTreeItemAfterCreate } from '@renderer/utils/dom';
 import useTabJsonModel from '../useTabJsonModel';
 import { Model } from 'flexlayout-react';
-import { RevezoneFile } from '@renderer/types/file';
+import { RevezoneFile, RevezoneFileType } from '@renderer/types/file';
 
 export default function useAddFile() {
   const { getFileTree } = useFileTree();
@@ -18,7 +18,7 @@ export default function useAddFile() {
   const addFile = useCallback(
     async (
       name: string,
-      type: 'board' | 'note' | 'mindmap' | 'tldraw',
+      type: RevezoneFileType,
       tabModel: Model | undefined,
       parentId?: string,
       fileData?: string

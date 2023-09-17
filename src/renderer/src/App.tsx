@@ -5,28 +5,47 @@ import WorkspaceLoaded from './components/WorkspaceLoaded';
 import zhCN from 'antd/locale/zh_CN';
 import zhTW from 'antd/locale/zh_TW';
 import enUS from 'antd/locale/en_US';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, message } from 'antd';
 import { theme } from './utils/theme';
 import { getOSName, isInRevezoneApp } from './utils/navigator';
 import { submitAppEnterUserEvent } from './utils/statistics';
-// import MultiTabs from './components/MultiTabsWithFlexLayout';
 import ResizableLayout from './components/ResizableLayout/index';
+import useAddFile from '@renderer/hooks/useAddFile';
+import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 
 const MultiTabs = lazy(() => import('./components/MultiTabsWithFlexLayout'));
 
 import './App.css';
+import {
+  getFilenameFromPath,
+  getFileNameWithoutSuffix,
+  getFileSuffix,
+  getFileTypeFromSuffix
+} from './utils/file';
 
 const OS_NAME = getOSName();
 
 function App(): JSX.Element {
   const [langCode] = useAtom(langCodeAtom);
+  const { addFile } = useAddFile();
+  const { model: tabModel } = useTabJsonModel();
 
   useEffect(() => {
     submitAppEnterUserEvent();
     window.api?.openFileSuccess((path, fileData) => {
       console.log('--- openFileSuccess ---', path, fileData);
+      const fileNameWithSuffix = getFilenameFromPath(path);
+      const fileName = fileNameWithSuffix && getFileNameWithoutSuffix(fileNameWithSuffix);
+      const suffix = fileNameWithSuffix && getFileSuffix(fileNameWithSuffix);
+      const fileType = suffix && getFileTypeFromSuffix(suffix);
+
+      if (fileName && fileType) {
+        addFile(fileName, fileType, tabModel, fileData);
+      } else {
+        message.error(`File ${path} unrecognized!`);
+      }
     });
-  }, []);
+  }, [tabModel]);
 
   const getLocale = useCallback(() => {
     switch (langCode) {

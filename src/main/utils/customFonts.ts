@@ -4,6 +4,7 @@ import { join } from 'path';
 import { EVENTS } from '../../preload/events';
 import fs from 'node:fs';
 import { USER_DATA_PATH, ensureDir } from './io';
+import { getFilenameFromPath, getFileNameWithoutSuffix, getFileSuffix } from '@renderer/utils/file';
 
 export interface Font {
   name: string;
@@ -18,36 +19,6 @@ export interface Manifest {
 const FONT_SUFFIXES = ['.ttf', '.woff2', '.otf'];
 
 const CUSTOM_FONTS_DIR = join(USER_DATA_PATH, 'custom_fonts');
-
-function getFilenameFromPath(path: string) {
-  // 先使用对应操作系统的分隔符切割路径
-  const parts = path.split(/[/\\]/);
-  // 取最后一个部分作为文件名
-  const filename = parts.pop();
-  return filename;
-}
-
-function getNormalFileName(filename: string) {
-  const lastDotIdx = filename.lastIndexOf('.');
-  if (lastDotIdx === -1 || lastDotIdx === 0) {
-    // 如果文件名没有扩展名或者以 . 开头，则直接返回原文件名
-    return filename;
-  } else {
-    // 否则截取文件名和扩展名之间的部分
-    return filename.slice(0, lastDotIdx)?.replace('.', '-');
-  }
-}
-
-function getFileSuffix(filename: string): string {
-  const lastDotIdx = filename.lastIndexOf('.');
-  if (lastDotIdx === -1 || lastDotIdx === 0) {
-    // 如果文件名没有扩展名或者以 . 开头，则直接返回原文件名
-    return '';
-  } else {
-    // 否则截取文件名和扩展名之间的部分
-    return filename.slice(lastDotIdx);
-  }
-}
 
 export const loadCustomFont = async (mainWindow: BrowserWindow) => {
   if (!mainWindow) {
@@ -70,7 +41,7 @@ export const loadCustomFont = async (mainWindow: BrowserWindow) => {
       await copyFile(filePath, destPath);
 
       return {
-        name: filenameWithSuffix && getNormalFileName(filenameWithSuffix),
+        name: filenameWithSuffix && getFileNameWithoutSuffix(filenameWithSuffix),
         nameWithSuffix: filenameWithSuffix,
         path: destPath
       };
@@ -152,7 +123,7 @@ export const serializeFonts = (fontNamesWithSuffix: string[]) => {
   fontNamesWithSuffix.forEach((fontName) => {
     if (!fontName || !isFontFile(fontName)) return;
 
-    const fontNameWithoutSuffix = getNormalFileName(fontName);
+    const fontNameWithoutSuffix = getFileNameWithoutSuffix(fontName);
     const item: Font = {
       name: fontNameWithoutSuffix,
       nameWithSuffix: fontName,

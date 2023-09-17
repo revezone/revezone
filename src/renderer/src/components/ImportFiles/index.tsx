@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import useAddFile from '@renderer/hooks/useAddFile';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
-import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import useFileTree from '@renderer/hooks/useFileTree';
 
 const FILE_NAME_REGEX = /^(.+)(\.[a-zA-Z0-9]+)$/;
@@ -35,7 +34,6 @@ export default function ImportFiles() {
   }, []);
 
   const onClick = useCallback(async () => {
-    // Destructure the one-element array.
     // @ts-ignore
     const fileHandles = await window.showOpenFilePicker({ multiple: true });
 
