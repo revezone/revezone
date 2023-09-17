@@ -111,15 +111,8 @@ export function getFullPathInfo(itemId: string, fileTree: RevezoneFileTree): Ful
   }
 }
 
-export function addOrUpdateFile(
-  fileId: string,
-  value: string,
-  fileTree: RevezoneFileTree,
-  type: 'add' | 'update'
-) {
+export function addOrUpdateFile(fileId: string, value: string, fileTree: RevezoneFileTree) {
   const { path: fullFilePath, parentDirPath } = getFullPathInfo(fileId, fileTree);
-
-  console.log('--- addOrUpdateFile ---', fullFilePath, type);
 
   ensureDir(parentDirPath);
 
@@ -127,12 +120,11 @@ export function addOrUpdateFile(
 }
 
 export function onAddFile(fileId: string, value: string, fileTree: RevezoneFileTree) {
-  console.log('--- onAddFile ---', fileId, value, fileTree);
-  addOrUpdateFile(fileId, value, fileTree, 'add');
+  addOrUpdateFile(fileId, value, fileTree);
 }
 
 export function onFileDataChange(fileId: string, value: string, fileTree: RevezoneFileTree) {
-  addOrUpdateFile(fileId, value, fileTree, 'update');
+  addOrUpdateFile(fileId, value, fileTree);
 }
 
 export function onRenameFileOrFolder(itemId: string, newName: string, fileTree: RevezoneFileTree) {
