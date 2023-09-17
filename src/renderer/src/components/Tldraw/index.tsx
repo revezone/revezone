@@ -43,22 +43,20 @@ export default function ReveTldraw(props: Props) {
 
       const snapshotStr = JSON.stringify(snapshot);
 
-      console.log('--- store change ---', entry, snapshot);
-
       fileDataChangeDebounceFn(file.id, snapshotStr, fileTree);
     });
   }, [editor, file, fileTree]);
 
-  const onUiEvent = (name, data) => {
-    console.log('--- onUiEvent ---', name, data);
-  };
+  // const onUiEvent = (name, data) => {
+  //   console.log('--- onUiEvent ---', name, data);
+  // };
 
   return (
     <div className="tldraw__editor w-full h-full">
       <Tldraw
         store={store}
         autoFocus
-        onUiEvent={onUiEvent}
+        // onUiEvent={onUiEvent}
         onMount={(editor) => {
           setEditor(editor);
         }}
