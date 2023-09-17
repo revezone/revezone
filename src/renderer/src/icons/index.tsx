@@ -54,7 +54,7 @@ export const TldrawIcon = ({ className }: { className: string }) => (
     fill="currentColor"
     width="32"
     height="32"
-    viewBox="0 0 36 36"
+    viewBox="-4 0 40 40"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
   >
