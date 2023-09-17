@@ -113,7 +113,7 @@ export default function MultiTabs() {
       case 'board':
         return <Palette className="w-4 h-4" />;
       case 'tldraw':
-        return <TldrawIcon className="w-4 h-4" />;
+        return <TldrawIcon className="w-3 h-3" />;
       case 'welcome':
         return <File className="w-4 h-4" />;
       default:

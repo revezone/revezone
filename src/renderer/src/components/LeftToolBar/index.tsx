@@ -5,18 +5,17 @@ import { useTranslation } from 'react-i18next';
 import useAddFolder from '@renderer/hooks/useAddFolder';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import useCurrentFolderId from '@renderer/hooks/useCurrentFolderId';
-import { MindMapIcon, TldrawIcon } from '@renderer/icons';
+import { TldrawIcon } from '@renderer/icons';
+import { Tooltip } from 'antd';
 
 import 'driver.js/dist/driver.css';
 
-import './index.css';
-
 interface Props {
-  size: 'small' | 'middle' | 'large';
+  size?: 'small' | 'middle' | 'large';
   className?: string;
 }
 
-export default function OperationBar(props: Props) {
+export default function LeftToolBar(props: Props) {
   const { size = 'middle', className } = props;
   const { addFile } = useAddFile();
   const { addFolder } = useAddFolder();
@@ -28,75 +27,80 @@ export default function OperationBar(props: Props) {
   const getSizeClassName = useCallback(() => {
     switch (size) {
       case 'small':
-        return 'h-5';
+        return 'w-5 h-5';
       case 'middle':
-        return 'h-5';
+        return 'w-5 h-5';
       case 'large':
-        return 'h-6';
+        return 'w-6 h-6';
       default:
-        return 'h-5';
+        return 'w-5 h-5';
     }
   }, [size]);
-
   return (
-    <div className={`revezone-menu-toolbar flex items-center pl-5 h-10 text-sm ${className}`}>
+    <div className={`flex flex-col flex-1 items-center w-6 h-full border-r p-1 ${className}`}>
       <span
         title={t('operation.addFolder')}
-        className="operation-item flex items-center mr-3 cursor-pointer"
+        className="operation-item flex items-center mt-5 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
           addFolder('New Folder');
         }}
       >
-        <FolderPlus className={`${getSizeClassName()} text-current`} />
-        <span className="operation-btn-desc ml-1 transition-all">{t('operation.addFolder')}</span>
+        <Tooltip title={t('operation.addFolder')} placement="right">
+          <FolderPlus className={`${getSizeClassName()} text-current`} />
+        </Tooltip>
       </span>
       <span
         title={t('operation.addBoard')}
         id="add-board-button"
-        className="operation-item flex items-center mr-3 cursor-pointer relative"
+        className="operation-item flex items-center mt-5 cursor-pointer relative"
         onClick={(e) => {
           e.stopPropagation();
           addFile('New Excalidarw', 'board', tabModel, currentFolderId);
         }}
       >
-        <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
-        <span className="operation-btn-desc ml-1 transition-all">{t('operation.addBoard')}</span>
+        <Tooltip title={t('operation.addBoard')} placement="right">
+          <Palette className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
+        </Tooltip>
       </span>
       <span
         title={t('operation.addTldraw')}
-        id="add-mindmap-button"
-        className="operation-item flex items-center mr-3 cursor-pointer relative"
+        id="add-tldraw-button"
+        className="operation-item flex items-center mt-5 cursor-pointer relative"
         onClick={(e) => {
           e.stopPropagation();
           addFile('New Tldraw', 'tldraw', tabModel, currentFolderId);
         }}
       >
-        <TldrawIcon className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
-        <span className="operation-btn-desc ml-1 transition-all">{t('operation.addTldraw')}</span>
+        <Tooltip title={t('operation.addTldraw')} placement="right">
+          <span>
+            <TldrawIcon className={`w-5 h-5 text-current cursor-pointer menu-icon`} />
+          </span>
+        </Tooltip>
       </span>
       {/* <span
         title={t('operation.addMindmap')}
         id="add-mindmap-button"
-        className="operation-item flex items-center mr-3 cursor-pointer relative"
+        className="operation-item flex items-center mt-3 cursor-pointer relative"
         onClick={(e) => {
-          e.stopPropagation();
-          addFile('New Mindmap', 'mindmap', tabModel, currentFolderId);
+            e.stopPropagation();
+            addFile('New Mindmap', 'mindmap', tabModel, currentFolderId);
         }}
-      >
+        >
         <MindMapIcon className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
         <span className="operation-btn-desc ml-1 transition-all">{t('operation.addMindmap')}</span>
-      </span> */}
+        </span> */}
       <span
         title={t('operation.addNote')}
-        className="operation-item flex items-center mr-3 cursor-pointer"
+        className="operation-item flex items-center mt-5 cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
           addFile('New Note', 'note', tabModel, currentFolderId);
         }}
       >
-        <FileType className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
-        <span className="operation-btn-desc ml-1 transition-all">{t('operation.addNote')}</span>
+        <Tooltip title={t('operation.addNote')} placement="right">
+          <FileType className={`${getSizeClassName()} text-current cursor-pointer menu-icon`} />
+        </Tooltip>
       </span>
     </div>
   );

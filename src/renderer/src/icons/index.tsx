@@ -49,12 +49,13 @@ export const MindMapIcon = ({ className }: { className: string }) => (
 
 export const TldrawIcon = ({ className }: { className: string }) => (
   <svg
-    className={`w-4 h-5 font-black ${className}`}
+    className={`w-4 h-4 font-black ${className}`}
     stroke="currentColor"
     fill="currentColor"
-    width="33"
-    height="33"
-    viewBox="0 0 33 33"
+    width="32"
+    height="32"
+    viewBox="0 0 36 36"
+    version="1.1"
     xmlns="http://www.w3.org/2000/svg"
   >
     <g clipPath="url(#clip0_1094_102908)">
@@ -71,7 +72,7 @@ export const TldrawIcon = ({ className }: { className: string }) => (
     </g>
     <defs>
       <clipPath id="clip0_1094_102908">
-        <rect width="33" height="33" fill="transparent" transform="translate(0.501953 0.886719)" />
+        <rect width="32" height="32" fill="transparent" transform="translate(0.501953 0.886719)" />
       </clipPath>
     </defs>
   </svg>

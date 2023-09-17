@@ -13,23 +13,11 @@ import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import type { RevezoneFile, RevezoneFileTree, RevezoneFolder } from '@renderer/types/file';
 import { useAtom } from 'jotai';
 import { focusItemAtom, selectedKeysAtom } from '@renderer/store/jotai';
-import OperationBar from '../OperationBar';
-import RevezoneLogo from '../RevezoneLogo';
-import {
-  Folder,
-  HardDrive,
-  UploadCloud,
-  MoreVertical,
-  Palette,
-  FileType,
-  Import
-} from 'lucide-react';
+import { Folder, HardDrive, UploadCloud, MoreVertical, Palette, FileType } from 'lucide-react';
 import useFileTreeContextMenu from '@renderer/hooks/useFileTreeContextMenu';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../LanguageSwitcher/index';
 import { submitUserEvent } from '@renderer/utils/statistics';
-import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import useOpenKeys from '@renderer/hooks/useOpenKeys';
@@ -39,7 +27,6 @@ import {
   setRenamingMenuItemIdToLocal
 } from '@renderer/store/localstorage';
 import useDeleteFolder from '@renderer/hooks/useDeleteFolder';
-import ImportFiles from '../ImportFiles';
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
@@ -54,7 +41,6 @@ export default function DraggableMenuTree() {
   const {
     updateTabJsonModelWhenCurrentFileChanged,
     renameTabName,
-    addTab,
     switchToWelcomePage,
     model: tabModel
   } = useTabJsonModel();
@@ -212,62 +198,9 @@ export default function DraggableMenuTree() {
     [fileTree]
   );
 
-  const onLogoClick = useCallback(() => {
-    switchToWelcomePage();
-  }, [tabModel]);
-
-  const storageTypeItems = [
-    {
-      key: 'local',
-      icon: <HardDrive className="w-4 mr-1"></HardDrive>,
-      label: t('storage.local')
-    },
-    {
-      key: 'cloud',
-      icon: <UploadCloud className="w-4 mr-1"></UploadCloud>,
-      disabled: true,
-      label: t('storage.cloud')
-    }
-  ];
-
   return (
-    <div className="revezone-menu-container">
-      <div className="flex flex-col mb-1 pl-5 pr-6 pt-0 justify-between">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <RevezoneLogo size="small" onClick={onLogoClick} />
-            <span className="text-sm whitespace-nowrap">&nbsp;-&nbsp;{t('text.alpha')}</span>
-            <PublicBetaNotice />
-          </div>
-          <Dropdown
-            trigger={['hover']}
-            menu={{
-              items: [
-                {
-                  key: 'import',
-                  label: <ImportFiles />,
-                  icon: <Import className="w-4 h-4" />
-                }
-              ]
-            }}
-          >
-            <MoreVertical className="w-3 h-3 cursor-pointer" />
-          </Dropdown>
-        </div>
-        <div className="flex justify-start">
-          <div className="mr-2 whitespace-nowrap">
-            <Dropdown menu={{ items: storageTypeItems }}>
-              <span className="text-slate-500 flex items-center cursor-pointer text-sm">
-                <HardDrive className="w-4 mr-1"></HardDrive>
-                {t('storage.local')}
-              </span>
-            </Dropdown>
-          </div>
-          <LanguageSwitcher />
-        </div>
-      </div>
-      <OperationBar size="small" />
-      <div className="menu-list border-t border-slate-100 px-1 pt-2">
+    <div className="revezone-menu-container flex-auto">
+      <div className="menu-list border-slate-100 px-1 pt-2">
         <ControlledTreeEnvironment
           items={fileTree}
           getItemTitle={(item) => `${item.data.name}`}
@@ -341,7 +274,7 @@ export default function DraggableMenuTree() {
                         {item.isFolder ? <Folder className="w-4 h-4" /> : null}
                         {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
                         {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
-                        {item.data.type === 'tldraw' ? <TldrawIcon className="w-4 h-4" /> : null}
+                        {item.data.type === 'tldraw' ? <TldrawIcon className="w-3 h-3" /> : null}
                       </div>
                       <div className="ml-2 truncate pr-2 text-sm">{title}</div>
                     </div>

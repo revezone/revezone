@@ -14,6 +14,8 @@ import { commonIndexeddbStorage } from '@renderer/store/commonIndexeddb';
 import { useTranslation } from 'react-i18next';
 import { Modal } from 'antd';
 import LanguageSwitcher from '../LanguageSwitcher/index';
+import LeftToolBar from '../LeftToolBar/index';
+import RevezoneBrand from '../RevezeonBrand/index';
 
 type Props = {
   children: ReactNode;
@@ -113,7 +115,11 @@ export default function ResizableLayout({ children }: Props) {
                 onClick={switchCollapse}
               />
             </div>
-            <DraggableMenuTree />
+            <RevezoneBrand />
+            <div className="flex h-full border-t">
+              <LeftToolBar />
+              <DraggableMenuTree />
+            </div>
             <BottomToolbar />
           </Panel>
           <PanelResizeHandle className="w-2 bg-gray-100 flex justify-center items-center">
