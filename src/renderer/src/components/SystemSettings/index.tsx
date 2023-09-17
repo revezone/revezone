@@ -1,7 +1,6 @@
 import { Modal, Tabs } from 'antd';
 import { useTranslation } from 'react-i18next';
 import CustomFonts from '../CustomFonts';
-import LanguageSwitcher from '../LanguageSwitcher';
 import { osName } from '@renderer/utils/navigator';
 import StoragePathSetting from '@renderer/components/StoragePathSetting';
 
@@ -29,16 +28,6 @@ export default function SystemSettings({ visible, setSystemSettingVisible, onCan
             key: 'custom_fonts',
             label: t('menu.customFont'),
             children: <CustomFonts setSystemSettingVisible={setSystemSettingVisible}></CustomFonts>
-          },
-          {
-            key: 'switch_language',
-            label: t('operation.switchLanguage'),
-            children: (
-              <div>
-                <span>{t('operation.switchLanguage')}:</span>
-                <LanguageSwitcher />
-              </div>
-            )
           },
           {
             key: 'storage_path',

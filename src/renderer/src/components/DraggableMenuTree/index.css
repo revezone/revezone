@@ -35,7 +35,7 @@
   .menu-list {
     overflow-y: scroll;
     width: 100%;
-    height: calc(100% - 6rem);
+    height: 100%;
     padding-bottom: 2rem;
   }
 

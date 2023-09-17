@@ -3,9 +3,6 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { PanelLeftClose, PanelLeftOpen, GripVertical } from 'lucide-react';
 import { siderbarCollapsedAtom, themeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
-
-import './index.css';
-import BottomToolbar from '../BottomToolbar/index';
 import { submitUserEvent } from '@renderer/utils/statistics';
 import DraggableMenuTree from '../DraggableMenuTree/index';
 import { driver } from 'driver.js';
@@ -16,6 +13,8 @@ import { Modal } from 'antd';
 import LanguageSwitcher from '../LanguageSwitcher/index';
 import LeftToolBar from '../LeftToolBar/index';
 import RevezoneBrand from '../RevezeonBrand/index';
+
+import './index.css';
 
 type Props = {
   children: ReactNode;
@@ -120,7 +119,6 @@ export default function ResizableLayout({ children }: Props) {
               <LeftToolBar />
               <DraggableMenuTree />
             </div>
-            <BottomToolbar />
           </Panel>
           <PanelResizeHandle className="w-2 bg-gray-100 flex justify-center items-center">
             <div className="flex flex-col">
