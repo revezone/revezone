@@ -4,7 +4,11 @@ import { join } from 'path';
 import { EVENTS } from '../../preload/events';
 import fs from 'node:fs';
 import { USER_DATA_PATH, ensureDir } from './io';
-import { getFilenameFromPath, getFileNameWithoutSuffix, getFileSuffix } from '@renderer/utils/file';
+import {
+  getFilenameFromPath,
+  getFileNameWithoutSuffix,
+  getFileSuffix
+} from '../../renderer/src/utils/file';
 
 export interface Font {
   name: string;
