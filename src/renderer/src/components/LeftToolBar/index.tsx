@@ -37,7 +37,7 @@ export default function LeftToolBar(props: Props) {
     }
   }, [size]);
   return (
-    <div className={`flex flex-col flex-1 items-center w-6 h-full border-r p-1 ${className}`}>
+    <div className={`flex flex-col items-center p-1 h-full border-r ${className}`}>
       <span
         title={t('operation.addFolder')}
         className="operation-item flex items-center mt-5 cursor-pointer"
