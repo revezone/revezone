@@ -42,7 +42,7 @@ function App(): JSX.Element {
       console.log('--- openFileSuccess ---', fileName, suffix, fileType);
 
       if (fileName && fileType) {
-        addFile(fileName, fileType, tabModel, fileData);
+        addFile(fileName, fileType, tabModel, 'root', fileData);
       } else {
         message.error(`File ${path} unrecognized!`);
       }
