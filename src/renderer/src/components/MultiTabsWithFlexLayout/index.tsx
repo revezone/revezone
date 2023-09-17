@@ -18,6 +18,7 @@ import { WELCOME_TAB_ITEM } from '@renderer/utils/constant';
 import { activeEditorManager } from '@revesuite/blocks';
 // import MindMap from '../MindMap';
 import ReveTldraw from '../Tldraw';
+import { TldrawIcon } from '@renderer/icons';
 
 export default function MultiTabs() {
   const { tabJsonModel, deleteTab, getTabList } = useTabJsonModel();
@@ -111,6 +112,8 @@ export default function MultiTabs() {
         return <FileType className="w-4 h-4" />;
       case 'board':
         return <Palette className="w-4 h-4" />;
+      case 'tldraw':
+        return <TldrawIcon className="w-4 h-4" />;
       case 'welcome':
         return <File className="w-4 h-4" />;
       default:

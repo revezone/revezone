@@ -43,6 +43,7 @@ import ImportFiles from '../ImportFiles';
 
 import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
+import { TldrawIcon } from '@renderer/icons';
 
 export default function DraggableMenuTree() {
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
@@ -340,6 +341,7 @@ export default function DraggableMenuTree() {
                         {item.isFolder ? <Folder className="w-4 h-4" /> : null}
                         {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
                         {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
+                        {item.data.type === 'tldraw' ? <TldrawIcon className="w-4 h-4" /> : null}
                       </div>
                       <div className="ml-2 truncate pr-2 text-sm">{title}</div>
                     </div>
