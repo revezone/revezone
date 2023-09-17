@@ -21,8 +21,6 @@ export default function useFileTree() {
 
         tree.root.children = [...((tree.root.children as string[]) || []), ...notes, ...boards];
 
-        console.log('--- unexpected ---', 'notes', notes, 'boards', boards);
-
         notes.forEach((fileId) => {
           tree[fileId] = {
             index: fileId,

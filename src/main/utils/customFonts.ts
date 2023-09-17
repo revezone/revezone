@@ -87,8 +87,6 @@ export const loadCustomFont = async (mainWindow: BrowserWindow) => {
   if (fontNames) {
     const fonts = await getRegisteredFonts();
 
-    console.log('--- fonts ---', fonts);
-
     mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, fonts);
   }
 };
@@ -125,8 +123,6 @@ export const activeCustomFont = (
       'base64'
     )}) format(${fontType})`;
 
-    console.log('--- active font ---', fontName, fontNameWithSuffix);
-
     mainWindow.webContents.insertCSS(
       `@font-face { font-family: '${fontName}'; src: ${fontUrl}; font-display: 'block' }`
     );
@@ -138,8 +134,6 @@ export const activeCustomFont = (
 export const batchActiveCustomFonts = (mainWindow: BrowserWindow) => {
   try {
     const fonts = getActiveFonts();
-
-    console.log('--- batchActiveCustomFonts ---', fonts);
 
     fonts.forEach((font) => activeCustomFont(mainWindow, font.name, font.nameWithSuffix));
   } catch (err) {
@@ -155,12 +149,8 @@ const isFontFile = (filename: string) => {
 export const serializeFonts = (fontNamesWithSuffix: string[]) => {
   const fonts: Font[] = [];
 
-  console.log('--- fontNamesWithSuffix ---', fontNamesWithSuffix);
-
   fontNamesWithSuffix.forEach((fontName) => {
     if (!fontName || !isFontFile(fontName)) return;
-
-    console.log('--- fontName ---', fontName);
 
     const fontNameWithoutSuffix = getNormalFileName(fontName);
     const item: Font = {

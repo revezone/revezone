@@ -81,8 +81,6 @@ class FileTreeIndexeddbStorage {
 
     const id = `folder_${nanoid()}`;
 
-    console.log('--- addFolder ---', name, parentId);
-
     const folderInfo = {
       id,
       name: name || 'New Folder',

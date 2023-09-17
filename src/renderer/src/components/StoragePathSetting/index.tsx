@@ -12,7 +12,6 @@ export default function StoragePathSetting() {
 
   useEffect(() => {
     window.api?.customStoragePathSuccess((event, path: string) => {
-      console.log('--- storagePath ---', path);
       setStoragePath(path);
     });
   }, []);

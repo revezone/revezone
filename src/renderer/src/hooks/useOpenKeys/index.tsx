@@ -21,8 +21,6 @@ export default function useOpenKeys() {
 
     const newKeys = [...openKeys, ...keys].filter((item) => !!item);
 
-    console.log('--- onExpandItem ---', newKeys);
-
     setOpenKeys(newKeys);
     setOpenKeysToLocal(newKeys);
   }, []);
@@ -30,8 +28,6 @@ export default function useOpenKeys() {
   const removeOpenKey = useCallback((key: string) => {
     const openKeys = getOpenKeysFromLocal();
     const keys = openKeys.filter((_key) => _key !== key);
-
-    console.log('--- onCollapseItem ---', keys);
 
     setOpenKeys(keys);
     setOpenKeysToLocal(keys);
