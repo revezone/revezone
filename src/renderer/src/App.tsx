@@ -33,13 +33,12 @@ function App(): JSX.Element {
   useEffect(() => {
     submitAppEnterUserEvent();
     window.api?.openFileSuccess((event, path, fileData) => {
-      console.log('--- openFileSuccess ---', path);
       const fileNameWithSuffix = getFilenameFromPath(path);
       const fileName = fileNameWithSuffix && getFileNameWithoutSuffix(fileNameWithSuffix);
       const suffix = fileNameWithSuffix && getFileSuffix(fileNameWithSuffix);
       const fileType = suffix && getFileTypeFromSuffix(suffix);
 
-      console.log('--- openFileSuccess ---', fileName, suffix, fileType);
+      console.log('--- openFileSuccess ---', path, fileName, suffix, fileType, fileData);
 
       if (fileName && fileType) {
         addFile(fileName, fileType, tabModel, 'root', fileData);

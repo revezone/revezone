@@ -54,7 +54,6 @@ export const getFileDataChangeDebounceFn = () => {
       data = JSON.stringify(data);
     }
 
-    console.log('--- send fileDataChange ---', id, JSON.parse(data));
     window.api?.fileDataChange(id, data, fileTree);
   }, 1000);
 };

@@ -3,8 +3,6 @@ import { AffineSchemas } from '@revesuite/blocks/models';
 import { IndexeddbPersistence } from 'y-indexeddb';
 import { emitter, events } from './eventemitter';
 
-console.log('AffineSchemas', AffineSchemas);
-
 const REVEZONE_EDITOR_KEY = 'revezone_blocksuite';
 
 class BlocksuiteStorage {

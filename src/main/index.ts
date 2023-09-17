@@ -210,7 +210,7 @@ app.whenReady().then(() => {
     // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
     console.log('--- open file ---', event, path);
 
-    const fileData = fs.readFileSync(path);
+    const fileData = fs.readFileSync(path).toString();
 
     mainWindow.webContents.send(EVENTS.openFileSuccess, path, fileData);
   });
