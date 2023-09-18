@@ -7,39 +7,11 @@
     margin-top: 0;
   }
 
-  .ant-menu-submenu-title:hover .menu-icon {
-    visibility: visible;
-  }
-
-  .ant-menu-submenu-title {
-    padding-left: 16px !important;
-  }
-
-  .ant-menu-submenu-title .menu-icon {
-    visibility: hidden;
-  }
-
-  .ant-menu-title-content {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-  }
-
-  .ant-menu-item {
-    padding-right: 0;
-    padding-left: 42px !important;
-    height: 50px;
-  }
-
   .menu-list {
     overflow-y: scroll;
     width: 100%;
     height: 100%;
     padding-bottom: 2rem;
   }
-
-  .ant-select-selection-item{
-    color: rgb(100 116 139); 
-  }
+ 
 }

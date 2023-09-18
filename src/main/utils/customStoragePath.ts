@@ -43,7 +43,6 @@ export const getUserFilesStoragePath = () => {
 
     return config.local_storage_path;
   } catch (err) {
-    console.error('getUserFilesStoragePath', err);
     return DEFAULT_LOCAL_FILES_STORAGE_PATH;
   }
 };

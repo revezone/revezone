@@ -3,7 +3,7 @@ import 'flexlayout-react/style/light.css';
 import NoteEditor from '@renderer/components/NoteEditor';
 import RevedrawApp from '../RevedrawApp';
 import WelcomePage from '../WelcomePage';
-import { lazy, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 
 import './index.css';
@@ -86,8 +86,6 @@ export default function MultiTabs() {
 
   const onAction = useCallback(
     (action: Action) => {
-      console.log('--- onAction ---', action);
-
       if (!model) return;
 
       switch (action.type) {
@@ -122,7 +120,6 @@ export default function MultiTabs() {
   }, []);
 
   const onModelChange = useCallback(() => {
-    console.log('--- onModelChange ---');
     setTabJsonModelToLocal(JSON.stringify(model?.toJson()));
   }, [model]);
 

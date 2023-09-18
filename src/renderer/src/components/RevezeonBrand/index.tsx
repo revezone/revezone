@@ -32,12 +32,25 @@ export default function RevezoneBrand() {
     }
   ];
   return (
-    <div className="flex flex-col mb-1 pl-5 pr-6 pt-0 justify-between">
+    <div className="flex flex-col mb-1 pl-2 pt-0 justify-between">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <RevezoneLogo size="small" onClick={onLogoClick} />
           <span className="text-sm whitespace-nowrap">&nbsp;-&nbsp;{t('text.alpha')}</span>
           <PublicBetaNotice />
+        </div>
+      </div>
+      <div className="flex justify-between items-center">
+        <div className="flex items-center">
+          <div className="mr-2 whitespace-nowrap">
+            <Dropdown menu={{ items: storageTypeItems }}>
+              <span className="text-slate-500 flex items-center cursor-pointer text-sm">
+                <HardDrive className="w-4 mr-1"></HardDrive>
+                {t('storage.local')}
+              </span>
+            </Dropdown>
+          </div>
+          <LanguageSwitcher />
         </div>
         <Dropdown
           trigger={['hover']}
@@ -51,19 +64,8 @@ export default function RevezoneBrand() {
             ]
           }}
         >
-          <MoreVertical className="w-3 h-3 cursor-pointer" />
+          <MoreVertical className="w-3 h-3 cursor-pointer mr-6" />
         </Dropdown>
-      </div>
-      <div className="flex justify-start">
-        <div className="mr-2 whitespace-nowrap">
-          <Dropdown menu={{ items: storageTypeItems }}>
-            <span className="text-slate-500 flex items-center cursor-pointer text-sm">
-              <HardDrive className="w-4 mr-1"></HardDrive>
-              {t('storage.local')}
-            </span>
-          </Dropdown>
-        </div>
-        <LanguageSwitcher />
       </div>
     </div>
   );
