@@ -36,7 +36,13 @@ export const openStoragePath = async (mainWindow: BrowserWindow, path: string) =
 };
 
 export const getUserFilesStoragePath = () => {
-  const config = JSON.parse(readFileSync(CONFIG_PATH).toString());
+  try {
+    const str = readFileSync(CONFIG_PATH).toString();
 
-  return config.local_storage_path || DEFAULT_LOCAL_FILES_STORAGE_PATH;
+    const config = str && JSON.parse(str);
+
+    return config.local_storage_path;
+  } catch (err) {
+    return DEFAULT_LOCAL_FILES_STORAGE_PATH;
+  }
 };
