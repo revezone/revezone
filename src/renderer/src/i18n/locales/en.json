@@ -16,7 +16,7 @@
   "operation": {
     "addFolder": "Add a folder",
     "addNote": "Add a note",
-    "addBoard": "Add a Excalidraw",
+    "addBoard": "Add a Excalidraw whiteboard",
     "rename": "Rename",
     "delete": "Delete",
     "copyRevezoneLink": "Copy revezone link",
@@ -25,7 +25,7 @@
     "systemSetting": "System setting",
     "storagePath": "Storage path",
     "addMindmap": "Add a mindmap",
-    "addTldraw": "Add a Tldraw",
+    "addTldraw": "Add a Tldraw whiteboard",
     "importFiles": "Import files",
     "import": "Import Files"
   },
@@ -34,7 +34,8 @@
     "boardDesc": "A whiteboard based on Excalidraw",
     "addBoardDesc": "Click me! Add an enhanced Excalidraw board right now.",
     "giveAStarDesc": "Please git a star if Revezone is helpful to you.",
-    "systemSettingDesc": "Custom fonts in Revezone board in the system setting."
+    "systemSettingDesc": "Come and customize the fonts in Excalidraw whiteboard",
+    "addTldrawDesc": "Revezone supports Tldraw whiteboard, try it now"
   },
   "welcome": {
     "productDesc": "A new way to use Excalidraw. A lightweight productivity tool to build your second brain that integrates enhanced Excalidraw whiteboard and Notion-like note-taking features. Local-first and block-based.",

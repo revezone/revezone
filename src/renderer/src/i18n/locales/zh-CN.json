@@ -16,7 +16,7 @@
   "operation": {
     "addFolder": "新建文件夹",
     "addNote": "新建笔记",
-    "addBoard": "新建 Excalidraw",
+    "addBoard": "新建 Excalidraw 白板",
     "rename": "重命名",
     "delete": "删除",
     "copyRevezoneLink": "复制 Revezone 链接",
@@ -25,7 +25,7 @@
     "systemSetting": "系统设置",
     "storagePath": "存储路径",
     "addMindmap": "新建脑图",
-    "addTldraw": "新建 Tldraw",
+    "addTldraw": "新建 Tldraw 白板",
     "importFiles": "导入文件",
     "import": "导入文件"
   },
@@ -34,7 +34,8 @@
     "boardDesc": "增强型 Excalidraw 白板",
     "addBoardDesc": "点我，创建一个 Excalidraw 白板吧",
     "giveAStarDesc": "动动小手给个 Github Star 吧",
-    "systemSettingDesc": "快来在白板中自定义你喜欢的字体吧"
+    "systemSettingDesc": "快来自定义 Excalidraw 白板中的字体吧",
+    "addTldrawDesc": "Revezone 支持 Tldraw 白板了，快快体验吧"
   },
   "welcome": {
     "productDesc": "使用 Excalidraw 的全新姿势。一款轻量级本地优先的用于构建第二大脑的效率工具，集成了增强型 Excalidraw 白板和类 Notion 笔记能力。",

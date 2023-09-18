@@ -73,10 +73,10 @@ export default function ResizableLayout({ children }: Props) {
           }
         },
         {
-          element: '#give-star-button',
+          element: '#add-tldraw-button',
           popover: {
-            title: t('operation.giveAStar'),
-            description: t('description.giveAStarDesc')
+            title: t('operation.addTldraw'),
+            description: t('description.addTldrawDesc')
           }
         }
       ]

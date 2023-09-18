@@ -13,10 +13,9 @@ import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import type { RevezoneFile, RevezoneFileTree, RevezoneFolder } from '@renderer/types/file';
 import { useAtom } from 'jotai';
 import { focusItemAtom, selectedKeysAtom } from '@renderer/store/jotai';
-import { Folder, HardDrive, UploadCloud, MoreVertical, Palette, FileType } from 'lucide-react';
+import { Folder, MoreVertical, Palette, FileType } from 'lucide-react';
 import useFileTreeContextMenu from '@renderer/hooks/useFileTreeContextMenu';
 import useFileTree from '@renderer/hooks/useFileTree';
-import { useTranslation } from 'react-i18next';
 import { submitUserEvent } from '@renderer/utils/statistics';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
@@ -37,11 +36,9 @@ export default function DraggableMenuTree() {
   const [focusItem, setFocusItem] = useAtom(focusItemAtom);
   const { fileTree, getFileTree } = useFileTree();
   const { openKeys, addOpenKeys, removeOpenKey } = useOpenKeys();
-  const { t } = useTranslation();
   const {
     updateTabJsonModelWhenCurrentFileChanged,
     renameTabName,
-    switchToWelcomePage,
     model: tabModel
   } = useTabJsonModel();
   const { updateCurrentFile } = useCurrentFile();
