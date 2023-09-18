@@ -23,7 +23,7 @@
     "giveAStar": "Git a Github star",
     "switchLanguage": "Switch Lanugage",
     "systemSetting": "System setting",
-    "storagePath": "Storage path",
+    "storagePath": "Local storage path",
     "addMindmap": "Add a mindmap",
     "addTldraw": "Add a Tldraw whiteboard",
     "importFiles": "Import files",
@@ -96,6 +96,7 @@
   "storagePath": {
     "changePath": "Change storage path",
     "openPath": "Open storage path",
-    "changePathConfirm": "Are you sure you want to modify the user file storage path?"
+    "changePathConfirm": "Are you sure you want to modify the user file storage path?",
+    "storagePathNotice": "The local storage path customization function is only supported on the Revezone desktop application."
   }
 }

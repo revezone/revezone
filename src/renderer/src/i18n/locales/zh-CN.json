@@ -23,7 +23,7 @@
     "giveAStar": "给个 Github Star 吧",
     "switchLanguage": "切换语言",
     "systemSetting": "系统设置",
-    "storagePath": "存储路径",
+    "storagePath": "本地存储路径",
     "addMindmap": "新建脑图",
     "addTldraw": "新建 Tldraw 白板",
     "importFiles": "导入文件",
@@ -72,7 +72,7 @@
   },
   "publicBeta": {
     "title": "公测公告",
-    "description": "Revezone 目前处于公测阶段，产品可能还有少量 bug，重要数据请做好备份。如果你有任何问题或建议，欢迎提交 github issue 或者扫码添加微信反馈。"
+    "description": "Revezone 目前处于公测阶段，产品可能还有少量 bug，重要数据请做好备份。如果你有任何问题或建议，欢迎提交 github issue 或者扫码添加微信加入公测群进行反馈。"
   },
   "customFont": {
     "customFont": "自定义字体",
@@ -96,6 +96,7 @@
   "storagePath": {
     "changePath": "更改存储路径",
     "openPath": "打开存储路径",
-    "changePathConfirm": "确定修改用户文件存储路径吗？"
+    "changePathConfirm": "确定修改用户文件存储路径吗？",
+    "storagePathNotice": "本地存储路径自定义功能仅在 Revezone 桌面应用端支持"
   }
 }

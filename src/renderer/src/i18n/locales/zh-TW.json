@@ -23,7 +23,7 @@
     "giveAStar": "給個 Github Star 吧",
     "switchLanguage": "切換語言",
     "systemSetting": "繫統設置",
-    "storagePath": "存儲路徑",
+    "storagePath": "本地存儲路徑",
     "addMindmap": "新建腦圖",
     "addTldraw": "新建 Tldraw 白板",
     "importFiles": "導入文件",
@@ -96,6 +96,7 @@
   "storagePath": {
     "changePath": "更改存儲路徑",
     "openPath": "打開存儲路徑",
-    "changePathConfirm": "確定修改用戶文件存儲路徑嗎？"
+    "changePathConfirm": "確定修改用戶文件存儲路徑嗎？",
+    "storagePathNotice": "本地存儲路徑自定義功能僅在 Revezone 桌面應用端支持"
   }
 }
