@@ -196,7 +196,7 @@ export default function DraggableMenuTree() {
   );
 
   return (
-    <div className="revezone-menu-container flex-auto">
+    <div className="revezone-menu-container w-[calc(100%-2rem)]">
       <div className="menu-list border-slate-100 px-1 pt-2">
         <ControlledTreeEnvironment
           items={fileTree}

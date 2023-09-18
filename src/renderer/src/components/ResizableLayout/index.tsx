@@ -115,7 +115,7 @@ export default function ResizableLayout({ children }: Props) {
               />
             </div>
             <RevezoneBrand />
-            <div className="flex h-full border-t">
+            <div className="flex h-full w-full border-t">
               <LeftToolBar />
               <DraggableMenuTree />
             </div>

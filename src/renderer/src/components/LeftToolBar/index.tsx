@@ -167,7 +167,7 @@ export default function LeftToolBar(props: Props) {
   }, [size]);
   return (
     <div
-      className={`flex flex-col items-center justify-between h-[calc(100%-80px)] p-2 border-r ${className}`}
+      className={`flex flex-col items-center justify-between h-[calc(100%-80px)] p-2 w-8 border-r ${className}`}
     >
       <div className="flex flex-col items-center">
         <span
