@@ -173,19 +173,6 @@ function createWindow(): BrowserWindow {
   return mainWindow;
 }
 
-// app.on('will-finish-launching', () => {
-//   // 监听当应用被打开时的事件
-//   app.on('open-file', (event, path) => {
-//     event.preventDefault();
-//     // 处理打开文件的逻辑
-//     // 在这里你可以通过 path 参数获取到文件的路径
-//     // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
-//     console.log('--- open file ---', event, path);
-
-//     const fileData = fs.readFileSync(path);
-//   });
-// });
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

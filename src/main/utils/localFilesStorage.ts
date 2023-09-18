@@ -7,7 +7,7 @@ import {
   RevezoneFile,
   RevezoneFileType
 } from '../../renderer/src/types/file';
-import path, { join } from 'node:path';
+import { join } from 'node:path';
 import { TreeItem } from 'react-complex-tree';
 import { getUniqueNameInSameTreeLevel } from '../../renderer/src/utils/file';
 
@@ -62,7 +62,7 @@ export const getParentPathInFileTree = (
       _filePath = filePath;
     } else {
       // @ts-ignore
-      _filePath = `${parentItem.name}/${filePath}`;
+      _filePath = join(parentItem.name, filePath);
     }
     // @ts-ignore
     filePath = getParentPathInFileTree(parentItem.id, fileTree, _filePath);
@@ -86,7 +86,7 @@ export function getFullPathInfo(itemId: string, fileTree: RevezoneFileTree): Ful
   const parentDirPath = join(userFilesStoragePath, parentPathInFileTree);
 
   if (item.id.startsWith('folder_')) {
-    const folderFullPath = path.join(parentDirPath, item.name);
+    const folderFullPath = join(parentDirPath, item.name);
 
     return {
       type: 'folder',
@@ -95,7 +95,7 @@ export function getFullPathInfo(itemId: string, fileTree: RevezoneFileTree): Ful
     };
   } else {
     const suffix = getFileSuffix(item.type);
-    const fullFilePath = path.join(parentDirPath, `${item.name}${suffix}`);
+    const fullFilePath = join(parentDirPath, `${item.name}${suffix}`);
 
     return {
       type: 'file',
