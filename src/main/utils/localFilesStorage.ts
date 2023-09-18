@@ -128,7 +128,7 @@ export function onFileDataChange(fileId: string, value: string, fileTree: Revezo
 export function onRenameFileOrFolder(itemId: string, newName: string, fileTree: RevezoneFileTree) {
   const { path: fullFilePath, parentDirPath, suffix } = getFullPathInfo(itemId, fileTree);
 
-  fs.renameSync(fullFilePath, `${parentDirPath}/${newName}${suffix}`);
+  fs.renameSync(fullFilePath, join(parentDirPath, `${newName}${suffix}`));
 }
 
 export function onDeleteFileOrFolder(
