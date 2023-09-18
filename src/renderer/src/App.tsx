@@ -23,6 +23,8 @@ import {
   getFileTypeFromSuffix
 } from './utils/file';
 
+let openFileSuccessListenerRegistered = false;
+
 const OS_NAME = getOSName();
 
 function App(): JSX.Element {
@@ -32,6 +34,16 @@ function App(): JSX.Element {
 
   useEffect(() => {
     submitAppEnterUserEvent();
+  }, []);
+
+  useEffect(() => {
+    if (!tabModel || openFileSuccessListenerRegistered) return;
+
+    console.log('--- tabModel change ---');
+
+    // avoid listener register multiple times
+    openFileSuccessListenerRegistered = true;
+
     window.api?.openFileSuccess((event, path, fileData) => {
       const fileNameWithSuffix = getFilenameFromPath(path);
       const fileName = fileNameWithSuffix && getFileNameWithoutSuffix(fileNameWithSuffix);

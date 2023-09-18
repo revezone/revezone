@@ -8,6 +8,7 @@ import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
 import { TreeItemRenderContext } from 'react-complex-tree';
 import { Modal } from 'antd';
 import { Model } from 'flexlayout-react';
+import { TldrawIcon } from '@renderer/icons';
 
 interface Props {
   deleteFile: (file: RevezoneFile, tabModel: Model) => void;
@@ -67,6 +68,16 @@ export default function useFileTreeContextMenu(props: Props) {
               domEvent.stopPropagation();
               domEvent.preventDefault();
               addFile('New Board', 'board', tabModel, item.id);
+            }
+          },
+          {
+            key: 'addboard',
+            label: t('operation.addTldraw'),
+            icon: <TldrawIcon className="w-4" />,
+            onClick: async ({ domEvent }: { domEvent: Event }) => {
+              domEvent.stopPropagation();
+              domEvent.preventDefault();
+              addFile('New Tldraw', 'tldraw', tabModel, item.id);
             }
           },
           {
