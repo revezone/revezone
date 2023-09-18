@@ -122,6 +122,8 @@ class FileTreeIndexeddbStorage {
     await this.updateFileTree(fileTree);
 
     if (info.type && ['board', 'tldraw'].includes(info.type)) {
+      console.log('--- addFileTreeItem ---', info.id, fileTree);
+
       window.api?.addFile(info.id, '{}', fileTree);
     }
 

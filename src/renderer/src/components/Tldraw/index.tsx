@@ -1,19 +1,17 @@
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useCallback } from 'react';
 import { RevezoneFile } from '@renderer/types/file';
 import { Tldraw, Editor, createTLStore, defaultShapeUtils } from '@tldraw/tldraw';
 import type { StoreSnapshot, TLRecord } from '@tldraw/tldraw';
-import { getFileDataChangeDebounceFn } from '@renderer/utils/file';
+import { sendFileDataChangeToMainDebounceFn } from '@renderer/utils/file';
 import useFileTree from '@renderer/hooks/useFileTree';
+import { tldrawIndexeddbStorage } from '@renderer/store/tldrawIndexeddb';
 
 import '@tldraw/tldraw/tldraw.css';
-import { tldrawIndexeddbStorage } from '@renderer/store/tldrawIndexeddb';
 
 interface Props {
   file: RevezoneFile;
   snapshot?: StoreSnapshot<TLRecord>;
 }
-
-const fileDataChangeDebounceFn = getFileDataChangeDebounceFn();
 
 export default function ReveTldraw(props: Props) {
   const { file } = props;
@@ -37,26 +35,23 @@ export default function ReveTldraw(props: Props) {
 
   useEffect(() => {
     editor?.store?.listen((entry) => {
+      if (!editor) return;
+
       const snapshot = editor.store.getSnapshot();
 
       tldrawIndexeddbStorage.updateTldraw(file.id, snapshot, fileTree);
 
       const snapshotStr = JSON.stringify(snapshot);
 
-      fileDataChangeDebounceFn(file.id, snapshotStr, fileTree);
+      sendFileDataChangeToMainDebounceFn(file.id, snapshotStr, fileTree);
     });
-  }, [editor, file, fileTree]);
-
-  // const onUiEvent = (name, data) => {
-  //   console.log('--- onUiEvent ---', name, data);
-  // };
+  }, [editor, fileTree]);
 
   return (
     <div className="tldraw__editor w-full h-full">
       <Tldraw
         store={store}
         autoFocus
-        // onUiEvent={onUiEvent}
         onMount={(editor) => {
           setEditor(editor);
         }}

@@ -1,9 +1,10 @@
 import { DOUBLE_LINK_REGEX } from './constant';
 import { RevezoneFolder, RevezoneFile, RevezoneFileTree, RevezoneFileType } from '../types/file';
-import { debounce } from './debounce';
 
 const REVEZONE_LINK_PROTOCOL = 'revezone://';
 const FILE_NAME_REGEX = /^(.+)(\.[a-zA-Z0-9]+)$/;
+
+let timeout;
 
 export const getFileIdOrNameFromLink = (link: string) => {
   if (link.startsWith(REVEZONE_LINK_PROTOCOL)) {
@@ -48,12 +49,19 @@ export function getUniqueNameInSameTreeLevel(
   return item.name;
 }
 
-export const getFileDataChangeDebounceFn = () => {
-  return debounce((id: string, data: string, fileTree: RevezoneFileTree) => {
-    if (typeof data !== 'string') {
-      data = JSON.stringify(data);
-    }
+export const sendFileDataChangeToMainDebounceFn = (
+  id: string,
+  data: string,
+  fileTree: RevezoneFileTree
+) => {
+  if (typeof data !== 'string') {
+    data = JSON.stringify(data);
+  }
 
+  // debounce
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    console.log('filechange debounce', id, data);
     window.api?.fileDataChange(id, data, fileTree);
   }, 1000);
 };

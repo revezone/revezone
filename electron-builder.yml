@@ -17,17 +17,13 @@ fileAssociations:
     ext: excalidraw
   - name: tldraw
     ext: tldraw
-  - name: markdown
-    ext: md
 win:
   executableName: Revezone
   protocols: 
     - name: revezone
       schemes:
-        - revezone
         - excalidraw
         - tldraw
-        - md
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -48,10 +44,8 @@ mac:
   protocols: 
     - name: revezone
       schemes:
-        - revezone
         - excalidraw
         - tldraw
-        - md
 dmg:
   artifactName: ${name}-${version}-${arch}.${ext}
 linux:

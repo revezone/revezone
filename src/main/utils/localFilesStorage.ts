@@ -77,12 +77,8 @@ export function getFullPathInfo(itemId: string, fileTree: RevezoneFileTree): Ful
   const userFilesStoragePath = getUserFilesStoragePath();
 
   if (!item) {
-    console.error(`getFullPathInfo: File item ${itemId} not found`);
-    return {
-      type: itemId.startsWith('file_') ? 'file' : 'folder',
-      path: userFilesStoragePath,
-      parentDirPath: userFilesStoragePath
-    };
+    console.log('--- getFullPathInfo ---', itemId, fileTree);
+    throw new Error(`getFullPathInfo: File item ${itemId} not found`);
   }
 
   const parentPathInFileTree = getParentPathInFileTree(itemId, fileTree);
@@ -115,6 +111,8 @@ export function addOrUpdateFile(fileId: string, value: string, fileTree: Revezon
   const { path: fullFilePath, parentDirPath } = getFullPathInfo(fileId, fileTree);
 
   ensureDir(parentDirPath);
+
+  console.log('--- addOrUpdateFile ---', parentDirPath, fullFilePath);
 
   fs.writeFileSync(fullFilePath, value);
 }
