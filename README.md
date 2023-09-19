@@ -4,7 +4,7 @@
 Revezone is currently in a public beta. Please report a [issue](https://github.com/revezone/revezone/issues/new), if you have any suggestions or questions.
 
 ---
-A lightweight graphic-centric productivity tool to build your Second Brain.
+A lightweight local-first graphic-centric productivity tool to build your second brain.
 
 ![](https://img.alicdn.com/imgextra/i1/O1CN01Fg2uUT1xflodGBz7J_!!6000000006471-2-tps-2952-1706.png)
 
@@ -22,7 +22,8 @@ Please give it a star ⭐ ☝️ if Revezone is helpful to you.
 Revezone is currently in a public beta. Please report a [issue](https://github.com/revezone/revezone/issues/new), if you have any suggestions or questions.
 
 ## Features
-* Board: A whiteboard function based on Excalidraw.
+* Excalidraw Board: A whiteboard function based on Excalidraw.
+* Tldraw Board: A whiteboard function base on Tldraw.
 * Note: A Notion-like note-taking function.
 * File Management: You can manage notes or boards based on folder.
 
