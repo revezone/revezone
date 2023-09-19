@@ -38,7 +38,7 @@
     "addTldrawDesc": "Revezone 支持 Tldraw 白板了，快快体验吧"
   },
   "welcome": {
-    "productDesc": "使用 Excalidraw 的全新姿势。一款轻量级本地优先的用于构建第二大脑的效率工具，集成了增强型 Excalidraw 白板和类 Notion 笔记能力。",
+    "productDesc": "一个轻量级本地优先以图形为中心的思维管理工具。",
     "operationTip": "这是一个空白页，请先在左侧边栏新建或选择某个文件",
     "operationGuide": "操作说明",
     "operationDetailDesc": "点击左侧边栏的操作图标来创建一个白板、笔记、文件夹",
