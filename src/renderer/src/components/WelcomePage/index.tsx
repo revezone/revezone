@@ -105,14 +105,14 @@ function WelcomeContent() {
       <div className="copyright absolute bottom-0 text-center w-full h-8 text-sm">
         Copyright © 2023{' '}
         <a
-          href="https://twitter.com/korbinzhao"
+          href="https://twitter.com/TheReveZone"
           target="_blank"
           rel="noreferrer"
           onClick={() => {
             submitUserEvent('welcomepage_click_twitter', {});
           }}
         >
-          Korbin Zhao
+          Revezone
         </a>
         . All rights reserved.
       </div>
