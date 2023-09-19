@@ -38,7 +38,7 @@
     "addTldrawDesc": "Revezone supports Tldraw whiteboard, try it now"
   },
   "welcome": {
-    "productDesc": "A lightweight native-first graph-centric mind management tool.",
+    "productDesc": "A lightweight local-first graph-centric mind management tool.",
     "operationTip": "This is an empty page. Please add or select a file first in the left sidebar.",
     "operationGuide": "Operation Guide",
     "operationDetailDesc": "Click the icons in left sidebar operation toolbar to add a board/note/folder.",
