@@ -10,7 +10,7 @@ Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果�
 ![](https://img.alicdn.com/imgextra/i1/O1CN01Fg2uUT1xflodGBz7J_!!6000000006471-2-tps-2952-1706.png)
 
 ## 赞助
-[投喂猫粮](https://afdian.net/a/wantian) 或 [买杯咖啡](https://www.buymeacoffee.com/korbinzhao)。
+[投喂猫粮（大陆用户）](https://github.com/korbinzhao/donate) 或 [买杯咖啡](https://www.buymeacoffee.com/korbinzhao)。
 
 ## 给个 Star
 如果 Revezone 对你有帮助，请不要吝惜小手给个 Star ⭐ 吧 ☝️ 
