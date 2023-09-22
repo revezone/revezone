@@ -9,7 +9,7 @@ A lightweight local-first graphic-centric productivity tool to build your second
 ![](https://img.alicdn.com/imgextra/i1/O1CN01Fg2uUT1xflodGBz7J_!!6000000006471-2-tps-2952-1706.png)
 
 ## Sponsor
-[Buy me a coffee](https://www.buymeacoffee.com/korbinzhao) or [feed my cat](https://afdian.net/a/wantian).
+[Buy me a coffee](https://www.buymeacoffee.com/korbinzhao) or [feed my cat](https://github.com/korbinzhao/donate).
 
 ## Giving a Star
 Please give it a star ⭐ ☝️ if Revezone is helpful to you.
