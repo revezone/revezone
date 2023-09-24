@@ -220,7 +220,16 @@ app.whenReady().then(() => {
     // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
     console.log('--- open url ---', event, link);
 
-    mainWindow.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
+    let _mainWindow = mainWindow;
+
+    if (BrowserWindow.getAllWindows().length === 0) {
+      _mainWindow = createWindow();
+      _mainWindow.on('ready-to-show', () => {
+        _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
+      });
+    } else {
+      _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
+    }
   });
 
   // autoUpdater.checkForUpdatesAndNotify();
