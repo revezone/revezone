@@ -27,7 +27,8 @@
     "addMindmap": "新建脑图",
     "addTldraw": "新建 Tldraw 白板",
     "importFiles": "导入文件",
-    "import": "导入文件"
+    "import": "导入文件",
+    "openDirectory": "打开所在文件夹"
   },
   "description": {
     "noteDesc": "类 Notion 笔记",

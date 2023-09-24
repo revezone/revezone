@@ -1,7 +1,15 @@
 import { useCallback, useState } from 'react';
-import { FileEdit, Trash2, ClipboardCopy, FileType, Palette, FolderPlus } from 'lucide-react';
+import {
+  FileEdit,
+  Trash2,
+  ClipboardCopy,
+  FileType,
+  Palette,
+  FolderPlus,
+  FolderOpen
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { RevezoneFile, RevezoneFolder } from '@renderer/types/file';
+import { RevezoneFile, RevezoneFileTree, RevezoneFolder } from '@renderer/types/file';
 import useAddFile from '../useAddFile';
 import useAddFolder from '../useAddFolder';
 import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
@@ -9,6 +17,7 @@ import { TreeItemRenderContext } from 'react-complex-tree';
 import { Modal } from 'antd';
 import { Model } from 'flexlayout-react';
 import { TldrawIcon } from '@renderer/icons';
+import useFileTree from '../useFileTree';
 
 interface Props {
   deleteFile: (file: RevezoneFile, tabModel: Model) => void;
@@ -30,8 +39,13 @@ export default function useFileTreeContextMenu(props: Props) {
       item: RevezoneFile | RevezoneFolder,
       context: TreeItemRenderContext,
       isFolder: boolean,
-      tabModel: Model
+      tabModel: Model | undefined,
+      fileTree: RevezoneFileTree
     ) => {
+      if (!(tabModel && fileTree)) {
+        return;
+      }
+
       const commonContextMenu = [
         {
           key: 'rename',
@@ -42,6 +56,16 @@ export default function useFileTreeContextMenu(props: Props) {
             console.log('rename');
             context.startRenamingItem();
             setRenamingMenuItemIdToLocal(item.id);
+          }
+        },
+        {
+          key: 'open_directory',
+          label: t('operation.openDirectory'),
+          icon: <FolderOpen className="w-4" />,
+          onClick: ({ domEvent }: { domEvent: Event }) => {
+            domEvent.stopPropagation();
+            console.log('open_directory');
+            window.api.openStoragePathById(item.id, fileTree);
           }
         },
         {

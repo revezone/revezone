@@ -23,11 +23,13 @@ import {
 import {
   customStoragePath,
   getUserFilesStoragePath,
-  openStoragePath
+  openStoragePath,
+  openStoragePathById
 } from './utils/customStoragePath';
 import { RevezoneFileTree, RevezoneFolder, RevezoneFile } from '../renderer/src/types/file';
 import { TreeItem } from 'react-complex-tree';
 import fs from 'node:fs';
+import { notify } from './utils/notification';
 
 // import { autoUpdater } from 'electron-updater';
 // import { notify } from './utils/notification';
@@ -159,6 +161,13 @@ function createWindow(): BrowserWindow {
   });
 
   ipcMain.on(
+    EVENTS.openStoragePathById,
+    async (event, itemId: string, fileTree: RevezoneFileTree) => {
+      mainWindow && openStoragePathById(mainWindow, itemId, fileTree);
+    }
+  );
+
+  ipcMain.on(
     EVENTS.dragAndDrop,
     async (
       event,
@@ -197,9 +206,21 @@ app.whenReady().then(() => {
     // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
     console.log('--- open file ---', event, path);
 
+    notify(`open file ${path}`);
+
     const fileData = fs.readFileSync(path).toString();
 
     mainWindow.webContents.send(EVENTS.openFileSuccess, path, fileData);
+  });
+
+  app.on('open-url', (event, link) => {
+    event.preventDefault();
+    // 处理打开文件的逻辑
+    // 在这里你可以通过 path 参数获取到文件的路径
+    // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
+    console.log('--- open url ---', event, link);
+
+    mainWindow.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
   });
 
   // autoUpdater.checkForUpdatesAndNotify();

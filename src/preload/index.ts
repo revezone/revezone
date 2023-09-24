@@ -20,6 +20,8 @@ const api = {
   customStoragePath: () => ipcRenderer.send(EVENTS.customStoragePath),
   customStoragePathSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.customStoragePathSuccess, cb),
   openStoragePath: () => ipcRenderer.send(EVENTS.openStoragePath),
+  openStoragePathById: (itemId: string, fileTree: RevezoneFileTree) =>
+    ipcRenderer.send(EVENTS.openStoragePathById, itemId, fileTree),
   addFile: (fileId: string, value: string, fileTree: RevezoneFileTree) =>
     ipcRenderer.send(EVENTS.addFile, fileId, value, fileTree),
   deleteFileOrFolder: (fileId: string, fileTree: RevezoneFileTree) =>
@@ -33,7 +35,10 @@ const api = {
   ) => {
     ipcRenderer.send(EVENTS.dragAndDrop, items, parentId, fileTree);
   },
-  openFileSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.openFileSuccess, cb)
+  openFileSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.openFileSuccess, cb),
+  openRevezoneLinkSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.openRevezoneLinkSuccess, cb),
+  removeAllRevezoneLinkListeners: () =>
+    ipcRenderer.removeAllListeners(EVENTS.openRevezoneLinkSuccess)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

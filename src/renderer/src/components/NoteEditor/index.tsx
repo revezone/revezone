@@ -17,8 +17,6 @@ function NoteEditor({ file }: Props): JSX.Element | null {
   const editorRef = useRef<RevezoneBlockSuiteEditor>();
   const editorMountRef = useRef(false);
 
-  console.log('--- noteeditor ---', file.id);
-
   if (!file) {
     return null;
   }

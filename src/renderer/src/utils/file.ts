@@ -61,7 +61,7 @@ export const sendFileDataChangeToMainDebounceFn = (
   // debounce
   clearTimeout(timeout);
   timeout = setTimeout(() => {
-    console.log('filechange debounce', id, data);
+    console.log('filechange debounce', id);
     window.api?.fileDataChange(id, data, fileTree);
   }, 1000);
 };
@@ -100,6 +100,8 @@ export function getFileTypeFromSuffix(suffix: string): RevezoneFileType | undefi
   switch (suffix) {
     case '.excalidraw':
       return 'board';
+    case '.tldr':
+      return 'tldraw';
     default:
       return suffix?.split('.').pop() as RevezoneFileType;
   }

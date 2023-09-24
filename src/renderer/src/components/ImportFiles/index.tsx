@@ -27,7 +27,7 @@ export default function ImportFiles() {
       case '.excalidraw':
         await addFile(fileName, 'board', tabModel, 'root', fileData);
         break;
-      case '.tldraw':
+      case '.tldr':
         await addFile(fileName, 'tldraw', tabModel, 'root', fileData);
         break;
     }

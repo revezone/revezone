@@ -70,12 +70,8 @@ export default function DraggableMenuTree() {
 
   const onSelectItems = useCallback(
     async (items: TreeItemIndex[]) => {
-      console.log('onSelect', items);
-
       if (items.length === 1 && (items[0] as string).startsWith('file_')) {
         const file = fileTree[items[0]].data as RevezoneFile;
-
-        console.log('--- file ---', file);
 
         await updateCurrentFile(file);
 
@@ -90,7 +86,6 @@ export default function DraggableMenuTree() {
   );
 
   const onFocusItem = useCallback((item: TreeItem) => {
-    console.log('--- onFocusItem ---', item);
     setFocusItem(item.data.id);
   }, []);
 
@@ -279,7 +274,13 @@ export default function DraggableMenuTree() {
                       trigger={['click']}
                       menu={{
                         // @ts-ignore
-                        items: getFileTreeContextMenu(item.data, context, !!item.isFolder, tabModel)
+                        items: getFileTreeContextMenu(
+                          item.data,
+                          context,
+                          !!item.isFolder,
+                          tabModel,
+                          fileTree
+                        )
                       }}
                       onClick={(e: Event) => e.stopPropagation()}
                     >

@@ -3,6 +3,8 @@ import { join } from 'path';
 import { EVENTS } from '../../preload/events';
 import { ensureDir } from './io';
 import { writeFileSync, readFileSync } from 'node:fs';
+import { getFullPathInfo } from './localFilesStorage';
+import { RevezoneFileTree } from '@renderer/types/file';
 
 const USER_DATA_PATH = app.getPath('userData');
 
@@ -30,8 +32,25 @@ export const customStoragePath = async (mainWindow: BrowserWindow) => {
 };
 
 export const openStoragePath = async (mainWindow: BrowserWindow, path: string) => {
+  console.log('--- open path1 ---', path);
   await dialog.showOpenDialog(mainWindow, {
-    defaultPath: path
+    defaultPath: path,
+    properties: ['openDirectory']
+  });
+};
+
+export const openStoragePathById = async (
+  mainWindow: BrowserWindow,
+  itemId: string,
+  fileTree: RevezoneFileTree
+) => {
+  const { path } = getFullPathInfo(itemId, fileTree);
+
+  console.log('--- open path2 ---', path);
+
+  await dialog.showOpenDialog(mainWindow, {
+    defaultPath: path,
+    properties: ['openDirectory']
   });
 };
 

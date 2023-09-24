@@ -11,7 +11,7 @@ import { join } from 'node:path';
 import { TreeItem } from 'react-complex-tree';
 import { getUniqueNameInSameTreeLevel } from '../../renderer/src/utils/file';
 
-type RevezoneFileSuffix = '.excalidraw' | '.tldraw' | '.md';
+type RevezoneFileSuffix = '.excalidraw' | '.tldr' | '.md';
 
 interface FullPathInfo {
   type: 'folder' | 'file';
@@ -28,7 +28,7 @@ export function getFileSuffix(fileType: string | undefined): RevezoneFileSuffix 
     case 'note':
       return '.md';
     case 'tldraw':
-      return '.tldraw';
+      return '.tldr';
   }
 
   return undefined;

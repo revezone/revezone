@@ -22,6 +22,9 @@ import {
   getFileSuffix,
   getFileTypeFromSuffix
 } from './utils/file';
+import useCurrentFile from './hooks/useCurrentFile';
+import useFileTree from './hooks/useFileTree';
+import { RevezoneFile } from './types/file';
 
 let openFileSuccessListenerRegistered = false;
 
@@ -30,7 +33,9 @@ const OS_NAME = getOSName();
 function App(): JSX.Element {
   const [langCode] = useAtom(langCodeAtom);
   const { addFile } = useAddFile();
-  const { model: tabModel } = useTabJsonModel();
+  const { model: tabModel, updateTabJsonModelWhenCurrentFileChanged } = useTabJsonModel();
+  const { updateCurrentFile } = useCurrentFile();
+  const { fileTree } = useFileTree();
 
   useEffect(() => {
     submitAppEnterUserEvent();
@@ -59,6 +64,32 @@ function App(): JSX.Element {
       }
     });
   }, [tabModel]);
+
+  useEffect(() => {
+    if (!tabModel || !(fileTree && JSON.stringify(fileTree) !== '{}')) {
+      return;
+    }
+
+    console.log('--- open revezone link listener ---');
+
+    window.api?.removeAllRevezoneLinkListeners();
+
+    window.api?.openRevezoneLinkSuccess(async (event, link) => {
+      const fileId = link?.split('revezone://')[1];
+      const file = fileTree[fileId]?.data as RevezoneFile;
+
+      console.log('openlink', link, file, fileTree, tabModel.toJson());
+
+      if (!file) {
+        message.error(`File ${link} not exsited!`);
+        return;
+      }
+
+      await updateCurrentFile(file);
+
+      updateTabJsonModelWhenCurrentFileChanged(file, tabModel);
+    });
+  }, [fileTree, tabModel]);
 
   const getLocale = useCallback(() => {
     switch (langCode) {

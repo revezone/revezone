@@ -77,25 +77,25 @@ export default function useTabJsonModel() {
   }, []);
 
   const updateTabJsonModelWhenCurrentFileChanged = useCallback(
-    (currentFile: RevezoneFile | undefined | null, model: Model | undefined) => {
-      if (!currentFile || !model) return;
+    (currentFile: RevezoneFile | undefined | null, tabModel: Model | undefined) => {
+      if (!currentFile || !tabModel) return;
 
-      const tabJsonModel = model.toJson();
+      const tabJsonModel = tabModel.toJson();
 
       const tabList = getTabList(tabJsonModel.layout);
 
       const _tabIndex = tabList.findIndex((tab) => tab.id === currentFile.id);
 
       if (_tabIndex < 0) {
-        addTab(currentFile, model);
+        addTab(currentFile, tabModel);
 
-        const newTabJsonModel = model.toJson();
+        const newTabJsonModel = tabModel.toJson();
 
         setTabJsonModel(newTabJsonModel);
         setTabJsonModelToLocal(JSON.stringify(newTabJsonModel));
       } else {
-        console.log('doAction', currentFile);
-        model.doAction(Actions.selectTab(currentFile.id));
+        console.log('tabmodel doAction', currentFile, tabList);
+        tabModel.doAction(Actions.selectTab(currentFile.id));
       }
     },
     []

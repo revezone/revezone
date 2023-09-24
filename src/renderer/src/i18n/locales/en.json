@@ -27,7 +27,8 @@
     "addMindmap": "Add a mindmap",
     "addTldraw": "Add a Tldraw whiteboard",
     "importFiles": "Import files",
-    "import": "Import Files"
+    "import": "Import Files",
+    "openDirectory": "Open the folder located"
   },
   "description": {
     "noteDesc": "A notion-like note function",

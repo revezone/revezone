@@ -9,9 +9,11 @@ export const EVENTS = {
   customStoragePath: 'custom-storage-path',
   customStoragePathSuccess: 'custom-storage-path-success',
   openStoragePath: 'open-storage-path',
+  openStoragePathById: 'open-storage-path-by-id',
   renameFileOrFolder: 'rename-file-or-folder',
   deleteFileOrFolder: 'delete-file-or-folder',
   addFile: 'add-local-file',
   dragAndDrop: 'drag-and-drop',
-  openFileSuccess: 'open-file-success'
+  openFileSuccess: 'open-file-success',
+  openRevezoneLinkSuccess: 'open-revezone-link-success'
 };
