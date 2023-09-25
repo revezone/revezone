@@ -40,19 +40,23 @@ const DEFAULT_WINDOW_HEIGHT = 770;
 // 创建一个新的存储实例
 const store = new Store();
 
+let mainWindow: BrowserWindow | null;
+
 // IMPORTANT: to fix file save problem in excalidraw: The request is not allowed by the user agent or the platform in the current context
 app.commandLine.appendSwitch('enable-experimental-web-platform-features');
 
 app.setAsDefaultProtocolClient('revezone');
 
 function createWindow(): BrowserWindow {
+  if (mainWindow) return mainWindow;
+
   const savedSize = store.get('windowSize', {
     width: DEFAULT_WINDOW_WIDTH,
     height: DEFAULT_WINDOW_HEIGHT
   }) as { width: number; height: number };
 
   // Create the browser window.
-  let mainWindow: BrowserWindow | null = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     titleBarStyle: isMacOS() ? 'hiddenInset' : 'default',
     titleBarOverlay: isMacOS() ? false : true,
     width: savedSize.width,
@@ -196,41 +200,7 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  const mainWindow = createWindow();
-
-  // 监听当应用被打开时的事件
-  app.on('open-file', (event, path) => {
-    event.preventDefault();
-    // 处理打开文件的逻辑
-    // 在这里你可以通过 path 参数获取到文件的路径
-    // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
-    console.log('--- open file ---', event, path);
-
-    notify(`open file ${path}`);
-
-    const fileData = fs.readFileSync(path).toString();
-
-    mainWindow.webContents.send(EVENTS.openFileSuccess, path, fileData);
-  });
-
-  app.on('open-url', (event, link) => {
-    event.preventDefault();
-    // 处理打开文件的逻辑
-    // 在这里你可以通过 path 参数获取到文件的路径
-    // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
-    console.log('--- open url ---', event, link);
-
-    let _mainWindow = mainWindow;
-
-    if (BrowserWindow.getAllWindows().length === 0) {
-      _mainWindow = createWindow();
-      _mainWindow.on('ready-to-show', () => {
-        _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
-      });
-    } else {
-      _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
-    }
-  });
+  createWindow();
 
   // autoUpdater.checkForUpdatesAndNotify();
 
@@ -251,6 +221,57 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
+  }
+});
+
+// 监听当应用被打开时的事件
+app.on('open-file', (event, path) => {
+  event.preventDefault();
+  // 处理打开文件的逻辑
+  // 在这里你可以通过 path 参数获取到文件的路径
+  // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
+  console.log('--- open file ---', event, path);
+
+  const fileData = fs.readFileSync(path).toString();
+
+  let _mainWindow = mainWindow;
+
+  if (BrowserWindow.getAllWindows().length === 0) {
+    app.whenReady().then(() => {
+      _mainWindow = createWindow();
+      _mainWindow.webContents.on('did-finish-load', () => {
+        console.log('did-finish-load');
+        setTimeout(() => {
+          mainWindow?.webContents.send(EVENTS.openFileSuccess, path, fileData);
+        }, 500);
+      });
+    });
+  } else {
+    mainWindow?.webContents.send(EVENTS.openFileSuccess, path, fileData);
+  }
+});
+
+app.on('open-url', (event, link) => {
+  event.preventDefault();
+  // 处理打开文件的逻辑
+  // 在这里你可以通过 path 参数获取到文件的路径
+  // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
+  console.log('--- open url ---', event, link);
+
+  let _mainWindow = mainWindow;
+
+  if (BrowserWindow.getAllWindows().length === 0) {
+    app.whenReady().then(() => {
+      _mainWindow = createWindow();
+      _mainWindow.webContents.on('did-finish-load', () => {
+        console.log('did-finish-load');
+        setTimeout(() => {
+          _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
+        }, 500);
+      });
+    });
+  } else {
+    _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
   }
 });
 
