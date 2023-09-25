@@ -94,7 +94,6 @@ export default function useTabJsonModel() {
         setTabJsonModel(newTabJsonModel);
         setTabJsonModelToLocal(JSON.stringify(newTabJsonModel));
       } else {
-        console.log('tabmodel doAction', currentFile, tabList);
         tabModel.doAction(Actions.selectTab(currentFile.id));
       }
     },

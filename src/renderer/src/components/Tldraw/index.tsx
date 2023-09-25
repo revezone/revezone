@@ -24,8 +24,6 @@ export default function ReveTldraw(props: Props) {
 
     if (!data) return;
 
-    console.log('data', data);
-
     store.loadSnapshot(data);
   };
 

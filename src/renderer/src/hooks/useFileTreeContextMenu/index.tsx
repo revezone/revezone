@@ -17,7 +17,7 @@ import { TreeItemRenderContext } from 'react-complex-tree';
 import { Modal } from 'antd';
 import { Model } from 'flexlayout-react';
 import { TldrawIcon } from '@renderer/icons';
-import useFileTree from '../useFileTree';
+import { isInRevezoneApp } from '@renderer/utils/navigator';
 
 interface Props {
   deleteFile: (file: RevezoneFile, tabModel: Model) => void;
@@ -46,6 +46,21 @@ export default function useFileTreeContextMenu(props: Props) {
         return;
       }
 
+      const openDirectoryMenu = isInRevezoneApp
+        ? [
+            {
+              key: 'open_directory',
+              label: t('operation.openDirectory'),
+              icon: <FolderOpen className="w-4" />,
+              onClick: ({ domEvent }: { domEvent: Event }) => {
+                domEvent.stopPropagation();
+                console.log('open_directory');
+                window.api.openStoragePathById(item.id, fileTree);
+              }
+            }
+          ]
+        : [];
+
       const commonContextMenu = [
         {
           key: 'rename',
@@ -58,16 +73,7 @@ export default function useFileTreeContextMenu(props: Props) {
             setRenamingMenuItemIdToLocal(item.id);
           }
         },
-        {
-          key: 'open_directory',
-          label: t('operation.openDirectory'),
-          icon: <FolderOpen className="w-4" />,
-          onClick: ({ domEvent }: { domEvent: Event }) => {
-            domEvent.stopPropagation();
-            console.log('open_directory');
-            window.api.openStoragePathById(item.id, fileTree);
-          }
-        },
+        ...openDirectoryMenu,
         {
           key: 'delete',
           label: t('operation.delete'),
@@ -85,7 +91,7 @@ export default function useFileTreeContextMenu(props: Props) {
       if (isFolder) {
         return [
           {
-            key: 'addboard',
+            key: 'addexcalidraw',
             label: t('operation.addBoard'),
             icon: <Palette className="w-4" />,
             onClick: async ({ domEvent }: { domEvent: Event }) => {
@@ -95,7 +101,7 @@ export default function useFileTreeContextMenu(props: Props) {
             }
           },
           {
-            key: 'addboard',
+            key: 'addtldraw',
             label: t('operation.addTldraw'),
             icon: <TldrawIcon className="w-4" />,
             onClick: async ({ domEvent }: { domEvent: Event }) => {

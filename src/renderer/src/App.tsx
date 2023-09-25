@@ -70,8 +70,6 @@ function App(): JSX.Element {
       return;
     }
 
-    console.log('--- open revezone link listener ---');
-
     window.api?.removeAllRevezoneLinkListeners();
 
     window.api?.openRevezoneLinkSuccess(async (event, link) => {
