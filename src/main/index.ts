@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron';
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { isMacOS } from './utils/platform';
@@ -186,34 +186,109 @@ function createWindow(): BrowserWindow {
   return mainWindow;
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron');
+const gotTheLock = app.requestSingleInstanceLock();
 
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window);
+if (!gotTheLock) {
+  app.quit();
+} else {
+  // For Windows
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+      setTimeout(() => {
+        let link = commandLine[commandLine.length - 1];
+        link = link.substring(0, link.length - 1);
+        dialog.showErrorBox('Welcome Back', `You arrived from: ${link}`);
+        mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
+      }, 500);
+    }
   });
 
-  createWindow();
+  // 监听当应用被打开时的事件
+  app.on('open-file', (event, path) => {
+    event.preventDefault();
+    // 处理打开文件的逻辑
+    // 在这里你可以通过 path 参数获取到文件的路径
+    // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
+    console.log('--- open file ---', event, path);
 
-  // autoUpdater.checkForUpdatesAndNotify();
+    const fileData = fs.readFileSync(path).toString();
 
-  // autoUpdater.on('update-available', (info) => {
-  //   notify(`update avilable: ${info && JSON.stringify(info)} `);
-  // });
+    let _mainWindow = mainWindow;
 
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) {
+      app.whenReady().then(() => {
+        _mainWindow = createWindow();
+        _mainWindow.webContents.on('did-finish-load', () => {
+          console.log('did-finish-load');
+          setTimeout(() => {
+            mainWindow?.webContents.send(EVENTS.openFileSuccess, path, fileData);
+          }, 500);
+        });
+      });
+    } else {
+      mainWindow?.webContents.send(EVENTS.openFileSuccess, path, fileData);
+    }
   });
-});
+
+  app.on('open-url', (event, link) => {
+    event.preventDefault();
+    // 处理打开文件的逻辑
+    // 在这里你可以通过 path 参数获取到文件的路径
+    // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
+    console.log('--- open url ---', event, link);
+
+    dialog.showErrorBox('open url', `open url: ${link}`);
+
+    let _mainWindow = mainWindow;
+
+    if (BrowserWindow.getAllWindows().length === 0) {
+      app.whenReady().then(() => {
+        _mainWindow = createWindow();
+        _mainWindow.webContents.on('did-finish-load', () => {
+          console.log('did-finish-load');
+          dialog.showErrorBox('open-url', `You arrived from: ${link}`);
+          setTimeout(() => {
+            _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
+          }, 500);
+        });
+      });
+    } else {
+      _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
+    }
+  });
+
+  // This method will be called when Electron has finished
+  // initialization and is ready to create browser windows.
+  // Some APIs can only be used after this event occurs.
+  app.whenReady().then(() => {
+    // Set app user model id for windows
+    electronApp.setAppUserModelId('com.electron');
+
+    // Default open or close DevTools by F12 in development
+    // and ignore CommandOrControl + R in production.
+    // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
+    app.on('browser-window-created', (_, window) => {
+      optimizer.watchWindowShortcuts(window);
+    });
+
+    createWindow();
+
+    // autoUpdater.checkForUpdatesAndNotify();
+
+    // autoUpdater.on('update-available', (info) => {
+    //   notify(`update avilable: ${info && JSON.stringify(info)} `);
+    // });
+
+    app.on('activate', function () {
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+  });
+}
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -221,57 +296,6 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
-  }
-});
-
-// 监听当应用被打开时的事件
-app.on('open-file', (event, path) => {
-  event.preventDefault();
-  // 处理打开文件的逻辑
-  // 在这里你可以通过 path 参数获取到文件的路径
-  // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
-  console.log('--- open file ---', event, path);
-
-  const fileData = fs.readFileSync(path).toString();
-
-  let _mainWindow = mainWindow;
-
-  if (BrowserWindow.getAllWindows().length === 0) {
-    app.whenReady().then(() => {
-      _mainWindow = createWindow();
-      _mainWindow.webContents.on('did-finish-load', () => {
-        console.log('did-finish-load');
-        setTimeout(() => {
-          mainWindow?.webContents.send(EVENTS.openFileSuccess, path, fileData);
-        }, 500);
-      });
-    });
-  } else {
-    mainWindow?.webContents.send(EVENTS.openFileSuccess, path, fileData);
-  }
-});
-
-app.on('open-url', (event, link) => {
-  event.preventDefault();
-  // 处理打开文件的逻辑
-  // 在这里你可以通过 path 参数获取到文件的路径
-  // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
-  console.log('--- open url ---', event, link);
-
-  let _mainWindow = mainWindow;
-
-  if (BrowserWindow.getAllWindows().length === 0) {
-    app.whenReady().then(() => {
-      _mainWindow = createWindow();
-      _mainWindow.webContents.on('did-finish-load', () => {
-        console.log('did-finish-load');
-        setTimeout(() => {
-          _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
-        }, 500);
-      });
-    });
-  } else {
-    _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
   }
 });
 
