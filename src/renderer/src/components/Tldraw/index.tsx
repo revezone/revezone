@@ -5,6 +5,7 @@ import type { StoreSnapshot, TLRecord } from '@tldraw/tldraw';
 import { sendFileDataChangeToMainDebounceFn } from '@renderer/utils/file';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { tldrawIndexeddbStorage } from '@renderer/store/tldrawIndexeddb';
+import { useDebounceFn } from 'ahooks';
 
 import '@tldraw/tldraw/tldraw.css';
 
@@ -30,21 +31,29 @@ export default function ReveTldraw(props: Props) {
     store.loadSnapshot(data);
   };
 
+  const onChangeFn = useCallback((editor, fileTree) => {
+    if (!editor) return;
+
+    const snapshot = editor.store.getSnapshot();
+
+    tldrawIndexeddbStorage.updateTldraw(file.id, snapshot, fileTree);
+
+    const snapshotStr = JSON.stringify(snapshot);
+
+    sendFileDataChangeToMainDebounceFn(file.id, snapshotStr, fileTree);
+  }, []);
+
+  const { run: onChangeDebounceFn } = useDebounceFn(onChangeFn, {
+    wait: 200
+  });
+
   useLayoutEffect(() => {
     getData();
   }, [store]);
 
   useEffect(() => {
     editor?.store?.listen((entry) => {
-      if (!editor) return;
-
-      const snapshot = editor.store.getSnapshot();
-
-      tldrawIndexeddbStorage.updateTldraw(file.id, snapshot, fileTree);
-
-      const snapshotStr = JSON.stringify(snapshot);
-
-      sendFileDataChangeToMainDebounceFn(file.id, snapshotStr, fileTree);
+      onChangeDebounceFn(editor, fileTree);
     });
   }, [editor, fileTree]);
 
