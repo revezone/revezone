@@ -99,5 +99,8 @@
     "openPath": "打开存储路径",
     "changePathConfirm": "确定修改用户文件存储路径吗？",
     "storagePathNotice": "本地存储路径自定义功能仅在 Revezone 桌面应用端支持"
+  },
+  "userGuideModel": {
+    "title": "请完成你的初始设置"
   }
 }

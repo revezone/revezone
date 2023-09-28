@@ -93,7 +93,7 @@ function App(): JSX.Element {
 
     if (!deepLinkUrlOpened) {
       deepLinkUrlOpened = true;
-      const deepLinkingUrl = window.electron.process.env.DEEP_LINKING_URL;
+      const deepLinkingUrl = window.electron?.process.env.DEEP_LINKING_URL;
 
       deepLinkingUrl && updateCurrentFileFromDeepLinkingUrl(deepLinkingUrl, fileTree, tabModel);
     }

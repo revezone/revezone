@@ -6,15 +6,16 @@ import { useAtom } from 'jotai';
 import { submitUserEvent } from '@renderer/utils/statistics';
 import DraggableMenuTree from '../DraggableMenuTree/index';
 import { driver } from 'driver.js';
-// import { getIsUserGuideShowed, setIsUserGuideShowed } from '../../store/localstorage';
 import { commonIndexeddbStorage } from '@renderer/store/commonIndexeddb';
 import { useTranslation } from 'react-i18next';
 import { Modal } from 'antd';
 import LanguageSwitcher from '../LanguageSwitcher/index';
 import LeftToolBar from '../LeftToolBar/index';
 import RevezoneBrand from '../RevezeonBrand/index';
+import { isInRevezoneApp } from '../../utils/navigator';
 
 import './index.css';
+import StoragePathSetting from '../StoragePathSetting';
 
 type Props = {
   children: ReactNode;
@@ -56,7 +57,7 @@ export default function ResizableLayout({ children }: Props) {
 
     const driverObj = driver({
       showProgress: true,
-      allowClose: false,
+      allowClose: true,
       steps: [
         {
           element: '#add-board-button',
@@ -138,14 +139,21 @@ export default function ResizableLayout({ children }: Props) {
       </Panel>
       <Modal
         open={modalVisible}
-        title={t('language.title')}
+        title={t('userGuideModel.title')}
         onOk={onModalClose}
         onCancel={onModalClose}
       >
+        <p className="border-b mt-2"></p>
         <p className="flex items-center mt-6">
           <span className="mr-1">{t('operation.switchLanguage')}:</span>
           <LanguageSwitcher />
         </p>
+        <p className="border-b mt-6"></p>
+        {isInRevezoneApp ? (
+          <p className="flex flex-col items-start mt-6">
+            <StoragePathSetting />
+          </p>
+        ) : null}
       </Modal>
     </PanelGroup>
   );

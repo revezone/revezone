@@ -99,5 +99,8 @@
     "openPath": "Open storage path",
     "changePathConfirm": "Are you sure you want to modify the user file storage path?",
     "storagePathNotice": "The local storage path customization function is only supported on the Revezone desktop application."
+  },
+  "userGuideModel": {
+    "title": "Please complete your initial setup"
   }
 }
