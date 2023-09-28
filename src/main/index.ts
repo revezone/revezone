@@ -29,10 +29,9 @@ import {
 import { RevezoneFileTree, RevezoneFolder, RevezoneFile } from '../renderer/src/types/file';
 import { TreeItem } from 'react-complex-tree';
 import fs from 'node:fs';
-import { notify } from './utils/notification';
 
 // import { autoUpdater } from 'electron-updater';
-// import { notify } from './utils/notification';
+import { notify } from './utils/notification';
 
 const DEFAULT_WINDOW_WIDTH = 1200;
 const DEFAULT_WINDOW_HEIGHT = 770;
@@ -83,6 +82,29 @@ function createWindow(): BrowserWindow {
   mainWindow.on('ready-to-show', () => {
     mainWindow?.show();
   });
+
+  // Protocol handler for win32
+  if (process.platform == 'win32') {
+    // Keep only command line / deep linked arguments
+
+    let deeplinkingUrl = '';
+
+    // For Windows Only
+    process.argv.forEach((arg) => {
+      if (/revezone:\/\//.test(arg)) {
+        deeplinkingUrl = arg.substring(0, arg.length - 1);
+      }
+    });
+
+    process.env.DEEP_LINKING_URL = deeplinkingUrl;
+
+    console.log(deeplinkingUrl);
+
+    // setTimeout(() => {
+    //   deeplinkingUrl &&
+    //     mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, deeplinkingUrl);
+    // }, 1000);
+  }
 
   mainWindow.on('closed', () => {
     mainWindow?.removeAllListeners();
@@ -200,19 +222,15 @@ if (!gotTheLock) {
       setTimeout(() => {
         let link = commandLine[commandLine.length - 1];
         link = link.substring(0, link.length - 1);
-        dialog.showErrorBox('Welcome Back', `You arrived from: ${link}`);
         mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
       }, 500);
     }
   });
 }
 
-// 监听当应用被打开时的事件
+// For Mac OS Only
 app.on('open-file', (event, path) => {
   event.preventDefault();
-  // 处理打开文件的逻辑
-  // 在这里你可以通过 path 参数获取到文件的路径
-  // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
   console.log('--- open file ---', event, path);
 
   const fileData = fs.readFileSync(path).toString();
@@ -234,27 +252,32 @@ app.on('open-file', (event, path) => {
   }
 });
 
+// For Mac OS Only
 app.on('open-url', (event, link) => {
   event.preventDefault();
-  // 处理打开文件的逻辑
-  // 在这里你可以通过 path 参数获取到文件的路径
-  // 例如，在这里可以通过 path 来加载并展示对应文件格式的内容
+
   console.log('--- open url ---', event, link);
 
-  dialog.showErrorBox('open url', `open url: ${link}`);
+  // dialog.showErrorBox('open url', `open url: ${link}`);
+
+  process.env.DEEP_LINKING_URL = link;
 
   let _mainWindow = mainWindow;
 
   if (BrowserWindow.getAllWindows().length === 0) {
     app.whenReady().then(() => {
       _mainWindow = createWindow();
-      _mainWindow.webContents.on('did-finish-load', () => {
-        console.log('did-finish-load');
-        dialog.showErrorBox('open-url', `You arrived from: ${link}`);
-        setTimeout(() => {
-          _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
-        }, 500);
-      });
+
+      // _mainWindow.webContents.on('did-finish-load', () => {
+      //   console.log('did-finish-load');
+      //   // dialog.showErrorBox('open-url', `You arrived from: ${link}`);
+
+      //   process.env.DEEP_LINKING_URL = link;
+
+      //   // setTimeout(() => {
+      //   //   _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
+      //   // }, 500);
+      // });
     });
   } else {
     _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);

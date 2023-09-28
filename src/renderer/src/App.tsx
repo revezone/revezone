@@ -24,9 +24,11 @@ import {
 } from './utils/file';
 import useCurrentFile from './hooks/useCurrentFile';
 import useFileTree from './hooks/useFileTree';
-import { RevezoneFile } from './types/file';
+import { RevezoneFile, RevezoneFileTree } from './types/file';
+import { Model } from 'flexlayout-react';
 
 let openFileSuccessListenerRegistered = false;
+let deepLinkUrlOpened = false;
 
 const OS_NAME = getOSName();
 
@@ -65,14 +67,8 @@ function App(): JSX.Element {
     });
   }, [tabModel]);
 
-  useEffect(() => {
-    if (!tabModel || !(fileTree && JSON.stringify(fileTree) !== '{}')) {
-      return;
-    }
-
-    window.api?.removeAllRevezoneLinkListeners();
-
-    window.api?.openRevezoneLinkSuccess(async (event, link) => {
+  const updateCurrentFileFromDeepLinkingUrl = useCallback(
+    async (link: string, fileTree: RevezoneFileTree, tabModel: Model) => {
       const fileId = link?.split('revezone://')[1];
       const file = fileTree[fileId]?.data as RevezoneFile;
 
@@ -86,6 +82,26 @@ function App(): JSX.Element {
       await updateCurrentFile(file);
 
       updateTabJsonModelWhenCurrentFileChanged(file, tabModel);
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (!tabModel || !(fileTree && JSON.stringify(fileTree) !== '{}')) {
+      return;
+    }
+
+    if (!deepLinkUrlOpened) {
+      deepLinkUrlOpened = true;
+      const deepLinkingUrl = window.electron.process.env.DEEP_LINKING_URL;
+
+      deepLinkingUrl && updateCurrentFileFromDeepLinkingUrl(deepLinkingUrl, fileTree, tabModel);
+    }
+
+    window.api?.removeAllRevezoneLinkListeners();
+
+    window.api?.openRevezoneLinkSuccess(async (event, link) => {
+      updateCurrentFileFromDeepLinkingUrl(link, fileTree, tabModel);
     });
   }, [fileTree, tabModel]);
 
