@@ -8,6 +8,8 @@ import { tldrawIndexeddbStorage } from '@renderer/store/tldrawIndexeddb';
 
 import '@tldraw/tldraw/tldraw.css';
 
+import './index.css';
+
 interface Props {
   file: RevezoneFile;
   snapshot?: StoreSnapshot<TLRecord>;
@@ -17,6 +19,7 @@ export default function ReveTldraw(props: Props) {
   const { file } = props;
   const [editor, setEditor] = useState<Editor>();
   const { fileTree } = useFileTree();
+
   const [store] = useState(() => createTLStore({ shapeUtils: defaultShapeUtils }));
 
   const getData = async () => {
@@ -46,10 +49,13 @@ export default function ReveTldraw(props: Props) {
   }, [editor, fileTree]);
 
   return (
-    <div className="tldraw__editor w-full h-full">
+    <div className="tldraw-editor-container w-full h-full">
       <Tldraw
         store={store}
         autoFocus
+        onUiEvent={(name, data) => {
+          console.log(name, data);
+        }}
         onMount={(editor) => {
           setEditor(editor);
         }}
