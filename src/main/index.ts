@@ -97,13 +97,6 @@ function createWindow(): BrowserWindow {
     });
 
     process.env.DEEP_LINKING_URL = deeplinkingUrl;
-
-    console.log(deeplinkingUrl);
-
-    // setTimeout(() => {
-    //   deeplinkingUrl &&
-    //     mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, deeplinkingUrl);
-    // }, 1000);
   }
 
   mainWindow.on('closed', () => {
@@ -256,10 +249,6 @@ app.on('open-file', (event, path) => {
 app.on('open-url', (event, link) => {
   event.preventDefault();
 
-  console.log('--- open url ---', event, link);
-
-  // dialog.showErrorBox('open url', `open url: ${link}`);
-
   process.env.DEEP_LINKING_URL = link;
 
   let _mainWindow = mainWindow;
@@ -267,17 +256,6 @@ app.on('open-url', (event, link) => {
   if (BrowserWindow.getAllWindows().length === 0) {
     app.whenReady().then(() => {
       _mainWindow = createWindow();
-
-      // _mainWindow.webContents.on('did-finish-load', () => {
-      //   console.log('did-finish-load');
-      //   // dialog.showErrorBox('open-url', `You arrived from: ${link}`);
-
-      //   process.env.DEEP_LINKING_URL = link;
-
-      //   // setTimeout(() => {
-      //   //   _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
-      //   // }, 500);
-      // });
     });
   } else {
     _mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
