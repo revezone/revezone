@@ -15,6 +15,7 @@ import useAddFolder from '../useAddFolder';
 import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
 import { TreeItemRenderContext } from 'react-complex-tree';
 import { Modal } from 'antd';
+import type { ItemType } from 'antd/es/menu/hooks/useItems';
 import { Model } from 'flexlayout-react';
 import { TldrawIcon } from '@renderer/icons';
 import { isInRevezoneApp } from '@renderer/utils/navigator';
@@ -25,6 +26,7 @@ interface Props {
 }
 
 let selectedItems: (RevezoneFile | RevezoneFolder)[];
+let currentItem: RevezoneFile | RevezoneFolder;
 
 export default function useFileTreeContextMenu(props: Props) {
   const { t } = useTranslation();
@@ -41,7 +43,7 @@ export default function useFileTreeContextMenu(props: Props) {
       tabModel: Model | undefined,
       fileTree: RevezoneFileTree,
       selectedKeys: string[]
-    ) => {
+    ): ItemType[] | undefined | any[] => {
       if (!(tabModel && fileTree)) {
         return;
       }
@@ -78,6 +80,8 @@ export default function useFileTreeContextMenu(props: Props) {
           icon: <Trash2 className="w-4"></Trash2>,
           onClick: ({ domEvent }: { domEvent: Event }) => {
             domEvent.stopPropagation();
+
+            currentItem = item;
 
             selectedItems = selectedKeys.map((key) => fileTree[key].data);
 
@@ -147,24 +151,38 @@ export default function useFileTreeContextMenu(props: Props) {
     []
   );
 
-  const getDeleteFileModal = (tabModel: Model | undefined) => (
-    <Modal
-      title={`${t('confirm.confirmDelete')} ${selectedItems?.map((item) => item.name).join(',')} ?`}
-      open={isModalOpen}
-      onOk={async () => {
-        for await (const item of selectedItems) {
-          if (item.name.startsWith('folder_')) {
-            tabModel && (await deleteFolder(item as RevezoneFolder, tabModel));
-          } else {
-            tabModel && (await deleteFile(item as RevezoneFile, tabModel));
-          }
-        }
+  const deleteItem = async (item, tabModel) => {
+    if (item.name.startsWith('folder_')) {
+      tabModel && (await deleteFolder(item as RevezoneFolder, tabModel));
+    } else {
+      tabModel && (await deleteFile(item as RevezoneFile, tabModel));
+    }
+  };
 
-        setIsModalOpen(false);
-      }}
-      onCancel={() => setIsModalOpen(false)}
-    ></Modal>
-  );
+  const getDeleteFileModal = (tabModel: Model | undefined) => {
+    if (!(selectedItems || currentItem)) {
+      return null;
+    }
+
+    const currentItemInSelectedItems = !!selectedItems?.find((item) => item.id === currentItem.id);
+
+    const deleteItems = currentItemInSelectedItems ? selectedItems : [currentItem];
+
+    return (
+      <Modal
+        title={`${t('confirm.confirmDelete')} ${deleteItems?.map((item) => item.name).join(',')} ?`}
+        open={isModalOpen}
+        onOk={async () => {
+          for await (const item of deleteItems) {
+            await deleteItem(item, tabModel);
+          }
+
+          setIsModalOpen(false);
+        }}
+        onCancel={() => setIsModalOpen(false)}
+      ></Modal>
+    );
+  };
 
   return { isModalOpen, getFileTreeContextMenu, getDeleteFileModal };
 }

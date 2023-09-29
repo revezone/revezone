@@ -249,7 +249,6 @@ export default function DraggableMenuTree() {
                     <Dropdown
                       trigger={['contextMenu']}
                       menu={{
-                        // @ts-ignore
                         items: getFileTreeContextMenu(
                           item.data,
                           context,
@@ -288,16 +287,15 @@ export default function DraggableMenuTree() {
                     <Dropdown
                       trigger={['click']}
                       menu={{
-                        // @ts-ignore
                         items: getFileTreeContextMenu(
                           item.data,
                           context,
                           !!item.isFolder,
                           tabModel,
-                          fileTree
+                          fileTree,
+                          selectedKeys
                         )
                       }}
-                      onClick={(e: Event) => e.stopPropagation()}
                     >
                       <div
                         className="w-8 h-6 flex items-center justify-center"
