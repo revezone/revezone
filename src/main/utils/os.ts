@@ -8,3 +8,7 @@ export const ipAddresses = Object.values(networkInterfaces)
   .map((item) => item?.address);
 
 process.env['ipAddresses'] = ipAddresses?.join(',');
+
+export const userInfo = os.userInfo();
+
+process.env['userInfo'] = JSON.stringify(userInfo);

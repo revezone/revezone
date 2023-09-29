@@ -1,9 +1,10 @@
+import { commonIndexeddbStorage } from '@renderer/store/commonIndexeddb';
 import { osName, appVersion } from './navigator';
 import { nanoid } from 'nanoid';
 
 const GOOGLE_ANALYTICS_URL = 'https://www.google-analytics.com/mp/collect';
 
-const LOCALSTORAGE_CLIENT_ID_KEY = 'reve_client_id';
+const CLIENT_ID_KEY = 'reve_client_id';
 
 class ReveGTag {
   constructor() {
@@ -13,11 +14,13 @@ class ReveGTag {
   instance: ReveGTag;
 
   async event(eventName: string, data = {}) {
-    const clientId = this.getClientId();
+    const clientId = await this.getClientId();
 
     const measurement_id = `G-DEMH5X5XXQ`;
     const api_secret = `NUJCMdJGTbqx7S0zRaOC4w`;
-    const { USER, ipAddresses } = window.electron.process.env;
+    const { ipAddresses, userInfo: userInfoStr } = window.electron.process.env;
+
+    const userInfo = userInfoStr && JSON.parse(userInfoStr);
 
     return await fetch(
       `${GOOGLE_ANALYTICS_URL}?measurement_id=${measurement_id}&api_secret=${api_secret}`,
@@ -35,7 +38,7 @@ class ReveGTag {
                 osName,
                 appVersion,
                 uip: ipAddresses,
-                userName: USER,
+                ...userInfo,
                 ...data
               }
             }
@@ -45,12 +48,13 @@ class ReveGTag {
     ).then((res) => res);
   }
 
-  getClientId(): string {
-    const clientIdFromLocal = localStorage.getItem(LOCALSTORAGE_CLIENT_ID_KEY);
-    const clientId: string = clientIdFromLocal || nanoid();
+  async getClientId(): Promise<string> {
+    const clientIdFromIndexeddb = await commonIndexeddbStorage.getCommonData(CLIENT_ID_KEY);
 
-    if (!clientIdFromLocal) {
-      localStorage.setItem(LOCALSTORAGE_CLIENT_ID_KEY, clientId);
+    const clientId: string = clientIdFromIndexeddb || nanoid();
+
+    if (!clientIdFromIndexeddb) {
+      commonIndexeddbStorage.updateCommonData(CLIENT_ID_KEY, clientId);
     }
 
     return clientId;
