@@ -1,3 +1,8 @@
+## 1.0.0-alpha.15
+### Bugfix
+* Fix deep linking of revezone protocol
+* Add debounce saving to Tldraw whiteboard
+
 ## 1.0.0-alpha.14
 ### Features
 * Support tldraw whiteboard
