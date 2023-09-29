@@ -1,6 +1,6 @@
 {
   "name": "revezone",
-  "version": "1.0.0-alpha.16",
+  "version": "1.0.0-alpha.17",
   "description": "A lightweight graphic-centric productivity tool to build your second brain.",
   "main": "./out/main/index.js",
   "author": "korbinzhao",
