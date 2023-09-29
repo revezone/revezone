@@ -1,3 +1,7 @@
+## 1.0.0-alpha.17
+### Bugfix
+* delete problem while click verticle more icon or context menu
+
 ## 1.0.0-alpha.16
 ### Features
 * Add batch delete feature by context menu
