@@ -80,7 +80,10 @@ export default function DraggableMenuTree() {
         setSelectedKeys(items as string[]);
       }
 
-      submitUserEvent('select_menu', { key: items.join(',') });
+      submitUserEvent('select_menu', {
+        key: items.join(','),
+        name: items.map((key) => fileTree[key]?.data.name).join(',')
+      });
     },
     [fileTree, tabModel]
   );
