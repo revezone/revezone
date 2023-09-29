@@ -137,8 +137,6 @@ const CustomFonts = ({ setSystemSettingVisible }: Props) => {
 
                   setSystemSettingVisible(false);
 
-                  console.log('---  switchfont ---', value);
-
                   window.api?.switchFontfamily(value);
 
                   emitter.emit('switch_font_family');

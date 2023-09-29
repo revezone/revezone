@@ -39,8 +39,6 @@ export default function ResizableLayout({ children }: Props) {
   const userGuideHandler = useCallback(async () => {
     const isUserGuideShowed = await commonIndexeddbStorage.getCommonData(IS_USER_GUIDE_SHOWED);
 
-    console.log('--- isUserGuideShowed ---', isUserGuideShowed);
-
     if (isUserGuideShowed !== 'true') {
       await commonIndexeddbStorage.updateCommonData(IS_USER_GUIDE_SHOWED, 'true');
 

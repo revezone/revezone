@@ -16,6 +16,6 @@ export const submitAppEnterUserEvent = () => {
       submitUserEvent('enter_app', {});
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };

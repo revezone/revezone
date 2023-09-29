@@ -66,7 +66,6 @@ export default function RevedrawApp({ file }: Props) {
 
   useEffect(() => {
     emitter.on('switch_font_family', () => {
-      console.log('switch font');
       rerender();
     });
   }, []);

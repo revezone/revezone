@@ -145,7 +145,6 @@ function createWindow(): BrowserWindow {
   });
 
   ipcMain.on(EVENTS.addFile, (event, fileId: string, value: string, fileTree: RevezoneFileTree) => {
-    console.log('--- event add file ---', fileId);
     onAddFile(fileId, value, fileTree);
   });
 
@@ -159,7 +158,6 @@ function createWindow(): BrowserWindow {
   ipcMain.on(
     EVENTS.renameFileOrFolder,
     async (event, fileId: string, newName: string, fileTree: RevezoneFileTree) => {
-      console.log('--- event rename file ---', fileId);
       onRenameFileOrFolder(fileId, newName, fileTree);
     }
   );
@@ -221,7 +219,6 @@ if (!gotTheLock) {
 // For Mac OS Only
 app.on('open-file', (event, path) => {
   event.preventDefault();
-  console.log('--- open file ---', event, path);
 
   const fileData = fs.readFileSync(path).toString();
 
@@ -231,7 +228,6 @@ app.on('open-file', (event, path) => {
     app.whenReady().then(() => {
       _mainWindow = createWindow();
       _mainWindow.webContents.on('did-finish-load', () => {
-        console.log('did-finish-load');
         setTimeout(() => {
           mainWindow?.webContents.send(EVENTS.openFileSuccess, path, fileData);
         }, 500);

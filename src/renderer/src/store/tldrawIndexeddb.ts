@@ -95,8 +95,6 @@ class TldrawIndexeddbStorage {
   async deleteTldraw(id: string) {
     await this.initDB();
 
-    console.log('--- deleteTldraw ---', id, this.db);
-
     await this.db?.delete(INDEXEDDB_TLDRAW_FILE_KEY, id);
   }
 }

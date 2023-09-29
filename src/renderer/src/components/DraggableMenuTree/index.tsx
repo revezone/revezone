@@ -91,7 +91,6 @@ export default function DraggableMenuTree() {
 
   const onRenameItem = useCallback(
     async (item: TreeItem<RevezoneFile | RevezoneFolder>, name: string) => {
-      console.log('--- onRenameItem ---', item, name);
       setRenamingMenuItemIdToLocal('');
 
       await fileTreeIndexeddbStorage.updateFileOrFolderName(item.data, name);
@@ -174,8 +173,6 @@ export default function DraggableMenuTree() {
 
   const onDrop = useCallback(
     async (items: TreeItem<RevezoneFile | RevezoneFolder>[], target: DraggingPosition) => {
-      console.log('--- onDrop ---', items, target);
-
       switch (target.targetType) {
         case 'between-items':
           onDropBetweenItems(items, target, fileTree);

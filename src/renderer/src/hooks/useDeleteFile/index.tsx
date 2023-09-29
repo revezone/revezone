@@ -18,8 +18,6 @@ export default function useDeleteFile() {
     async (file: RevezoneFile, tabModel: Model) => {
       await fileTreeIndexeddbStorage.deleteFile(file.id);
 
-      console.log('--- delete file ---', file);
-
       await deleteTab(file.id, tabModel);
 
       if (file.id === currentFile?.id) {

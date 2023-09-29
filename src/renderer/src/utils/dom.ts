@@ -23,6 +23,6 @@ export const dbclickMenuTreeItemAfterCreate = () => {
 
     element?.dispatchEvent(event);
 
-    console.log('--- dbclick ---', element);
+    console.debug('--- dbclick ---', element);
   }, 100);
 };

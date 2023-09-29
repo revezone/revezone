@@ -62,8 +62,6 @@ class CommonIndexeddbStorage {
   async deleteCommonData(key: string) {
     await this.initDB();
 
-    console.log('--- this.db ---', key, this.db);
-
     await this.db?.delete(INDEXEDDB_REVEZONE_COMMON_KEY, key);
   }
 }

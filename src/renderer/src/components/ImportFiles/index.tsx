@@ -17,8 +17,6 @@ export default function ImportFiles() {
 
     const fileData = await localFile.text();
 
-    console.log('--- import file ---', localFile, fileData);
-
     const matches = localFile.name.match(FILE_NAME_REGEX);
     const fileName = matches?.[1];
     const fileSuffix = matches?.[2];

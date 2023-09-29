@@ -62,9 +62,9 @@ export default function ReveTldraw(props: Props) {
       <Tldraw
         store={store}
         autoFocus
-        onUiEvent={(name, data) => {
-          console.log(name, data);
-        }}
+        // onUiEvent={(name, data) => {
+        //   console.log(name, data);
+        // }}
         onMount={(editor) => {
           setEditor(editor);
         }}

@@ -36,8 +36,6 @@ function NoteEditor({ file }: Props): JSX.Element | null {
         onLinkOpen
       });
 
-      console.log('--- editor ---', editorRef.current);
-
       editorDomRef.current.innerHTML = '';
 
       editorDomRef.current?.appendChild(editorRef.current);
@@ -47,8 +45,6 @@ function NoteEditor({ file }: Props): JSX.Element | null {
     }
 
     return () => {
-      console.log('--- note unmount remove ---', editorDomRef.current, editorRef.current);
-
       editorRef.current && editorDomRef.current?.removeChild(editorRef.current);
       editorRef.current = undefined;
       editorMountRef.current = false;

@@ -23,8 +23,6 @@ export default function useAddFile() {
       parentId?: string,
       fileData?: string
     ): Promise<RevezoneFile | undefined> => {
-      console.log('--- addfile ---', tabModel);
-
       if (!tabModel) return;
 
       const file = await fileTreeIndexeddbStorage.addFile(name, type, parentId, fileData);
@@ -35,8 +33,6 @@ export default function useAddFile() {
       getFileTree();
 
       dbclickMenuTreeItemAfterCreate();
-
-      console.log('--- addFile ---', file);
 
       updateCurrentFile(file);
 

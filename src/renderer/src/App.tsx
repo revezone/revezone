@@ -46,8 +46,6 @@ function App(): JSX.Element {
   useEffect(() => {
     if (!tabModel || openFileSuccessListenerRegistered) return;
 
-    console.log('--- tabModel change ---');
-
     // avoid listener register multiple times
     openFileSuccessListenerRegistered = true;
 
@@ -56,8 +54,6 @@ function App(): JSX.Element {
       const fileName = fileNameWithSuffix && getFileNameWithoutSuffix(fileNameWithSuffix);
       const suffix = fileNameWithSuffix && getFileSuffix(fileNameWithSuffix);
       const fileType = suffix && getFileTypeFromSuffix(suffix);
-
-      console.log('--- openFileSuccess ---', path, fileName, suffix, fileType, fileData);
 
       if (fileName && fileType) {
         addFile(fileName, fileType, tabModel, 'root', fileData);
@@ -71,8 +67,6 @@ function App(): JSX.Element {
     async (link: string, fileTree: RevezoneFileTree, tabModel: Model) => {
       const fileId = link?.split('revezone://')[1];
       const file = fileTree[fileId]?.data as RevezoneFile;
-
-      console.log('openlink', link, file, fileTree, tabModel.toJson());
 
       if (!file) {
         message.error(`File ${link} not exsited!`);

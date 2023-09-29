@@ -141,7 +141,6 @@ export default function useTabJsonModel() {
 
     const newTabJsonModel = model.toJson();
 
-    console.log('deleteTabJsonModel', fileId, newTabJsonModel);
     setTabJsonModel(newTabJsonModel);
     setTabJsonModelToLocal(JSON.stringify(newTabJsonModel));
 

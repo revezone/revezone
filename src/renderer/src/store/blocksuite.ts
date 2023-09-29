@@ -31,12 +31,12 @@ class BlocksuiteStorage {
     window.persistence = indexeddbPersistence;
 
     indexeddbPersistence.on('synced', async () => {
-      console.log('content from the database is loaded');
+      // console.log('content from the database is loaded');
       emitter.emit(events.WORKSPACE_LOADED);
 
-      this.workspace.slots.pagesUpdated.on((...args) => {
-        console.log('--- pagesUpdated ---', ...args);
-      });
+      // this.workspace.slots.pagesUpdated.on((...args) => {
+      //   console.log('--- pagesUpdated ---', ...args);
+      // });
     });
   }
 
@@ -55,7 +55,7 @@ class BlocksuiteStorage {
   async getAllPageIds(): Promise<string[]> {
     const pageNameList = await this.workspace.getPageNameList();
     const pageIds: string[] = pageNameList.map((name) => name.split('space:')?.[1]);
-    console.log('--- getAllPages ---', pageIds);
+    // console.log('--- getAllPages ---', pageIds);
     return pageIds;
   }
 

@@ -20,7 +20,6 @@ export default function useDoubleLink(outerJump: boolean) {
       }
 
       const link = typeof elementOrLink === 'string' ? elementOrLink : elementOrLink.link;
-      console.log('link', link);
 
       const fileIdOrNameInRevezone = link && getFileIdOrNameFromLink(link);
 

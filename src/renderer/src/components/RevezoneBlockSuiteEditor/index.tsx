@@ -23,8 +23,6 @@ export default class RevezoneBlockSuiteEditor extends LitElement {
 
     this.onLinkOpen = onLinkOpen;
 
-    console.log('--- page ---', page);
-
     if (!page) return;
 
     this.page = page;
@@ -46,21 +44,16 @@ export default class RevezoneBlockSuiteEditor extends LitElement {
 
     if (!this.page) return;
 
-    console.log('--- connectedCallback ---', this);
-
     editor.page = this.page;
     this.appendChild(editor);
   }
 
   override disconnectedCallback(): void {
-    console.log('--- disconnectedCallback ---', this.children[0]);
-
     this.removeChild(this.children[0]);
   }
 
   async eventListener() {
     this.page?.slots.linkClicked.on((href) => {
-      console.log('--- linkClick ---', href);
       setTimeout(() => {
         this.onLinkOpen(href);
       }, 100);

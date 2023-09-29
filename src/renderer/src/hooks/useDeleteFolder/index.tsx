@@ -35,8 +35,6 @@ export default function useDeleteFolder() {
 
       const childrenIdsInFolder = getChildren(folder.id, fileTree, []);
 
-      console.log('--- delete childrenIdsInFolder ---', childrenIdsInFolder);
-
       for await (const childId of childrenIdsInFolder) {
         if (childId.startsWith('file_')) {
           const file = fileTree[childId].data;
@@ -46,11 +44,7 @@ export default function useDeleteFolder() {
         }
       }
 
-      console.log('fileIdsInFolder deleted');
-
       await fileTreeIndexeddbStorage.deleteFolder(folder.id);
-
-      console.log('folder deleted');
 
       await getFileTree();
     },

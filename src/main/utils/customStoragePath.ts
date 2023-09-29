@@ -20,8 +20,6 @@ export const customStoragePath = async (mainWindow: BrowserWindow) => {
 
   const destPath = folderPaths?.[0];
 
-  console.log('--- destPath ---', destPath);
-
   if (!destPath) return;
 
   ensureDir(REVEZONE_APP_CONFIG_DIR);
@@ -32,14 +30,11 @@ export const customStoragePath = async (mainWindow: BrowserWindow) => {
 };
 
 export const openStoragePath = async (path: string) => {
-  console.log('--- open path1 ---', path);
   shell.showItemInFolder(path);
 };
 
 export const showItemInFolder = async (itemId: string, fileTree: RevezoneFileTree) => {
   const { path } = getFullPathInfo(itemId, fileTree);
-
-  console.log('--- open path2 ---', path);
 
   shell.showItemInFolder(path);
 };

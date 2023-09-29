@@ -67,8 +67,6 @@ class FileTreeIndexeddbStorage {
 
     const fileTree = await this.getFileTree();
 
-    console.log('--- initFileTreeStore ---', fileTree);
-
     if (!fileTree) {
       await this.updateFileTree(DEFAULT_FILE_TREE);
     }
@@ -122,8 +120,6 @@ class FileTreeIndexeddbStorage {
     await this.updateFileTree(fileTree);
 
     if (info.type && ['board', 'tldraw'].includes(info.type)) {
-      console.log('--- addFileTreeItem ---', info.id, fileTree);
-
       window.api?.addFile(info.id, '{}', fileTree);
     }
 
@@ -296,8 +292,6 @@ class FileTreeIndexeddbStorage {
 
     await this.updateFileTree(fileTree);
 
-    console.log('--- rename ---', item.id, uniqueName, fileTree, window.api);
-
     window.api?.renameFileOrFolder(item.id, uniqueName, oldFileTree);
   }
 
@@ -305,8 +299,6 @@ class FileTreeIndexeddbStorage {
     if (!folderId) return;
 
     await this.initDB();
-
-    console.log('--- delete folder ---', folderId);
 
     await this.deleteItemFromFileTree(folderId);
 

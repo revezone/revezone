@@ -36,8 +36,6 @@ export const loadCustomFont = async (mainWindow: BrowserWindow) => {
 
   ensureDir(CUSTOM_FONTS_DIR);
 
-  console.log('--- openfile ---', filePaths);
-
   const promises = filePaths.map(async (filePath: string) => {
     try {
       const filenameWithSuffix = getFilenameFromPath(filePath);
@@ -67,9 +65,7 @@ export const loadCustomFont = async (mainWindow: BrowserWindow) => {
 };
 
 export const removeCustomFont = async (fontPath: string, mainWindow: BrowserWindow) => {
-  const result = await fs.unlinkSync(fontPath);
-
-  console.log('removeCustomFont result', result);
+  await fs.unlinkSync(fontPath);
 
   const fonts = await getRegisteredFonts();
 
@@ -176,7 +172,7 @@ export const getRegisteredFonts = () => {
 
 export const switchFontfamily = (mainWindow: BrowserWindow, fontName: string) => {
   if (!fontName) {
-    console.log('--- switchFontfamily fontName unexpected undefined ---', fontName);
+    console.error('--- switchFontfamily fontName unexpected undefined ---', fontName);
     return;
   }
 
@@ -185,7 +181,7 @@ export const switchFontfamily = (mainWindow: BrowserWindow, fontName: string) =>
   const fontNameWithSuffix = fonts.find((font) => font.name === fontName)?.nameWithSuffix;
 
   if (!fontNameWithSuffix) {
-    console.log(
+    console.error(
       '--- switchFontfamily fontNameWithSuffix unexpected undefined ---',
       fontNameWithSuffix
     );

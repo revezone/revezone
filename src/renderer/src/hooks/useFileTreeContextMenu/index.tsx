@@ -54,7 +54,6 @@ export default function useFileTreeContextMenu(props: Props) {
               icon: <FolderOpen className="w-4" />,
               onClick: ({ domEvent }: { domEvent: Event }) => {
                 domEvent.stopPropagation();
-                console.log('open_directory');
                 window.api.showItemInFolder(item.id, fileTree);
               }
             }
@@ -68,7 +67,6 @@ export default function useFileTreeContextMenu(props: Props) {
           icon: <FileEdit className="w-4" />,
           onClick: ({ domEvent }: { domEvent: Event }) => {
             domEvent.stopPropagation();
-            console.log('rename');
             context.startRenamingItem();
             setRenamingMenuItemIdToLocal(item.id);
           }
@@ -80,7 +78,6 @@ export default function useFileTreeContextMenu(props: Props) {
           icon: <Trash2 className="w-4"></Trash2>,
           onClick: ({ domEvent }: { domEvent: Event }) => {
             domEvent.stopPropagation();
-            console.log('click', item);
 
             selectedItems = selectedKeys.map((key) => fileTree[key].data);
 
@@ -155,8 +152,6 @@ export default function useFileTreeContextMenu(props: Props) {
       title={`${t('confirm.confirmDelete')} ${selectedItems?.map((item) => item.name).join(',')} ?`}
       open={isModalOpen}
       onOk={async () => {
-        console.log('delete', selectedItems);
-
         for await (const item of selectedItems) {
           if (item.name.startsWith('folder_')) {
             tabModel && (await deleteFolder(item as RevezoneFolder, tabModel));

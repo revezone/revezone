@@ -77,7 +77,6 @@ export function getFullPathInfo(itemId: string, fileTree: RevezoneFileTree): Ful
   const userFilesStoragePath = getUserFilesStoragePath();
 
   if (!item) {
-    console.log('--- getFullPathInfo ---', itemId, fileTree);
     throw new Error(`getFullPathInfo: File item ${itemId} not found`);
   }
 
@@ -112,8 +111,6 @@ export function addOrUpdateFile(fileId: string, value: string, fileTree: Revezon
 
   ensureDir(parentDirPath);
 
-  console.log('--- addOrUpdateFile ---', parentDirPath, fullFilePath);
-
   fs.writeFileSync(fullFilePath, value);
 }
 
@@ -135,17 +132,11 @@ export function onDeleteFileOrFolder(
   item: RevezoneFile | RevezoneFolder,
   fileTree: RevezoneFileTree
 ) {
-  console.log('--- delete ---', item);
-
   const { path: fullFilePath } = getFullPathInfo(item.id, fileTree);
 
   if (item.id.startsWith('folder_')) {
-    console.log('--- delete folder ---', fullFilePath);
-
     fs.rmdirSync(fullFilePath);
   } else {
-    console.log('--- delete file path ---', fullFilePath);
-
     fs.rmSync(fullFilePath);
   }
 }
@@ -160,15 +151,11 @@ export function moveFileOrFolder(
 
   const uniqueName = getUniqueNameInSameTreeLevel(item, fileTree);
 
-  console.log('--- uniqueName ---', item.name, uniqueName);
-
   let destPath = join(parentPath, uniqueName);
 
   if (item.id.startsWith('file_')) {
     destPath = `${destPath}${getFileSuffix(item.type)}`;
   }
-
-  console.log('--- moveFileOrFolder ---', sourcePath, destPath);
 
   if (sourcePath !== destPath) {
     fs.renameSync(sourcePath, destPath);
