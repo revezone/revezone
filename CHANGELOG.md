@@ -1,3 +1,10 @@
+## 1.0.0-alpha.16
+### Features
+* Add batch delete feature by context menu
+* Optimize showing item in folder features in custom storage path
+### Bugfix
+* Fix the deleting problem of tldraw in indexeddb
+
 ## 1.0.0-alpha.15
 ### Bugfix
 * [Fix deep linking of revezone protocol](https://github.com/revezone/revezone/issues/17)
