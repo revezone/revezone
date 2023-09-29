@@ -24,8 +24,7 @@ interface Props {
   deleteFolder: (folder: RevezoneFolder, tabModel: Model) => void;
 }
 
-let currentItem: RevezoneFile | RevezoneFolder;
-let currentIsFolder: boolean;
+let selectedItems: (RevezoneFile | RevezoneFolder)[];
 
 export default function useFileTreeContextMenu(props: Props) {
   const { t } = useTranslation();
@@ -40,7 +39,8 @@ export default function useFileTreeContextMenu(props: Props) {
       context: TreeItemRenderContext,
       isFolder: boolean,
       tabModel: Model | undefined,
-      fileTree: RevezoneFileTree
+      fileTree: RevezoneFileTree,
+      selectedKeys: string[]
     ) => {
       if (!(tabModel && fileTree)) {
         return;
@@ -81,8 +81,9 @@ export default function useFileTreeContextMenu(props: Props) {
           onClick: ({ domEvent }: { domEvent: Event }) => {
             domEvent.stopPropagation();
             console.log('click', item);
-            currentItem = item;
-            currentIsFolder = isFolder;
+
+            selectedItems = selectedKeys.map((key) => fileTree[key].data);
+
             setIsModalOpen(true);
           }
         }
@@ -151,15 +152,17 @@ export default function useFileTreeContextMenu(props: Props) {
 
   const getDeleteFileModal = (tabModel: Model | undefined) => (
     <Modal
-      title={`${t('confirm.confirmDelete')} ${currentItem?.name} ?`}
+      title={`${t('confirm.confirmDelete')} ${selectedItems?.map((item) => item.name).join(',')} ?`}
       open={isModalOpen}
       onOk={async () => {
-        console.log('delete', currentItem);
+        console.log('delete', selectedItems);
 
-        if (currentIsFolder) {
-          tabModel && (await deleteFolder(currentItem as RevezoneFolder, tabModel));
-        } else {
-          tabModel && (await deleteFile(currentItem as RevezoneFile, tabModel));
+        for await (const item of selectedItems) {
+          if (item.name.startsWith('folder_')) {
+            tabModel && (await deleteFolder(item as RevezoneFolder, tabModel));
+          } else {
+            tabModel && (await deleteFile(item as RevezoneFile, tabModel));
+          }
         }
 
         setIsModalOpen(false);

@@ -16,7 +16,7 @@
   "operation": {
     "addFolder": "Add a folder",
     "addNote": "Add a note",
-    "addBoard": "Add a Excalidraw whiteboard",
+    "addBoard": "Add an Excalidraw whiteboard",
     "rename": "Rename",
     "delete": "Delete",
     "copyRevezoneLink": "Copy revezone link",

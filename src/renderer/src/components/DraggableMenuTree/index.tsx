@@ -246,30 +246,45 @@ export default function DraggableMenuTree() {
                     {...context.interactiveElementProps}
                     className="rct-tree-item-button flex justify-between items-center"
                   >
-                    <div
-                      className={`flex items-center flex-1 menu-tree-item-child w-11/12 ${item.data.id}`}
-                      onDoubleClick={(e) => {
-                        e.stopPropagation();
-                        setRenamingMenuItemIdToLocal(item.data.id);
-                        context.startRenamingItem();
-                      }}
-                      onBlur={(e) => {
-                        e.stopPropagation();
-
-                        if (getRenamingMenuItemIdFromLocal()) {
-                          const target = e.target as HTMLInputElement;
-                          onRenameItem(item, target.value);
-                        }
+                    <Dropdown
+                      trigger={['contextMenu']}
+                      menu={{
+                        // @ts-ignore
+                        items: getFileTreeContextMenu(
+                          item.data,
+                          context,
+                          !!item.isFolder,
+                          tabModel,
+                          fileTree,
+                          selectedKeys
+                        )
                       }}
                     >
-                      <div className="flex items-center">
-                        {item.isFolder ? <Folder className="w-4 h-4" /> : null}
-                        {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
-                        {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
-                        {item.data.type === 'tldraw' ? <TldrawIcon className="w-3 h-3" /> : null}
+                      <div
+                        className={`flex items-center flex-1 menu-tree-item-child w-11/12 ${item.data.id}`}
+                        onDoubleClick={(e) => {
+                          e.stopPropagation();
+                          setRenamingMenuItemIdToLocal(item.data.id);
+                          context.startRenamingItem();
+                        }}
+                        onBlur={(e) => {
+                          e.stopPropagation();
+
+                          if (getRenamingMenuItemIdFromLocal()) {
+                            const target = e.target as HTMLInputElement;
+                            onRenameItem(item, target.value);
+                          }
+                        }}
+                      >
+                        <div className="flex items-center">
+                          {item.isFolder ? <Folder className="w-4 h-4" /> : null}
+                          {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
+                          {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
+                          {item.data.type === 'tldraw' ? <TldrawIcon className="w-3 h-3" /> : null}
+                        </div>
+                        <div className="ml-2 truncate pr-2 text-sm">{title}</div>
                       </div>
-                      <div className="ml-2 truncate pr-2 text-sm">{title}</div>
-                    </div>
+                    </Dropdown>
                     <Dropdown
                       trigger={['click']}
                       menu={{

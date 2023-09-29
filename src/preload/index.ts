@@ -3,7 +3,6 @@ import { electronAPI } from '@electron-toolkit/preload';
 import { EVENTS } from './events';
 import { RevezoneFileTree, RevezoneFolder, RevezoneFile } from '../renderer/src/types/file';
 import { TreeItem } from 'react-complex-tree';
-import { showItemInFolder } from '../main/utils/customStoragePath';
 
 type Callback = () => void;
 
