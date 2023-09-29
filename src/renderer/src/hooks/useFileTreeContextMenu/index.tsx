@@ -55,7 +55,7 @@ export default function useFileTreeContextMenu(props: Props) {
               onClick: ({ domEvent }: { domEvent: Event }) => {
                 domEvent.stopPropagation();
                 console.log('open_directory');
-                window.api.openStoragePathById(item.id, fileTree);
+                window.api.showItemInFolder(item.id, fileTree);
               }
             }
           ]

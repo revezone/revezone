@@ -9,7 +9,7 @@ export const EVENTS = {
   customStoragePath: 'custom-storage-path',
   customStoragePathSuccess: 'custom-storage-path-success',
   openStoragePath: 'open-storage-path',
-  openStoragePathById: 'open-storage-path-by-id',
+  showItemInFolder: 'show-item-in-folder',
   renameFileOrFolder: 'rename-file-or-folder',
   deleteFileOrFolder: 'delete-file-or-folder',
   addFile: 'add-local-file',

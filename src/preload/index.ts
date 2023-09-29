@@ -3,6 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload';
 import { EVENTS } from './events';
 import { RevezoneFileTree, RevezoneFolder, RevezoneFile } from '../renderer/src/types/file';
 import { TreeItem } from 'react-complex-tree';
+import { showItemInFolder } from '../main/utils/customStoragePath';
 
 type Callback = () => void;
 
@@ -19,9 +20,9 @@ const api = {
   switchFontfamily: (fontName: string) => ipcRenderer.send(EVENTS.switchFontfamily, fontName),
   customStoragePath: () => ipcRenderer.send(EVENTS.customStoragePath),
   customStoragePathSuccess: (cb: Callback) => ipcRenderer.on(EVENTS.customStoragePathSuccess, cb),
-  openStoragePath: () => ipcRenderer.send(EVENTS.openStoragePath),
-  openStoragePathById: (itemId: string, fileTree: RevezoneFileTree) =>
-    ipcRenderer.send(EVENTS.openStoragePathById, itemId, fileTree),
+  openStoragePath: (storagePath: string) => ipcRenderer.send(EVENTS.openStoragePath, storagePath),
+  showItemInFolder: (itemId: string, fileTree: RevezoneFileTree) =>
+    ipcRenderer.send(EVENTS.showItemInFolder, itemId, fileTree),
   addFile: (fileId: string, value: string, fileTree: RevezoneFileTree) =>
     ipcRenderer.send(EVENTS.addFile, fileId, value, fileTree),
   deleteFileOrFolder: (fileId: string, fileTree: RevezoneFileTree) =>

@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { isMacOS } from './utils/platform';
@@ -24,7 +24,7 @@ import {
   customStoragePath,
   getUserFilesStoragePath,
   openStoragePath,
-  openStoragePathById
+  showItemInFolder
 } from './utils/customStoragePath';
 import { RevezoneFileTree, RevezoneFolder, RevezoneFile } from '../renderer/src/types/file';
 import { TreeItem } from 'react-complex-tree';
@@ -176,15 +176,12 @@ function createWindow(): BrowserWindow {
   });
 
   ipcMain.on(EVENTS.openStoragePath, async (event, storagePath: string) => {
-    mainWindow && openStoragePath(mainWindow, storagePath);
+    openStoragePath(storagePath);
   });
 
-  ipcMain.on(
-    EVENTS.openStoragePathById,
-    async (event, itemId: string, fileTree: RevezoneFileTree) => {
-      mainWindow && openStoragePathById(mainWindow, itemId, fileTree);
-    }
-  );
+  ipcMain.on(EVENTS.showItemInFolder, async (event, itemId: string, fileTree: RevezoneFileTree) => {
+    mainWindow && showItemInFolder(itemId, fileTree);
+  });
 
   ipcMain.on(
     EVENTS.dragAndDrop,

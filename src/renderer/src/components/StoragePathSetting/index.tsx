@@ -48,7 +48,7 @@ export default function StoragePathSetting() {
         <Button
           size="small"
           onClick={() => {
-            window.api?.openStoragePath();
+            window.api?.openStoragePath(storagePath);
           }}
         >
           {t('storagePath.openPath')}

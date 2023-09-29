@@ -1,4 +1,4 @@
-import { BrowserWindow, dialog, app } from 'electron';
+import { BrowserWindow, dialog, app, shell } from 'electron';
 import { join } from 'path';
 import { EVENTS } from '../../preload/events';
 import { ensureDir } from './io';
@@ -31,27 +31,17 @@ export const customStoragePath = async (mainWindow: BrowserWindow) => {
   mainWindow.webContents.send(EVENTS.customStoragePathSuccess, destPath);
 };
 
-export const openStoragePath = async (mainWindow: BrowserWindow, path: string) => {
+export const openStoragePath = async (path: string) => {
   console.log('--- open path1 ---', path);
-  await dialog.showOpenDialog(mainWindow, {
-    defaultPath: path,
-    properties: ['openDirectory']
-  });
+  shell.showItemInFolder(path);
 };
 
-export const openStoragePathById = async (
-  mainWindow: BrowserWindow,
-  itemId: string,
-  fileTree: RevezoneFileTree
-) => {
+export const showItemInFolder = async (itemId: string, fileTree: RevezoneFileTree) => {
   const { path } = getFullPathInfo(itemId, fileTree);
 
   console.log('--- open path2 ---', path);
 
-  await dialog.showOpenDialog(mainWindow, {
-    defaultPath: path,
-    properties: ['openDirectory']
-  });
+  shell.showItemInFolder(path);
 };
 
 export const getUserFilesStoragePath = () => {
