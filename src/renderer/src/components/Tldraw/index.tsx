@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useCallback } from 'react';
-import { RevezoneFile } from '@renderer/types/file';
+import { RevezoneFile, RevezoneFileTree } from '@renderer/types/file';
 import { Tldraw, Editor, createTLStore, defaultShapeUtils } from '@tldraw/tldraw';
-import type { StoreSnapshot, TLRecord } from '@tldraw/tldraw';
+import { StoreSnapshot, TLRecord, TLInstanceId } from '@tldraw/tldraw';
 import { sendFileDataChangeToMainDebounceFn } from '@renderer/utils/file';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { tldrawIndexeddbStorage } from '@renderer/store/tldrawIndexeddb';
@@ -16,10 +16,13 @@ interface Props {
   snapshot?: StoreSnapshot<TLRecord>;
 }
 
+const INSTANCE_STATE_KEY = 'instance:instance' as TLInstanceId;
+
 export default function ReveTldraw(props: Props) {
   const { file } = props;
   const [editor, setEditor] = useState<Editor>();
   const { fileTree } = useFileTree();
+  const [instanceState, setInstanceState] = useState();
 
   const [store] = useState(() => createTLStore({ shapeUtils: defaultShapeUtils }));
 
@@ -28,15 +31,21 @@ export default function ReveTldraw(props: Props) {
 
     if (!data) return;
 
+    setInstanceState(data.instanceState);
+
     store.loadSnapshot(data);
   };
 
-  const onChangeFn = useCallback((editor, fileTree) => {
+  const onChangeFn = useCallback((editor: Editor, fileTree: RevezoneFileTree) => {
     if (!editor) return;
 
     const snapshot = editor.store.getSnapshot();
 
-    tldrawIndexeddbStorage.updateTldraw(file.id, snapshot, fileTree);
+    const instanceState = editor.store.get(INSTANCE_STATE_KEY);
+
+    console.log('--- onChangeFn instanceState ---', instanceState);
+
+    tldrawIndexeddbStorage.updateTldraw(file.id, { ...snapshot, instanceState }, fileTree);
 
     const snapshotStr = JSON.stringify(snapshot);
 
@@ -52,6 +61,11 @@ export default function ReveTldraw(props: Props) {
   }, [store]);
 
   useEffect(() => {
+    if (!(editor && instanceState)) return;
+    editor.updateInstanceState(instanceState);
+  }, [editor, instanceState]);
+
+  useEffect(() => {
     editor?.store?.listen((entry) => {
       onChangeDebounceFn(editor, fileTree);
     });
@@ -62,9 +76,9 @@ export default function ReveTldraw(props: Props) {
       <Tldraw
         store={store}
         autoFocus
-        // onUiEvent={(name, data) => {
-        //   console.log(name, data);
-        // }}
+        onUiEvent={(name, data) => {
+          console.log(name, data);
+        }}
         onMount={(editor) => {
           setEditor(editor);
         }}

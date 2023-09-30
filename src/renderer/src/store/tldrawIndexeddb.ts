@@ -3,22 +3,27 @@ import { RevezoneFileTree } from '../types/file';
 import { sendFileDataChangeToMainDebounceFn } from '../utils/file';
 import type { StoreSnapshot, TLRecord } from '@tldraw/tldraw';
 
+export type TLDrawData = StoreSnapshot<TLRecord> & { instanceState?: any };
+
 export interface RevezoneTldrawDBSchema extends DBSchema {
   tldraw: {
     key: string;
-    value: StoreSnapshot<TLRecord>;
+    value: TLDrawData;
   };
 }
 
 export const INDEXEDDB_TLDRAW_FILE_KEY = 'tldraw';
 export const INDEXEDDB_REVEZONE_TLDRAW = 'revezone_tldraw';
 
-const TLDRAW_INITIAL_DATA: StoreSnapshot<TLRecord> = {
+const TLDRAW_INITIAL_DATA: TLDrawData = {
   store: {},
   schema: {
     schemaVersion: 1,
     storeVersion: 4,
     recordVersions: {}
+  },
+  instanceState: {
+    isDebugMode: false
   }
 };
 
@@ -62,7 +67,7 @@ class TldrawIndexeddbStorage {
     return tldrawStore;
   }
 
-  async updateTldraw(id: string, tldrawData: StoreSnapshot<TLRecord>, fileTree: RevezoneFileTree) {
+  async updateTldraw(id: string, tldrawData: TLDrawData, fileTree: RevezoneFileTree) {
     await this.initDB();
 
     const isExisted = !!(await this.db?.get(INDEXEDDB_TLDRAW_FILE_KEY, id));
@@ -77,7 +82,7 @@ class TldrawIndexeddbStorage {
     sendFileDataChangeToMainDebounceFn(id, JSON.stringify(tldrawData), fileTree);
   }
 
-  async addTldraw(id: string, tldrawData: StoreSnapshot<TLRecord> = TLDRAW_INITIAL_DATA) {
+  async addTldraw(id: string, tldrawData: TLDrawData = TLDRAW_INITIAL_DATA) {
     await this.initDB();
     await this.db?.add(INDEXEDDB_TLDRAW_FILE_KEY, tldrawData, id);
   }
