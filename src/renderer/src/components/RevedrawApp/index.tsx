@@ -29,11 +29,25 @@ export default function RevedrawApp({ file }: Props) {
   const { onLinkOpen } = useDoubleLink(true);
   const { fileTree } = useFileTree();
 
+  const clearDeletedElements = useCallback((data) => {
+    data.elements?.forEach((element) => {
+      if (element?.isDeleted) {
+        delete data.files?.[element.fileId];
+      }
+    });
+
+    data.elements = data.elements?.filter((element) => !element.isDeleted);
+
+    return data;
+  }, []);
+
   const getDataSource = useCallback(async (id: string) => {
     // reset data source for a new canvas file
     setDataSource(undefined);
 
-    const data = await boardIndexeddbStorage.getBoard(id);
+    let data = await boardIndexeddbStorage.getBoard(id);
+
+    data = clearDeletedElements(data);
 
     const dataStr = !data || typeof data === 'string' ? data : JSON.stringify(data);
 
