@@ -13,6 +13,8 @@ import { getUniqueNameInSameTreeLevel } from '../../renderer/src/utils/file';
 
 type RevezoneFileSuffix = '.excalidraw' | '.tldr' | '.md';
 
+const REVEZONE_FILE_SUFFIXES = ['.excalidraw', '.tldr', '.md'];
+
 interface FullPathInfo {
   type: 'folder' | 'file';
   fileType?: RevezoneFileType;
@@ -170,4 +172,38 @@ export function onDragAndDrop(
   items.forEach((item) => {
     moveFileOrFolder(item.data, parentId, fileTree);
   });
+}
+
+export function getRevezoneLinkFromCommandLine(args: string[]) {
+  let deeplinkingUrl = '';
+
+  // For Windows Only
+  args.forEach((arg) => {
+    if (/revezone:\/\//.test(arg)) {
+      deeplinkingUrl = arg.substring(0, arg.length - 1);
+    }
+  });
+
+  return deeplinkingUrl;
+}
+
+export function getFilePathFromProcessArgv(args: string[]) {
+  let filePath = '';
+
+  // For Windows Only
+  args.forEach((arg) => {
+    let isRevezoneFile = false;
+
+    REVEZONE_FILE_SUFFIXES.forEach((suffix) => {
+      if (arg.endsWith(suffix)) {
+        isRevezoneFile = true;
+      }
+    });
+
+    if (isRevezoneFile) {
+      filePath = arg;
+    }
+  });
+
+  return filePath;
 }

@@ -18,7 +18,9 @@ import {
   onRenameFileOrFolder,
   onDeleteFileOrFolder,
   onAddFile,
-  onDragAndDrop
+  onDragAndDrop,
+  getRevezoneLinkFromCommandLine,
+  getFilePathFromProcessArgv
 } from './utils/localFilesStorage';
 import {
   customStoragePath,
@@ -87,16 +89,19 @@ function createWindow(): BrowserWindow {
   if (process.platform == 'win32') {
     // Keep only command line / deep linked arguments
 
-    let deeplinkingUrl = '';
-
-    // For Windows Only
-    process.argv.forEach((arg) => {
-      if (/revezone:\/\//.test(arg)) {
-        deeplinkingUrl = arg.substring(0, arg.length - 1);
-      }
-    });
+    const deeplinkingUrl = getRevezoneLinkFromCommandLine(process.argv);
 
     process.env.DEEP_LINKING_URL = deeplinkingUrl;
+
+    notify(process.argv.join(', '));
+
+    const filePath = getFilePathFromProcessArgv(process.argv);
+
+    process.env.OPEN_FILE_PATH = filePath;
+
+    const fileData = fs.readFileSync(filePath).toString();
+
+    process.env.OPEN_FILE_DATA = fileData;
   }
 
   mainWindow.on('closed', () => {
@@ -203,14 +208,19 @@ if (!gotTheLock) {
 } else {
   // For Windows
   app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // console.log('second instance', commandLine, workingDirectory);
+    // console.log('process.argv', process.argv);
+
+    // notify(commandLine?.join(', '));
+    // notify(process.argv.join(', '));
+
     // Someone tried to run a second instance, we should focus our window.
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
       mainWindow.focus();
       setTimeout(() => {
-        let link = commandLine[commandLine.length - 1];
-        link = link.substring(0, link.length - 1);
-        mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
+        const link = getRevezoneLinkFromCommandLine(commandLine);
+        link && mainWindow?.webContents.send(EVENTS.openRevezoneLinkSuccess, link);
       }, 500);
     }
   });
@@ -219,6 +229,8 @@ if (!gotTheLock) {
 // For Mac OS Only
 app.on('open-file', (event, path) => {
   event.preventDefault();
+
+  console.log('open file: ', path);
 
   const fileData = fs.readFileSync(path).toString();
 
@@ -241,6 +253,8 @@ app.on('open-file', (event, path) => {
 // For Mac OS Only
 app.on('open-url', (event, link) => {
   event.preventDefault();
+
+  console.log('open-url', link);
 
   process.env.DEEP_LINKING_URL = link;
 

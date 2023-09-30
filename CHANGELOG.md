@@ -1,4 +1,6 @@
-## 1.0.0-alpha.17
+## 1.0.0-alpha.18
+### Features
+* Add tldraw board instance state persistence ability
 ### Bugfix
 * Fix excalidraw file size not change problem while deleting images from an excalidraw board
 

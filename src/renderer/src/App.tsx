@@ -29,6 +29,7 @@ import { Model } from 'flexlayout-react';
 
 let openFileSuccessListenerRegistered = false;
 let deepLinkUrlOpened = false;
+let associatedFileOpened = false;
 
 const OS_NAME = getOSName();
 
@@ -43,6 +44,19 @@ function App(): JSX.Element {
     submitAppEnterUserEvent();
   }, []);
 
+  const doOpenFile = useCallback((path: string, fileData: string, tabModel: Model) => {
+    const fileNameWithSuffix = getFilenameFromPath(path);
+    const fileName = fileNameWithSuffix && getFileNameWithoutSuffix(fileNameWithSuffix);
+    const suffix = fileNameWithSuffix && getFileSuffix(fileNameWithSuffix);
+    const fileType = suffix && getFileTypeFromSuffix(suffix);
+
+    if (fileName && fileType) {
+      addFile(fileName, fileType, tabModel, 'root', fileData);
+    } else {
+      message.error(`File ${path} unrecognized!`);
+    }
+  }, []);
+
   useEffect(() => {
     if (!tabModel || openFileSuccessListenerRegistered) return;
 
@@ -50,16 +64,7 @@ function App(): JSX.Element {
     openFileSuccessListenerRegistered = true;
 
     window.api?.openFileSuccess((event, path, fileData) => {
-      const fileNameWithSuffix = getFilenameFromPath(path);
-      const fileName = fileNameWithSuffix && getFileNameWithoutSuffix(fileNameWithSuffix);
-      const suffix = fileNameWithSuffix && getFileSuffix(fileNameWithSuffix);
-      const fileType = suffix && getFileTypeFromSuffix(suffix);
-
-      if (fileName && fileType) {
-        addFile(fileName, fileType, tabModel, 'root', fileData);
-      } else {
-        message.error(`File ${path} unrecognized!`);
-      }
+      doOpenFile(path, fileData, tabModel);
     });
   }, [tabModel]);
 
@@ -69,7 +74,7 @@ function App(): JSX.Element {
       const file = fileTree[fileId]?.data as RevezoneFile;
 
       if (!file) {
-        message.error(`File ${link} not exsited!`);
+        message.error(`File ${link} not existed!`);
         return;
       }
 
@@ -92,10 +97,19 @@ function App(): JSX.Element {
       deepLinkingUrl && updateCurrentFileFromDeepLinkingUrl(deepLinkingUrl, fileTree, tabModel);
     }
 
+    if (!associatedFileOpened) {
+      associatedFileOpened = true;
+
+      const openFilePath = window.electron?.process.env.OPEN_FILE_PATH;
+      const fileData = window.electron?.process.env.OPEN_FILE_DATA;
+
+      openFilePath && fileData && doOpenFile(openFilePath, fileData, tabModel);
+    }
+
     window.api?.removeAllRevezoneLinkListeners();
 
     window.api?.openRevezoneLinkSuccess(async (event, link) => {
-      updateCurrentFileFromDeepLinkingUrl(link, fileTree, tabModel);
+      link && updateCurrentFileFromDeepLinkingUrl(link, fileTree, tabModel);
     });
   }, [fileTree, tabModel]);
 
