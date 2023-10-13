@@ -1,4 +1,4 @@
-# Revezone - A lightweight graphic-centric productivity tool
+# Revezone - A local-first lightweight graphic-centric productivity tool to build your second brain
 [中文 Readme](README_zh.md)
 
 Revezone is currently in a public beta. Please report a [issue](https://github.com/revezone/revezone/issues/new), if you have any suggestions or questions.
