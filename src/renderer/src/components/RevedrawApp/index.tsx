@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
-import { FileTreeItem, RevezoneFile } from '@renderer/types/file';
+import { RevezoneFile } from '@renderer/types/file';
 import { Revedraw } from 'revemate';
-import { ExcalidrawImperativeAPI, NonDeletedExcalidrawElement } from 'revemate/es/Revedraw/types';
+import { ExcalidrawDataSource, ExcalidrawImperativeAPI } from 'revemate/es/Revedraw/types';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
-import { currentFileAtom, fileTreeAtom, langCodeAtom } from '@renderer/store/jotai';
+import { langCodeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { getOSName } from '@renderer/utils/navigator';
-import { getFileIdOrNameFromLink } from '@renderer/utils/file';
+import { emitter } from '@renderer/store/eventemitter';
+import useDoubleLink from '@renderer/hooks/useDoubleLink';
 
 import './index.css';
+import useFileTree from '@renderer/hooks/useFileTree';
 
 interface Props {
   file: RevezoneFile;
@@ -22,26 +24,44 @@ let firsRender = true;
 export default function RevedrawApp({ file }: Props) {
   const [dataSource, setDataSource] = useState<string>();
   const [, setRef] = useState<ExcalidrawImperativeAPI>();
-  const [fileTree] = useAtom(fileTreeAtom);
-  const [, setCurrentFile] = useAtom(currentFileAtom);
   const [systemLangCode] = useAtom(langCodeAtom);
   const [didRender, setDidRender] = useState(true);
+  const { onLinkOpen } = useDoubleLink(true);
+  const { fileTree } = useFileTree();
 
-  const getDataSource = useCallback(async (id) => {
+  const clearDeletedElements = useCallback((data) => {
+    data.elements?.forEach((element) => {
+      if (element?.isDeleted) {
+        delete data.files?.[element.fileId];
+      }
+    });
+
+    data.elements = data.elements?.filter((element) => !element.isDeleted);
+
+    return data;
+  }, []);
+
+  const getDataSource = useCallback(async (id: string) => {
     // reset data source for a new canvas file
     setDataSource(undefined);
 
-    const data = await boardIndexeddbStorage.getBoard(id);
+    let data = await boardIndexeddbStorage.getBoard(id);
 
-    setDataSource(data);
+    data = clearDeletedElements(data);
+
+    const dataStr = !data || typeof data === 'string' ? data : JSON.stringify(data);
+
+    setDataSource(dataStr);
   }, []);
 
   // HACK: fix the custom font not working completely when first render
-  const rerender = useCallback(() => {
+  const rerender = useCallback(async () => {
     const WAIT_TIME_WINDWOS = 500;
     const WAIT_TIME_MACOS = 200;
 
     const waitTime = OS_NAME === 'MacOS' ? WAIT_TIME_MACOS : WAIT_TIME_WINDWOS;
+
+    await getDataSource(file.id);
 
     setTimeout(() => {
       setDidRender(false);
@@ -49,7 +69,7 @@ export default function RevedrawApp({ file }: Props) {
         setDidRender(true);
       }, 100);
     }, waitTime);
-  }, []);
+  }, [file.id]);
 
   useEffect(() => {
     if (firsRender) {
@@ -58,44 +78,29 @@ export default function RevedrawApp({ file }: Props) {
     }
   }, []);
 
-  const onChangeFn = useCallback(
-    async (data) => {
-      const str = JSON.stringify(data);
+  useEffect(() => {
+    emitter.on('switch_font_family', () => {
+      rerender();
+    });
+  }, []);
 
-      await boardIndexeddbStorage.addOrUpdateBoard(file.id, str);
+  const onChangeFn = useCallback(
+    async (data: ExcalidrawDataSource) => {
+      const _data = {
+        type: 'excalidraw',
+        version: 2,
+        source: window.location.href,
+        ...data
+      };
+
+      await boardIndexeddbStorage.updateBoard(file.id, _data, fileTree);
     },
-    [file.id]
+    [file.id, fileTree]
   );
 
   const { run: onChangeDebounceFn, cancel: cancelDebounceFn } = useDebounceFn(onChangeFn, {
     wait: 200
   });
-
-  const onLinkOpen = useCallback(
-    (element: NonDeletedExcalidrawElement) => {
-      const { link } = element;
-      console.log('link', link);
-
-      const fileIdOrNameInRevezone = link && getFileIdOrNameFromLink(link);
-
-      if (fileIdOrNameInRevezone) {
-        const files = fileTree?.reduce((prev: RevezoneFile[], item: FileTreeItem) => {
-          return [...prev, ...item.children];
-        }, []);
-
-        const file = files.find(
-          (_file) => _file.id === fileIdOrNameInRevezone || _file.name === fileIdOrNameInRevezone
-        );
-
-        if (file) {
-          setCurrentFile(file);
-        }
-      } else {
-        link && window.open(link);
-      }
-    },
-    [fileTree]
-  );
 
   useEffect(() => {
     getDataSource(file.id);

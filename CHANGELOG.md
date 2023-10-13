@@ -1,6 +1,13 @@
+## 1.0.0-alpha.18
+### Features
+* Add tldraw board instance state persistence ability
+### Bugfix
+* Fix excalidraw file size not change problem while deleting images from an excalidraw board
+
+
 ## 1.0.0-alpha.17
 ### Bugfix
-* delete problem while click verticle more icon or context menu
+* Fix deleting problem while click verticle more icon or context menu
 
 ## 1.0.0-alpha.16
 ### Features

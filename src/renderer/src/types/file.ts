@@ -1,3 +1,5 @@
+import { TreeItem } from 'react-complex-tree';
+
 export interface RevezoneFolder {
   id: string;
   name: string;
@@ -12,7 +14,7 @@ export interface RevezoneFolderFileMapping {
   gmtModified: string;
 }
 
-export type RevezoneFileType = 'note' | 'board';
+export type RevezoneFileType = 'note' | 'board' | 'welcome' | 'mindmap' | 'tldraw';
 
 export interface RevezoneFile {
   id: string;
@@ -25,13 +27,14 @@ export interface RevezoneFile {
 export interface RevezoneFolder {
   id: string;
   name: string;
+  type?: 'folder';
   gmtCreate: string;
   gmtModified: string;
 }
 
 export type FileTreeItem = RevezoneFolder & { children: RevezoneFile[] };
 
-export type FileTree = FileTreeItem[];
+export type RevezoneFileTree = { [key: string]: TreeItem<RevezoneFile | RevezoneFolder> };
 
 export interface OnFolderOrFileAddProps {
   fileId?: string;

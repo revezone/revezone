@@ -1,36 +1,112 @@
-import { useCallback, useEffect } from 'react';
-import CustomLayout from './components/CustomLayout';
-import NoteEditor from './components/NoteEditor';
+import { lazy, useCallback, useEffect } from 'react';
 import { useAtom } from 'jotai';
-import { currentFileAtom, langCodeAtom } from './store/jotai';
+import { langCodeAtom } from './store/jotai';
 import WorkspaceLoaded from './components/WorkspaceLoaded';
-import RevedrawApp from './components/RevedrawApp';
 import zhCN from 'antd/locale/zh_CN';
 import zhTW from 'antd/locale/zh_TW';
 import enUS from 'antd/locale/en_US';
-import WelcomePage from './components/WelcomePage';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, message } from 'antd';
 import { theme } from './utils/theme';
 import { getOSName, isInRevezoneApp } from './utils/navigator';
+import ResizableLayout from './components/ResizableLayout/index';
+import useAddFile from '@renderer/hooks/useAddFile';
+import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
+
+const MultiTabs = lazy(() => import('./components/MultiTabsWithFlexLayout'));
 
 import './App.css';
+import {
+  getFilenameFromPath,
+  getFileNameWithoutSuffix,
+  getFileSuffix,
+  getFileTypeFromSuffix
+} from './utils/file';
+import useCurrentFile from './hooks/useCurrentFile';
+import useFileTree from './hooks/useFileTree';
+import { RevezoneFile, RevezoneFileTree } from './types/file';
+import { Model } from 'flexlayout-react';
+
+let openFileSuccessListenerRegistered = false;
+let deepLinkUrlOpened = false;
+let associatedFileOpened = false;
 
 const OS_NAME = getOSName();
 
 function App(): JSX.Element {
-  const [currentFile] = useAtom(currentFileAtom);
   const [langCode] = useAtom(langCodeAtom);
+  const { addFile } = useAddFile();
+  const { model: tabModel, updateTabJsonModelWhenCurrentFileChanged } = useTabJsonModel();
+  const { updateCurrentFile } = useCurrentFile();
+  const { fileTree } = useFileTree();
 
-  const renderContent = useCallback((file) => {
-    switch (file?.type) {
-      case 'note':
-        return <NoteEditor file={file} />;
-      case 'board':
-        return <RevedrawApp file={file} />;
-      default:
-        return <WelcomePage />;
+  const doOpenFile = useCallback((path: string, fileData: string, tabModel: Model) => {
+    const fileNameWithSuffix = getFilenameFromPath(path);
+    const fileName = fileNameWithSuffix && getFileNameWithoutSuffix(fileNameWithSuffix);
+    const suffix = fileNameWithSuffix && getFileSuffix(fileNameWithSuffix);
+    const fileType = suffix && getFileTypeFromSuffix(suffix);
+
+    if (fileName && fileType) {
+      addFile(fileName, fileType, tabModel, 'root', fileData);
+    } else {
+      message.error(`File ${path} unrecognized!`);
     }
   }, []);
+
+  useEffect(() => {
+    if (!tabModel || openFileSuccessListenerRegistered) return;
+
+    // avoid listener register multiple times
+    openFileSuccessListenerRegistered = true;
+
+    window.api?.openFileSuccess((event, path, fileData) => {
+      doOpenFile(path, fileData, tabModel);
+    });
+  }, [tabModel]);
+
+  const updateCurrentFileFromDeepLinkingUrl = useCallback(
+    async (link: string, fileTree: RevezoneFileTree, tabModel: Model) => {
+      const fileId = link?.split('revezone://')[1];
+      const file = fileTree[fileId]?.data as RevezoneFile;
+
+      if (!file) {
+        message.error(`File ${link} not existed!`);
+        return;
+      }
+
+      await updateCurrentFile(file);
+
+      updateTabJsonModelWhenCurrentFileChanged(file, tabModel);
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (!tabModel || !(fileTree && JSON.stringify(fileTree) !== '{}')) {
+      return;
+    }
+
+    if (!deepLinkUrlOpened) {
+      deepLinkUrlOpened = true;
+      const deepLinkingUrl = window.electron?.process.env.DEEP_LINKING_URL;
+
+      deepLinkingUrl && updateCurrentFileFromDeepLinkingUrl(deepLinkingUrl, fileTree, tabModel);
+    }
+
+    if (!associatedFileOpened) {
+      associatedFileOpened = true;
+
+      const openFilePath = window.electron?.process.env.OPEN_FILE_PATH;
+      const fileData = window.electron?.process.env.OPEN_FILE_DATA;
+
+      openFilePath && fileData && doOpenFile(openFilePath, fileData, tabModel);
+    }
+
+    window.api?.removeAllRevezoneLinkListeners();
+
+    window.api?.openRevezoneLinkSuccess(async (event, link) => {
+      link && updateCurrentFileFromDeepLinkingUrl(link, fileTree, tabModel);
+    });
+  }, [fileTree, tabModel]);
 
   const getLocale = useCallback(() => {
     switch (langCode) {
@@ -50,9 +126,11 @@ function App(): JSX.Element {
           isInRevezoneApp ? 'is-in-revezone-native-app' : 'is-in-browser'
         }`}
       >
-        <CustomLayout>
-          <WorkspaceLoaded>{renderContent(currentFile)}</WorkspaceLoaded>
-        </CustomLayout>
+        <ResizableLayout>
+          <WorkspaceLoaded>
+            <MultiTabs />
+          </WorkspaceLoaded>
+        </ResizableLayout>
       </div>
     </ConfigProvider>
   );

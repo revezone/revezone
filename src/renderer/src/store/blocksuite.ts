@@ -1,9 +1,7 @@
-import { Workspace, createIndexeddbStorage, createMemoryStorage } from '@blocksuite/store';
-import { AffineSchemas } from '@blocksuite/blocks/models';
+import { Workspace, createIndexeddbStorage, createMemoryStorage } from '@revesuite/store';
+import { AffineSchemas } from '@revesuite/blocks/models';
 import { IndexeddbPersistence } from 'y-indexeddb';
 import { emitter, events } from './eventemitter';
-
-console.log('AffineSchemas', AffineSchemas);
 
 const REVEZONE_EDITOR_KEY = 'revezone_blocksuite';
 
@@ -22,7 +20,7 @@ class BlocksuiteStorage {
     id: REVEZONE_EDITOR_KEY,
     blobStorages: [createIndexeddbStorage, createMemoryStorage]
   }).register(AffineSchemas);
-  indexeddbPersistence;
+  indexeddbPersistence: IndexeddbPersistence | undefined;
 
   async initYIndexeddb() {
     const indexeddbPersistence = new IndexeddbPersistence(REVEZONE_EDITOR_KEY, this.workspace.doc);
@@ -33,8 +31,12 @@ class BlocksuiteStorage {
     window.persistence = indexeddbPersistence;
 
     indexeddbPersistence.on('synced', async () => {
-      console.log('content from the database is loaded');
+      // console.log('content from the database is loaded');
       emitter.emit(events.WORKSPACE_LOADED);
+
+      // this.workspace.slots.pagesUpdated.on((...args) => {
+      //   console.log('--- pagesUpdated ---', ...args);
+      // });
     });
   }
 
@@ -43,7 +45,18 @@ class BlocksuiteStorage {
   }
 
   async deletePage(pageId: string) {
-    await this.workspace.removePage(pageId);
+    try {
+      await this.workspace.removePage(pageId);
+    } catch (err) {
+      console.warn('delete page error: ', err);
+    }
+  }
+
+  async getAllPageIds(): Promise<string[]> {
+    const pageNameList = await this.workspace.getPageNameList();
+    const pageIds: string[] = pageNameList.map((name) => name.split('space:')?.[1]);
+    // console.log('--- getAllPages ---', pageIds);
+    return pageIds;
   }
 
   // TODO: FIGURE OUT THE API OF COPY PAGE IN BLOCKSUITE

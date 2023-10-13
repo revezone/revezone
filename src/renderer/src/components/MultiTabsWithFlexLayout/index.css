@@ -1,0 +1,41 @@
+.flexlayout__layout {
+  position: relative;
+  height: 100%;
+
+  .tab_content {
+    height: 100%;
+  }
+
+  .flexlayout__tabset-selected{
+    @apply bg-white;
+  }
+
+  .flexlayout__tab_button {
+    @apply text-neutral-500 text-sm;
+
+    .flexlayout__tab_button_content {
+      @apply truncate inline-block;
+      max-width: 16rem;
+    }
+
+    &.flexlayout__tab_button--selected {
+      @apply text-neutral-800 bg-slate-100 rounded-t-md border-b-2 border-b-slate-400;
+    }
+
+    &:hover {
+      @apply text-gray-600 bg-gray-200 rounded-t-md;
+    }
+  }
+
+  .flexlayout__tabset_tabbar_outer_top {
+    @apply border-slate-100;
+  }
+}
+
+.revezone-siderbar-collapsed {
+  height: 100%;
+
+  .flexlayout__tabset_tabbar_outer_top {
+    @apply pl-10;
+  }
+}

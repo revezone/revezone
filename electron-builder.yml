@@ -12,8 +12,18 @@ files:
 asarUnpack:
   - resources/**
 afterSign: build/notarize.js
+fileAssociations:
+  - name: excalidraw
+    ext: excalidraw
+  - name: tldr
+    ext: tldr
 win:
   executableName: Revezone
+  protocols: 
+    - name: revezone
+      schemes:
+        - excalidraw
+        - tldr
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -31,6 +41,11 @@ mac:
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  protocols: 
+    - name: revezone
+      schemes:
+        - excalidraw
+        - tldr
 dmg:
   artifactName: ${name}-${version}-${arch}.${ext}
 linux:

@@ -1,9 +1,14 @@
-import { dialog, app } from 'electron';
-import { copyFile } from 'node:fs/promises';
+import { dialog, BrowserWindow } from 'electron';
+import { copyFile, writeFile } from 'node:fs/promises';
 import { join } from 'path';
-import { notify } from './notification';
 import { EVENTS } from '../../preload/events';
 import fs from 'node:fs';
+import { USER_DATA_PATH, ensureDir } from './io';
+import {
+  getFilenameFromPath,
+  getFileNameWithoutSuffix,
+  getFileSuffix
+} from '../../renderer/src/utils/file';
 
 export interface Font {
   name: string;
@@ -11,69 +16,40 @@ export interface Font {
   path: string;
 }
 
-const FONT_SUFFIXES = ['.ttf', '.woff2'];
+export interface Manifest {
+  activeFonts: string;
+}
 
-const USER_DATA_PATH = app.getPath('userData');
+const FONT_SUFFIXES = ['.ttf', '.woff2', '.otf'];
 
 const CUSTOM_FONTS_DIR = join(USER_DATA_PATH, 'custom_fonts');
 
-function getFilenameFromPath(path) {
-  // 先使用对应操作系统的分隔符切割路径
-  const parts = path.split(/[/\\]/);
-  // 取最后一个部分作为文件名
-  const filename = parts.pop();
-  return filename;
-}
-
-function removeFileExtension(filename) {
-  const lastDotIdx = filename.lastIndexOf('.');
-  if (lastDotIdx === -1 || lastDotIdx === 0) {
-    // 如果文件名没有扩展名或者以 . 开头，则直接返回原文件名
-    return filename;
-  } else {
-    // 否则截取文件名和扩展名之间的部分
-    return filename.slice(0, lastDotIdx);
-  }
-}
-
-function getFileSuffix(filename) {
-  const lastDotIdx = filename.lastIndexOf('.');
-  if (lastDotIdx === -1 || lastDotIdx === 0) {
-    // 如果文件名没有扩展名或者以 . 开头，则直接返回原文件名
-    return '';
-  } else {
-    // 否则截取文件名和扩展名之间的部分
-    return filename.slice(lastDotIdx);
-  }
-}
-
-export const loadCustomFont = async (mainWindow) => {
+export const loadCustomFont = async (mainWindow: BrowserWindow) => {
   if (!mainWindow) {
     return;
   }
 
   const { filePaths } = await dialog.showOpenDialog(mainWindow, {
     properties: ['openFile', 'multiSelections'],
-    filters: [{ name: 'Fonts', extensions: ['ttf', 'woff2'] }]
+    filters: [{ name: 'Fonts', extensions: ['ttf', 'woff2', 'otf'] }]
   });
 
   ensureDir(CUSTOM_FONTS_DIR);
 
-  console.log('--- openfile ---', filePaths);
-
-  const promises = filePaths.map(async (filePath) => {
+  const promises = filePaths.map(async (filePath: string) => {
     try {
       const filenameWithSuffix = getFilenameFromPath(filePath);
       const destPath = join(CUSTOM_FONTS_DIR, `${filenameWithSuffix}`);
       await copyFile(filePath, destPath);
 
       return {
-        name: removeFileExtension(filenameWithSuffix),
+        name: filenameWithSuffix && getFileNameWithoutSuffix(filenameWithSuffix),
         nameWithSuffix: filenameWithSuffix,
         path: destPath
       };
     } catch (err) {
       console.error('copy file error:', err);
+      return undefined;
     }
   });
 
@@ -82,39 +58,41 @@ export const loadCustomFont = async (mainWindow) => {
   const fontNames = results.map((item) => item?.name)?.join(',');
 
   if (fontNames) {
-    notify(`Fonts ${fontNames} added! `);
     const fonts = await getRegisteredFonts();
 
     mainWindow.webContents.send(EVENTS.loadCustomFontSuccess, fonts);
-
-    // setTimeout(() => {
-    //   app.relaunch();
-    //   app.quit();
-    // }, 500);
   }
 };
 
-export const removeCustomFont = async (fontPath: string, mainWindow) => {
-  const result = await fs.unlinkSync(fontPath);
-
-  console.log('removeCustomFont result', result);
+export const removeCustomFont = async (fontPath: string, mainWindow: BrowserWindow) => {
+  await fs.unlinkSync(fontPath);
 
   const fonts = await getRegisteredFonts();
 
   mainWindow.webContents.send(EVENTS.removeCustomFontSuccess, fonts);
 };
 
-export const registerCustomFont = (mainWindow, fontName, fontNameWithSuffix) => {
+export const activeCustomFont = (
+  mainWindow: BrowserWindow,
+  fontName: string,
+  fontNameWithSuffix: string
+) => {
   if (!(mainWindow && fontNameWithSuffix)) {
     return;
   }
 
   try {
+    let fontType = 'opentype';
+
+    if (fontNameWithSuffix.endsWith('woff2')) {
+      fontType = 'woff2';
+    }
+
     const fontPath = join(CUSTOM_FONTS_DIR, fontNameWithSuffix);
     const fontData = fs.readFileSync(fontPath);
-    const fontUrl = `url(data:font/truetype;base64,${fontData.toString('base64')})`;
-
-    console.log('--- reigister font ---', fontNameWithSuffix);
+    const fontUrl = `url(data:font/${fontType};base64,${fontData.toString(
+      'base64'
+    )}) format(${fontType})`;
 
     mainWindow.webContents.insertCSS(
       `@font-face { font-family: '${fontName}'; src: ${fontUrl}; font-display: 'block' }`
@@ -124,37 +102,28 @@ export const registerCustomFont = (mainWindow, fontName, fontNameWithSuffix) => 
   }
 };
 
-export const batchRegisterCustomFonts = (mainWindow) => {
+export const batchActiveCustomFonts = (mainWindow: BrowserWindow) => {
   try {
-    const fonts = getRegisteredFonts();
-    fonts.forEach((font) => registerCustomFont(mainWindow, font.name, font.nameWithSuffix));
+    const fonts = getActiveFonts();
+
+    fonts.forEach((font) => activeCustomFont(mainWindow, font.name, font.nameWithSuffix));
   } catch (err) {
     console.error(err);
   }
 };
 
-export const ensureDir = (dir: string) => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-};
-
-const isFontFile = (filename) => {
+const isFontFile = (filename: string) => {
   const suffix = getFileSuffix(filename);
-  return FONT_SUFFIXES.includes(suffix);
+  return FONT_SUFFIXES.includes(suffix.toLowerCase());
 };
 
-export const getRegisteredFonts = () => {
-  ensureDir(CUSTOM_FONTS_DIR);
-
-  const fontNamesWithSuffix = fs.readdirSync(CUSTOM_FONTS_DIR);
-
+export const serializeFonts = (fontNamesWithSuffix: string[]) => {
   const fonts: Font[] = [];
 
   fontNamesWithSuffix.forEach((fontName) => {
-    if (!isFontFile(fontName)) return;
+    if (!fontName || !isFontFile(fontName)) return;
 
-    const fontNameWithoutSuffix = removeFileExtension(fontName);
+    const fontNameWithoutSuffix = getFileNameWithoutSuffix(fontName);
     const item: Font = {
       name: fontNameWithoutSuffix,
       nameWithSuffix: fontName,
@@ -164,8 +133,66 @@ export const getRegisteredFonts = () => {
     fonts.push(item);
   });
 
+  return fonts;
+};
+
+export const getFontNamesWithSuffixFromIO = () => {
+  return fs.readdirSync(CUSTOM_FONTS_DIR)?.filter((name) => isFontFile(name));
+};
+
+export const getActiveFonts = () => {
+  ensureDir(CUSTOM_FONTS_DIR);
+
+  const manifestStr = fs.readFileSync(join(CUSTOM_FONTS_DIR, 'manifest.json'))?.toString();
+
+  const manifest: Manifest = manifestStr && JSON.parse(manifestStr);
+
+  let fontNamesWithSuffix;
+  if (manifest) {
+    fontNamesWithSuffix = manifest.activeFonts.split(',');
+  } else {
+    fontNamesWithSuffix = getFontNamesWithSuffixFromIO();
+  }
+
+  return serializeFonts(fontNamesWithSuffix);
+};
+
+export const getRegisteredFonts = () => {
+  ensureDir(CUSTOM_FONTS_DIR);
+
+  const fontNamesWithSuffix = getFontNamesWithSuffixFromIO();
+
+  const fonts = serializeFonts(fontNamesWithSuffix);
+
   // inject registeredFonts to env to enable renderer get custom fonts
   process.env['registeredFonts'] = JSON.stringify(fonts);
 
   return fonts;
+};
+
+export const switchFontfamily = (mainWindow: BrowserWindow, fontName: string) => {
+  if (!fontName) {
+    console.error('--- switchFontfamily fontName unexpected undefined ---', fontName);
+    return;
+  }
+
+  const fonts = getRegisteredFonts();
+
+  const fontNameWithSuffix = fonts.find((font) => font.name === fontName)?.nameWithSuffix;
+
+  if (!fontNameWithSuffix) {
+    console.error(
+      '--- switchFontfamily fontNameWithSuffix unexpected undefined ---',
+      fontNameWithSuffix
+    );
+    return;
+  }
+
+  activeCustomFont(mainWindow, fontName, fontNameWithSuffix);
+  updateManifest(JSON.stringify({ activeFonts: fontNameWithSuffix }));
+};
+
+export const updateManifest = async (manifest: string) => {
+  const fontPath = join(CUSTOM_FONTS_DIR, 'manifest.json');
+  await writeFile(fontPath, manifest);
 };

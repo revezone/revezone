@@ -1,17 +1,21 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import moment from 'moment-timezone';
-
-moment.tz.setDefault('Asia/Shanghai');
+import { RevezoneFileTree } from '../types/file';
+import { sendFileDataChangeToMainDebounceFn } from '../utils/file';
+import { ExcalidrawDataSource } from 'revemate/es/Revedraw/types';
 
 export interface RevezoneBoardDBSchema extends DBSchema {
   board: {
     key: string;
-    value: string;
+    value: ExcalidrawDataSource;
   };
 }
 
 export const INDEXEDDB_BOARD_FILE_KEY = 'board';
 export const INDEXEDDB_REVEZONE_BOARD = 'revezone_board';
+
+const EXCALIDRAW_INITIAL_DATA: ExcalidrawDataSource = {
+  elements: []
+};
 
 class BoardIndexeddbStorage {
   constructor() {
@@ -45,33 +49,46 @@ class BoardIndexeddbStorage {
     return db;
   }
 
-  async initBoardFileStore(db): Promise<IDBObjectStore> {
-    const boardStore: IDBObjectStore = await db.createObjectStore(INDEXEDDB_BOARD_FILE_KEY, {
+  async initBoardFileStore(db: IDBPDatabase<RevezoneBoardDBSchema>) {
+    const boardStore = await db.createObjectStore(INDEXEDDB_BOARD_FILE_KEY, {
       autoIncrement: true
     });
 
     return boardStore;
   }
 
-  async addOrUpdateBoard(id: string, boardData: string) {
+  async updateBoard(id: string, boardData: ExcalidrawDataSource, fileTree: RevezoneFileTree) {
     await this.initDB();
+
+    const isExisted = !!(await this.db?.get(INDEXEDDB_BOARD_FILE_KEY, id));
+
+    if (!isExisted) {
+      console.warn(`Board ${id} not existed, cannot update!`);
+      return;
+    }
+
     await this.db?.put(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
+
+    sendFileDataChangeToMainDebounceFn(id, JSON.stringify(boardData), fileTree);
   }
 
-  async addBoard(id, boardData) {
+  async addBoard(id: string, boardData: ExcalidrawDataSource = EXCALIDRAW_INITIAL_DATA) {
     await this.initDB();
     await this.db?.add(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
   }
 
-  async getBoard(id) {
+  async getBoard(id: string) {
     await this.initDB();
     return await this.db?.get(INDEXEDDB_BOARD_FILE_KEY, id);
   }
 
-  async deleteBoard(id) {
+  async getAllBoardIds(): Promise<string[]> {
     await this.initDB();
+    return (await this.db?.getAllKeys(INDEXEDDB_BOARD_FILE_KEY)) || [];
+  }
 
-    console.log('--- this.db ---', id, this.db);
+  async deleteBoard(id: string) {
+    await this.initDB();
 
     await this.db?.delete(INDEXEDDB_BOARD_FILE_KEY, id);
   }

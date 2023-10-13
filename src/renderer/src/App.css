@@ -7,7 +7,7 @@
   }
 }
 
-.ant-popover-content{
+.ant-popover-content, .ant-modal-content{
   .ant-btn-primary {
     background-color: #0284c7;
   }

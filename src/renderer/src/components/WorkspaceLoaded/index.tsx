@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { emitter, events } from '../../store/eventemitter';
 import { workspaceLoadedAtom } from '../../store/jotai';
 import { useAtom } from 'jotai';

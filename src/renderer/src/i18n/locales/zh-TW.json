@@ -1,0 +1,106 @@
+{
+  "menu": {
+    "customFont": "自定義字體",
+    "loadCustomFont": "加載自定義字體",
+    "downloadApp": "下載桌面應用開啟自定義字體功能"
+  },
+  "customFontModal": {
+    "title": "自定義字體",
+    "fontFile": "字體文件",
+    "fontName": "字體名稱",
+    "load": "加載文件"
+  },
+  "message": {
+    "createFolderFirst": "請先創建文件夾"
+  },
+  "operation": {
+    "addFolder": "新建文件夾",
+    "addNote": "新建筆記",
+    "addBoard": "新建 Excalidraw 白板",
+    "rename": "重命名",
+    "delete": "刪除",
+    "copyRevezoneLink": "復制 Revezone 鏈接",
+    "giveAStar": "給個 Github Star 吧",
+    "switchLanguage": "切換語言",
+    "systemSetting": "繫統設置",
+    "storagePath": "本地存儲路徑",
+    "addMindmap": "新建腦圖",
+    "addTldraw": "新建 Tldraw 白板",
+    "importFiles": "導入文件",
+    "import": "導入文件",
+    "openDirectory": "打開所在資料夾"
+  },
+  "description": {
+    "noteDesc": "類 Notion 筆記",
+    "boardDesc": "基於 Excalidraw 的白闆",
+    "addBoardDesc": "點我，創建一個 Excalidraw 白闆吧",
+    "giveAStarDesc": "動動小手給個 Github Star 吧",
+    "systemSettingDesc": "快來自定義 Excalidraw 白板中的字體吧",
+    "addTldrawDesc": "Revezone 支持 Tldraw 白板了，快快體驗吧"
+  },
+  "welcome": {
+    "productDesc": "一個輕量級本地優先以圖形為中心的思維管理工具。",
+    "operationTip": "這是一個空白頁，請先在左側邊欄新建或選擇某個文件",
+    "operationGuide": "操作說明",
+    "operationDetailDesc": "點擊左側邊欄的操作圖標來創建一個白闆、筆記、文件夾",
+    "onlineTry": "此為線上體驗版，只包含基礎功能。",
+    "downloadApp": "下載桌面應用體驗全量功能。"
+  },
+  "links": {
+    "title": "鏈接",
+    "website": "官網",
+    "github": "官方 Github (給個 Star 吧)",
+    "twitter": "官方 Twitter",
+    "authorTwitter": "關註作者",
+    "authorBilibili": "官方 B 站（獲取最新產品動態）",
+    "buyMeACoffee": "買杯咖啡",
+    "feedMyCat": "投餵貓糧",
+    "downloadApp": "下載桌面應用"
+  },
+  "text": {
+    "untitled": "請輸入標題",
+    "defaultFolder": "默認文件夾",
+    "alpha": "公測版",
+    "welcomePage": "歡迎頁"
+  },
+  "storage": {
+    "cloud": "雲存儲(敬請期待)",
+    "local": "本地存儲"
+  },
+  "help": {
+    "issue": "提交問題",
+    "contactTheAuthor": "聯繫作者"
+  },
+  "publicBeta": {
+    "title": "公測公告",
+    "description": "Revezone 目前處於公測階段，產品可能還有少量 bug，重要數據請做好備份。如果妳有任何問題或建議，歡迎提交 github issue 或者掃碼添加微信反饋。"
+  },
+  "customFont": {
+    "customFont": "自定義字體",
+    "fontsLoaded": "已加載字體",
+    "loadFontFile": "加載字體文件",
+    "enableCustomFontInBoard": "開啟白闆中的自定義字體",
+    "deleteFont": "刪除字體",
+    "confirmDelete": "確定刪除字體",
+    "onlineVersionTip": "自定義字體僅在桌面應用中支持，請下載桌面應用",
+    "fontFirstLoadTip": "註意：初次加載字體後，需要重啟應用，字體才會在白闆內生效",
+    "emptyTip": "暫無自定義字體"
+  },
+  "confirm": {
+    "yes": "是",
+    "no": "否",
+    "confirmDelete": "確定刪除"
+  },
+  "language": {
+    "title": "請先選擇妳的語言!"
+  },
+  "storagePath": {
+    "changePath": "更改存儲路徑",
+    "openPath": "打開存儲路徑",
+    "changePathConfirm": "確定修改用戶文件存儲路徑嗎？",
+    "storagePathNotice": "本地存儲路徑自定義功能僅在 Revezone 桌面應用端支持"
+  },
+  "userGuideModel": {
+    "title": "請完成你的初始設置"
+  }
+}

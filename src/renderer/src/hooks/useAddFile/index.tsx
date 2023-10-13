@@ -1,48 +1,47 @@
 import { useCallback } from 'react';
-import { FileTree, RevezoneFileType, OnFolderOrFileAddProps } from '@renderer/types/file';
-import { fileTreeAtom, currentFileAtom } from '@renderer/store/jotai';
-import { useAtom } from 'jotai';
-import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
-import { useTranslation } from 'react-i18next';
-import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
-import { blocksuiteStorage } from '@renderer/store/blocksuite';
+import useFileTree from '@renderer/hooks/useFileTree';
+import useCurrentFile from '../useCurrentFile';
+import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
+import useOpenKeys from '../useOpenKeys';
+import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
+import { dbclickMenuTreeItemAfterCreate } from '@renderer/utils/dom';
+import useTabJsonModel from '../useTabJsonModel';
+import { Model } from 'flexlayout-react';
+import { RevezoneFile, RevezoneFileType } from '@renderer/types/file';
 
-interface Props {
-  onAdd?: ({ fileId, folderId, type }: OnFolderOrFileAddProps) => void;
-}
-
-const DEFAULT_BORAD_DATA = '{}';
-
-export default function useAddFile({ onAdd }: Props) {
-  const [, setCurrentFile] = useAtom(currentFileAtom);
-  const [, setFileTree] = useAtom(fileTreeAtom);
-  const { t } = useTranslation();
+export default function useAddFile() {
+  const { getFileTree } = useFileTree();
+  const { updateCurrentFile } = useCurrentFile();
+  const { addOpenKeys } = useOpenKeys();
+  const { updateTabJsonModelWhenCurrentFileChanged } = useTabJsonModel();
 
   const addFile = useCallback(
-    async (folderId: string | undefined, type: RevezoneFileType, fileTree: FileTree) => {
-      let _folderId = folderId || fileTree?.[0]?.id;
+    async (
+      name: string,
+      type: RevezoneFileType,
+      tabModel: Model | undefined,
+      parentId?: string,
+      fileData?: string
+    ): Promise<RevezoneFile | undefined> => {
+      if (!tabModel) return;
 
-      if (!_folderId) {
-        _folderId = (await menuIndexeddbStorage.addFolder(t('text.defaultFolder')))?.id;
-      }
+      const file = await fileTreeIndexeddbStorage.addFile(name, type, parentId, fileData);
 
-      const file = await menuIndexeddbStorage.addFile(_folderId, type);
+      parentId && addOpenKeys([parentId]);
+      setRenamingMenuItemIdToLocal(file.id);
 
-      if (type === 'board') {
-        await boardIndexeddbStorage.addBoard(file.id, DEFAULT_BORAD_DATA);
-      } else if (type === 'note') {
-        await blocksuiteStorage.addPage(file.id);
-      }
+      getFileTree();
 
-      const tree = await menuIndexeddbStorage.getFileTree();
-      setFileTree(tree);
+      dbclickMenuTreeItemAfterCreate();
 
-      setCurrentFile(file);
+      updateCurrentFile(file);
 
-      onAdd?.({ fileId: file.id, folderId: _folderId, type: 'file' });
+      updateTabJsonModelWhenCurrentFileChanged(file, tabModel);
+
+      return file;
     },
     []
   );
 
-  return [addFile];
+  return { addFile };
 }

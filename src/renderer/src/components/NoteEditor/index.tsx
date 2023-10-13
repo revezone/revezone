@@ -1,29 +1,25 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import '@blocksuite/editor';
-import '@blocksuite/editor/themes/affine.css';
+import { useEffect, useRef } from 'react';
+import '@revesuite/editor';
+import '@revesuite/editor/themes/affine.css';
 import RevezoneBlockSuiteEditor from '../RevezoneBlockSuiteEditor';
-import { Input } from 'antd';
-import { menuIndexeddbStorage } from '@renderer/store/menuIndexeddb';
 import { RevezoneFile } from '@renderer/types/file';
+import useDoubleLink from '@renderer/hooks/useDoubleLink';
 
 import './index.css';
-import useFileTree from '@renderer/hooks/useFileTree';
-import { useTranslation } from 'react-i18next';
 
 interface Props {
   file: RevezoneFile;
 }
 
 function NoteEditor({ file }: Props): JSX.Element | null {
+  const { onLinkOpen, tabModel, fileTree } = useDoubleLink(false);
+  const editorDomRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<RevezoneBlockSuiteEditor>();
+  const editorMountRef = useRef(false);
+
   if (!file) {
     return null;
   }
-
-  const editorRef = useRef<HTMLDivElement>(null);
-  const editorMountRef = useRef(false);
-  const [title, setTitle] = useState(file.name);
-  const { getFileTree } = useFileTree();
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (!file || editorMountRef.current) {
@@ -32,70 +28,34 @@ function NoteEditor({ file }: Props): JSX.Element | null {
 
     editorMountRef.current = true;
 
-    let editor;
+    // let editor: RevezoneBlockSuiteEditor | undefined;
 
-    if (editorRef.current) {
-      editor = new RevezoneBlockSuiteEditor({
-        pageId: file.id
+    if (editorDomRef.current) {
+      editorRef.current = new RevezoneBlockSuiteEditor({
+        pageId: file.id,
+        onLinkOpen
       });
 
-      editorRef.current.innerHTML = '';
+      editorDomRef.current.innerHTML = '';
 
-      editorRef.current?.appendChild(editor);
+      editorDomRef.current?.appendChild(editorRef.current);
 
       // @ts-ignore TEST
       window.editor = editor;
     }
 
     return () => {
-      editorRef.current?.removeChild(editor);
+      editorRef.current && editorDomRef.current?.removeChild(editorRef.current);
+      editorRef.current = undefined;
+      editorMountRef.current = false;
     };
-  }, [file.id]);
-
-  useEffect(() => {
-    setTitle(file.name);
-  }, [file.name]);
+  }, [file.id, tabModel, fileTree, onLinkOpen]);
 
   useEffect(() => {
     editorMountRef.current = false;
   }, [file.id]);
 
-  const onPageTitleChange = useCallback(
-    (e) => {
-      const newTitle = e.target.value;
-      setTitle(newTitle);
-      menuIndexeddbStorage.updateFileName(file, newTitle);
-      getFileTree();
-    },
-    [file.id]
-  );
-
-  const onPressEnter = useCallback(() => {
-    const richText = document
-      .querySelector('.affine-frame-block-container')
-      ?.querySelector('.affine-rich-text');
-
-    // @ts-ignore
-    richText?.focus();
-  }, []);
-
-  return (
-    <div className="blocksuite-editor-container">
-      <div className="note-editor-title border-slate-100 border-b">
-        <Input.TextArea
-          className="text-3xl font-bold px-6"
-          bordered={false}
-          value={title}
-          autoSize={{ minRows: 1, maxRows: 6 }}
-          style={{ whiteSpace: 'pre-wrap' }}
-          placeholder={t('text.untitled')}
-          onChange={onPageTitleChange}
-          onPressEnter={onPressEnter}
-        ></Input.TextArea>
-      </div>
-      <div className="blocksuite-editor-content" ref={editorRef}></div>
-    </div>
-  );
+  return <div className="blocksuite-editor-container" ref={editorDomRef}></div>;
 }
 
 export default NoteEditor;

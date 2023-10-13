@@ -1,0 +1,16 @@
+.revezone-menu-container {
+  position: relative;
+  height: calc(100% - 4rem);
+  margin-top: 1rem;
+
+  .os-is-macos.is-in-revezone-native-app & {
+    margin-top: 0;
+  }
+
+  .menu-list {
+    overflow-y: scroll;
+    height: 100%;
+    padding-bottom: 2rem;
+  }
+ 
+}

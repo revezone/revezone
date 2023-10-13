@@ -1,3 +1,5 @@
+import { getRenamingMenuItemIdFromLocal } from '@renderer/store/localstorage';
+
 export const getPageTitleDom = (): HTMLElement | null | undefined => {
   return document
     .querySelector('.affine-default-page-block-title ')
@@ -5,22 +7,22 @@ export const getPageTitleDom = (): HTMLElement | null | undefined => {
 };
 
 /**
- * the hack method to update blocksuite editor title dom
- * fix the problem that not rerender after rename page block's title prop
- * @param title string
+ * HACK: show renaming status when menu tree item first created
  */
-export const hackUpdateTitleDom = (title) => {
+export const dbclickMenuTreeItemAfterCreate = () => {
   setTimeout(() => {
-    const titleDom = getPageTitleDom();
+    const element = document.querySelector(
+      `.menu-tree-item-child.${getRenamingMenuItemIdFromLocal()}`
+    );
 
-    if (titleDom) {
-      titleDom.innerHTML = title;
-    }
-  }, 0);
-};
+    const event = new MouseEvent('dblclick', {
+      bubbles: true,
+      cancelable: true,
+      view: window
+    });
 
-export const getPageTitleFromDom = (): string => {
-  const titleDom = getPageTitleDom();
+    element?.dispatchEvent(event);
 
-  return titleDom?.innerHTML || '';
+    console.debug('--- dbclick ---', element);
+  }, 100);
 };

@@ -3,6 +3,7 @@
   "include": [
     "src/renderer/src/env.d.ts",
     "src/renderer/src/**/*",
+    "src/renderer/src/**/*.json",
     "src/renderer/src/**/*.tsx",
     "src/preload/*.d.ts"
   ],
@@ -16,6 +17,7 @@
       ]
     },
     "noUnusedLocals": false,
-    "noUnusedParameters": false 
+    "noUnusedParameters": false,
+    "noImplicitAny": false,
   }
 }

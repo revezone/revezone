@@ -12,14 +12,14 @@ export default function DownloadApp({ className = '', from }: Props) {
 
   return (
     <a
-      className={`mr-2 flex items-center ${className}`}
+      className={`reve-text-link`}
       href="https://github.com/revezone/revezone/releases"
       target="_blank"
       rel="noreferrer"
       title={t('welcome.downloadApp')}
     >
       <DownloadCloud
-        className={`w-4 h-4 ${!isInRevezoneApp ? 'animate-bounce' : null}`}
+        className={`w-4 h-4 ${!isInRevezoneApp ? 'animate-bounce' : null} ${className}`}
       ></DownloadCloud>
     </a>
   );

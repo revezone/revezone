@@ -12,35 +12,38 @@ import { isInRevezoneApp } from '@renderer/utils/navigator';
 import DownloadApp from '../DownloadApp/index';
 import { Font } from '@renderer/types/file';
 import { XSquare } from 'lucide-react';
+import { emitter } from '@renderer/store/eventemitter';
 
 const registeredFontsStr = window.electron?.process.env.registeredFonts;
-const registeredFonts = registeredFontsStr && JSON.parse(registeredFontsStr);
+const registeredFonts: Font[] | undefined = registeredFontsStr && JSON.parse(registeredFontsStr);
 
-const CustomFonts = () => {
+interface Props {
+  setSystemSettingVisible: (visible: boolean) => void;
+}
+
+const CustomFonts = ({ setSystemSettingVisible }: Props) => {
   const { t } = useTranslation();
   const update = useUpdate();
 
-  const [fonts, setFonts] = useState<Font[]>(registeredFonts);
+  const [fonts, setFonts] = useState<Font[] | undefined>(registeredFonts);
   const [boardCustomFontSwitch, setBoardCustomFontSwitch] = useState(
     getBoardCustomFontSwitchFromLocal() === 'true'
   );
   const [boardCustomFont, setBoardCustomFont] = useState(getBoardCustomFontFromLocal());
-
-  console.log('--- registeredFonts ---', registeredFonts);
 
   const loadCustomFonts = useCallback(() => {
     window.api && window.api.loadCustomFonts();
   }, []);
 
   useEffect(() => {
-    setBoardCustomFontSwitchToLocal(boardCustomFontSwitch);
+    setBoardCustomFontSwitchToLocal(String(boardCustomFontSwitch));
   }, [boardCustomFontSwitch]);
 
   useEffect(() => {
-    setBoardCustomFontToLocal(boardCustomFont);
+    boardCustomFont && setBoardCustomFontToLocal(boardCustomFont);
   }, [boardCustomFont]);
 
-  const customFontsChanged = useCallback(async (event, newFonts) => {
+  const customFontsChanged = useCallback(async (event: Event, newFonts: Font[]) => {
     setFonts(newFonts);
 
     // clear board custom font if font was removed
@@ -55,14 +58,11 @@ const CustomFonts = () => {
 
   useEffect(() => {
     window.api && window.api.onLoadCustomFontSuccess(customFontsChanged);
-  }, []);
-
-  useEffect(() => {
     window.api && window.api.onRemoveCustomFontSuccess(customFontsChanged);
   }, []);
 
   const removeCustomFont = (fontPath: string) => {
-    window.api.removeCustomFont(fontPath);
+    window.api?.removeCustomFont(fontPath);
   };
 
   if (!isInRevezoneApp) {
@@ -128,13 +128,21 @@ const CustomFonts = () => {
             ></Switch>
           </p>
           {boardCustomFontSwitch ? (
-            <p className="mb-2">
+            <div className="mb-2">
               <Select
                 className="w-80"
                 value={boardCustomFont}
-                onChange={(value) => setBoardCustomFont(value)}
+                onChange={(value) => {
+                  setBoardCustomFont(value);
+
+                  setSystemSettingVisible(false);
+
+                  window.api?.switchFontfamily(value);
+
+                  emitter.emit('switch_font_family');
+                }}
               >
-                {fonts.map((font) => {
+                {fonts?.map((font) => {
                   return (
                     <Select.Option key={font.name} value={font.name}>
                       {font.name}
@@ -142,7 +150,7 @@ const CustomFonts = () => {
                   );
                 })}
               </Select>
-            </p>
+            </div>
           ) : null}
           <p className="mt-2 text-orange-300">{t('customFont.fontFirstLoadTip')}</p>
         </div>

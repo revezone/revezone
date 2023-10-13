@@ -28,12 +28,11 @@ export default function EditableText({
   const inputRef = useRef<InputRef>(null);
 
   const _onChange = useCallback((e) => {
-    setValue(e.target.value);
+    setValue(e.target?.value);
   }, []);
 
   const _onSave = useCallback(
     (e) => {
-      console.log('_onSave', e);
       e.stopPropagation();
       e.preventDefault();
       onSave(value);
@@ -53,7 +52,6 @@ export default function EditableText({
     if (isPreview) return;
 
     setTimeout(() => {
-      console.log('_onEdit', inputRef);
       inputRef.current?.focus();
       // scroll the focused input element into view
       document.querySelector('.revezone-menu-container')?.scrollIntoView();

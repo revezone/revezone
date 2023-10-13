@@ -11,5 +11,17 @@
   "i18n-ally.localesPaths": [
     "src/renderer/src/i18n",
     "src/renderer/src/i18n/locales"
+<<<<<<< HEAD
   ]
+=======
+  ],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.enabledParsers": [
+    "ts",
+    "json"
+  ],
+  "i18n-ally.sourceLanguage": "zh-CN",
+  "i18n-ally.displayLanguage": "zh-CN",
+  "i18n-ally.editor.preferEditor": true,
+>>>>>>> origin/master
 }
