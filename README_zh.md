@@ -24,12 +24,6 @@ Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果�
 ## 反馈问题
 Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果你有任何问题或者建议，欢迎提交 [issue](https://github.com/revezone/revezone/issues/new) 进行反馈。
 
-## 参与公测
-目前 Revezone 已正式开放公测。如果大家在产品使用过程中有任何问题或者产品上的想法，欢迎参与公测反馈问题或建议，您的建议将直接影响未来产品迭代的方向和节奏。让我们一起打造一个用起来爽的思维管理工具。
-
-参与公测方式：扫码添加微信邀请进入公测群
-![](https://img.alicdn.com/imgextra/i4/O1CN01rXBaQt1bGC8tJAAit_!!6000000003437-0-tps-1074-885.jpg_300x300)
-
 ## 产品特性
 * Excalidraw 白板: 基于 Excalidraw 的无限画布白板
 * Tldraw 白板：基于 Tldraw 的无限画布白板
