@@ -1,7 +1,16 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { RevezoneFileTree } from '../types/file';
 import { sendFileDataChangeToMainDebounceFn } from '../utils/file';
-import { ExcalidrawDataSource } from 'revemate/es/Revedraw/types';
+
+// Excalidraw data shape: elements + appState + files
+export interface ExcalidrawDataSource {
+  type?: string;
+  version?: number;
+  source?: string;
+  elements?: unknown[];
+  appState?: Record<string, unknown>;
+  files?: Record<string, unknown>;
+}
 
 export interface RevezoneBoardDBSchema extends DBSchema {
   board: {

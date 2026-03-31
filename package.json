@@ -18,14 +18,16 @@
     "postinstall": "electron-builder install-app-deps",
     "build:win": "electron-vite build && electron-builder --win --x64 --config",
     "build:mac": "electron-vite build && electron-builder --mac --config",
-    "build:linux": "electron-vite build && electron-builder --linux --config"
+    "build:linux": "electron-vite build && electron-builder --linux --config",
+    "build:web": "vite build --config vite.web.config.ts",
+    "preview:web": "vite preview --config vite.web.config.ts --base /revezone/"
   },
   "dependencies": {
+    "@excalidraw/excalidraw": "^0.18.0",
     "@revesuite/blocks": "0.6.1-alpha.8",
     "@revesuite/editor": "0.6.1-alpha.8",
     "@revesuite/lit": "0.6.1-alpha.8",
     "@revesuite/store": "0.6.1-alpha.8",
-    "@tldraw/tldraw": "2.0.0-canary.84788cded670",
     "@toeverything/y-indexeddb": "0.7.0-canary.44",
     "ahooks": "^3.7.8",
     "antd": "^5.6.4",
@@ -44,7 +46,7 @@
     "react-complex-tree": "^2.2.2",
     "react-i18next": "^13.0.2",
     "react-resizable-panels": "^0.0.55",
-    "revemate": "0.0.1-beta.28",
+    "tldraw": "^4.5.4",
     "turndown": "^7.1.2",
     "uuid": "^9.0.0",
     "y-indexeddb": "^9.0.11",

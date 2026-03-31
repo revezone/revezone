@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 import { getFileIdOrNameFromLink } from '@renderer/utils/file';
-import { NonDeletedExcalidrawElement } from 'revemate/es/Revedraw/types';
+import type { NonDeletedExcalidrawElement } from '@excalidraw/excalidraw/element/types';
 import { fileTreeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { RevezoneFile } from '@renderer/types/file';

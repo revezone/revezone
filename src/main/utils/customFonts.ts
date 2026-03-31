@@ -143,18 +143,25 @@ export const getFontNamesWithSuffixFromIO = () => {
 export const getActiveFonts = () => {
   ensureDir(CUSTOM_FONTS_DIR);
 
-  const manifestStr = fs.readFileSync(join(CUSTOM_FONTS_DIR, 'manifest.json'))?.toString();
+  const manifestPath = join(CUSTOM_FONTS_DIR, 'manifest.json');
 
-  const manifest: Manifest = manifestStr && JSON.parse(manifestStr);
-
-  let fontNamesWithSuffix;
-  if (manifest) {
-    fontNamesWithSuffix = manifest.activeFonts.split(',');
-  } else {
-    fontNamesWithSuffix = getFontNamesWithSuffixFromIO();
+  // If manifest.json doesn't exist yet, fall back to scanning the directory
+  if (!fs.existsSync(manifestPath)) {
+    return serializeFonts(getFontNamesWithSuffixFromIO());
   }
 
-  return serializeFonts(fontNamesWithSuffix);
+  try {
+    const manifestStr = fs.readFileSync(manifestPath, 'utf-8');
+    const manifest: Manifest = manifestStr && JSON.parse(manifestStr);
+
+    if (manifest?.activeFonts) {
+      return serializeFonts(manifest.activeFonts.split(',').filter(Boolean));
+    }
+  } catch (err) {
+    console.error('[customFonts] Failed to read manifest.json, falling back to directory scan:', err);
+  }
+
+  return serializeFonts(getFontNamesWithSuffixFromIO());
 };
 
 export const getRegisteredFonts = () => {
@@ -193,6 +200,7 @@ export const switchFontfamily = (mainWindow: BrowserWindow, fontName: string) =>
 };
 
 export const updateManifest = async (manifest: string) => {
+  ensureDir(CUSTOM_FONTS_DIR);
   const fontPath = join(CUSTOM_FONTS_DIR, 'manifest.json');
   await writeFile(fontPath, manifest);
 };

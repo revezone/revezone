@@ -1,9 +1,10 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { RevezoneFileTree } from '../types/file';
 import { sendFileDataChangeToMainDebounceFn } from '../utils/file';
-import type { StoreSnapshot, TLRecord } from '@tldraw/tldraw';
+import type { TLEditorSnapshot, TLStoreSnapshot } from 'tldraw';
 
-export type TLDrawData = StoreSnapshot<TLRecord> & { instanceState?: any };
+// Supports both new TLEditorSnapshot format and legacy TLStoreSnapshot format
+export type TLDrawData = TLEditorSnapshot | (TLStoreSnapshot & { instanceState?: any });
 
 export interface RevezoneTldrawDBSchema extends DBSchema {
   tldraw: {
@@ -16,16 +17,8 @@ export const INDEXEDDB_TLDRAW_FILE_KEY = 'tldraw';
 export const INDEXEDDB_REVEZONE_TLDRAW = 'revezone_tldraw';
 
 const TLDRAW_INITIAL_DATA: TLDrawData = {
-  store: {},
-  schema: {
-    schemaVersion: 1,
-    storeVersion: 4,
-    recordVersions: {}
-  },
-  instanceState: {
-    isDebugMode: false
-  }
-};
+  document: { store: {}, schema: { schemaVersion: 2, sequences: {} } }
+} as TLEditorSnapshot;
 
 class TldrawIndexeddbStorage {
   constructor() {

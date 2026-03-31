@@ -1,55 +1,63 @@
 import { useState, useEffect, useLayoutEffect, useCallback } from 'react';
 import { RevezoneFile, RevezoneFileTree } from '@renderer/types/file';
-import { Tldraw, Editor, createTLStore, defaultShapeUtils } from '@tldraw/tldraw';
-import { StoreSnapshot, TLRecord, TLInstanceId } from '@tldraw/tldraw';
+import { Tldraw, Editor, createTLStore, defaultShapeUtils, getSnapshot, loadSnapshot } from 'tldraw';
+import type { TLEditorSnapshot, TLStoreSnapshot } from 'tldraw';
 import { sendFileDataChangeToMainDebounceFn } from '@renderer/utils/file';
 import useFileTree from '@renderer/hooks/useFileTree';
 import { tldrawIndexeddbStorage } from '@renderer/store/tldrawIndexeddb';
 import { useDebounceFn } from 'ahooks';
 
-import '@tldraw/tldraw/tldraw.css';
+import 'tldraw/tldraw.css';
 
 import './index.css';
 
 interface Props {
   file: RevezoneFile;
-  snapshot?: StoreSnapshot<TLRecord>;
+  snapshot?: TLEditorSnapshot;
 }
 
-const INSTANCE_STATE_KEY = 'instance:instance' as TLInstanceId;
+/** Detect if stored data is old-format TLStoreSnapshot (pre-v4) */
+function isLegacySnapshot(data: unknown): data is TLStoreSnapshot {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'store' in data &&
+    !('document' in data)
+  );
+}
 
 export default function ReveTldraw(props: Props) {
   const { file } = props;
   const [editor, setEditor] = useState<Editor>();
   const { fileTree } = useFileTree();
-  const [instanceState, setInstanceState] = useState();
 
-  const [store] = useState(() => createTLStore({ shapeUtils: defaultShapeUtils }));
+  const [store] = useState(() => createTLStore({ shapeUtils: [...defaultShapeUtils] }));
 
-  const getData = async () => {
+  const loadData = async () => {
     const data = await tldrawIndexeddbStorage.getTldraw(file.id);
-
     if (!data) return;
 
-    setInstanceState(data.instanceState);
-
-    store.loadSnapshot(data);
+    try {
+      if (isLegacySnapshot(data)) {
+        // Old format: TLStoreSnapshot — load via standalone loadSnapshot()
+        loadSnapshot(store, data);
+      } else {
+        // New format: TLEditorSnapshot
+        loadSnapshot(store, data as TLEditorSnapshot);
+      }
+    } catch (err) {
+      console.warn('[ReveTldraw] Failed to load snapshot, starting fresh:', err);
+    }
   };
 
   const onChangeFn = useCallback((editor: Editor, fileTree: RevezoneFileTree) => {
     if (!editor) return;
 
-    const snapshot = editor.store.getSnapshot();
+    const snapshot: TLEditorSnapshot = getSnapshot(editor.store);
 
-    const instanceState = editor.store.get(INSTANCE_STATE_KEY);
+    tldrawIndexeddbStorage.updateTldraw(file.id, snapshot, fileTree);
 
-    console.log('--- onChangeFn instanceState ---', instanceState);
-
-    tldrawIndexeddbStorage.updateTldraw(file.id, { ...snapshot, instanceState }, fileTree);
-
-    const snapshotStr = JSON.stringify(snapshot);
-
-    sendFileDataChangeToMainDebounceFn(file.id, snapshotStr, fileTree);
+    sendFileDataChangeToMainDebounceFn(file.id, JSON.stringify(snapshot), fileTree);
   }, []);
 
   const { run: onChangeDebounceFn } = useDebounceFn(onChangeFn, {
@@ -57,16 +65,11 @@ export default function ReveTldraw(props: Props) {
   });
 
   useLayoutEffect(() => {
-    getData();
+    loadData();
   }, [store]);
 
   useEffect(() => {
-    if (!(editor && instanceState)) return;
-    editor.updateInstanceState(instanceState);
-  }, [editor, instanceState]);
-
-  useEffect(() => {
-    editor?.store?.listen((entry) => {
+    editor?.store?.listen(() => {
       onChangeDebounceFn(editor, fileTree);
     });
   }, [editor, fileTree]);

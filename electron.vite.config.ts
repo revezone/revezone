@@ -1,10 +1,5 @@
 import { resolve } from 'path';
-import {
-  defineConfig,
-  externalizeDepsPlugin,
-  bytecodePlugin,
-  splitVendorChunkPlugin
-} from 'electron-vite';
+import { defineConfig, externalizeDepsPlugin, bytecodePlugin } from 'electron-vite';
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
 
@@ -28,7 +23,6 @@ export default defineConfig({
       }
     },
     plugins: [
-      splitVendorChunkPlugin(),
       react(),
       visualizer({
         emitFile: true,
@@ -48,8 +42,8 @@ export default defineConfig({
               '@revesuite/lit',
               '@revesuite/store'
             ],
-            revemate: ['revemate'],
-            tldraw: ['@tldraw/tldraw']
+            excalidraw: ['@excalidraw/excalidraw'],
+            tldraw: ['tldraw']
           }
         }
       }

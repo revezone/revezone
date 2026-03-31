@@ -1,15 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { RevezoneFile } from '@renderer/types/file';
-import { Revedraw } from 'revemate';
-import { ExcalidrawDataSource, ExcalidrawImperativeAPI } from 'revemate/es/Revedraw/types';
-import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
+import { Excalidraw } from '@excalidraw/excalidraw';
+import type { ExcalidrawImperativeAPI, AppState, BinaryFiles } from '@excalidraw/excalidraw/types';
+import type { OrderedExcalidrawElement } from '@excalidraw/excalidraw/element/types';
+import { boardIndexeddbStorage, ExcalidrawDataSource } from '@renderer/store/boardIndexeddb';
 import { useDebounceFn } from 'ahooks';
 import { langCodeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
-import { getOSName } from '@renderer/utils/navigator';
 import { emitter } from '@renderer/store/eventemitter';
 import useDoubleLink from '@renderer/hooks/useDoubleLink';
 
+import '@excalidraw/excalidraw/index.css';
 import './index.css';
 import useFileTree from '@renderer/hooks/useFileTree';
 
@@ -17,83 +18,73 @@ interface Props {
   file: RevezoneFile;
 }
 
-const OS_NAME = getOSName();
-
-let firsRender = true;
-
 export default function RevedrawApp({ file }: Props) {
-  const [dataSource, setDataSource] = useState<string>();
-  const [, setRef] = useState<ExcalidrawImperativeAPI>();
+  const [initialData, setInitialData] = useState<ExcalidrawDataSource | null>(null);
+  const excalidrawAPIRef = useRef<ExcalidrawImperativeAPI | null>(null);
   const [systemLangCode] = useAtom(langCodeAtom);
-  const [didRender, setDidRender] = useState(true);
   const { onLinkOpen } = useDoubleLink(true);
   const { fileTree } = useFileTree();
 
-  const clearDeletedElements = useCallback((data) => {
-    data.elements?.forEach((element) => {
-      if (element?.isDeleted) {
-        delete data.files?.[element.fileId];
+  const clearDeletedElements = useCallback((data: ExcalidrawDataSource): ExcalidrawDataSource => {
+    if (!data?.elements) return data;
+
+    const elements = (data.elements as Array<{ isDeleted?: boolean; fileId?: string }>);
+    const files = { ...(data.files || {}) } as Record<string, unknown>;
+
+    elements.forEach((element) => {
+      if (element?.isDeleted && element.fileId) {
+        delete files[element.fileId];
       }
     });
 
-    data.elements = data.elements?.filter((element) => !element.isDeleted);
-
-    return data;
+    return {
+      ...data,
+      elements: elements.filter((el) => !el.isDeleted),
+      files
+    };
   }, []);
 
-  const getDataSource = useCallback(async (id: string) => {
-    // reset data source for a new canvas file
-    setDataSource(undefined);
+  const loadData = useCallback(async (id: string) => {
+    setInitialData(null);
 
     let data = await boardIndexeddbStorage.getBoard(id);
+    if (!data) {
+      setInitialData({ elements: [] });
+      return;
+    }
 
     data = clearDeletedElements(data);
+    setInitialData(data);
+  }, [clearDeletedElements]);
 
-    const dataStr = !data || typeof data === 'string' ? data : JSON.stringify(data);
-
-    setDataSource(dataStr);
-  }, []);
-
-  // HACK: fix the custom font not working completely when first render
-  const rerender = useCallback(async () => {
-    const WAIT_TIME_WINDWOS = 500;
-    const WAIT_TIME_MACOS = 200;
-
-    const waitTime = OS_NAME === 'MacOS' ? WAIT_TIME_MACOS : WAIT_TIME_WINDWOS;
-
-    await getDataSource(file.id);
-
-    setTimeout(() => {
-      setDidRender(false);
-      setTimeout(() => {
-        setDidRender(true);
-      }, 100);
-    }, waitTime);
+  useEffect(() => {
+    loadData(file.id);
   }, [file.id]);
 
   useEffect(() => {
-    if (firsRender) {
-      firsRender = false;
-      rerender();
-    }
-  }, []);
-
-  useEffect(() => {
-    emitter.on('switch_font_family', () => {
-      rerender();
-    });
-  }, []);
+    const handler = () => loadData(file.id);
+    emitter.on('switch_font_family', handler);
+    return () => {
+      emitter.off('switch_font_family', handler);
+    };
+  }, [file.id, loadData]);
 
   const onChangeFn = useCallback(
-    async (data: ExcalidrawDataSource) => {
-      const _data = {
+    async (
+      elements: readonly OrderedExcalidrawElement[],
+      appState: AppState,
+      files: BinaryFiles
+    ) => {
+      const data: ExcalidrawDataSource = {
         type: 'excalidraw',
         version: 2,
-        source: window.location.href,
-        ...data
+        source: typeof window !== 'undefined' ? window.location.href : '',
+        elements: elements as unknown[],
+        appState: appState as Record<string, unknown>,
+        files: files as Record<string, unknown>
       };
 
-      await boardIndexeddbStorage.updateBoard(file.id, _data, fileTree);
+      await boardIndexeddbStorage.updateBoard(file.id, data, fileTree);
     },
     [file.id, fileTree]
   );
@@ -103,24 +94,27 @@ export default function RevedrawApp({ file }: Props) {
   });
 
   useEffect(() => {
-    getDataSource(file.id);
     return () => {
       cancelDebounceFn();
     };
   }, [file.id]);
 
-  return dataSource ? (
-    <>
-      {didRender ? (
-        <Revedraw
-          dataSource={dataSource}
-          canvasName={file.name}
-          getRef={(ref) => setRef(ref)}
-          systemLangCode={systemLangCode}
-          onChange={onChangeDebounceFn}
-          onLinkOpen={onLinkOpen}
-        />
-      ) : null}
-    </>
-  ) : null;
+  if (!initialData) return null;
+
+  return (
+    <div className="revedraw-container w-full h-full">
+      <Excalidraw
+        key={file.id}
+        initialData={initialData}
+        langCode={systemLangCode}
+        excalidrawAPI={(api) => {
+          excalidrawAPIRef.current = api;
+        }}
+        onChange={onChangeDebounceFn}
+        onLinkOpen={(element, event) => {
+          onLinkOpen(element, event as unknown as Event);
+        }}
+      />
+    </div>
+  );
 }
