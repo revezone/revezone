@@ -240,14 +240,6 @@ function createWindow(): BrowserWindow {
     mainWindow && customStoragePath(mainWindow);
   });
 
-  ipcMain.on(EVENTS.openStoragePath, async (event, storagePath: string) => {
-    openStoragePath(storagePath);
-  });
-
-  ipcMain.on(EVENTS.showItemInFolder, async (event, itemId: string, fileTree: RevezoneFileTree) => {
-    mainWindow && showItemInFolder(itemId, fileTree);
-  });
-
   ipcMain.on(
     EVENTS.dragAndDrop,
     async (
@@ -339,6 +331,14 @@ app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron');
   registerVersionHistory();
   registerNoteAssets(assertRendererSender);
+  ipcMain.handle(EVENTS.openStoragePath, (event) => {
+    assertRendererSender(event);
+    return openStoragePath();
+  });
+  ipcMain.handle(EVENTS.showItemInFolder, (event, itemId: string, fileTree: RevezoneFileTree) => {
+    assertRendererSender(event);
+    return showItemInFolder(itemId, fileTree);
+  });
   let searchPending = false;
   ipcMain.handle(COMMUNITY_SEARCH_CHANNEL, async (event, input: unknown) => {
     assertRendererSender(event);

@@ -11,7 +11,9 @@
     "load": "加載文件"
   },
   "message": {
-    "createFolderFirst": "請先創建文件夾"
+    "createFolderFirst": "請先創建文件夾",
+    "openedStorageFolder": "所在資料夾尚未儲存在本機，已開啟本機儲存目錄。",
+    "openFolderError": "無法開啟資料夾，請檢查本機儲存路徑。"
   },
   "operation": {
     "addFolder": "新建文件夾",

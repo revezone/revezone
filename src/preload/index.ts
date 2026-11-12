@@ -45,11 +45,9 @@ export const api = {
   customStoragePath: () => ipcRenderer.send(EVENTS.customStoragePath),
   customStoragePathSuccess: (cb: Callback<[string]>) =>
     subscribe(EVENTS.customStoragePathSuccess, cb),
-  openStoragePath: (storagePath?: string) => {
-    if (storagePath) ipcRenderer.send(EVENTS.openStoragePath, storagePath);
-  },
-  showItemInFolder: (itemId: string, fileTree: RevezoneFileTree) =>
-    ipcRenderer.send(EVENTS.showItemInFolder, itemId, fileTree),
+  openStoragePath: (): Promise<void> => ipcRenderer.invoke(EVENTS.openStoragePath),
+  showItemInFolder: (itemId: string, fileTree: RevezoneFileTree): Promise<boolean> =>
+    ipcRenderer.invoke(EVENTS.showItemInFolder, itemId, fileTree),
   addFile: (fileId: string, value: string, fileTree: RevezoneFileTree) =>
     ipcRenderer.send(EVENTS.addFile, fileId, value, fileTree),
   deleteFileOrFolder: (item: RevezoneFile | RevezoneFolder, fileTree: RevezoneFileTree) =>

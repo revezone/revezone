@@ -2,7 +2,7 @@ import { BrowserWindow, dialog, app, shell } from 'electron';
 import { join } from 'path';
 import { EVENTS } from '../../preload/events';
 import { ensureDir } from './io';
-import { writeFileSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { getFullPathInfo } from './localFilesStorage';
 import { RevezoneFileTree } from '@renderer/types/file';
 
@@ -29,14 +29,26 @@ export const customStoragePath = async (mainWindow: BrowserWindow) => {
   mainWindow.webContents.send(EVENTS.customStoragePathSuccess, destPath);
 };
 
-export const openStoragePath = async (path: string) => {
-  shell.showItemInFolder(path);
+export const openStoragePath = async (path = getUserFilesStoragePath()) => {
+  if (!statSync(path, { throwIfNoEntry: false })?.isDirectory()) {
+    throw new Error('The storage folder does not exist.');
+  }
+
+  const error = await shell.openPath(path);
+  if (error) throw new Error(error);
 };
 
 export const showItemInFolder = async (itemId: string, fileTree: RevezoneFileTree) => {
-  const { path } = getFullPathInfo(itemId, fileTree);
+  const { path, parentDirPath } = getFullPathInfo(itemId, fileTree);
 
-  shell.showItemInFolder(path);
+  if (existsSync(path)) {
+    shell.showItemInFolder(path);
+    return false;
+  }
+
+  const parentExists = statSync(parentDirPath, { throwIfNoEntry: false })?.isDirectory();
+  await openStoragePath(parentExists ? parentDirPath : getUserFilesStoragePath());
+  return !parentExists;
 };
 
 export const getUserFilesStoragePath = () => {

@@ -1,4 +1,4 @@
-import { Button, Popconfirm } from 'antd';
+import { Button, message, Popconfirm } from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isInRevezoneApp } from '@renderer/utils/navigator';
@@ -47,8 +47,12 @@ export default function StoragePathSetting() {
 
         <Button
           size="small"
-          onClick={() => {
-            window.api?.openStoragePath(storagePath);
+          onClick={async () => {
+            try {
+              await window.api.openStoragePath();
+            } catch {
+              message.error(t('message.openFolderError'));
+            }
           }}
         >
           {t('storagePath.openPath')}

@@ -14,7 +14,7 @@ import useAddFile from '../useAddFile';
 import useAddFolder from '../useAddFolder';
 import { setRenamingMenuItemIdToLocal } from '@renderer/store/localstorage';
 import { TreeItemRenderContext } from 'react-complex-tree';
-import { Modal } from 'antd';
+import { message, Modal } from 'antd';
 import type { ItemType } from 'antd/es/menu/hooks/useItems';
 import { Model } from 'flexlayout-react';
 import { TldrawIcon } from '@renderer/icons';
@@ -54,9 +54,14 @@ export default function useFileTreeContextMenu(props: Props) {
               key: 'open_directory',
               label: t('operation.openDirectory'),
               icon: <FolderOpen className="w-4" />,
-              onClick: ({ domEvent }: { domEvent: Event }) => {
+              onClick: async ({ domEvent }: { domEvent: Event }) => {
                 domEvent.stopPropagation();
-                window.api.showItemInFolder(item.id, fileTree);
+                try {
+                  const openedStorageFolder = await window.api.showItemInFolder(item.id, fileTree);
+                  if (openedStorageFolder) message.warning(t('message.openedStorageFolder'));
+                } catch {
+                  message.error(t('message.openFolderError'));
+                }
               }
             }
           ]
@@ -148,7 +153,7 @@ export default function useFileTreeContextMenu(props: Props) {
         ];
       }
     },
-    []
+    [addFile, addFolder, t]
   );
 
   const deleteItem = async (item, tabModel) => {

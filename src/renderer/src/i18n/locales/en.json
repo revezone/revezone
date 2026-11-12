@@ -11,7 +11,9 @@
     "load": "Load File"
   },
   "message": {
-    "createFolderFirst": "Please create a folder first"
+    "createFolderFirst": "Please create a folder first",
+    "openedStorageFolder": "The containing folder is not on disk yet. Opened the local storage folder.",
+    "openFolderError": "Could not open the folder. Check the local storage path."
   },
   "operation": {
     "addFolder": "Add a folder",

@@ -11,7 +11,9 @@
     "load": "加载文件"
   },
   "message": {
-    "createFolderFirst": "请先创建文件夹"
+    "createFolderFirst": "请先创建文件夹",
+    "openedStorageFolder": "所在文件夹尚未保存在本机，已打开本地存储目录。",
+    "openFolderError": "无法打开文件夹，请检查本地存储路径。"
   },
   "operation": {
     "addFolder": "新建文件夹",
