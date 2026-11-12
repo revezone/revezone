@@ -1,31 +1,36 @@
-import { useCallback, useEffect, MutableRefObject } from 'react';
+import { useCallback } from 'react';
 import { useAtom } from 'jotai';
 import { tabJsonModelAtom, tabModelAtom } from '@renderer/store/jotai';
 import { TabItem } from '@renderer/types/tabs';
-import { getTabJsonModelFromLocal, setTabJsonModelToLocal } from '@renderer/store/localstorage';
+import { setTabJsonModelToLocal } from '@renderer/store/localstorage';
 import useCurrentFile from '../useCurrentFile';
 import { RevezoneFile } from '@renderer/types/file';
 import {
-  IJsonModel,
   IJsonRowNode,
   IJsonTabSetNode,
   IJsonTabNode,
   DockLocation,
   Model,
-  Actions
+  Actions,
+  TabSetNode
 } from 'flexlayout-react';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { WELCOME_TAB_ITEM } from '@renderer/utils/constant';
+
+export function getActiveTabset(model: Model) {
+  let tabset = model.getActiveTabset();
+  if (!tabset) {
+    model.visitNodes((node) => {
+      if (!tabset && node instanceof TabSetNode) tabset = node;
+    });
+  }
+  return tabset;
+}
 
 export default function useTabJsonModel() {
   const [tabJsonModel, setTabJsonModel] = useAtom(tabJsonModelAtom);
   const [model] = useAtom(tabModelAtom);
   const { updateCurrentFile } = useCurrentFile();
-
-  useEffect(() => {
-    const tabJsonModelFromLocal = getTabJsonModelFromLocal();
-    setTabJsonModel(tabJsonModelFromLocal);
-  }, []);
 
   const getTabList = useCallback(
     (
@@ -45,36 +50,6 @@ export default function useTabJsonModel() {
     },
     []
   );
-
-  const getActiveTabset = useCallback((tabJsonModel: IJsonModel): IJsonTabSetNode => {
-    const layoutChildren = tabJsonModel.layout.children as IJsonTabSetNode[];
-
-    let activeTabset: IJsonTabSetNode = layoutChildren[0];
-
-    for (const child of layoutChildren) {
-      if (child.active) {
-        activeTabset = child;
-        break;
-      }
-    }
-
-    return activeTabset;
-  }, []);
-
-  const getSelectedTab = useCallback((tabJsonModel: IJsonModel) => {
-    const layoutChildren = tabJsonModel.layout.children as IJsonTabSetNode[];
-
-    let selectedTab: IJsonTabNode = layoutChildren[0].children[0];
-
-    for (const child of layoutChildren) {
-      if (child.active) {
-        selectedTab = child.children[child.selected || 0];
-        break;
-      }
-    }
-
-    return selectedTab;
-  }, []);
 
   const updateTabJsonModelWhenCurrentFileChanged = useCallback(
     (currentFile: RevezoneFile | undefined | null, tabModel: Model | undefined) => {
@@ -110,13 +85,10 @@ export default function useTabJsonModel() {
       config: currentFile
     };
 
-    const json = model.toJson();
+    const activeTabset = getActiveTabset(model);
+    if (!activeTabset) return;
 
-    const activeTabset = getActiveTabset(json);
-
-    model.doAction(
-      Actions.addNode(newTabItem, activeTabset.id || '', DockLocation.CENTER, 0, true)
-    );
+    model.doAction(Actions.addNode(newTabItem, activeTabset.getId(), DockLocation.CENTER, 0, true));
   }, []);
 
   const switchToWelcomePage = useCallback(() => {
@@ -144,10 +116,9 @@ export default function useTabJsonModel() {
     setTabJsonModel(newTabJsonModel);
     setTabJsonModelToLocal(JSON.stringify(newTabJsonModel));
 
-    const selectedTab = getSelectedTab(newTabJsonModel);
-
-    const currentFile = selectedTab?.id
-      ? await fileTreeIndexeddbStorage.getFile(selectedTab.id)
+    const selectedTab = getActiveTabset(model)?.getSelectedNode();
+    const currentFile = selectedTab
+      ? await fileTreeIndexeddbStorage.getFile(selectedTab.getId())
       : undefined;
 
     updateCurrentFile(currentFile);

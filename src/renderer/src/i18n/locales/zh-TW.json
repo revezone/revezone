@@ -28,7 +28,13 @@
     "addTldraw": "新建 Tldraw 白板",
     "importFiles": "導入文件",
     "import": "導入文件",
-    "openDirectory": "打開所在資料夾"
+    "openDirectory": "打開所在資料夾",
+    "hideFiles": "收合檔案側欄",
+    "showFiles": "展開檔案側欄",
+    "resizeFiles": "調整檔案側欄寬度",
+    "newBoardName": "新白板",
+    "newNoteName": "新筆記",
+    "fileActions": "檔案操作"
   },
   "description": {
     "noteDesc": "類 Notion 筆記",
@@ -44,7 +50,16 @@
     "operationGuide": "操作說明",
     "operationDetailDesc": "點擊左側邊欄的操作圖標來創建一個白闆、筆記、文件夾",
     "onlineTry": "此為線上體驗版，只包含基礎功能。",
-    "downloadApp": "下載桌面應用體驗全量功能。"
+    "downloadApp": "下載桌面應用體驗全量功能。",
+    "startCreating": "開始創作",
+    "storageMac": "白板和筆記都儲存在這台 Mac 上。",
+    "storageDesktop": "白板和筆記都儲存在這台電腦上。",
+    "storageBrowser": "白板和筆記都儲存在這個瀏覽器中。",
+    "newBoard": "新增白板",
+    "importBoard": "匯入白板",
+    "unsupportedBoard": "不支援此白板格式：{{name}}",
+    "importBoardError": "無法匯入 {{name}}。",
+    "createFileError": "無法建立檔案。"
   },
   "links": {
     "title": "鏈接",

@@ -1,7 +1,8 @@
 import { Modal, Radio, Tabs } from 'antd';
 import { useTranslation } from 'react-i18next';
 import CustomFonts from '../CustomFonts';
-import { osName } from '@renderer/utils/navigator';
+import LanguageSwitcher from '../LanguageSwitcher';
+import { isInRevezoneApp, osName } from '@renderer/utils/navigator';
 import StoragePathSetting from '@renderer/components/StoragePathSetting';
 import AgentModelSettings from './AgentModelSettings';
 import { getAgentModelStrings } from './agentModelStrings';
@@ -92,6 +93,11 @@ export default function SystemSettings({
             )
           },
           {
+            key: 'language',
+            label: t('operation.switchLanguage'),
+            children: <LanguageSwitcher />
+          },
+          {
             key: 'custom_fonts',
             label: t('menu.customFont'),
             children: <CustomFonts setSystemSettingVisible={setSystemSettingVisible}></CustomFonts>
@@ -113,7 +119,40 @@ export default function SystemSettings({
                   children: <AgentModelSettings active={visible && activeTab === 'agent'} />
                 }
               ]
-            : [])
+            : []),
+          {
+            key: 'links',
+            label: t('links.title'),
+            children: (
+              <ul className="space-y-2">
+                <li>
+                  <a href="https://revezone.com" target="_blank" rel="noreferrer">
+                    {t('links.website')}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/revezone/revezone/issues/new"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {t('help.issue')}
+                  </a>
+                </li>
+                {!isInRevezoneApp && (
+                  <li>
+                    <a
+                      href="https://github.com/revezone/revezone/releases"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {t('links.downloadApp')}
+                    </a>
+                  </li>
+                )}
+              </ul>
+            )
+          }
         ]}
       ></Tabs>
     </Modal>

@@ -2,8 +2,6 @@ import { DOUBLE_LINK_REGEX } from './constant';
 import { RevezoneFolder, RevezoneFile, RevezoneFileTree, RevezoneFileType } from '../types/file';
 
 const REVEZONE_LINK_PROTOCOL = 'revezone://';
-const FILE_NAME_REGEX = /^(.+)(\.[a-zA-Z0-9]+)$/;
-
 const fileSaveTimers = new Map<string, ReturnType<typeof setTimeout>>();
 
 export const getFileIdOrNameFromLink = (link: string) => {
@@ -31,11 +29,10 @@ export function getUniqueNameInSameTreeLevel(
 
   let maxRepeatIndex = 0;
 
-  const repeatIndexRegx = new RegExp(`^${item.name}\\(([0-9]+)\\)$`);
-
   if (isRepeated) {
     itemNamesInSameTreeLevel?.forEach((name) => {
-      const repeatIndex = name.match(repeatIndexRegx)?.[1];
+      if (!name.startsWith(item.name)) return;
+      const repeatIndex = name.slice(item.name.length).match(/^\(([0-9]+)\)$/)?.[1];
 
       if (repeatIndex) {
         maxRepeatIndex =

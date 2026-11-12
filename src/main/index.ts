@@ -133,7 +133,7 @@ function createWindow(): BrowserWindow {
     height: savedSize.height,
     show: false,
     frame: true,
-    trafficLightPosition: { x: 10, y: 10 },
+    trafficLightPosition: { x: 10, y: 14 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       nodeIntegration: false,

@@ -3,9 +3,12 @@ import type { KeyboardEvent, PointerEvent } from 'react';
 
 const WIDTH_KEY = 'revezone.aiSidebar.width';
 const DEFAULT_WIDTH = 360;
-const MIN_WIDTH = 280;
+const MIN_WIDTH = 224;
 const MAX_WIDTH = 760;
 const EDITOR_MIN_WIDTH = 360;
+const OVERLAY_BREAKPOINT = 640;
+// Excalidraw switches to its mobile tools below this editor width.
+const EDITOR_DESKTOP_WIDTH = 730;
 const KEYBOARD_STEP = 24;
 
 function savedWidth() {
@@ -15,7 +18,7 @@ function savedWidth() {
   } catch {
     // The panel can still be resized if local storage is unavailable.
   }
-  return DEFAULT_WIDTH;
+  return undefined;
 }
 
 type Drag = { pointerId: number; startX: number; startWidth: number };
@@ -26,7 +29,7 @@ export default function useSidebarWidth() {
   const [workspaceWidth, setWorkspaceWidth] = useState(0);
   const [preferredWidth, setPreferredWidth] = useState(savedWidth);
   const [dragWidth, setDragWidth] = useState<number>();
-  const overlay = workspaceWidth > 0 && workspaceWidth < EDITOR_MIN_WIDTH + MIN_WIDTH;
+  const overlay = workspaceWidth > 0 && workspaceWidth < OVERLAY_BREAKPOINT;
   const max = workspaceWidth
     ? Math.min(
         MAX_WIDTH,
@@ -35,7 +38,10 @@ export default function useSidebarWidth() {
     : MAX_WIDTH;
   const min = Math.min(MIN_WIDTH, max);
   const clampWidth = (value: number) => Math.round(Math.max(min, Math.min(value, max)));
-  const width = clampWidth(dragWidth ?? preferredWidth);
+  const defaultWidth = workspaceWidth
+    ? Math.min(workspaceWidth / 3, Math.max(MIN_WIDTH, workspaceWidth - EDITOR_DESKTOP_WIDTH))
+    : DEFAULT_WIDTH;
+  const width = clampWidth(dragWidth ?? preferredWidth ?? defaultWidth);
 
   useLayoutEffect(() => {
     const node = workspace.current;
@@ -47,11 +53,13 @@ export default function useSidebarWidth() {
     return () => observer.disconnect();
   }, []);
 
-  function save(value: number) {
-    const preference = Math.max(MIN_WIDTH, Math.min(value, MAX_WIDTH));
+  function save(value?: number) {
+    const preference =
+      value === undefined ? undefined : Math.max(MIN_WIDTH, Math.min(value, MAX_WIDTH));
     setPreferredWidth(preference);
     try {
-      localStorage.setItem(WIDTH_KEY, String(preference));
+      if (preference === undefined) localStorage.removeItem(WIDTH_KEY);
+      else localStorage.setItem(WIDTH_KEY, String(preference));
     } catch {
       // Keep the current size for this session.
     }
@@ -110,7 +118,7 @@ export default function useSidebarWidth() {
       },
       onPointerCancel: cancelDrag,
       onLostPointerCapture: cancelDrag,
-      onDoubleClick: () => save(DEFAULT_WIDTH),
+      onDoubleClick: () => save(),
       onKeyDown
     }
   };

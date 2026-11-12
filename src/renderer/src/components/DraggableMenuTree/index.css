@@ -12,7 +12,6 @@
     height: 100%;
     padding-bottom: 2rem;
   }
- 
 }
 
 .revezone-menu-container .rct-tree-item-button {
@@ -52,11 +51,17 @@
   color: var(--rz-app-muted);
 }
 
-:root[data-revezone-color='dark'] .revezone-menu-container .rct-tree-item-button .text-gray-500:hover {
+:root[data-revezone-color='dark']
+  .revezone-menu-container
+  .rct-tree-item-button
+  .text-gray-500:hover {
   color: var(--rz-app-accent);
 }
 
-:root[data-revezone-color='dark'] .revezone-menu-container .rct-tree-item-title-container-search-match .menu-tree-item-child {
+:root[data-revezone-color='dark']
+  .revezone-menu-container
+  .rct-tree-item-title-container-search-match
+  .menu-tree-item-child {
   color: var(--rz-app-accent);
 }
 
@@ -64,11 +69,163 @@
   filter: invert(85%);
 }
 
-:root[data-revezone-color='dark'] .revezone-menu-container :is(.rct-tree-search-input, .rct-tree-item-renaming-input)::placeholder {
+:root[data-revezone-color='dark']
+  .revezone-menu-container
+  :is(.rct-tree-search-input, .rct-tree-item-renaming-input)::placeholder {
   color: var(--rz-app-muted);
 }
 
-:root[data-revezone-color='dark'] .revezone-menu-container :is(.rct-tree-item-button, .rct-tree-search-input, .rct-tree-item-renaming-input):focus-visible {
+:root[data-revezone-color='dark']
+  .revezone-menu-container
+  :is(.rct-tree-item-button, .rct-tree-search-input, .rct-tree-item-renaming-input):focus-visible {
   outline: 2px solid var(--rz-app-focus);
   outline-offset: -2px;
+}
+
+.revezone-menu-container.rz-file-tree {
+  --rct-color-tree-bg: transparent;
+  --rct-color-tree-focus-outline: transparent;
+  --rct-color-arrow: var(--rz-app-muted);
+  --rct-color-drag-between-line-bg: var(--rz-app-accent);
+  --rct-focus-outline: var(--rz-app-focus);
+  --rct-item-height: 30px;
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  margin: 0;
+  color: var(--rz-app-text);
+}
+
+.rz-file-tree .menu-list {
+  overflow: auto;
+  padding: 3px 10px 12px;
+}
+
+.rz-file-tree .rct-tree-item-title-container {
+  gap: 4px;
+  border-radius: 7px;
+}
+
+.rz-file-tree .rct-tree-item-button {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent !important;
+  color: inherit !important;
+  font-size: 13px;
+}
+
+.rz-file-tree .rct-tree-item-title-container-selected .rct-tree-item-button::before {
+  content: none;
+}
+
+.rz-file-tree .rct-tree-item-title-container:hover {
+  background: var(--rz-app-hover) !important;
+}
+
+.rz-file-tree
+  :is(.rct-tree-item-title-container-selected, .rct-tree-item-title-container-dragging-over) {
+  background: var(--rz-app-selected) !important;
+  color: var(--rz-app-accent);
+}
+
+.rz-file-tree .rct-tree-item-arrow {
+  flex: none;
+  margin-right: 0;
+}
+
+.rz-file-tree .menu-tree-item-child,
+.rz-file-search-result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.rz-file-tree :is(.menu-tree-item-child, .rz-file-search-result) svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.65px;
+}
+
+.rz-file-tree :is(.rz-file-tree-name, .rz-file-search-result span) {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rz-file-tree .rct-tree-item-renaming-input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--rz-app-border);
+  border-radius: 4px;
+  padding: 2px 5px;
+  background: var(--rz-app-raised);
+  color: var(--rz-app-text);
+  font: inherit;
+}
+
+.rz-file-tree .rz-file-tree-actions {
+  display: grid;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  margin-right: 5px;
+  place-items: center;
+  border-radius: 5px;
+  color: var(--rz-app-muted);
+}
+
+.rz-file-tree .rz-file-tree-actions:hover {
+  background: var(--rz-app-hover);
+  color: var(--rz-app-accent);
+}
+
+.rz-file-tree .rz-file-tree-actions svg {
+  width: 15px;
+  height: 15px;
+}
+
+.rz-file-tree .rct-tree-item-title-container-selected .rz-file-tree-actions {
+  color: inherit;
+}
+
+.rz-file-tree
+  :is(.rct-tree-item-button, .rz-file-tree-actions, .rz-file-search-result):focus-visible {
+  outline: 2px solid var(--rz-app-focus);
+  outline-offset: -2px;
+}
+
+.rz-file-search-results {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rz-file-search-result {
+  min-height: var(--rct-item-height);
+  border-radius: 7px;
+  padding: 0 10px;
+  font-size: 13px;
+  text-align: start;
+}
+
+.rz-file-search-result:hover {
+  background: var(--rz-app-hover);
+}
+
+.rz-file-search-result[aria-current='true'] {
+  background: var(--rz-app-selected);
+  color: var(--rz-app-accent);
+}
+
+.rz-file-search-empty {
+  margin: 8px 7px;
+  color: var(--rz-app-muted);
+  font-size: 13px;
 }

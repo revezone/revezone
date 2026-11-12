@@ -1,13 +1,15 @@
 import { atom } from 'jotai';
-import { IJsonModel, Layout, Model, ITabRenderValues } from 'flexlayout-react';
+import type { IJsonModel, Model } from 'flexlayout-react';
 import { RevezoneFile, RevezoneFolder, RevezoneFileTree } from '@renderer/types/file';
 import {
   getCurrentFileFromLocal,
+  getLangCodeFromLocal,
   getOpenKeysFromLocal,
-  getSelectedKeysFromLocal
+  getSelectedKeysFromLocal,
+  getTabJsonModelFromLocal
 } from './localstorage';
 
-import { DEFAULT_TAB_JSON_MODEL } from '@renderer/utils/constant';
+import { DEFAULT_LANG_CODE } from '@renderer/utils/constant';
 
 type Theme = 'light' | 'dark';
 
@@ -23,11 +25,11 @@ export const currentFolderIdAtom = atom<string | undefined>(undefined);
 
 export const siderbarCollapsedAtom = atom(false);
 
-export const langCodeAtom = atom('en');
+export const langCodeAtom = atom(getLangCodeFromLocal() || DEFAULT_LANG_CODE);
 
 export const themeAtom = atom<Theme>('light');
 
-export const tabJsonModelAtom = atom<IJsonModel>(DEFAULT_TAB_JSON_MODEL);
+export const tabJsonModelAtom = atom<IJsonModel>(getTabJsonModelFromLocal());
 export const tabModelAtom = atom<Model | undefined>(undefined);
 
 export const selectedKeysAtom = atom<string[]>(getSelectedKeysFromLocal());

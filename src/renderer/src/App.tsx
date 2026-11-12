@@ -27,6 +27,7 @@ import useCurrentFile from './hooks/useCurrentFile';
 import useFileTree from './hooks/useFileTree';
 import { RevezoneFile, RevezoneFileTree } from './types/file';
 import { Model } from 'flexlayout-react';
+import { useTranslation } from 'react-i18next';
 
 let openFileSuccessListenerRegistered = false;
 let deepLinkUrlOpened = false;
@@ -36,12 +37,17 @@ const OS_NAME = getOSName();
 
 function App(): JSX.Element {
   const [langCode] = useAtom(langCodeAtom);
+  const { i18n } = useTranslation();
   const { color } = useWindowColor();
   const { display: canvasDisplay } = useCanvasDisplay();
   const { addFile } = useAddFile();
   const { model: tabModel, updateTabJsonModelWhenCurrentFileChanged } = useTabJsonModel();
   const { updateCurrentFile } = useCurrentFile();
   const { fileTree } = useFileTree();
+
+  useLayoutEffect(() => {
+    void i18n.changeLanguage(langCode);
+  }, [i18n, langCode]);
 
   useLayoutEffect(() => {
     document.documentElement.dataset.revezoneColor = color;

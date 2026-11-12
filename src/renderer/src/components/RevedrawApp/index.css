@@ -1,5 +1,10 @@
-.revezone-layout.sidebar-collapsed .excalidraw .App-menu_top {
-  padding-left: 2rem;
+/* New boards open ready to draw. Import and help remain in the editor's menu. */
+.excalidraw-cn-app .excalidraw :is(.welcome-screen-center, .welcome-screen-decor) {
+  display: none;
+}
+
+.excalidraw-cn-app .excalidraw:not(.excalidraw--mobile) .sidebar-trigger__label {
+  font-size: 13px;
 }
 
 .ant-modal-root {

@@ -1,95 +1,84 @@
 .revezone-layout {
   width: 100%;
   height: 100%;
-
-  .ant-layout {
-    height: 100%;
-  }
-
-  .revezone-topleft-toolbar {
-
-    .os-is-macos.is-in-revezone-native-app & {
-      position: relative;
-    }
-
-    position: absolute;
-    right: 0;
-    z-index: 100;
-    display: flex;
-    flex-direction: row-reverse;
-    height: 2rem;
-    font-size: 16px;
-    -webkit-user-select: none;
-    -webkit-app-region: drag;
-
-    .panel-left-button {
-      margin: 0.3rem 0.6rem 0 0;
-      -webkit-app-region: no-drag;
-    }
-  }
-
-
-
-  .ant-menu-title-content {
-    flex: auto;
-  }
- 
-}
-
-:root[data-revezone-color='dark'] .revezone-layout > [data-panel-id='sidebar'] {
-  background-color: var(--rz-app-panel);
+  background: var(--rz-app-bg);
   color: var(--rz-app-text);
 }
 
-:root[data-revezone-color='dark'] .revezone-layout > [data-panel-id='sidebar'] > .border-t,
-:root[data-revezone-color='dark'] .revezone-layout > [data-panel-id='sidebar'] > .border-t > .border-r {
-  border-color: var(--rz-app-border);
+.rz-shell-sidebar {
+  background: var(--rz-shell-sidebar-bg);
 }
 
-:root[data-revezone-color='dark'] [data-panel-id='sidebar'] .bg-clip-text.text-transparent {
-  background-image: none;
-  color: var(--rz-app-accent);
-  text-decoration-color: var(--rz-app-accent);
+.rz-shell-sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
 }
 
-:root[data-revezone-color='dark'] [data-panel-id='sidebar'] :is(.text-slate-500, .ant-select-arrow) {
-  color: var(--rz-app-muted);
+.rz-shell-sidebar-inner[hidden] {
+  display: none;
 }
 
-:root[data-revezone-color='dark'] [data-panel-id='sidebar'] .revezone-language-select .ant-select-selection-item {
+.rz-shell-sidebar-titlebar {
+  display: flex;
+  flex: 0 0 var(--rz-titlebar-height);
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 8px;
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+.rz-shell-icon-button {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
   color: var(--rz-app-text);
+  -webkit-app-region: no-drag;
 }
 
-:root[data-revezone-color='dark'] [data-panel-id='sidebar'] :is(.operation-item, .reve-text-link, .panel-left-button),
-:root[data-revezone-color='dark'] .revezone-layout > [data-panel] > .lucide-panel-left-open {
-  border-radius: 4px;
-  color: var(--rz-app-muted);
+.rz-shell-icon-button:hover {
+  background: var(--rz-app-hover);
 }
 
-:root[data-revezone-color='dark'] [data-panel-id='sidebar'] :is(.operation-item, .reve-text-link, .panel-left-button):hover,
-:root[data-revezone-color='dark'] .revezone-layout > [data-panel] > .lucide-panel-left-open:hover {
-  background-color: var(--rz-app-hover);
-  color: var(--rz-app-accent);
-}
-
-:root[data-revezone-color='dark'] [data-panel-id='sidebar'] a:focus-visible {
-  outline: 2px solid var(--rz-app-focus);
-  outline-offset: 2px;
-}
-
-:root[data-revezone-color='dark'] .revezone-layout > [data-panel-resize-handle-id] {
-  background-color: var(--rz-app-bg);
-}
-
-:root[data-revezone-color='dark'] .revezone-layout > [data-panel-resize-handle-id] svg {
-  color: var(--rz-app-muted);
-}
-
-:root[data-revezone-color='dark'] .revezone-layout > [data-panel-resize-handle-id]:is(:hover, [data-resize-handle-active]) {
-  background-color: var(--rz-app-hover);
-}
-
-:root[data-revezone-color='dark'] .revezone-layout > [data-panel-resize-handle-id]:focus-visible {
+.rz-shell-icon-button:focus-visible,
+.rz-shell-divider:focus-visible {
   outline: 2px solid var(--rz-app-focus);
   outline-offset: -2px;
+}
+
+.rz-shell-divider {
+  position: relative;
+  z-index: 2;
+  width: 1px;
+  flex: none;
+  background: var(--rz-app-border);
+  cursor: col-resize;
+}
+
+.rz-shell-divider::after {
+  position: absolute;
+  inset: 0 -2px;
+  content: '';
+}
+
+.rz-shell-divider:is(:hover, [data-resize-handle-active]) {
+  background: var(--rz-app-focus);
+}
+
+.rz-shell-main {
+  position: relative;
+  min-width: 0;
+}
+
+.rz-shell-reopen-files {
+  position: absolute;
+  z-index: 5;
+  top: calc((var(--rz-titlebar-height) - 28px) / 2);
+  left: var(--rz-window-controls-inset);
 }

@@ -1,27 +1,25 @@
-import { Layout, Model, Action, TabNode, IJsonTabSetNode } from 'flexlayout-react';
+import { Layout, Model, Action, Actions, TabNode } from 'flexlayout-react';
 import 'flexlayout-react/style/light.css';
 import NoteEditor from '@renderer/components/NoteEditor';
 import RevedrawApp from '../RevedrawApp';
 import WelcomePage from '../WelcomePage';
-import { useCallback, useEffect, useRef } from 'react';
-import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
-
-import './index.css';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import useTabJsonModel, { getActiveTabset } from '@renderer/hooks/useTabJsonModel';
 import { useAtom } from 'jotai';
 import { setTabJsonModelToLocal } from '@renderer/store/localstorage';
 import useCurrentFile from '@renderer/hooks/useCurrentFile';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { siderbarCollapsedAtom, tabModelAtom } from '@renderer/store/jotai';
 import { RevezoneFile, RevezoneFileType } from '@renderer/types/file';
-import { Palette, FileType, File } from 'lucide-react';
-import { WELCOME_TAB_ITEM } from '@renderer/utils/constant';
-// import MindMap from '../MindMap';
+import { FileText, PenLine } from 'lucide-react';
 import ReveTldraw from '../Tldraw';
 import { TldrawIcon } from '@renderer/icons';
+import './index.css';
 
 export default function MultiTabs() {
   const { tabJsonModel, deleteTab, getTabList } = useTabJsonModel();
   const [model, setModel] = useAtom(tabModelAtom);
+  const [hasDocuments, setHasDocuments] = useState(false);
   const { currentFile, updateCurrentFile } = useCurrentFile();
   const focusedFile = useRef(currentFile?.id);
   const updateFocus = useRef(updateCurrentFile);
@@ -30,84 +28,91 @@ export default function MultiTabs() {
   const [collapsed] = useAtom(siderbarCollapsedAtom);
 
   useEffect(() => {
-    if (!tabJsonModel) return;
-
-    try {
-      const tabList = getTabList(tabJsonModel.layout);
-
-      if (tabList.length === 0) {
-        const tabset = tabJsonModel.layout.children[0] as IJsonTabSetNode;
-        tabset.children.push(WELCOME_TAB_ITEM);
-        tabset.selected = 0;
-      }
-    } catch (err) {
-      console.warn(err);
+    const nextModel = Model.fromJson(tabJsonModel);
+    // Old layouts stored the welcome page as a tab. It is now the empty state.
+    const welcomeTabs = getTabList(tabJsonModel.layout).filter(
+      (tab) => tab.config?.type === 'welcome'
+    );
+    for (const tab of welcomeTabs) {
+      if (tab.id) nextModel.doAction(Actions.deleteTab(tab.id));
     }
 
-    const _model = Model.fromJson(tabJsonModel);
+    const savedLayout = nextModel.toJson();
+    const hasTabs = getTabList(savedLayout.layout).length > 0;
+    if (welcomeTabs.length) setTabJsonModelToLocal(JSON.stringify(savedLayout));
 
-    setModel(_model);
-  }, [tabJsonModel]);
+    setHasDocuments(hasTabs);
+    setModel(nextModel);
 
-  const renderContent = useCallback((file: RevezoneFile) => {
-    switch (file?.type) {
-      case 'note':
-        return <NoteEditor file={file} />;
-      case 'board':
-        return <RevedrawApp file={file} />;
-      case 'tldraw':
-        return <ReveTldraw file={file} />;
-      // case 'mindmap':
-      //   return <MindMap />;
-      default:
-        return <WelcomePage />;
+    const selected = getActiveTabset(nextModel)?.getSelectedNode();
+    const selectedId = selected?.getId();
+    if (selectedId === focusedFile.current) return;
+
+    let active = true;
+    const previousId = focusedFile.current;
+    if (selectedId) {
+      void fileTreeIndexeddbStorage.getFile(selectedId).then((file) => {
+        if (active && focusedFile.current === previousId) void updateFocus.current(file);
+      });
+    } else {
+      void updateFocus.current(undefined);
     }
-  }, []);
+    return () => {
+      active = false;
+    };
+  }, [getTabList, setModel, tabJsonModel]);
 
   const factory = useCallback((node: TabNode) => {
-    const file = node.getConfig() as RevezoneFile;
+    const file = { ...(node.getConfig() as RevezoneFile), name: node.getName() };
+    let content: JSX.Element | null = null;
+
+    switch (file.type) {
+      case 'note':
+        content = <NoteEditor file={file} />;
+        break;
+      case 'board':
+        content = <RevedrawApp file={file} />;
+        break;
+      case 'tldraw':
+        content = <ReveTldraw file={file} />;
+        break;
+    }
+
     return (
       <div
-        className="tab_content"
+        className="tab_content rz-document-enter"
         onPointerDownCapture={() => {
-          if (file?.id && file.type !== 'welcome' && focusedFile.current !== file.id) {
+          if (file.id && focusedFile.current !== file.id) {
             focusedFile.current = file.id;
             void updateFocus.current(file);
           }
         }}
       >
-        {renderContent(file)}
+        {content}
       </div>
     );
   }, []);
 
-  const onTabDelete = useCallback((fileId: string, model: Model | undefined) => {
-    deleteTab(fileId, model);
-  }, []);
-
-  const onTabSelect = useCallback(async (fileId: string, model: Model | undefined) => {
-    if (!model) return;
-
-    const file = fileId ? await fileTreeIndexeddbStorage.getFile(fileId) : undefined;
-    updateCurrentFile(file);
-  }, []);
-
   const onAction = useCallback(
     (action: Action) => {
-      if (!model) return;
+      if (!model) return action;
 
-      switch (action.type) {
-        case 'FlexLayout_DeleteTab':
-          onTabDelete(action.data.node, model);
-          break;
-        case 'FlexLayout_SelectTab':
-          onTabSelect(action.data.tabNode, model);
-          break;
+      if (action.type === Actions.DELETE_TAB) {
+        void deleteTab(action.data.node, model);
+        return undefined;
+      }
+
+      if (action.type === Actions.SELECT_TAB) {
+        const fileId: string = action.data.tabNode;
+        focusedFile.current = fileId;
+        void fileTreeIndexeddbStorage.getFile(fileId).then((file) => {
+          if (focusedFile.current === fileId) void updateFocus.current(file);
+        });
       }
 
       return action;
     },
-    [model]
+    [deleteTab, model]
   );
 
   const iconFactory = useCallback((tabNode: TabNode) => {
@@ -115,33 +120,41 @@ export default function MultiTabs() {
 
     switch (fileType) {
       case 'note':
-        return <FileType className="w-4 h-4" />;
+        return <FileText size={14} aria-hidden="true" />;
       case 'board':
-        return <Palette className="w-4 h-4" />;
+        return <PenLine size={14} aria-hidden="true" />;
       case 'tldraw':
         return <TldrawIcon className="w-3 h-3" />;
-      case 'welcome':
-        return <File className="w-4 h-4" />;
       default:
         return null;
     }
   }, []);
 
-  const onModelChange = useCallback(() => {
-    setTabJsonModelToLocal(JSON.stringify(model?.toJson()));
-  }, [model]);
+  const onModelChange = useCallback(
+    (updated: Model) => {
+      const savedLayout = updated.toJson();
+      setTabJsonModelToLocal(JSON.stringify(savedLayout));
+      setHasDocuments(getTabList(savedLayout.layout).length > 0);
+    },
+    [getTabList]
+  );
 
-  return model ? (
-    <div
-      className={`revezone-layout-wrapper h-full ${collapsed ? 'revezone-siderbar-collapsed' : ''}`}
-    >
-      <Layout
-        model={model}
-        factory={factory}
-        onAction={onAction}
-        iconFactory={iconFactory}
-        onModelChange={onModelChange}
-      />
+  return (
+    <div className={`revezone-layout-wrapper ${collapsed ? 'rz-files-collapsed' : ''}`}>
+      {model && hasDocuments ? (
+        <Layout
+          model={model}
+          factory={factory}
+          onAction={onAction}
+          iconFactory={iconFactory}
+          onModelChange={onModelChange}
+        />
+      ) : (
+        <>
+          <div className="rz-empty-tabstrip" aria-hidden="true" />
+          <WelcomePage />
+        </>
+      )}
     </div>
-  ) : null;
+  );
 }

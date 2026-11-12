@@ -7,13 +7,14 @@ import {
   DraggingPositionBetweenItems,
   DraggingPositionItem
 } from 'react-complex-tree';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Dropdown } from 'antd';
+import { useTranslation } from 'react-i18next';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import type { RevezoneFile, RevezoneFileTree, RevezoneFolder } from '@renderer/types/file';
 import { useAtom } from 'jotai';
 import { focusItemAtom, selectedKeysAtom } from '@renderer/store/jotai';
-import { Folder, MoreVertical, Palette, FileType } from 'lucide-react';
+import { FileText, Folder, MoreHorizontal, Spline } from 'lucide-react';
 import useFileTreeContextMenu from '@renderer/hooks/useFileTreeContextMenu';
 import useFileTree from '@renderer/hooks/useFileTree';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
@@ -30,7 +31,21 @@ import 'react-complex-tree/lib/style-modern.css';
 import './index.css';
 import { TldrawIcon } from '@renderer/icons';
 
-export default function DraggableMenuTree() {
+interface Props {
+  searchQuery: string;
+  noSearchResults: string;
+  label: string;
+}
+
+function FileIcon({ item }: { item: TreeItem<RevezoneFile | RevezoneFolder> }) {
+  if (item.isFolder) return <Folder size={16} aria-hidden="true" />;
+  if (item.data.type === 'board') return <Spline size={16} aria-hidden="true" />;
+  if (item.data.type === 'tldraw') return <TldrawIcon className="w-4 h-4" />;
+  return <FileText size={16} aria-hidden="true" />;
+}
+
+export default function DraggableMenuTree({ searchQuery, noSearchResults, label }: Props) {
+  const { t } = useTranslation();
   const [selectedKeys, setSelectedKeys] = useAtom(selectedKeysAtom);
   const [focusItem, setFocusItem] = useAtom(focusItemAtom);
   const { fileTree, getFileTree } = useFileTree();
@@ -43,6 +58,16 @@ export default function DraggableMenuTree() {
   const { updateCurrentFile } = useCurrentFile();
   const { deleteFile } = useDeleteFile();
   const { deleteFolder } = useDeleteFolder();
+  const normalizedQuery = searchQuery.trim().toLocaleLowerCase();
+  const matchingFiles = useMemo(
+    () =>
+      normalizedQuery
+        ? Object.values(fileTree).filter(
+            (item) => !item.isFolder && item.data.name.toLocaleLowerCase().includes(normalizedQuery)
+          )
+        : [],
+    [fileTree, normalizedQuery]
+  );
 
   useEffect(() => {
     getFileTree();
@@ -69,8 +94,9 @@ export default function DraggableMenuTree() {
 
   const onSelectItems = useCallback(
     async (items: TreeItemIndex[]) => {
-      if (items.length === 1 && (items[0] as string).startsWith('file_')) {
-        const file = fileTree[items[0]].data as RevezoneFile;
+      const item = items.length === 1 ? fileTree[items[0]] : undefined;
+      if (item && !item.isFolder) {
+        const file = item.data as RevezoneFile;
 
         await updateCurrentFile(file);
 
@@ -89,14 +115,15 @@ export default function DraggableMenuTree() {
   const onRenameItem = useCallback(
     async (item: TreeItem<RevezoneFile | RevezoneFolder>, name: string) => {
       setRenamingMenuItemIdToLocal('');
+      if (!name.trim()) return;
 
       await fileTreeIndexeddbStorage.updateFileOrFolderName(item.data, name);
+      const updatedTree = await getFileTree();
+      const savedName = updatedTree?.[item.data.id]?.data.name;
 
-      if (!item.isFolder) {
-        await renameTabName(item.data.id, name, tabModel);
+      if (!item.isFolder && savedName) {
+        renameTabName(item.data.id, savedName, tabModel);
       }
-
-      getFileTree();
     },
     [tabModel]
   );
@@ -184,9 +211,40 @@ export default function DraggableMenuTree() {
     [fileTree]
   );
 
+  if (normalizedQuery) {
+    return (
+      <div className="revezone-menu-container rz-file-tree">
+        <div className="menu-list">
+          {matchingFiles.length === 0 ? (
+            <p className="rz-file-search-empty" role="status">
+              {noSearchResults}
+            </p>
+          ) : (
+            <ul className="rz-file-search-results" aria-label={label}>
+              {matchingFiles.map((item) => (
+                <li key={item.index}>
+                  <button
+                    type="button"
+                    className="rz-file-search-result"
+                    aria-current={selectedKeys.includes(item.data.id) ? 'true' : undefined}
+                    title={item.data.name}
+                    onClick={() => void onSelectItems([item.index])}
+                  >
+                    <FileIcon item={item} />
+                    <span>{item.data.name}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="revezone-menu-container w-[calc(100%-2rem)]">
-      <div className="menu-list border-slate-100 px-1 pt-2">
+    <div className="revezone-menu-container rz-file-tree">
+      <div className="menu-list">
         <ControlledTreeEnvironment
           items={fileTree}
           getItemTitle={(item) => `${item.data.name}`}
@@ -208,6 +266,18 @@ export default function DraggableMenuTree() {
           onFocusItem={onFocusItem}
           onDrop={onDrop}
           onRenameItem={onRenameItem}
+          renderRenameInput={({ formProps, inputProps, inputRef, submitButtonRef }) => (
+            <form {...formProps} className="rct-tree-item-renaming-form">
+              <input {...inputProps} ref={inputRef} className="rct-tree-item-renaming-input" />
+              <input
+                ref={submitButtonRef}
+                type="submit"
+                className="rct-tree-item-renaming-submit-button"
+                value={t('confirm.yes')}
+                onClick={(event) => event.stopPropagation()}
+              />
+            </form>
+          )}
           renderTreeContainer={({ children, containerProps }) => (
             <div {...containerProps}>{children}</div>
           )}
@@ -217,12 +287,20 @@ export default function DraggableMenuTree() {
           renderItem={({ item, depth, children, title, context, arrow }) => {
             const InteractiveComponent = context.isRenaming ? 'div' : 'button';
             const type = context.isRenaming ? undefined : 'button';
+            const menuItems = getFileTreeContextMenu(
+              item.data,
+              context,
+              !!item.isFolder,
+              tabModel,
+              fileTree,
+              selectedKeys
+            );
 
             return (
               <li {...context.itemContainerWithChildrenProps} className="rct-tree-item-li">
                 <div
                   {...context.itemContainerWithoutChildrenProps}
-                  style={{ paddingLeft: `${(depth + 1) * 0.5}rem` }}
+                  style={{ paddingLeft: `${10 + depth * 14}px` }}
                   className={[
                     'rct-tree-item-title-container',
                     item.isFolder && 'rct-tree-item-title-container-isFolder',
@@ -233,28 +311,17 @@ export default function DraggableMenuTree() {
                     context.isSearchMatching && 'rct-tree-item-title-container-search-match'
                   ].join(' ')}
                 >
-                  {arrow}
+                  {item.isFolder && arrow}
                   <InteractiveComponent
                     // @ts-ignore
                     type={type}
                     {...context.interactiveElementProps}
-                    className="rct-tree-item-button flex justify-between items-center"
+                    className="rct-tree-item-button"
+                    title={context.isRenaming ? undefined : item.data.name}
                   >
-                    <Dropdown
-                      trigger={['contextMenu']}
-                      menu={{
-                        items: getFileTreeContextMenu(
-                          item.data,
-                          context,
-                          !!item.isFolder,
-                          tabModel,
-                          fileTree,
-                          selectedKeys
-                        )
-                      }}
-                    >
+                    <Dropdown trigger={['contextMenu']} menu={{ items: menuItems }}>
                       <div
-                        className={`flex items-center flex-1 menu-tree-item-child w-11/12 ${item.data.id}`}
+                        className={`menu-tree-item-child ${item.data.id}`}
                         onDoubleClick={(e) => {
                           e.stopPropagation();
                           setRenamingMenuItemIdToLocal(item.data.id);
@@ -262,50 +329,45 @@ export default function DraggableMenuTree() {
                         }}
                         onBlur={(e) => {
                           e.stopPropagation();
+                          if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget)) return;
 
-                          if (getRenamingMenuItemIdFromLocal()) {
-                            const target = e.target as HTMLInputElement;
-                            onRenameItem(item, target.value);
+                          if (
+                            context.isRenaming &&
+                            e.target instanceof HTMLInputElement &&
+                            getRenamingMenuItemIdFromLocal() === item.data.id
+                          ) {
+                            void onRenameItem(item, e.target.value);
                           }
                         }}
                       >
-                        <div className="flex items-center">
-                          {item.isFolder ? <Folder className="w-4 h-4" /> : null}
-                          {item.data.type === 'note' ? <FileType className="w-4 h-4" /> : null}
-                          {item.data.type === 'board' ? <Palette className="w-4 h-4" /> : null}
-                          {item.data.type === 'tldraw' ? <TldrawIcon className="w-3 h-3" /> : null}
-                        </div>
-                        <div className="ml-2 truncate pr-2 text-sm">{title}</div>
-                      </div>
-                    </Dropdown>
-                    <Dropdown
-                      trigger={['click']}
-                      menu={{
-                        items: getFileTreeContextMenu(
-                          item.data,
-                          context,
-                          !!item.isFolder,
-                          tabModel,
-                          fileTree,
-                          selectedKeys
-                        )
-                      }}
-                    >
-                      <div
-                        className="w-8 h-6 flex items-center justify-center"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <MoreVertical className="w-3 h-3 cursor-pointer text-gray-500" />
+                        <FileIcon item={item} />
+                        <div className="rz-file-tree-name">{title}</div>
                       </div>
                     </Dropdown>
                   </InteractiveComponent>
+                  {!context.isRenaming && (
+                    <Dropdown trigger={['click']} menu={{ items: menuItems }}>
+                      <button
+                        type="button"
+                        className="rz-file-tree-actions"
+                        tabIndex={context.isFocused ? 0 : -1}
+                        aria-haspopup="menu"
+                        aria-label={`${t('operation.fileActions', 'File actions')}: ${
+                          item.data.name
+                        }`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <MoreHorizontal size={16} aria-hidden="true" />
+                      </button>
+                    </Dropdown>
+                  )}
                 </div>
                 {children}
               </li>
             );
           }}
         >
-          <Tree treeId="revezone-file-tree" rootItem="root" treeLabel="FileTree" />
+          <Tree treeId="revezone-file-tree" rootItem="root" treeLabel={label} />
         </ControlledTreeEnvironment>
       </div>
       {getDeleteFileModal(tabModel)}

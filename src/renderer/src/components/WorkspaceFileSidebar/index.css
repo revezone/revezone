@@ -1,0 +1,113 @@
+.rz-file-sidebar {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  color: var(--rz-app-text);
+}
+
+.rz-file-search {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  margin: 8px 14px 9px;
+  padding: 0 10px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--rz-app-muted) 8%, transparent);
+  color: var(--rz-app-muted);
+}
+
+.rz-file-search:focus-within {
+  outline: 2px solid var(--rz-app-focus);
+  outline-offset: -1px;
+}
+
+.rz-file-search svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+}
+
+.rz-file-search input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--rz-app-text);
+  font-size: 13px;
+}
+
+.rz-file-search input::placeholder {
+  color: var(--rz-app-muted);
+  opacity: 1;
+}
+
+.rz-file-sidebar-heading,
+.rz-file-sidebar-footer {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 0 12px 0 17px;
+}
+
+.rz-file-sidebar-heading h2 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.rz-file-sidebar-footer {
+  min-height: 42px;
+  margin: 0 14px 6px;
+  padding: 0 0 0 5px;
+  border-top: 1px solid var(--rz-app-border);
+  color: var(--rz-app-muted);
+}
+
+.rz-file-sidebar :is(.rz-file-sidebar-heading, .rz-file-sidebar-footer) button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 6px;
+}
+
+.rz-file-sidebar :is(.rz-file-sidebar-heading, .rz-file-sidebar-footer) button:hover {
+  background: var(--rz-app-hover);
+  color: var(--rz-app-accent);
+}
+
+.rz-file-sidebar :is(.rz-file-sidebar-heading, .rz-file-sidebar-footer) button:focus-visible {
+  outline: 2px solid var(--rz-app-focus);
+}
+
+.rz-file-sidebar :is(.rz-file-sidebar-heading, .rz-file-sidebar-footer) button svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.rz-file-sidebar-footer button.rz-file-sidebar-storage {
+  flex: 0 1 auto;
+  justify-content: flex-start;
+  min-width: 0;
+  padding: 0 4px;
+  font-size: 13px;
+  text-align: start;
+}
+
+.rz-file-sidebar-storage span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

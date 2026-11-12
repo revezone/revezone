@@ -21,14 +21,20 @@
     "delete": "Delete",
     "copyRevezoneLink": "Copy revezone link",
     "giveAStar": "Git a Github star",
-    "switchLanguage": "Switch Lanugage",
+    "switchLanguage": "Language",
     "systemSetting": "System setting",
     "storagePath": "Local storage path",
     "addMindmap": "Add a mindmap",
     "addTldraw": "Add a Tldraw whiteboard",
     "importFiles": "Import files",
     "import": "Import Files",
-    "openDirectory": "Open the folder located"
+    "openDirectory": "Open the folder located",
+    "hideFiles": "Hide files",
+    "showFiles": "Show files",
+    "resizeFiles": "Resize file sidebar",
+    "newBoardName": "New whiteboard",
+    "newNoteName": "New note",
+    "fileActions": "File actions"
   },
   "description": {
     "noteDesc": "A notion-like note function",
@@ -44,7 +50,16 @@
     "operationGuide": "Operation Guide",
     "operationDetailDesc": "Click the icons in left sidebar operation toolbar to add a board/note/folder.",
     "onlineTry": "This is an online trial version which only supports basic functions.",
-    "downloadApp": "Download desktop app to enable full function."
+    "downloadApp": "Download desktop app to enable full function.",
+    "startCreating": "Start creating",
+    "storageMac": "Whiteboards and notes are saved on this Mac.",
+    "storageDesktop": "Whiteboards and notes are saved on this computer.",
+    "storageBrowser": "Whiteboards and notes are saved in this browser.",
+    "newBoard": "New whiteboard",
+    "importBoard": "Import whiteboards",
+    "unsupportedBoard": "Unsupported whiteboard format: {{name}}",
+    "importBoardError": "Could not import {{name}}.",
+    "createFileError": "Could not create the file."
   },
   "links": {
     "title": "Links",

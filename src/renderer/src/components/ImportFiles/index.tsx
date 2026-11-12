@@ -1,44 +1,77 @@
-import { useCallback } from 'react';
+import { useRef, type ChangeEvent } from 'react';
+import { message } from 'antd';
+import { useStore } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import useAddFile from '@renderer/hooks/useAddFile';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
-import useFileTree from '@renderer/hooks/useFileTree';
+import { tabModelAtom } from '@renderer/store/jotai';
+import {
+  getFileNameWithoutSuffix,
+  getFileSuffix,
+  getFileTypeFromSuffix
+} from '@renderer/utils/file';
 
-const FILE_NAME_REGEX = /^(.+)(\.[a-zA-Z0-9]+)$/;
+export function useImportBoards() {
+  const { t } = useTranslation();
+  const { addFile } = useAddFile();
+  const { model } = useTabJsonModel();
+  const store = useStore();
+  const pickerRef = useRef<HTMLInputElement>(null);
+
+  const importBoards = () => pickerRef.current?.click();
+
+  const onChooseBoards = async (event: ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.currentTarget.files ?? []);
+    event.currentTarget.value = '';
+
+    for (const file of files) {
+      const type = getFileTypeFromSuffix(getFileSuffix(file.name).toLowerCase());
+
+      if (type !== 'board' && type !== 'tldraw') {
+        message.error(t('welcome.unsupportedBoard', { name: file.name }));
+        continue;
+      }
+
+      try {
+        const data = await file.text();
+        await addFile(
+          getFileNameWithoutSuffix(file.name),
+          type,
+          store.get(tabModelAtom),
+          'root',
+          data
+        );
+      } catch (error) {
+        console.error(error);
+        message.error(t('welcome.importBoardError', { name: file.name }));
+      }
+    }
+  };
+
+  const boardPicker = (
+    <input
+      ref={pickerRef}
+      type="file"
+      accept=".excalidraw,.tldr"
+      multiple
+      hidden
+      onChange={onChooseBoards}
+    />
+  );
+
+  return { importBoards, boardPicker, canImport: !!model };
+}
 
 export default function ImportFiles() {
   const { t } = useTranslation();
-  const { addFile } = useAddFile();
-  const { model: tabModel } = useTabJsonModel();
-  const { fileTree } = useFileTree();
+  const { importBoards, boardPicker, canImport } = useImportBoards();
 
-  const importFile = useCallback(async (fileHandle) => {
-    const localFile = await fileHandle.getFile();
-
-    const fileData = await localFile.text();
-
-    const matches = localFile.name.match(FILE_NAME_REGEX);
-    const fileName = matches?.[1];
-    const fileSuffix = matches?.[2];
-
-    switch (fileSuffix) {
-      case '.excalidraw':
-        await addFile(fileName, 'board', tabModel, 'root', fileData);
-        break;
-      case '.tldr':
-        await addFile(fileName, 'tldraw', tabModel, 'root', fileData);
-        break;
-    }
-  }, []);
-
-  const onClick = useCallback(async () => {
-    // @ts-ignore
-    const fileHandles = await window.showOpenFilePicker({ multiple: true });
-
-    for await (const fileHandle of fileHandles) {
-      await importFile(fileHandle);
-    }
-  }, [fileTree, tabModel]);
-
-  return <div onClick={onClick}>{t('operation.import')}</div>;
+  return (
+    <>
+      <button type="button" onClick={importBoards} disabled={!canImport}>
+        {t('operation.import')}
+      </button>
+      {boardPicker}
+    </>
+  );
 }

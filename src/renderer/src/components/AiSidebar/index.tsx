@@ -27,7 +27,7 @@ import {
   subscribeAiEditors
 } from '@renderer/ai/editorRegistry';
 import { researchNoteOperation } from '@renderer/ai/communityResearch';
-import { currentFileAtom, tabModelAtom } from '@renderer/store/jotai';
+import { currentFileAtom, fileTreeAtom, tabModelAtom } from '@renderer/store/jotai';
 import { emitter, events } from '@renderer/store/eventemitter';
 import useAddFile from '@renderer/hooks/useAddFile';
 import { getAgentModelStrings } from '../SystemSettings/agentModelStrings';
@@ -92,14 +92,19 @@ export default function AiWorkspace({ children }: { children: ReactNode }) {
   const strings = getAiStrings(i18n.language);
   const modelStrings = getAgentModelStrings(i18n.language);
   const file = useAtomValue(currentFileAtom);
+  const fileTree = useAtomValue(fileTreeAtom);
   const tabModel = useAtomValue(tabModelAtom);
   const { addFile } = useAddFile();
   const docId =
     file?.type === 'note' || file?.type === 'board' || file?.type === 'tldraw' ? file.id : '';
+  const documentName = fileTree[docId]?.data.name ?? file?.name;
   const activeDoc = useRef(docId);
   activeDoc.current = docId;
   const adapter = useSyncExternalStore(subscribeAiEditors, () => lookupAiEditor(docId));
   const [open, setOpen] = useState(true);
+  const expandButton = useRef<HTMLButtonElement>(null);
+  const collapseButton = useRef<HTMLButtonElement>(null);
+  const moveToggleFocus = useRef(false);
   const sidebarSize = useSidebarWidth();
   const [view, setView] = useState<'chat' | 'community' | 'history'>('chat');
   const [draft, setDraft] = useState('');
@@ -124,6 +129,17 @@ export default function AiWorkspace({ children }: { children: ReactNode }) {
   const previousResearchQuery = recentMessages.find((entry) => entry.research?.query)?.research
     ?.query;
   const statusRequest = useRef(0);
+
+  useEffect(() => {
+    if (!moveToggleFocus.current) return;
+    moveToggleFocus.current = false;
+    (open ? collapseButton.current : expandButton.current)?.focus();
+  }, [open]);
+
+  function setSidebarOpen(next: boolean) {
+    moveToggleFocus.current = true;
+    setOpen(next);
+  }
 
   const refreshStatus = useCallback(async () => {
     const request = ++statusRequest.current;
@@ -481,15 +497,19 @@ export default function AiWorkspace({ children }: { children: ReactNode }) {
       className="rz-ai-workspace"
       ref={sidebarSize.workspace}
       data-resizing={sidebarSize.dragging || undefined}
+      data-ai-collapsed={!open || undefined}
     >
       <div className="rz-ai-editor">{children}</div>
       {!open && (
         <button
           className="rz-ai-open"
+          ref={expandButton}
           type="button"
-          onClick={() => setOpen(true)}
+          onClick={() => setSidebarOpen(true)}
           title={strings.show}
           aria-label={strings.show}
+          aria-controls="rz-ai-sidebar"
+          aria-expanded={false}
         >
           <PanelRightOpen size={19} />
         </button>
@@ -535,16 +555,24 @@ export default function AiWorkspace({ children }: { children: ReactNode }) {
             <button
               type="button"
               className="rz-ai-icon"
-              onClick={() => setOpen(false)}
+              ref={collapseButton}
+              onClick={() => setSidebarOpen(false)}
               title={strings.hide}
               aria-label={strings.hide}
+              aria-controls="rz-ai-sidebar"
+              aria-expanded={true}
             >
               <PanelRightClose size={17} />
             </button>
           </div>
-          <div className="rz-ai-document" title={file?.name} aria-label={strings.context}>
+          <div
+            className="rz-ai-document"
+            data-active={!!docId || undefined}
+            title={documentName}
+            aria-label={strings.context}
+          >
             <FileText size={14} aria-hidden="true" />
-            <span>{docId ? file?.name : strings.context}</span>
+            <span>{docId ? documentName : strings.context}</span>
           </div>
         </header>
         <div className="rz-ai-tabs" role="tablist" aria-label={strings.title}>
@@ -555,7 +583,7 @@ export default function AiWorkspace({ children }: { children: ReactNode }) {
             data-testid="ai-chat-tab"
             onClick={() => setView('chat')}
           >
-            <Sparkles size={15} aria-hidden="true" /> {strings.chat}
+            {strings.chat}
           </button>
           {window.communitySearch && (
             <button
@@ -583,7 +611,7 @@ export default function AiWorkspace({ children }: { children: ReactNode }) {
             active={view === 'community'}
             adapter={adapter}
             language={i18n.language}
-            noteName={file?.type === 'note' ? file.name : undefined}
+            noteName={file?.type === 'note' ? documentName : undefined}
           />
         )}
         {view === 'community' ? null : !adapter ? (

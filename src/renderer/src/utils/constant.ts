@@ -44,8 +44,8 @@ export const DEFAULT_TAB_JSON_MODEL: IJsonModel = {
       {
         type: 'tabset',
         weight: 10,
-        selected: 0,
-        children: [WELCOME_TAB_ITEM]
+        selected: -1,
+        children: []
       }
     ]
   }

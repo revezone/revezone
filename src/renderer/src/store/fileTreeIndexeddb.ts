@@ -97,7 +97,12 @@ class FileTreeIndexeddbStorage {
    * @param parentId
    * @returns
    */
-  async addFileTreeItem(info: RevezoneFile | RevezoneFolder, isFolder: boolean, parentId?: string) {
+  async addFileTreeItem(
+    info: RevezoneFile | RevezoneFolder,
+    isFolder: boolean,
+    parentId?: string,
+    fileData?: string
+  ) {
     await this.initDB();
 
     const fileTree = (await this.getFileTree()) || {};
@@ -117,7 +122,9 @@ class FileTreeIndexeddbStorage {
     await this.updateFileTree(fileTree);
 
     if (info.type && ['board', 'tldraw'].includes(info.type)) {
-      window.api?.addFile(info.id, '{}', fileTree);
+      window.api?.addFile(info.id, fileData ?? '{}', fileTree);
+    } else if (isFolder || info.type === 'note') {
+      window.api?.addFile(info.id, '', fileTree);
     }
 
     return info;
@@ -149,7 +156,7 @@ class FileTreeIndexeddbStorage {
       gmtModified: dayjs().toLocaleString()
     };
 
-    await this.addFileTreeItem(fileInfo, false, parentId);
+    await this.addFileTreeItem(fileInfo, false, parentId, fileData);
 
     return fileInfo;
   }

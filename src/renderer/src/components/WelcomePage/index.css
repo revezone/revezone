@@ -1,0 +1,100 @@
+.rz-welcome {
+  display: grid;
+  height: 100%;
+  min-height: 0;
+  place-items: safe center;
+  overflow: auto;
+  padding: 24px 20px;
+  background: var(--rz-shell-home-bg);
+  text-align: center;
+}
+
+.rz-welcome-content {
+  display: flex;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: center;
+  margin-block-end: 32px;
+}
+
+.rz-welcome-artwork {
+  display: block;
+  width: 80px;
+  height: 69px;
+  object-fit: contain;
+  margin-bottom: 24px;
+}
+
+.rz-welcome h1 {
+  margin: 0;
+  color: var(--rz-app-text);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.rz-welcome p {
+  margin: 8px 0 0;
+  color: var(--rz-app-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.rz-welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 12px;
+  margin-top: 22px;
+}
+
+.rz-welcome-button,
+.rz-welcome-import {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 7px;
+  color: var(--rz-app-text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.rz-welcome-button {
+  min-width: 108px;
+  border: 1px solid var(--rz-app-border);
+  padding: 6px 14px;
+}
+
+.rz-welcome-primary {
+  min-width: 122px;
+  border-color: transparent;
+  background: var(--rz-shell-primary);
+  color: white;
+}
+
+.rz-welcome-button:not(.rz-welcome-primary):hover,
+.rz-welcome-import:hover {
+  background: var(--rz-app-hover);
+}
+
+.rz-welcome-primary:hover {
+  background: var(--rz-shell-primary-hover);
+}
+
+.rz-welcome-import {
+  margin-top: 12px;
+  padding: 4px 9px;
+  color: var(--rz-app-muted);
+}
+
+.rz-welcome button:focus-visible {
+  outline: 2px solid var(--rz-app-focus);
+  outline-offset: 3px;
+}
+
+.rz-welcome button:disabled {
+  opacity: 0.55;
+}

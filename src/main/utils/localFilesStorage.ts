@@ -109,11 +109,10 @@ export function getFullPathInfo(itemId: string, fileTree: RevezoneFileTree): Ful
 }
 
 export function addOrUpdateFile(fileId: string, value: string, fileTree: RevezoneFileTree) {
-  const { path: fullFilePath, parentDirPath } = getFullPathInfo(fileId, fileTree);
+  const { type, path: fullFilePath, parentDirPath } = getFullPathInfo(fileId, fileTree);
 
-  ensureDir(parentDirPath);
-
-  fs.writeFileSync(fullFilePath, value);
+  ensureDir(type === 'folder' ? fullFilePath : parentDirPath);
+  if (type === 'file') fs.writeFileSync(fullFilePath, value);
 }
 
 export function onAddFile(fileId: string, value: string, fileTree: RevezoneFileTree) {
@@ -125,9 +124,12 @@ export function onFileDataChange(fileId: string, value: string, fileTree: Revezo
 }
 
 export function onRenameFileOrFolder(itemId: string, newName: string, fileTree: RevezoneFileTree) {
-  const { path: fullFilePath, parentDirPath, suffix } = getFullPathInfo(itemId, fileTree);
+  const { type, path: fullFilePath, parentDirPath, suffix } = getFullPathInfo(itemId, fileTree);
+  const destination = join(parentDirPath, newName + (suffix ?? ''));
 
-  fs.renameSync(fullFilePath, join(parentDirPath, `${newName}${suffix}`));
+  // Older empty folders were stored in the file tree before they existed on disk.
+  if (type === 'folder' && !fs.existsSync(fullFilePath)) ensureDir(destination);
+  else fs.renameSync(fullFilePath, destination);
 }
 
 export function onDeleteFileOrFolder(

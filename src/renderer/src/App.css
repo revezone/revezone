@@ -10,6 +10,14 @@
   --rz-app-selected: #dfedf8;
   --rz-app-accent: #075985;
   --rz-app-focus: #0275a8;
+  --rz-titlebar-height: 44px;
+  --rz-window-controls-inset: 8px;
+  --rz-shell-sidebar-bg: #eaedf4;
+  --rz-shell-toolbar-bg: #f3f5f8;
+  --rz-shell-home-bg: #f1f2f8;
+  --rz-shell-ai-bg: #f6f7fb;
+  --rz-shell-primary: #0284c7;
+  --rz-shell-primary-hover: #0275a8;
   color-scheme: light;
 }
 
@@ -25,6 +33,12 @@
   --rz-app-selected: #24445e;
   --rz-app-accent: #99d4fa;
   --rz-app-focus: #8bccf6;
+  --rz-shell-sidebar-bg: #1a2431;
+  --rz-shell-toolbar-bg: #1a2431;
+  --rz-shell-home-bg: #151c27;
+  --rz-shell-ai-bg: #1a2431;
+  --rz-shell-primary: #17688b;
+  --rz-shell-primary-hover: #1d789d;
   color-scheme: dark;
 }
 
@@ -38,6 +52,10 @@
 .revezone-app-container {
   width: 100%;
   height: 100%;
+}
+
+.os-is-macos.is-in-revezone-native-app {
+  --rz-window-controls-inset: 74px;
 }
 
 :root:not([data-revezone-color='dark'])
@@ -61,18 +79,6 @@
 .rz-appearance-setting p {
   margin: 8px 0 0;
   color: var(--rz-app-muted);
-}
-
-.revezone-welcome-page {
-  color: var(--rz-app-muted);
-}
-
-.revezone-welcome-page :is(h2, .text-xl) {
-  color: var(--rz-app-text);
-}
-
-.revezone-welcome-page a:hover {
-  color: var(--rz-app-accent);
 }
 
 :root[data-revezone-color='dark'] .ant-modal-content :is(.text-gray-700, .text-slate-600) {

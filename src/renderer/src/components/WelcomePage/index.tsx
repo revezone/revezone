@@ -1,109 +1,76 @@
-import RevezoneLogo from '../RevezoneLogo';
-import { Twitter, Coffee, Cat } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Download, Plus } from 'lucide-react';
+import { message } from 'antd';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Bilibili, GithubCircle } from '../../icons';
-import DownloadApp from '../DownloadApp';
-import { isInRevezoneApp } from '@renderer/utils/navigator';
-import PublicBetaNotice from '@renderer/components/PublicBetaNotice';
-import AttentionAnimation from '../AttentionAnimation';
-
-function WelcomeContent() {
-  const { t } = useTranslation();
-
-  return (
-    <div className="revezone-welcome-page relative w-full h-full flex pt-6 pb-10 justify-center">
-      <div className="content w-2/3 overflow-scroll text-sm">
-        <div className="reve-text-link mb-6">
-          <RevezoneLogo size="large" url="https://revezone.com" />
-          <span className="text-xl"> - {t('text.alpha')}</span>
-          <PublicBetaNotice />
-        </div>
-        <p className="mb-6">{t('welcome.productDesc')}</p>
-        <p className="mb-6">{t('publicBeta.description')}</p>
-        <p className="mb-6 reve-text-link">
-          {!isInRevezoneApp ? t('welcome.onlineTry') : null} {t('welcome.downloadApp')}{' '}
-          <DownloadApp className="ml-2" from="welcomepage" />
-        </p>
-        <p className="mb-6 text-sm">{t('welcome.operationTip')}</p>
-        <div className="mb-6 text-sm">
-          <h2 className="mb-2 text-base">{t('welcome.operationGuide')}</h2>
-          <p className="mb-2">{t('welcome.operationDetailDesc')}</p>
-        </div>
-        <div className="text-sm">
-          <h2 className="mb-2 text-base">{t('links.title')}</h2>
-          <p className="mb-2">
-            <a
-              href="https://github.com/revezone/revezone"
-              target="_blank"
-              rel="noreferrer"
-              className="reve-text-link relative"
-            >
-              <AttentionAnimation />
-              <GithubCircle className="w-4 h-4 mr-2" /> {t('links.github')}
-            </a>
-          </p>
-          <p className="mb-2">
-            <a
-              href="https://space.bilibili.com/393134139"
-              target="_blank"
-              rel="noreferrer"
-              className="reve-text-link relative"
-            >
-              <AttentionAnimation />
-              <Bilibili className="w-4 h-4 mr-2" /> {t('links.authorBilibili')}
-            </a>
-          </p>
-          <p className="mb-2">
-            <a
-              href="https://twitter.com/TheReveZone"
-              target="_blank"
-              rel="noreferrer"
-              className="reve-text-link"
-            >
-              <Twitter className="w-4 h-4 mr-2" /> {t('links.twitter')}
-            </a>
-          </p>
-          <p className="mb-2">
-            <a
-              href="https://afdian.net/a/wantian"
-              target="_blank"
-              rel="noreferrer"
-              className="reve-text-link"
-            >
-              <Cat className="w-4 h-4 mr-2" /> {t('links.feedMyCat')}
-            </a>
-          </p>
-          <p className="mb-2">
-            <a
-              href="https://www.buymeacoffee.com/korbinzhao"
-              target="_blank"
-              rel="noreferrer"
-              className="reve-text-link"
-            >
-              <Coffee className="w-4 h-4 mr-2" /> {t('links.buyMeACoffee')}
-            </a>
-          </p>
-        </div>
-      </div>
-      <div className="copyright absolute bottom-0 text-center w-full h-8 text-sm">
-        Copyright © 2023{' '}
-        <a href="https://twitter.com/TheReveZone" target="_blank" rel="noreferrer">
-          Revezone
-        </a>
-        . All rights reserved.
-      </div>
-    </div>
-  );
-}
+import useAddFile from '@renderer/hooks/useAddFile';
+import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
+import { isInRevezoneApp, osName } from '@renderer/utils/navigator';
+import { useImportBoards } from '../ImportFiles';
+import whiteboardArtwork from './welcome-whiteboard.webp';
+import './index.css';
 
 export default function WelcomePage() {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 200);
-  }, []);
+  const { t } = useTranslation();
+  const { addFile } = useAddFile();
+  const { model } = useTabJsonModel();
+  const { importBoards, boardPicker, canImport } = useImportBoards();
+  const creating = useRef(false);
+  const storageHint = isInRevezoneApp
+    ? osName === 'MacOS'
+      ? 'welcome.storageMac'
+      : 'welcome.storageDesktop'
+    : 'welcome.storageBrowser';
 
-  return !loading ? <WelcomeContent /> : null;
+  async function createFile(type: 'board' | 'note') {
+    if (!model || creating.current) return;
+    creating.current = true;
+    try {
+      const name = t(type === 'board' ? 'operation.newBoardName' : 'operation.newNoteName');
+      await addFile(name, type, model, 'root');
+    } catch (error) {
+      console.error(error);
+      message.error(t('welcome.createFileError'));
+    } finally {
+      creating.current = false;
+    }
+  }
+
+  return (
+    <main className="rz-welcome" aria-labelledby="rz-welcome-heading">
+      {boardPicker}
+      <div className="rz-welcome-content">
+        <img className="rz-welcome-artwork" src={whiteboardArtwork} alt="" width={80} height={69} />
+        <h1 id="rz-welcome-heading">{t('welcome.startCreating')}</h1>
+        <p>{t(storageHint)}</p>
+        <div className="rz-welcome-actions">
+          <button
+            type="button"
+            className="rz-welcome-button rz-welcome-primary"
+            disabled={!model}
+            onClick={() => void createFile('board')}
+          >
+            <Plus size={15} aria-hidden="true" />
+            {t('welcome.newBoard')}
+          </button>
+          <button
+            type="button"
+            className="rz-welcome-button"
+            disabled={!model}
+            onClick={() => void createFile('note')}
+          >
+            {t('operation.addNote')}
+          </button>
+        </div>
+        <button
+          type="button"
+          className="rz-welcome-import"
+          disabled={!canImport}
+          onClick={importBoards}
+        >
+          <Download size={15} aria-hidden="true" />
+          {t('welcome.importBoard')}
+        </button>
+      </div>
+    </main>
+  );
 }
