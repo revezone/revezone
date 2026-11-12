@@ -1,0 +1,57 @@
+.rz-ai-research {
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid var(--rz-ai-line);
+  white-space: normal;
+  display: grid;
+  gap: 7px;
+}
+.rz-ai-inline-citation {
+  color: var(--rz-ai-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.rz-ai-research summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+.rz-ai-research ol {
+  list-style: decimal;
+  margin: 4px 0 0;
+  padding-left: 21px;
+}
+.rz-ai-research li {
+  padding: 3px 0;
+}
+.rz-ai-research :is(a, button) {
+  color: var(--rz-ai-accent);
+}
+.rz-ai-research a:hover {
+  text-decoration: underline;
+}
+.rz-ai-research :is(a, summary):focus-visible,
+.rz-ai-inline-citation:focus-visible {
+  outline: 2px solid #0284c7;
+  outline-offset: 2px;
+}
+.rz-ai-research a svg {
+  display: inline-block;
+  vertical-align: -1px;
+}
+.rz-ai-research-meta {
+  display: flex;
+  gap: 2px 6px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--rz-ai-muted);
+}
+.rz-ai-research button {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  padding: 2px 4px;
+  border-radius: 4px;
+}

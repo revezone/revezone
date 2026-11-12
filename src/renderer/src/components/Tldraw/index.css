@@ -12,3 +12,42 @@
   }
 
 }
+
+:root[data-revezone-color] .tldraw-editor-container {
+  --rz-tldraw-ui-shadow: rgb(36 52 73 / 18%);
+  --rz-tldraw-ui-warning: #9b1c1c;
+}
+
+:root[data-revezone-color='dark'] .tldraw-editor-container {
+  --rz-tldraw-ui-shadow: rgb(0 0 0 / 34%);
+  --rz-tldraw-ui-warning: #ffb4ae;
+}
+
+/* Radix renders these floating surfaces beside the UI layout, inside the editor container. */
+:root[data-revezone-color] .tldraw-editor-container
+  :is(.tlui-layout, .tlui-menu, .tlui-popover__content, .tlui-dialog__overlay) {
+  --color-panel: var(--rz-app-raised);
+  --color-low: var(--rz-app-surface);
+  --color-panel-contrast: var(--rz-app-border);
+  --color-divider: var(--rz-app-border);
+  --color-muted-0: var(--rz-app-surface);
+  --color-muted-1: color-mix(in srgb, var(--rz-app-muted) 70%, var(--rz-app-raised));
+  --color-muted-2: var(--rz-app-hover);
+  --color-hint: var(--rz-app-selected);
+  --color-overlay: rgb(13 23 35 / 38%);
+  --color-focus: var(--rz-app-focus);
+  --color-selected: var(--rz-app-selected);
+  --color-selected-contrast: var(--rz-app-accent);
+  --color-text: var(--rz-app-text);
+  --color-text-0: var(--rz-app-text);
+  --color-text-1: var(--rz-app-text);
+  --color-text-2: var(--rz-app-muted);
+  --color-text-3: color-mix(in srgb, var(--rz-app-muted) 75%, var(--rz-app-raised));
+  --color-primary: var(--rz-app-accent);
+  --color-warn: var(--rz-tldraw-ui-warning);
+  --shadow-1: 0 1px 3px var(--rz-tldraw-ui-shadow);
+  --shadow-2: 0 2px 6px var(--rz-tldraw-ui-shadow);
+  --shadow-3: 0 4px 14px var(--rz-tldraw-ui-shadow);
+
+  color: var(--color-text);
+}

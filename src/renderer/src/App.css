@@ -1,16 +1,133 @@
+:root {
+  --rz-app-bg: #fff;
+  --rz-app-panel: #fff;
+  --rz-app-surface: #f4f7fa;
+  --rz-app-raised: #fff;
+  --rz-app-text: #243449;
+  --rz-app-muted: #536275;
+  --rz-app-border: #dbe3ec;
+  --rz-app-hover: #edf3f8;
+  --rz-app-selected: #dfedf8;
+  --rz-app-accent: #075985;
+  --rz-app-focus: #0275a8;
+  color-scheme: light;
+}
+
+:root[data-revezone-color='dark'] {
+  --rz-app-bg: #151c27;
+  --rz-app-panel: #1a2431;
+  --rz-app-surface: #1c2736;
+  --rz-app-raised: #202c3c;
+  --rz-app-text: #e5edf7;
+  --rz-app-muted: #a8b7ca;
+  --rz-app-border: #344357;
+  --rz-app-hover: #2a394c;
+  --rz-app-selected: #24445e;
+  --rz-app-accent: #99d4fa;
+  --rz-app-focus: #8bccf6;
+  color-scheme: dark;
+}
+
+:root[data-revezone-color='dark'],
+:root[data-revezone-color='dark'] body,
+:root[data-revezone-color='dark'] .revezone-app-container {
+  background: var(--rz-app-bg);
+  color: var(--rz-app-text);
+}
+
 .revezone-app-container {
   width: 100%;
   height: 100%;
-
-  .ant-btn-primary {
-    background-color: #0284c7;
-  }
 }
 
-.ant-popover-content, .ant-modal-content{
+:root:not([data-revezone-color='dark'])
+  :is(.revezone-app-container, .ant-popover-content, .ant-modal-content)
   .ant-btn-primary {
-    background-color: #0284c7;
-  }
+  background-color: #0284c7;
 }
 
+.rz-appearance-setting {
+  min-width: 0;
+  border: 0;
+  padding: 12px 0;
+}
 
+.rz-appearance-setting legend {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rz-appearance-setting p {
+  margin: 8px 0 0;
+  color: var(--rz-app-muted);
+}
+
+.revezone-welcome-page {
+  color: var(--rz-app-muted);
+}
+
+.revezone-welcome-page :is(h2, .text-xl) {
+  color: var(--rz-app-text);
+}
+
+.revezone-welcome-page a:hover {
+  color: var(--rz-app-accent);
+}
+
+:root[data-revezone-color='dark'] .ant-modal-content :is(.text-gray-700, .text-slate-600) {
+  color: var(--rz-app-text);
+}
+
+:root[data-revezone-color='dark']
+  .ant-modal-content
+  :is(.text-gray-400, .text-gray-500, .text-slate-500) {
+  color: var(--rz-app-muted);
+}
+
+:root[data-revezone-color='dark'] .ant-modal-content :is(.border-b, .divide-y > * + *) {
+  border-color: var(--rz-app-border);
+}
+
+:root[data-revezone-color='dark'] .ant-message-notice-content {
+  background: var(--rz-app-raised);
+  color: var(--rz-app-text);
+}
+
+:root[data-revezone-color='dark'] .driver-popover {
+  background: var(--rz-app-raised);
+  color: var(--rz-app-text);
+}
+
+:root[data-revezone-color='dark']
+  .driver-popover
+  :is(.driver-popover-close-btn, .driver-popover-progress-text) {
+  color: var(--rz-app-muted);
+}
+
+:root[data-revezone-color='dark'] .driver-popover-footer button {
+  border-color: var(--rz-app-border);
+  background: var(--rz-app-surface);
+  color: var(--rz-app-text);
+  text-shadow: none;
+}
+
+:root[data-revezone-color='dark'] .driver-popover-footer button:is(:hover, :focus) {
+  background: var(--rz-app-hover);
+}
+
+:root[data-revezone-color='dark'] .driver-popover-arrow-side-top {
+  border-top-color: var(--rz-app-raised);
+}
+
+:root[data-revezone-color='dark'] .driver-popover-arrow-side-right {
+  border-right-color: var(--rz-app-raised);
+}
+
+:root[data-revezone-color='dark'] .driver-popover-arrow-side-bottom {
+  border-bottom-color: var(--rz-app-raised);
+}
+
+:root[data-revezone-color='dark'] .driver-popover-arrow-side-left {
+  border-left-color: var(--rz-app-raised);
+}

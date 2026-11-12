@@ -1,126 +1,192 @@
-import { useCallback, useEffect, useState } from 'react';
-import { RevezoneFile } from '@renderer/types/file';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Revedraw } from 'revemate';
-import { ExcalidrawDataSource, ExcalidrawImperativeAPI } from 'revemate/es/Revedraw/types';
-import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
+import type { ExcalidrawDataSource, ExcalidrawImperativeAPI } from 'revemate/es/Revedraw/types';
 import { useDebounceFn } from 'ahooks';
-import { langCodeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
-import { getOSName } from '@renderer/utils/navigator';
-import { emitter } from '@renderer/store/eventemitter';
+import { createBoardAdapter, readBoard } from '@renderer/ai/boardAdapter';
+import { registerAiEditor } from '@renderer/ai/editorRegistry';
 import useDoubleLink from '@renderer/hooks/useDoubleLink';
-
-import './index.css';
 import useFileTree from '@renderer/hooks/useFileTree';
+import { boardIndexeddbStorage, type StoredBoard } from '@renderer/store/boardIndexeddb';
+import { useCanvasDisplay } from '@renderer/store/canvasDisplay';
+import { emitter } from '@renderer/store/eventemitter';
+import { langCodeAtom } from '@renderer/store/jotai';
+import { useWindowColor } from '@renderer/store/windowColor';
+import type { RevezoneFile } from '@renderer/types/file';
+import './index.css';
 
-interface Props {
-  file: RevezoneFile;
+type BoardTheme = ExcalidrawDataSource['appState']['theme'];
+
+function boardViewSettings({ appState }: ExcalidrawDataSource) {
+  const drawingDefaults = Object.entries(appState).filter(([key]) => key.startsWith('currentItem'));
+  return JSON.stringify([
+    appState.scrollX,
+    appState.scrollY,
+    appState.zoom?.value,
+    appState.exportBackground,
+    appState.exportWithDarkMode,
+    appState.exportEmbedScene,
+    appState.exportScale,
+    appState.activeTool,
+    appState.penMode,
+    appState.showStats,
+    drawingDefaults
+  ]);
 }
 
-const OS_NAME = getOSName();
-
-let firsRender = true;
-
-export default function RevedrawApp({ file }: Props) {
-  const [dataSource, setDataSource] = useState<string>();
-  const [, setRef] = useState<ExcalidrawImperativeAPI>();
+export default function RevedrawApp({ file }: { file: RevezoneFile }) {
+  const [dataSource, setDataSource] = useState<StoredBoard>();
+  const [api, setApi] = useState<ExcalidrawImperativeAPI>();
+  const [fontRevision, setFontRevision] = useState(0);
   const [systemLangCode] = useAtom(langCodeAtom);
-  const [didRender, setDidRender] = useState(true);
+  const { display } = useCanvasDisplay();
+  const { color } = useWindowColor();
   const { onLinkOpen } = useDoubleLink(true);
   const { fileTree } = useFileTree();
-
-  const clearDeletedElements = useCallback((data) => {
-    data.elements?.forEach((element) => {
-      if (element?.isDeleted) {
-        delete data.files?.[element.fileId];
-      }
+  const fileTreeRef = useRef(fileTree);
+  fileTreeRef.current = fileTree;
+  const lastData = useRef<ExcalidrawDataSource>();
+  const lastScene = useRef('');
+  const lastViewSettings = useRef('');
+  const pendingSave = useRef<ExcalidrawDataSource>();
+  const changeListeners = useRef(new Set<() => void>());
+  const storedThemes = useRef<{ wrapper?: string; editor?: BoardTheme }>({});
+  const originalTheme = storedThemes.current.wrapper === 'dark' ? 'dark' : 'light';
+  const displayTheme = display === 'follow-window' ? color : originalTheme;
+  const screenDataSource = useMemo(() => {
+    if (!dataSource) return undefined;
+    // Revemate controls its editor theme through dataSource. Its export renderer uses the
+    // separate exportWithDarkMode setting instead of this live theme.
+    return JSON.stringify({
+      ...dataSource,
+      theme: displayTheme,
+      appState: { ...dataSource.appState, theme: displayTheme }
     });
+  }, [dataSource, displayTheme]);
 
-    data.elements = data.elements?.filter((element) => !element.isDeleted);
-
-    return data;
-  }, []);
-
-  const getDataSource = useCallback(async (id: string) => {
-    // reset data source for a new canvas file
-    setDataSource(undefined);
-
-    let data = await boardIndexeddbStorage.getBoard(id);
-
-    data = clearDeletedElements(data);
-
-    const dataStr = !data || typeof data === 'string' ? data : JSON.stringify(data);
-
-    setDataSource(dataStr);
-  }, []);
-
-  // HACK: fix the custom font not working completely when first render
-  const rerender = useCallback(async () => {
-    const WAIT_TIME_WINDWOS = 500;
-    const WAIT_TIME_MACOS = 200;
-
-    const waitTime = OS_NAME === 'MacOS' ? WAIT_TIME_MACOS : WAIT_TIME_WINDWOS;
-
-    await getDataSource(file.id);
-
-    setTimeout(() => {
-      setDidRender(false);
-      setTimeout(() => {
-        setDidRender(true);
-      }, 100);
-    }, waitTime);
-  }, [file.id]);
-
-  useEffect(() => {
-    if (firsRender) {
-      firsRender = false;
-      rerender();
-    }
-  }, []);
-
-  useEffect(() => {
-    emitter.on('switch_font_family', () => {
-      rerender();
-    });
-  }, []);
-
-  const onChangeFn = useCallback(
-    async (data: ExcalidrawDataSource) => {
-      const _data = {
+  const persist = useCallback(
+    (data: ExcalidrawDataSource) => {
+      const { theme: _viewTheme, appState: state, ...document } = data;
+      const { theme: _editorTheme, ...appState } = state;
+      const { wrapper, editor } = storedThemes.current;
+      const scene = {
         type: 'excalidraw',
         version: 2,
         source: window.location.href,
-        ...data
+        ...document,
+        ...(wrapper === undefined ? {} : { theme: wrapper }),
+        appState: editor === undefined ? appState : { ...appState, theme: editor }
       };
-
-      await boardIndexeddbStorage.updateBoard(file.id, _data, fileTree);
+      return boardIndexeddbStorage.updateBoard(file.id, scene, fileTreeRef.current);
     },
-    [file.id, fileTree]
+    [file.id]
   );
 
-  const { run: onChangeDebounceFn, cancel: cancelDebounceFn } = useDebounceFn(onChangeFn, {
-    wait: 200
-  });
+  const persistPending = useCallback(async () => {
+    const data = pendingSave.current;
+    if (!data) return;
+    await persist(data);
+    if (pendingSave.current === data) pendingSave.current = undefined;
+  }, [persist]);
+
+  const { run: saveDebounced, cancel: cancelSave } = useDebounceFn(
+    () => {
+      void persistPending().catch(console.error);
+    },
+    { wait: 200 }
+  );
 
   useEffect(() => {
-    getDataSource(file.id);
+    let active = true;
+    void boardIndexeddbStorage.getBoard(file.id).then((data) => {
+      if (!active) return;
+      let source: StoredBoard | undefined;
+      try {
+        source = typeof data === 'string' ? JSON.parse(data) : data;
+      } catch (error) {
+        console.error(error);
+      }
+      storedThemes.current = { wrapper: source?.theme, editor: source?.appState?.theme };
+      setDataSource(source ?? { elements: [] });
+    });
     return () => {
-      cancelDebounceFn();
+      active = false;
+      cancelSave();
+      void persistPending().catch(console.error);
     };
-  }, [file.id]);
+  }, [file.id, persistPending, cancelSave]);
 
-  return dataSource ? (
-    <>
-      {didRender ? (
-        <Revedraw
-          dataSource={dataSource}
-          canvasName={file.name}
-          getRef={(ref) => setRef(ref)}
-          systemLangCode={systemLangCode}
-          onChange={onChangeDebounceFn}
-          onLinkOpen={onLinkOpen}
-        />
-      ) : null}
-    </>
+  useEffect(() => {
+    const remount = () => {
+      const data = lastData.current;
+      if (data) {
+        setDataSource(data);
+        setApi(undefined);
+        setFontRevision((revision) => revision + 1);
+      }
+    };
+    emitter.on('switch_font_family', remount);
+    return () => {
+      emitter.off('switch_font_family', remount);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!api) return;
+    const flush = async () => {
+      cancelSave();
+      const pending = pendingSave.current;
+      const scene = readBoard(api);
+      const appState = api.getAppState();
+      const data: ExcalidrawDataSource = {
+        ...lastData.current,
+        theme: appState.theme,
+        langCode: lastData.current?.langCode ?? systemLangCode,
+        appState: {
+          ...appState,
+          selectedElementIds: {},
+          collaborators: new Map()
+        },
+        elements: scene.elements,
+        files: scene.files
+      };
+      lastData.current = data;
+      await persist(data);
+      if (pendingSave.current === pending) pendingSave.current = undefined;
+    };
+    return registerAiEditor(createBoardAdapter(file.id, api, changeListeners.current, flush));
+  }, [api, cancelSave, file.id, persist, systemLangCode]);
+
+  const onBoardChange = (data: ExcalidrawDataSource) => {
+    if (data.appState?.isLoading) return;
+    lastData.current = data;
+    const revision = JSON.stringify([
+      data.elements.map((element) => [element.id, element.versionNonce, element.isDeleted]),
+      Object.keys(data.files ?? {}),
+      data.appState?.viewBackgroundColor
+    ]);
+    const viewSettings = boardViewSettings(data);
+    const initialized = lastScene.current !== '';
+    const sceneChanged = revision !== lastScene.current;
+    const viewSettingsChanged = viewSettings !== lastViewSettings.current;
+    lastScene.current = revision;
+    lastViewSettings.current = viewSettings;
+    if (initialized && (sceneChanged || viewSettingsChanged)) pendingSave.current = data;
+    if (initialized && sceneChanged) {
+      saveDebounced();
+      for (const listener of changeListeners.current) listener();
+    }
+  };
+
+  return screenDataSource ? (
+    <Revedraw
+      key={fontRevision}
+      dataSource={screenDataSource}
+      canvasName={file.name}
+      getRef={setApi}
+      systemLangCode={systemLangCode}
+      onChange={onBoardChange}
+      onLinkOpen={onLinkOpen}
+    />
   ) : null;
 }

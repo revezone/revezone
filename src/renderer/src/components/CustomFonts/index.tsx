@@ -43,7 +43,7 @@ const CustomFonts = ({ setSystemSettingVisible }: Props) => {
     boardCustomFont && setBoardCustomFontToLocal(boardCustomFont);
   }, [boardCustomFont]);
 
-  const customFontsChanged = useCallback(async (event: Event, newFonts: Font[]) => {
+  const customFontsChanged = useCallback(async (_event: undefined, newFonts: Font[]) => {
     setFonts(newFonts);
 
     // clear board custom font if font was removed

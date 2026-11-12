@@ -3,7 +3,6 @@ import { RevezoneFile } from '@renderer/types/file';
 import { Model } from 'flexlayout-react';
 import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
-import { blocksuiteStorage } from '@renderer/store/blocksuite';
 import useCurrentFile from '../useCurrentFile';
 import useTabJsonModel from '../useTabJsonModel';
 import useFileTree from '../useFileTree';
@@ -30,9 +29,6 @@ export default function useDeleteFile() {
           break;
         case 'tldraw':
           await tldrawIndexeddbStorage.deleteTldraw(file.id);
-          break;
-        case 'note':
-          await blocksuiteStorage.deletePage(file.id);
           break;
       }
 

@@ -35,3 +35,61 @@
   }
  
 }
+
+:root[data-revezone-color='dark'] .revezone-layout > [data-panel-id='sidebar'] {
+  background-color: var(--rz-app-panel);
+  color: var(--rz-app-text);
+}
+
+:root[data-revezone-color='dark'] .revezone-layout > [data-panel-id='sidebar'] > .border-t,
+:root[data-revezone-color='dark'] .revezone-layout > [data-panel-id='sidebar'] > .border-t > .border-r {
+  border-color: var(--rz-app-border);
+}
+
+:root[data-revezone-color='dark'] [data-panel-id='sidebar'] .bg-clip-text.text-transparent {
+  background-image: none;
+  color: var(--rz-app-accent);
+  text-decoration-color: var(--rz-app-accent);
+}
+
+:root[data-revezone-color='dark'] [data-panel-id='sidebar'] :is(.text-slate-500, .ant-select-arrow) {
+  color: var(--rz-app-muted);
+}
+
+:root[data-revezone-color='dark'] [data-panel-id='sidebar'] .revezone-language-select .ant-select-selection-item {
+  color: var(--rz-app-text);
+}
+
+:root[data-revezone-color='dark'] [data-panel-id='sidebar'] :is(.operation-item, .reve-text-link, .panel-left-button),
+:root[data-revezone-color='dark'] .revezone-layout > [data-panel] > .lucide-panel-left-open {
+  border-radius: 4px;
+  color: var(--rz-app-muted);
+}
+
+:root[data-revezone-color='dark'] [data-panel-id='sidebar'] :is(.operation-item, .reve-text-link, .panel-left-button):hover,
+:root[data-revezone-color='dark'] .revezone-layout > [data-panel] > .lucide-panel-left-open:hover {
+  background-color: var(--rz-app-hover);
+  color: var(--rz-app-accent);
+}
+
+:root[data-revezone-color='dark'] [data-panel-id='sidebar'] a:focus-visible {
+  outline: 2px solid var(--rz-app-focus);
+  outline-offset: 2px;
+}
+
+:root[data-revezone-color='dark'] .revezone-layout > [data-panel-resize-handle-id] {
+  background-color: var(--rz-app-bg);
+}
+
+:root[data-revezone-color='dark'] .revezone-layout > [data-panel-resize-handle-id] svg {
+  color: var(--rz-app-muted);
+}
+
+:root[data-revezone-color='dark'] .revezone-layout > [data-panel-resize-handle-id]:is(:hover, [data-resize-handle-active]) {
+  background-color: var(--rz-app-hover);
+}
+
+:root[data-revezone-color='dark'] .revezone-layout > [data-panel-resize-handle-id]:focus-visible {
+  outline: 2px solid var(--rz-app-focus);
+  outline-offset: -2px;
+}

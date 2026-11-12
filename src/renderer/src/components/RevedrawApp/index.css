@@ -3,13 +3,165 @@
 }
 
 .ant-modal-root {
-
   .ant-btn-primary {
     background-color: #1677ff;
   }
 }
 
-.excalidraw .dropdown-menu .dropdown-menu-item .revezone-app-custom-font-icon{
+.excalidraw .dropdown-menu .dropdown-menu-item .revezone-app-custom-font-icon {
   width: 0.8rem;
   height: 0.8rem;
+}
+
+/* Canvas appearance is controlled in Revezone's shared appearance settings. */
+.excalidraw-cn-app .dropdown-menu-item-custom:has(> button.switch-theme) {
+  display: none;
+}
+
+/* Revemate renders dialogs under body. The app palette applies to controls and dialogs, and the
+   canvas and swatches use the editor's rendering theme. */
+:root
+  :is(
+    .excalidraw-cn-app .excalidraw :is(.layer-ui__wrapper, .sidebar, .context-menu, .Toast),
+    body:has(.excalidraw-cn-app) > .excalidraw.excalidraw-modal-container
+  ) {
+  --rz-board-inverse: #fff;
+  --rz-board-danger: #b42318;
+  --rz-board-danger-hover: #912018;
+  --rz-board-danger-surface: #fff0ee;
+  --rz-board-scrim: rgb(21 28 39 / 24%);
+
+  color: var(--rz-app-text);
+  color-scheme: light;
+  --background: var(--rz-app-panel);
+  --color-base-20: var(--rz-app-hover);
+  --interactive-normal: var(--rz-app-surface);
+  --input-shadow: inset 0 0 0 1px var(--rz-app-border);
+  --text-normal: var(--rz-app-text);
+
+  --island-bg-color: var(--rz-app-panel);
+  --sidebar-bg-color: var(--rz-app-panel);
+  --sidebar-border-color: var(--rz-app-border);
+  --default-bg-color: var(--rz-app-surface);
+  --default-border-color: var(--rz-app-border);
+  --dialog-border-color: var(--rz-app-border);
+  --popup-bg-color: var(--rz-app-raised);
+  --popup-secondary-bg-color: var(--rz-app-surface);
+  --popup-text-color: var(--rz-app-text);
+  --popup-text-inverted-color: var(--rz-board-inverse);
+  --overlay-bg-color: var(--rz-board-scrim);
+  --text-primary-color: var(--rz-app-text);
+  --icon-fill-color: var(--rz-app-text);
+  --keybinding-color: var(--rz-app-muted);
+  --link-color: var(--rz-app-accent);
+  --focus-highlight-color: var(--rz-app-focus);
+  --select-highlight-color: var(--rz-app-hover);
+
+  --button-gray-1: var(--rz-app-surface);
+  --button-gray-2: var(--rz-app-border);
+  --button-gray-3: var(--rz-app-border);
+  --button-hover-bg: var(--rz-app-hover);
+  --button-destructive-color: var(--rz-board-danger);
+  --button-destructive-bg-color: var(--rz-board-danger-surface);
+  --input-bg-color: var(--rz-app-surface);
+  --input-border-color: var(--rz-app-border);
+  --input-hover-bg-color: var(--rz-app-hover);
+  --input-label-color: var(--rz-app-muted);
+  --color-icon-white: var(--rz-board-inverse);
+  --color-primary: var(--rz-app-accent);
+  --color-primary-darker: var(--rz-app-accent);
+  --color-primary-darkest: var(--rz-app-focus);
+  --color-primary-light: var(--rz-app-selected);
+  --color-primary-light-darker: var(--rz-app-selected);
+  --color-danger: var(--rz-board-danger);
+  --color-danger-dark: var(--rz-board-danger-hover);
+  --color-danger-darker: var(--rz-board-danger-hover);
+  --color-danger-darkest: var(--rz-board-danger-hover);
+  --color-danger-background: var(--rz-board-danger-surface);
+  --color-danger-color: var(--rz-board-danger);
+  --color-danger-icon-background: var(--rz-board-danger-surface);
+  --color-danger-icon-color: var(--rz-board-danger);
+  --RadioGroup-background: var(--rz-app-surface);
+  --RadioGroup-border: var(--rz-app-border);
+  --RadioGroup-choice-color-off: var(--rz-app-text);
+  --RadioGroup-choice-color-off-hover: var(--rz-app-text);
+  --RadioGroup-choice-color-on: var(--rz-board-inverse);
+  --RadioGroup-choice-background-off: var(--rz-app-surface);
+  --RadioGroup-choice-background-off-active: var(--rz-app-hover);
+  --RadioGroup-choice-background-on: var(--rz-app-accent);
+  --RadioGroup-choice-background-on-active: var(--rz-app-focus);
+  --RadioGroup-choice-background-on-hover: var(--rz-app-accent);
+  --Switch-disabled-color: var(--rz-app-border);
+  --Switch-track-background: var(--rz-app-surface);
+  --Switch-thumb-background: var(--rz-app-muted);
+  --ImageExportModal-preview-border: var(--rz-app-border);
+  --scrollbar-thumb: var(--rz-app-border);
+  --scrollbar-thumb-hover: var(--rz-app-muted);
+}
+
+:root[data-revezone-color='dark']
+  :is(
+    .excalidraw-cn-app .excalidraw :is(.layer-ui__wrapper, .sidebar, .context-menu, .Toast),
+    body:has(.excalidraw-cn-app) > .excalidraw.excalidraw-modal-container
+  ) {
+  --rz-board-inverse: #151c27;
+  --rz-board-danger: #ffb4a9;
+  --rz-board-danger-hover: #ffc8bf;
+  --rz-board-danger-surface: #4d2829;
+  --rz-board-scrim: rgb(8 14 23 / 62%);
+  color-scheme: dark;
+}
+
+/* The pinned Revedraw stylesheet gives the native menu surface an important theme color. */
+.excalidraw-cn-app .excalidraw .dropdown-menu .dropdown-menu-container {
+  background-color: var(--rz-app-raised) !important;
+}
+
+.excalidraw-cn-app
+  .excalidraw
+  .dropdown-menu
+  :is(.dropdown-menu-item-base, .dropdown-menu-item-custom) {
+  color: var(--rz-app-text);
+}
+
+.excalidraw-cn-app
+  .excalidraw
+  .ToolIcon
+  :is(.ToolIcon_type_radio, .ToolIcon_type_checkbox):checked
+  + .ToolIcon__icon {
+  --keybinding-color: var(--rz-app-muted);
+  background-color: var(--rz-app-selected);
+}
+
+.excalidraw-cn-app .excalidraw .context-menu .context-menu-item:is(:hover, :focus-visible) {
+  color: var(--rz-app-text);
+  background-color: var(--rz-app-hover);
+}
+
+.excalidraw-cn-app
+  .excalidraw
+  .context-menu
+  .context-menu-item.dangerous
+  .context-menu-item__label {
+  color: var(--rz-board-danger);
+}
+
+.excalidraw-cn-app .excalidraw .HintViewer > span {
+  color: var(--rz-app-muted);
+  background: var(--rz-app-panel);
+  border-radius: var(--border-radius-md);
+}
+
+:root .excalidraw-cn-app .excalidraw .library-menu-items__no-items {
+  color: var(--rz-app-muted);
+}
+
+body:has(.excalidraw-cn-app) > .excalidraw.excalidraw-modal-container .Modal__background {
+  background-color: var(--rz-board-scrim);
+}
+
+body:has(.excalidraw-cn-app)
+  > .excalidraw.excalidraw-modal-container
+  :is(.Dialog__action-button--primary, .Dialog__action-button--danger) {
+  color: var(--rz-board-inverse);
 }

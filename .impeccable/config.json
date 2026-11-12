@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "src/renderer/src/components/MultiTabsWithFlexLayout/index.css"
+        ],
+        "createdAt": "2026-11-10T10:42:00.933Z",
+        "reason": "Codex: The bottom border indicates the selected FlexLayout tab. HEAD already uses this style, and the desktop screenshot shows the border and rounding on opposite edges."
+      }
+    ]
+  }
+}

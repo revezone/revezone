@@ -32,6 +32,69 @@
   }
 }
 
+:root[data-revezone-color='dark'] .revezone-layout-wrapper .flexlayout__layout {
+  --color-text: var(--rz-app-text);
+  --color-background: var(--rz-app-bg);
+  --color-base: var(--rz-app-panel);
+  --color-1: var(--rz-app-panel);
+  --color-2: var(--rz-app-surface);
+  --color-3: var(--rz-app-raised);
+  --color-4: var(--rz-app-border);
+  --color-5: var(--rz-app-hover);
+  --color-6: var(--rz-app-hover);
+  --color-tabset-background: var(--rz-app-panel);
+  --color-tabset-background-selected: var(--rz-app-panel);
+  --color-tabset-header-background: var(--rz-app-panel);
+  --color-tab-selected-background: var(--rz-app-selected);
+  --color-tab-unselected: var(--rz-app-muted);
+  --color-icon: var(--rz-app-muted);
+  --color-overflow: var(--rz-app-muted);
+  --color-popup-border: var(--rz-app-border);
+  --color-popup-unselected-background: var(--rz-app-raised);
+  --color-edge-marker: var(--rz-app-focus);
+
+  background-color: var(--rz-app-bg);
+  color: var(--rz-app-text);
+}
+
+:root[data-revezone-color='dark'] .revezone-layout-wrapper .flexlayout__tabset-selected {
+  background-color: var(--color-tabset-background-selected);
+}
+
+:root[data-revezone-color='dark'] .revezone-layout-wrapper .flexlayout__tabset_tabbar_outer_top {
+  border-color: var(--color-tabset-divider-line);
+}
+
+:root[data-revezone-color='dark'] .revezone-layout-wrapper .flexlayout__tab_button {
+  color: var(--color-tab-unselected);
+}
+
+:root[data-revezone-color='dark'] .revezone-layout-wrapper .flexlayout__tab_button:hover {
+  background-color: var(--rz-app-hover);
+  color: var(--rz-app-text);
+}
+
+:root[data-revezone-color='dark'] .revezone-layout-wrapper .flexlayout__tab_button--selected,
+:root[data-revezone-color='dark'] .revezone-layout-wrapper .flexlayout__tab_button--selected:hover {
+  border-bottom-color: var(--rz-app-accent);
+  background-color: var(--color-tab-selected-background);
+  color: var(--color-tab-selected);
+}
+
+:root[data-revezone-color='dark'] .revezone-layout-wrapper :is(.flexlayout__tab_button_trailing, .flexlayout__tab_toolbar_button, .flexlayout__tab_button_overflow):hover {
+  background-color: var(--rz-app-hover);
+  color: var(--rz-app-accent);
+}
+
+:root[data-revezone-color='dark'] .revezone-layout-wrapper :is(.flexlayout__tab_button, .flexlayout__tab_toolbar_button, .flexlayout__tab_button_overflow, .flexlayout__tab_button_textbox):focus-visible {
+  outline: 2px solid var(--rz-app-focus);
+  outline-offset: -2px;
+}
+
+:root[data-revezone-color='dark'] .revezone-layout-wrapper .flexlayout__popup_menu_container {
+  scrollbar-color: var(--rz-app-muted) transparent;
+}
+
 .revezone-siderbar-collapsed {
   height: 100%;
 

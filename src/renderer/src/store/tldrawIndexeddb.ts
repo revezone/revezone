@@ -1,9 +1,9 @@
-import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import { RevezoneFileTree } from '../types/file';
+import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
+import type { RevezoneFileTree } from '../types/file';
 import { sendFileDataChangeToMainDebounceFn } from '../utils/file';
-import type { StoreSnapshot, TLRecord } from '@tldraw/tldraw';
+import type { StoreSnapshot, TLInstance, TLRecord } from '@tldraw/tldraw';
 
-export type TLDrawData = StoreSnapshot<TLRecord> & { instanceState?: any };
+export type TLDrawData = StoreSnapshot<TLRecord> & { instanceState?: Partial<TLInstance> };
 
 export interface RevezoneTldrawDBSchema extends DBSchema {
   tldraw: {
@@ -28,79 +28,69 @@ const TLDRAW_INITIAL_DATA: TLDrawData = {
 };
 
 class TldrawIndexeddbStorage {
-  constructor() {
-    if (TldrawIndexeddbStorage.instance) {
-      return TldrawIndexeddbStorage.instance;
+  private database?: Promise<IDBPDatabase<RevezoneTldrawDBSchema>>;
+  private readonly writes = new Map<string, Promise<void>>();
+
+  private getDatabase() {
+    if (!this.database) {
+      this.database = openDB<RevezoneTldrawDBSchema>(INDEXEDDB_REVEZONE_TLDRAW, 1, {
+        upgrade(db) {
+          db.createObjectStore(INDEXEDDB_TLDRAW_FILE_KEY, { autoIncrement: true });
+        }
+      }).catch((error) => {
+        this.database = undefined;
+        throw error;
+      });
     }
-
-    TldrawIndexeddbStorage.instance = this;
-
-    (async () => {
-      this.db = await this.initDB();
-    })();
+    return this.database;
   }
 
-  static instance: TldrawIndexeddbStorage;
-  db: IDBPDatabase<RevezoneTldrawDBSchema> | undefined;
+  private enqueueWrite(id: string, write: () => Promise<void>) {
+    const operation = (this.writes.get(id) ?? Promise.resolve()).catch(() => undefined).then(write);
+    this.writes.set(id, operation);
+    const clear = () => {
+      if (this.writes.get(id) === operation) this.writes.delete(id);
+    };
+    operation.then(clear, clear);
+    return operation;
+  }
 
-  async initDB(): Promise<IDBPDatabase<RevezoneTldrawDBSchema>> {
-    if (this.db) {
-      return this.db;
-    }
-
-    const db = await openDB<RevezoneTldrawDBSchema>(INDEXEDDB_REVEZONE_TLDRAW, 1, {
-      upgrade: async (db) => {
-        await this.initTldrawFileStore(db);
+  updateTldraw(id: string, tldrawData: TLDrawData, fileTree: RevezoneFileTree) {
+    return this.enqueueWrite(id, async () => {
+      const db = await this.getDatabase();
+      const tx = db.transaction(INDEXEDDB_TLDRAW_FILE_KEY, 'readwrite', { durability: 'strict' });
+      if (!(await tx.store.getKey(id))) {
+        await tx.done;
+        throw new Error('This Tldraw board is no longer in the workspace.');
+      }
+      await Promise.all([tx.store.put(tldrawData, id), tx.done]);
+      if (fileTree[id]?.data.type === 'tldraw') {
+        sendFileDataChangeToMainDebounceFn(id, JSON.stringify(tldrawData), fileTree);
       }
     });
-
-    this.db = db;
-
-    return db;
   }
 
-  async initTldrawFileStore(db: IDBPDatabase<RevezoneTldrawDBSchema>) {
-    const tldrawStore = await db.createObjectStore(INDEXEDDB_TLDRAW_FILE_KEY, {
-      autoIncrement: true
+  addTldraw(id: string, tldrawData: TLDrawData = TLDRAW_INITIAL_DATA) {
+    return this.enqueueWrite(id, async () => {
+      const db = await this.getDatabase();
+      await db.add(INDEXEDDB_TLDRAW_FILE_KEY, tldrawData, id);
     });
-
-    return tldrawStore;
-  }
-
-  async updateTldraw(id: string, tldrawData: TLDrawData, fileTree: RevezoneFileTree) {
-    await this.initDB();
-
-    const isExisted = !!(await this.db?.get(INDEXEDDB_TLDRAW_FILE_KEY, id));
-
-    if (!isExisted) {
-      console.warn(`Tldraw ${id} not existed, cannot update!`);
-      return;
-    }
-
-    await this.db?.put(INDEXEDDB_TLDRAW_FILE_KEY, tldrawData, id);
-
-    sendFileDataChangeToMainDebounceFn(id, JSON.stringify(tldrawData), fileTree);
-  }
-
-  async addTldraw(id: string, tldrawData: TLDrawData = TLDRAW_INITIAL_DATA) {
-    await this.initDB();
-    await this.db?.add(INDEXEDDB_TLDRAW_FILE_KEY, tldrawData, id);
   }
 
   async getTldraw(id: string) {
-    await this.initDB();
-    return await this.db?.get(INDEXEDDB_TLDRAW_FILE_KEY, id);
+    await this.writes.get(id)?.catch(() => undefined);
+    return (await this.getDatabase()).get(INDEXEDDB_TLDRAW_FILE_KEY, id);
   }
 
   async getAllTldrawIds(): Promise<string[]> {
-    await this.initDB();
-    return (await this.db?.getAllKeys(INDEXEDDB_TLDRAW_FILE_KEY)) || [];
+    return (await this.getDatabase()).getAllKeys(INDEXEDDB_TLDRAW_FILE_KEY);
   }
 
-  async deleteTldraw(id: string) {
-    await this.initDB();
-
-    await this.db?.delete(INDEXEDDB_TLDRAW_FILE_KEY, id);
+  deleteTldraw(id: string) {
+    return this.enqueueWrite(id, async () => {
+      const db = await this.getDatabase();
+      await db.delete(INDEXEDDB_TLDRAW_FILE_KEY, id);
+    });
   }
 }
 

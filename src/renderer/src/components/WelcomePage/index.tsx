@@ -12,7 +12,7 @@ function WelcomeContent() {
   const { t } = useTranslation();
 
   return (
-    <div className="revezone-welcome-page relative w-full h-full flex pt-6 pb-10 justify-center text-slate-400">
+    <div className="revezone-welcome-page relative w-full h-full flex pt-6 pb-10 justify-center">
       <div className="content w-2/3 overflow-scroll text-sm">
         <div className="reve-text-link mb-6">
           <RevezoneLogo size="large" url="https://revezone.com" />
@@ -25,7 +25,7 @@ function WelcomeContent() {
           {!isInRevezoneApp ? t('welcome.onlineTry') : null} {t('welcome.downloadApp')}{' '}
           <DownloadApp className="ml-2" from="welcomepage" />
         </p>
-        <p className="mb-6 text-sm  text-slate-600">{t('welcome.operationTip')}</p>
+        <p className="mb-6 text-sm">{t('welcome.operationTip')}</p>
         <div className="mb-6 text-sm">
           <h2 className="mb-2 text-base">{t('welcome.operationGuide')}</h2>
           <p className="mb-2">{t('welcome.operationDetailDesc')}</p>

@@ -3,7 +3,7 @@ import 'flexlayout-react/style/light.css';
 import NoteEditor from '@renderer/components/NoteEditor';
 import RevedrawApp from '../RevedrawApp';
 import WelcomePage from '../WelcomePage';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 
 import './index.css';
@@ -15,7 +15,6 @@ import { siderbarCollapsedAtom, tabModelAtom } from '@renderer/store/jotai';
 import { RevezoneFile, RevezoneFileType } from '@renderer/types/file';
 import { Palette, FileType, File } from 'lucide-react';
 import { WELCOME_TAB_ITEM } from '@renderer/utils/constant';
-import { activeEditorManager } from '@revesuite/blocks';
 // import MindMap from '../MindMap';
 import ReveTldraw from '../Tldraw';
 import { TldrawIcon } from '@renderer/icons';
@@ -23,7 +22,11 @@ import { TldrawIcon } from '@renderer/icons';
 export default function MultiTabs() {
   const { tabJsonModel, deleteTab, getTabList } = useTabJsonModel();
   const [model, setModel] = useAtom(tabModelAtom);
-  const { updateCurrentFile } = useCurrentFile();
+  const { currentFile, updateCurrentFile } = useCurrentFile();
+  const focusedFile = useRef(currentFile?.id);
+  const updateFocus = useRef(updateCurrentFile);
+  focusedFile.current = currentFile?.id;
+  updateFocus.current = updateCurrentFile;
   const [collapsed] = useAtom(siderbarCollapsedAtom);
 
   useEffect(() => {
@@ -62,9 +65,20 @@ export default function MultiTabs() {
   }, []);
 
   const factory = useCallback((node: TabNode) => {
-    const file = node.getConfig();
-
-    return <div className="tab_content">{renderContent(file)}</div>;
+    const file = node.getConfig() as RevezoneFile;
+    return (
+      <div
+        className="tab_content"
+        onPointerDownCapture={() => {
+          if (file?.id && file.type !== 'welcome' && focusedFile.current !== file.id) {
+            focusedFile.current = file.id;
+            void updateFocus.current(file);
+          }
+        }}
+      >
+        {renderContent(file)}
+      </div>
+    );
   }, []);
 
   const onTabDelete = useCallback((fileId: string, model: Model | undefined) => {
@@ -76,12 +90,6 @@ export default function MultiTabs() {
 
     const file = fileId ? await fileTreeIndexeddbStorage.getFile(fileId) : undefined;
     updateCurrentFile(file);
-
-    // FIX: note selection conflix with board in multi tabs scene
-    if (file?.type !== 'note') {
-      // @ts-ignore
-      activeEditorManager.setActive(undefined);
-    }
   }, []);
 
   const onAction = useCallback(

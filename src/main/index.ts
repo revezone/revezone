@@ -1,5 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
+import type { IpcMainInvokeEvent } from 'electron';
 import { join } from 'path';
+import { pathToFileURL } from 'node:url';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { isMacOS } from './utils/platform';
 import {
@@ -31,22 +33,73 @@ import {
 import { RevezoneFileTree, RevezoneFolder, RevezoneFile } from '../renderer/src/types/file';
 import { TreeItem } from 'react-complex-tree';
 import fs from 'node:fs';
-
-// import { autoUpdater } from 'electron-updater';
-import { notify } from './utils/notification';
+import { VersionHistoryStore } from './utils/versionHistory';
+import { registerAiService } from './utils/aiService';
+import { searchCommunity } from './utils/communitySearch';
+import { COMMUNITY_SEARCH_CHANNEL } from '../shared/community';
+import { registerNoteAssets, registerNoteAssetScheme } from './utils/noteAssets';
 
 const DEFAULT_WINDOW_WIDTH = 1200;
 const DEFAULT_WINDOW_HEIGHT = 770;
 
 // 创建一个新的存储实例
 const store = new Store();
+const versionHistory = new VersionHistoryStore(join(app.getPath('userData'), 'version-history'));
 
 let mainWindow: BrowserWindow | null;
 
 // IMPORTANT: to fix file save problem in excalidraw: The request is not allowed by the user agent or the platform in the current context
 app.commandLine.appendSwitch('enable-experimental-web-platform-features');
+registerNoteAssetScheme();
 
 app.setAsDefaultProtocolClient('revezone');
+
+function rendererUrl(): string {
+  return (
+    (is.dev && process.env['ELECTRON_RENDERER_URL']) ||
+    pathToFileURL(join(__dirname, '../renderer/index.html')).href
+  );
+}
+
+function isRendererUrl(value: string): boolean {
+  try {
+    const actual = new URL(value);
+    const expected = new URL(rendererUrl());
+    actual.hash = '';
+    expected.hash = '';
+    return actual.href === expected.href;
+  } catch {
+    return false;
+  }
+}
+
+function assertRendererSender(event: IpcMainInvokeEvent) {
+  const frame = event.senderFrame;
+  if (
+    !mainWindow ||
+    event.sender !== mainWindow.webContents ||
+    !frame ||
+    frame.parent ||
+    !isRendererUrl(frame.url)
+  ) {
+    throw new Error('Request did not come from the app');
+  }
+}
+
+function registerVersionHistory() {
+  ipcMain.handle(EVENTS.versionList, (event, docId: unknown) => {
+    assertRendererSender(event);
+    return versionHistory.list(docId);
+  });
+  ipcMain.handle(EVENTS.versionGet, (event, docId: unknown, versionId: unknown) => {
+    assertRendererSender(event);
+    return versionHistory.get(docId, versionId);
+  });
+  ipcMain.handle(EVENTS.versionSave, (event, input: unknown) => {
+    assertRendererSender(event);
+    return versionHistory.save(input);
+  });
+}
 
 function createWindow(): BrowserWindow {
   if (mainWindow) return mainWindow;
@@ -55,6 +108,22 @@ function createWindow(): BrowserWindow {
     width: DEFAULT_WINDOW_WIDTH,
     height: DEFAULT_WINDOW_HEIGHT
   }) as { width: number; height: number };
+
+  getRegisteredFonts();
+  process.env['USER_FILES_STORAGE_PATH'] = getUserFilesStoragePath();
+
+  if (process.platform === 'win32') {
+    process.env.DEEP_LINKING_URL = getRevezoneLinkFromCommandLine(process.argv);
+    const filePath = getFilePathFromProcessArgv(process.argv);
+    if (filePath) {
+      try {
+        process.env.OPEN_FILE_DATA = fs.readFileSync(filePath, 'utf8');
+        process.env.OPEN_FILE_PATH = filePath;
+      } catch (error) {
+        console.error('Could not open the launch file', error);
+      }
+    }
+  }
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -67,42 +136,21 @@ function createWindow(): BrowserWindow {
     trafficLightPosition: { x: 10, y: 10 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
-      webSecurity: false
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true,
+      webSecurity: true
     }
   });
 
   registerAppMenu();
-
-  getRegisteredFonts();
-  batchActiveCustomFonts(mainWindow);
-
-  process.env['USER_FILES_STORAGE_PATH'] = getUserFilesStoragePath();
+  registerAiService(mainWindow);
 
   mainWindow.setMenuBarVisibility(false);
 
   mainWindow.on('ready-to-show', () => {
     mainWindow?.show();
   });
-
-  // Protocol handler for win32
-  if (process.platform == 'win32') {
-    // Keep only command line / deep linked arguments
-
-    const deeplinkingUrl = getRevezoneLinkFromCommandLine(process.argv);
-
-    process.env.DEEP_LINKING_URL = deeplinkingUrl;
-
-    notify(process.argv.join(', '));
-
-    const filePath = getFilePathFromProcessArgv(process.argv);
-
-    process.env.OPEN_FILE_PATH = filePath;
-
-    const fileData = fs.readFileSync(filePath).toString();
-
-    process.env.OPEN_FILE_DATA = fileData;
-  }
 
   mainWindow.on('closed', () => {
     mainWindow?.removeAllListeners();
@@ -117,19 +165,33 @@ function createWindow(): BrowserWindow {
   });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url);
+    try {
+      const url = new URL(details.url);
+      if (url.protocol === 'https:' || url.protocol === 'http:') {
+        void shell
+          .openExternal(url.href)
+          .catch((error) => console.error('Could not open link', error));
+      }
+    } catch {
+      // Ignore malformed or disallowed links.
+    }
     return { action: 'deny' };
+  });
+  mainWindow.webContents.on('will-navigate', (event) => {
+    if (!isRendererUrl(event.url)) event.preventDefault();
+  });
+  mainWindow.webContents.on('will-redirect', (event) => {
+    if (event.isMainFrame && !isRendererUrl(event.url)) event.preventDefault();
+  });
+  mainWindow.webContents.on('did-finish-load', () => {
+    if (mainWindow) batchActiveCustomFonts(mainWindow);
   });
 
   // mainWindow.webContents.openDevTools();
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL']);
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
-  }
+  void mainWindow.loadURL(rendererUrl());
 
   if (isMacOS()) {
     ipcMain.on(EVENTS.toggleTrafficLight, (event, isShow) => {
@@ -275,6 +337,19 @@ app.on('open-url', (event, link) => {
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron');
+  registerVersionHistory();
+  registerNoteAssets(assertRendererSender);
+  let searchPending = false;
+  ipcMain.handle(COMMUNITY_SEARCH_CHANNEL, async (event, input: unknown) => {
+    assertRendererSender(event);
+    if (searchPending) throw new Error('A community search is already in progress.');
+    searchPending = true;
+    try {
+      return await searchCommunity(input);
+    } finally {
+      searchPending = false;
+    }
+  });
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

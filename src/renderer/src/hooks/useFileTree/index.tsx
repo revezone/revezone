@@ -3,6 +3,7 @@ import { fileTreeIndexeddbStorage } from '@renderer/store/fileTreeIndexeddb';
 import { fileTreeAtom } from '@renderer/store/jotai';
 import { useAtom } from 'jotai';
 import { blocksuiteStorage } from '@renderer/store/blocksuite';
+import { blockNoteStorage } from '@renderer/store/blockNoteStorage';
 import { boardIndexeddbStorage } from '@renderer/store/boardIndexeddb';
 
 export default function useFileTree() {
@@ -14,8 +15,11 @@ export default function useFileTree() {
     // DEBUG: check files not deleted unexpected
     if (localStorage.getItem('is_debug') === 'true') {
       if (tree) {
-        let notes = await blocksuiteStorage.getAllPageIds();
-        notes = notes.filter((id) => !tree[id]);
+        const noteIds = await Promise.all([
+          blocksuiteStorage.getAllPageIds(),
+          blockNoteStorage.listIds()
+        ]);
+        const notes = [...new Set(noteIds.flat())].filter((id) => !tree[id]);
         let boards = await boardIndexeddbStorage.getAllBoardIds();
         boards = boards.filter((id) => !tree[id]);
 

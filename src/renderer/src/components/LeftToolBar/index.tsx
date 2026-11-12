@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import useAddFile from '@renderer/hooks/useAddFile';
 import { useTranslation } from 'react-i18next';
 import useAddFolder from '@renderer/hooks/useAddFolder';
@@ -22,6 +22,7 @@ import { Dropdown } from 'antd';
 import { useMemo, useState } from 'react';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from '@renderer/store/jotai';
+import { emitter, events } from '@renderer/store/eventemitter';
 import SystemSettings from '../SystemSettings';
 import { GithubCircle, Bilibili } from '@renderer/icons';
 import DownloadApp from '../DownloadApp';
@@ -41,6 +42,18 @@ export default function LeftToolBar(props: Props) {
   const { model: tabModel } = useTabJsonModel();
   const [langCode] = useAtom(langCodeAtom);
   const [systemSettingVisible, setSystemSettingVisible] = useState(false);
+  const [settingsTab, setSettingsTab] = useState('custom_fonts');
+
+  useEffect(() => {
+    const openAgentSettings = () => {
+      setSettingsTab('agent');
+      setSystemSettingVisible(true);
+    };
+    emitter.on(events.OPEN_AGENT_MODEL_SETTINGS, openAgentSettings);
+    return () => {
+      emitter.off(events.OPEN_AGENT_MODEL_SETTINGS, openAgentSettings);
+    };
+  }, []);
 
   const helpMenu = useMemo(
     () => [
@@ -234,6 +247,8 @@ export default function LeftToolBar(props: Props) {
         </span>
         <SystemSettings
           visible={systemSettingVisible}
+          activeTab={settingsTab}
+          onTabChange={setSettingsTab}
           setSystemSettingVisible={setSystemSettingVisible}
           onCancel={() => setSystemSettingVisible(false)}
         ></SystemSettings>

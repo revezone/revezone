@@ -32,13 +32,12 @@ export const registerAppMenu = () => {
   const menu = Menu.getApplicationMenu();
 
   if (menu) {
-    menu.items = menu?.items.map((item) => {
+    menu.items.forEach((item) => {
       if (item.role === 'help') {
         helpSubMenuItems.forEach((_item) => {
           item.submenu?.insert(0, _item);
         });
       }
-      return item;
     });
   }
 

@@ -1,0 +1,465 @@
+.rz-note {
+  --rz-note-background: #fff;
+  --rz-note-text: #243449;
+  --rz-note-muted: #536275;
+  --rz-note-accent: #075985;
+  --rz-note-border: #dbe3ec;
+  --rz-note-scrollbar: #a7b7ca;
+  --rz-note-surface: #f4f7fa;
+  --rz-note-popup: #fff;
+  --rz-note-hover: #edf3f8;
+  --rz-note-selected: #dfedf8;
+  --rz-note-selection: #d1e6fb;
+  --rz-note-focus: #0275a8;
+  --rz-note-error: #9b1c1c;
+  --rz-note-shadow: rgb(36 52 73 / 16%);
+  --rz-note-code-background: #192434;
+  --rz-note-code-border: #27384e;
+  --rz-note-code-text: #e4edf7;
+
+  --rz-note-font: 'zh quote', 'Helvetica Neue', -apple-system, 'PingFang SC', sans-serif;
+  --rz-note-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --rz-note-measure: 48rem;
+  --rz-note-gutter: clamp(16px, 5.5cqi, 64px);
+  --rz-note-font-size: 16px;
+  --rz-note-line-height: 1.62;
+  --rz-note-block-spacing: 4px;
+  --rz-note-title-size: clamp(24px, 5cqi, 34px);
+  --rz-note-heading-gap: 18px;
+  --rz-note-heading-one: 1.9em;
+  --rz-note-heading-two: 1.5em;
+  --rz-note-heading-three: 1.2em;
+  --rz-note-code-padding: 16px;
+
+  container: rz-note / inline-size;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  isolation: isolate;
+  color-scheme: light;
+  color: var(--rz-note-text);
+  background: var(--rz-note-background);
+  caret-color: var(--rz-note-accent);
+  scrollbar-color: var(--rz-note-scrollbar) transparent;
+  font-family: var(--rz-note-font);
+}
+
+.rz-note[data-note-layout='reading'] {
+  --rz-note-measure: 40rem;
+  --rz-note-gutter: clamp(20px, 7.5cqi, 72px);
+  --rz-note-font-size: 17px;
+  --rz-note-line-height: 1.78;
+  --rz-note-block-spacing: 6px;
+  --rz-note-title-size: clamp(26px, 5.5cqi, 38px);
+  --rz-note-heading-gap: 24px;
+}
+
+.rz-note[data-note-layout='reading']:not([data-note-color='dark']) {
+  --rz-note-background: #fbf8f1;
+  --rz-note-text: #322e29;
+  --rz-note-muted: #60574c;
+  --rz-note-border: #e1d8c8;
+  --rz-note-surface: #f1ebdf;
+  --rz-note-popup: #fffcf6;
+  --rz-note-hover: #f1eadd;
+}
+
+.rz-note[data-note-layout='technical'] {
+  --rz-note-measure: 64rem;
+  --rz-note-gutter: clamp(16px, 4.5cqi, 54px);
+  --rz-note-font-size: 15px;
+  --rz-note-line-height: 1.52;
+  --rz-note-block-spacing: 3px;
+  --rz-note-title-size: clamp(22px, 4.5cqi, 30px);
+  --rz-note-heading-gap: 14px;
+  --rz-note-heading-one: 1.8em;
+  --rz-note-heading-two: 1.4em;
+  --rz-note-heading-three: 1.15em;
+  --rz-note-code-padding: 13px;
+}
+
+.rz-note[data-note-color='dark'] {
+  --rz-note-background: #151c27;
+  --rz-note-text: #e5edf7;
+  --rz-note-muted: #a8b7ca;
+  --rz-note-accent: #99d4fa;
+  --rz-note-border: #344357;
+  --rz-note-scrollbar: #53677e;
+  --rz-note-surface: #1c2736;
+  --rz-note-popup: #202c3c;
+  --rz-note-hover: #2a394c;
+  --rz-note-selected: #24445e;
+  --rz-note-selection: #345575;
+  --rz-note-focus: #8bccf6;
+  --rz-note-error: #ffb4ae;
+  --rz-note-shadow: rgb(0 0 0 / 32%);
+  --rz-note-code-background: #101722;
+  --rz-note-code-border: #344357;
+
+  color-scheme: dark;
+}
+
+.rz-note ::selection {
+  color: var(--rz-note-text);
+  background: var(--rz-note-selection);
+}
+
+.rz-note-shell {
+  box-sizing: border-box;
+  max-width: calc(var(--rz-note-measure) + 2 * var(--rz-note-gutter));
+  min-height: 100%;
+  margin-inline: auto;
+  padding: clamp(14px, 2.5cqi, 24px) var(--rz-note-gutter) 80px;
+}
+
+.rz-note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px 8px;
+  margin: 0 0 clamp(14px, 3cqi, 25px);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rz-note-border);
+}
+
+.rz-note-actions button,
+.rz-note-error button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  max-width: 100%;
+  padding: 4px 7px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--rz-note-accent);
+  font: inherit;
+  font-size: 12px;
+  text-align: start;
+  cursor: pointer;
+}
+
+.rz-note-actions button svg {
+  flex-shrink: 0;
+}
+
+.rz-note-actions button:hover,
+.rz-note-error button:hover {
+  background: var(--rz-note-hover);
+}
+
+.rz-note-actions button:focus-visible,
+.rz-note-error button:focus-visible,
+.rz-note-title:focus-visible,
+.rz-note-appearance-option:has(input:focus-visible) {
+  outline: 2px solid var(--rz-note-focus);
+  outline-offset: 2px;
+}
+
+.rz-note-appearance {
+  position: relative;
+  min-width: 0;
+  margin-inline-end: auto;
+}
+
+.rz-note-actions .rz-note-appearance-trigger[aria-expanded='true'] {
+  background: var(--rz-note-selected);
+}
+
+.rz-note-appearance-menu {
+  position: absolute;
+  z-index: 110;
+  inset-block-start: calc(100% + 7px);
+  inset-inline-start: 0;
+  box-sizing: border-box;
+  width: 13rem;
+  max-width: calc(100cqi - 2 * var(--rz-note-gutter));
+  max-height: min(24rem, calc(100dvh - 8rem));
+  overflow: auto;
+  padding: 8px;
+  border-radius: 9px;
+  background: var(--rz-note-popup);
+  color: var(--rz-note-text);
+  box-shadow: 0 4px 16px var(--rz-note-shadow);
+  font-size: 13px;
+}
+
+.rz-note-appearance-group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.rz-note-appearance-group + .rz-note-appearance-group {
+  margin-top: 10px;
+}
+
+.rz-note-appearance-group legend {
+  padding: 2px 7px 3px;
+  color: var(--rz-note-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rz-note-appearance-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  padding: 4px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.rz-note-appearance-option:hover {
+  background: var(--rz-note-hover);
+}
+
+.rz-note-appearance-option:has(input:checked) {
+  background: var(--rz-note-selected);
+}
+
+.rz-note-appearance-option input {
+  flex: 0 0 auto;
+  margin: 0;
+  accent-color: var(--rz-note-accent);
+}
+
+.rz-note-appearance-option input:focus-visible {
+  outline: none;
+}
+
+.rz-note-title {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0 0 14px;
+  padding: 3px 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--rz-note-text);
+  font: inherit;
+  font-size: var(--rz-note-title-size);
+  font-weight: 700;
+  line-height: 1.23;
+  letter-spacing: -0.025em;
+}
+
+.rz-note-title::placeholder {
+  opacity: 1;
+  color: var(--rz-note-muted);
+}
+
+/* Both the editor container and any BlockNote popup roots share the note palette. */
+.rz-note .bn-root {
+  --bn-colors-editor-text: var(--rz-note-text);
+  --bn-colors-editor-background: var(--rz-note-background);
+  --bn-colors-menu-text: var(--rz-note-text);
+  --bn-colors-menu-background: var(--rz-note-popup);
+  --bn-colors-tooltip-text: var(--rz-note-text);
+  --bn-colors-tooltip-background: var(--rz-note-surface);
+  --bn-colors-hovered-text: var(--rz-note-text);
+  --bn-colors-hovered-background: var(--rz-note-hover);
+  --bn-colors-selected-text: var(--rz-note-text);
+  --bn-colors-selected-background: var(--rz-note-selected);
+  --bn-colors-disabled-text: var(--rz-note-muted);
+  --bn-colors-disabled-background: var(--rz-note-surface);
+  --bn-colors-shadow: var(--rz-note-shadow);
+  --bn-colors-border: var(--rz-note-border);
+  --bn-colors-side-menu: var(--rz-note-muted);
+  --bn-font-family: var(--rz-note-font);
+
+  --bn-colors-highlights-gray-text: #536275;
+  --bn-colors-highlights-brown-text: #744323;
+  --bn-colors-highlights-red-text: #a92638;
+  --bn-colors-highlights-orange-text: #87410c;
+  --bn-colors-highlights-yellow-text: #786211;
+  --bn-colors-highlights-green-text: #28634e;
+  --bn-colors-highlights-blue-text: #075985;
+  --bn-colors-highlights-purple-text: #6542a0;
+  --bn-colors-highlights-pink-text: #91335e;
+}
+
+.rz-note[data-note-color='dark'] .bn-root {
+  --bn-colors-highlights-gray-text: #bfcad8;
+  --bn-colors-highlights-gray-background: #354255;
+  --bn-colors-highlights-brown-text: #e3af8f;
+  --bn-colors-highlights-brown-background: #4a3429;
+  --bn-colors-highlights-red-text: #ffa5a5;
+  --bn-colors-highlights-red-background: #4e2c37;
+  --bn-colors-highlights-orange-text: #ffc18d;
+  --bn-colors-highlights-orange-background: #493624;
+  --bn-colors-highlights-yellow-text: #efd084;
+  --bn-colors-highlights-yellow-background: #4b4128;
+  --bn-colors-highlights-green-text: #a5d9bc;
+  --bn-colors-highlights-green-background: #2c423a;
+  --bn-colors-highlights-blue-text: #9ed4ff;
+  --bn-colors-highlights-blue-background: #263d54;
+  --bn-colors-highlights-purple-text: #d1b9ff;
+  --bn-colors-highlights-purple-background: #3d3254;
+  --bn-colors-highlights-pink-text: #f4abd5;
+  --bn-colors-highlights-pink-background: #482e44;
+}
+
+.rz-note .bn-editor {
+  min-height: 55vh;
+  padding-inline: 0;
+  font-family: var(--rz-note-font);
+  font-size: var(--rz-note-font-size);
+}
+
+.rz-note .bn-editor .bn-block-outer {
+  line-height: var(--rz-note-line-height);
+}
+
+.rz-note .bn-editor .bn-block-content {
+  min-width: 0;
+  padding-block: var(--rz-note-block-spacing);
+}
+
+.rz-note .bn-editor .bn-inline-content {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.rz-note .bn-editor [data-content-type='heading'] {
+  padding-block-start: var(--rz-note-heading-gap);
+  line-height: 1.23;
+  letter-spacing: -0.02em;
+}
+
+.rz-note .bn-editor [data-content-type='heading']:is(:not([data-level]), [data-level='1']) {
+  --level: var(--rz-note-heading-one);
+}
+
+.rz-note .bn-editor [data-content-type='heading'][data-level='2'] {
+  --level: var(--rz-note-heading-two);
+}
+
+.rz-note .bn-editor [data-content-type='heading'][data-level='3'] {
+  --level: var(--rz-note-heading-three);
+}
+
+.rz-note .bn-editor .bn-toggle-slot > [data-content-type='heading'] {
+  padding-block-start: 0;
+}
+
+.rz-note .bn-editor .bn-inline-content a {
+  color: var(--rz-note-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.17em;
+}
+
+.rz-note .bn-editor [data-content-type='numberedListItem']::before {
+  color: var(--rz-note-muted);
+  transition-property: margin-right;
+}
+
+.rz-note .bn-editor blockquote,
+.rz-note .bn-editor hr {
+  color: var(--rz-note-muted);
+  border-color: var(--rz-note-border);
+}
+
+.rz-note .bn-editor :is(code, pre) {
+  font-family: var(--rz-note-mono);
+  font-size: 0.9em;
+}
+
+.rz-note .bn-editor :not(pre) > code {
+  padding: 0.06em 0.24em;
+  border-radius: 4px;
+  background: var(--rz-note-surface);
+}
+
+.rz-note .bn-editor .bn-block-content[data-content-type='codeBlock'] {
+  padding: 0;
+  border: 1px solid var(--rz-note-code-border);
+  color: var(--rz-note-code-text);
+  background: var(--rz-note-code-background);
+}
+
+.rz-note .bn-editor [data-content-type='codeBlock'] > pre {
+  --bn-suggestion-surface: var(--rz-note-code-background);
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: calc(var(--rz-note-code-padding) + 8px) var(--rz-note-code-padding)
+    var(--rz-note-code-padding);
+  overflow-x: auto;
+}
+
+.rz-note .bn-editor pre > code {
+  font-size: inherit;
+}
+
+.rz-note .bn-editor [data-content-type='codeBlock'] > div > select {
+  max-width: calc(100% - 32px);
+  color: var(--rz-note-code-text);
+}
+
+.rz-note .bn-editor [data-content-type='codeBlock'] > div > select > option {
+  color: var(--rz-note-code-text);
+  background: var(--rz-note-code-background);
+}
+
+.rz-note .bn-editor :is([data-file-block], .bn-file-block-content-wrapper, .tableWrapper) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.rz-note .bn-editor :is(img, video, audio, .bn-visual-media-wrapper) {
+  max-width: 100%;
+}
+
+.rz-note .bn-editor :is(img, video) {
+  height: auto;
+}
+
+.rz-note .bn-editor .bn-file-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.rz-note .bn-editor .bn-file-caption {
+  min-inline-size: min(16ch, calc(100cqi - 2 * var(--rz-note-gutter)));
+  color: var(--rz-note-muted);
+  overflow-wrap: anywhere;
+}
+
+.rz-note .bn-editor [data-text-alignment='right'] .bn-file-caption {
+  align-self: flex-end;
+}
+
+.rz-note .bn-editor [data-text-alignment='center'] .bn-file-caption {
+  align-self: center;
+}
+
+.rz-note .bn-editor .tableWrapper {
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.rz-note-error {
+  margin: 0 0 12px;
+  color: var(--rz-note-error);
+  font-size: 13px;
+}
+
+@container rz-note (max-width: 340px) {
+  .rz-note-actions {
+    column-gap: 4px;
+  }
+
+  .rz-note-actions button {
+    padding-inline: 5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rz-note .bn-editor .bn-block-content {
+    transition: none;
+  }
+}

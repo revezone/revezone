@@ -136,7 +136,7 @@ export default function DraggableMenuTree() {
 
       await fileTreeIndexeddbStorage.updateFileTree(fileTree);
 
-      window.api?.dragAndDrop(items, target.parentItem, oldFileTree);
+      window.api?.dragAndDrop(items, String(target.parentItem), oldFileTree);
 
       getFileTree();
     },
@@ -161,7 +161,7 @@ export default function DraggableMenuTree() {
 
       await fileTreeIndexeddbStorage.updateFileTree(fileTree);
 
-      window.api?.dragAndDrop(items, target.targetItem, oldFileTree);
+      window.api?.dragAndDrop(items, String(target.targetItem), oldFileTree);
 
       getFileTree();
     },

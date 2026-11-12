@@ -2,7 +2,7 @@ import { openDB, DBSchema, IDBPDatabase, IDBPObjectStore } from 'idb';
 import { nanoid } from 'nanoid';
 import { RevezoneFile, RevezoneFolder, RevezoneFileType, RevezoneFileTree } from '../types/file';
 import { menuIndexeddbStorage } from './_menuIndexeddb';
-import { blocksuiteStorage } from './blocksuite';
+import { blockNoteStorage } from './blockNoteStorage';
 import { boardIndexeddbStorage } from './boardIndexeddb';
 import { DEFAULT_FILE_TREE } from '@renderer/utils/constant';
 import dayjs from 'dayjs';
@@ -134,7 +134,7 @@ class FileTreeIndexeddbStorage {
     const fileId = `file_${nanoid()}`;
 
     if (type === 'note') {
-      await blocksuiteStorage.addPage(fileId);
+      await blockNoteStorage.create(fileId);
     } else if (type === 'board') {
       await boardIndexeddbStorage.addBoard(fileId, fileData && JSON.parse(fileData));
     } else if (type === 'tldraw') {

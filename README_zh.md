@@ -30,6 +30,36 @@ Revezone 正处于公测阶段，功能还有不少不足或者缺陷。如果�
 * 笔记: 类 Notion 笔记
 * 文件管理: 可拖拽目录树和标签页布局
 
+### 桌面 AI 和版本历史
+
+打开笔记或 Excalidraw 白板后，可在右侧与 AI 对话。明确的编辑指令会写入当前文档，主动建议需要点「应用」。人可以照常编辑。版本历史支持命名检查点、预览、恢复到原文档和恢复为副本。每次 AI 写入前都会先保存本地恢复点。历史保存在桌面应用数据目录的 `version-history` 下。
+
+内置 Agent 默认使用本机 Ollama 的 `qwen3:4b-instruct-2507-q4_K_M`。启动 Ollama 并执行 `ollama pull qwen3:4b-instruct-2507-q4_K_M`。也可在「设置 → Agent」配置支持 Chat Completions 工具调用和结构化输出的服务，再测试连接。macOS 上保存的模型密钥通过系统钥匙串保护。
+
+同一设置中可改用已安装并登录的 Codex CLI 或 Claude Code。CLI 会收到当前对话和文档上下文，生成回答、修改或建议，由 Revezone 校验并按相同的版本历史流程应用。对话中的社区技能由内置 Agent 提供。
+
+从源码运行桌面版需要 Node.js 22.12 或更新版本：
+
+```sh
+corepack pnpm install --frozen-lockfile
+corepack pnpm dev
+```
+
+从终端启动时，可用 `REVEZONE_AI_BASE_URL`、`REVEZONE_AI_MODEL` 和可选的 `REVEZONE_AI_API_KEY` 提供默认模型设置。应用内保存的设置优先。版本历史可离线使用。
+
+### 社区检索
+
+可在笔记或白板的「对话」中让内置 Agent 查社区，例如「GitHub 上有关于 Excalidraw 图片导出留白的讨论吗？」模型会判断是否检索、选择可用技能并生成搜索词。结果附原帖链接和发布时间。在笔记中可点击「将来源整理进笔记」，也可以直接要求「查完后把来源整理进当前笔记」。
+
+在右侧「社区检索」中按关键词查找 GitHub 的公开 Issue 和 PR、Reddit 的公开帖子，或 X 最近 7 天的公开帖子。结果带原帖链接和发布时间，可勾选后整理进当前笔记。插入前会创建本地恢复点。Reddit 和 X 写入笔记的是链接和时间，帖子标题和摘要用于检索时浏览。
+
+- **GitHub** 可直接搜索公开内容，也可用 `repo:owner/name` 限定仓库。需要更高的请求额度时，可在启动桌面端的环境中设置 `REVEZONE_GITHUB_TOKEN`。
+- **Reddit** 需要 [获批的 Data API 权限](https://support.reddithelp.com/hc/en-us/articles/14945211791892-Developer-Platform-Accessing-Reddit-Data)。在启动桌面端的环境中配置 `REVEZONE_REDDIT_ACCESS_TOKEN`，或获批应用的 `REVEZONE_REDDIT_CLIENT_ID` 和 `REVEZONE_REDDIT_CLIENT_SECRET`，并按 [官方要求](https://support.reddithelp.com/hc/en-us/articles/16160319875092-Reddit-Data-API-Wiki) 设置 `REVEZONE_REDDIT_USER_AGENT`。凭据由桌面主进程读取。
+- **X** 使用 [官方最近搜索](https://docs.x.com/x-api/posts/search/quickstart/recent-search)。在启动桌面端的环境中设置应用的 `REVEZONE_X_BEARER_TOKEN`。可在对话中明确要求检索 X，也可以在手动搜索中勾选。[X API 按使用量计费](https://docs.x.com/x-api/getting-started/pricing)。
+- **小红书** 可用当前关键词打开官方网站。复制笔记的原帖链接或整段分享文案，粘贴到「手动收录原帖」。日期和北京时间均可按原帖选填，只知道日期就只填日期，无法确认时留空。
+
+社区检索可以独立使用，只向所选平台发送检索词。
+
 ### Excalidraw 白板
 你可以在 Revezone 中以更简单的姿势使用 Excalidraw 功能，可以在桌面应用中自定义字体，也可以通过双链功能有效连接 Revezone 中的笔记。
 ![](https://img.alicdn.com/imgextra/i4/O1CN01TPddti1nbyNkT9Qkc_!!6000000005109-2-tps-2952-1706.png)

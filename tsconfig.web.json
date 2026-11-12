@@ -7,6 +7,14 @@
     "src/renderer/src/**/*.tsx",
     "src/preload/*.d.ts"
   ],
+  "exclude": [
+    "src/renderer/src/components/BottomToolbar/index.tsx",
+    "src/renderer/src/components/CustomFontModal/index.tsx",
+    "src/renderer/src/components/CustomLayout/index.tsx",
+    "src/renderer/src/components/CustomMenu/index.tsx",
+    "src/renderer/src/components/ErrorBoundary/index.tsx",
+    "src/renderer/src/utils/tabs.ts"
+  ],
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx",

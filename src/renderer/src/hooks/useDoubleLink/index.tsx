@@ -24,7 +24,9 @@ export default function useDoubleLink(outerJump: boolean) {
       const fileIdOrNameInRevezone = link && getFileIdOrNameFromLink(link);
 
       if (fileIdOrNameInRevezone) {
-        let file: RevezoneFile | undefined = fileTree[fileIdOrNameInRevezone].data as RevezoneFile;
+        let file: RevezoneFile | undefined = fileTree[fileIdOrNameInRevezone]?.data as
+          | RevezoneFile
+          | undefined;
 
         if (!file) {
           file = Object.values(fileTree).find((item) => item.data.name === fileIdOrNameInRevezone)

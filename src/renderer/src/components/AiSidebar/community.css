@@ -1,0 +1,204 @@
+.rz-community {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.rz-community[hidden] {
+  display: none;
+}
+.rz-community-search {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--rz-ai-line);
+}
+.rz-community-query {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+.rz-community-query > input {
+  width: 0;
+  flex: 1;
+  border: 1px solid #adbdce;
+  border-radius: 5px;
+  padding: 4px 7px;
+}
+.rz-community-query > input::placeholder {
+  color: var(--rz-ai-muted);
+  opacity: 1;
+}
+.rz-community-query button {
+  flex: none;
+}
+.rz-community-filters,
+.rz-community-filters fieldset {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.rz-community-filters {
+  margin-top: 9px;
+  justify-content: space-between;
+}
+.rz-community-filters label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.rz-community input[type='checkbox'] {
+  accent-color: var(--rz-ai-accent);
+}
+.rz-community-filters select {
+  max-width: 100%;
+  padding: 2px 3px;
+  color: var(--rz-ai-muted);
+  background: var(--rz-ai-bg);
+  border: 1px solid var(--rz-ai-line);
+  border-radius: 4px;
+  font-size: 12px;
+}
+.rz-community-filters select:focus-visible,
+.rz-community-results a:focus-visible {
+  outline: 2px solid #0284c7;
+  outline-offset: 2px;
+}
+.rz-community-content {
+  gap: 8px;
+  padding-top: 10px;
+}
+.rz-community-count {
+  font-size: 12px;
+}
+.rz-community-results {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rz-community-results li {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rz-ai-line);
+}
+.rz-community-results li:last-child {
+  border-bottom: 0;
+}
+.rz-community-results input {
+  margin-top: 4px;
+}
+.rz-community-results a {
+  color: var(--rz-ai-accent);
+  font-weight: 600;
+}
+.rz-community-results a:hover {
+  text-decoration: underline;
+}
+.rz-community-results a svg {
+  display: inline-block;
+  vertical-align: -2px;
+}
+.rz-community-byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+  color: var(--rz-ai-muted);
+  font-size: 11px;
+  margin-top: 3px;
+}
+.rz-community-byline time {
+  font-variant-numeric: tabular-nums;
+}
+.rz-community-results .rz-community-excerpt {
+  margin-top: 4px;
+  color: var(--rz-ai-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: pre-line;
+}
+.rz-community-footer {
+  display: grid;
+  gap: 6px;
+  padding: 10px 14px 12px;
+  border-top: 1px solid var(--rz-ai-line);
+}
+.rz-community-footer:empty {
+  display: none;
+}
+.rz-community-footer p {
+  margin: 0;
+}
+.rz-community-selection {
+  font-size: 11px;
+}
+.rz-community-usage {
+  margin: 5px 0 0;
+  font-size: 11px;
+}
+.rz-community-xhs {
+  border-bottom: 1px solid var(--rz-ai-line);
+  padding-bottom: 8px;
+}
+.rz-community-xhs-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 8px;
+  flex-wrap: wrap;
+}
+.rz-community-xhs a,
+.rz-community-xhs summary {
+  color: var(--rz-ai-accent);
+}
+.rz-community-xhs a:hover,
+.rz-community-xhs summary:hover {
+  text-decoration: underline;
+}
+.rz-community-xhs :is(a, summary):focus-visible {
+  outline: 2px solid #0284c7;
+  outline-offset: 2px;
+}
+.rz-community-xhs a svg {
+  display: inline-block;
+  vertical-align: -2px;
+}
+.rz-community-xhs summary {
+  cursor: pointer;
+  margin-top: 4px;
+}
+.rz-community-xhs-form {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+.rz-community-xhs-form label {
+  display: grid;
+  gap: 3px;
+}
+.rz-community-xhs-form :is(input, textarea) {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #adbdce;
+  border-radius: 5px;
+  padding: 4px 6px;
+  color: inherit;
+  background: var(--rz-ai-bg);
+}
+.rz-community-xhs-time {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(106px, 1fr));
+  gap: 8px;
+}
+.rz-community-xhs-time label {
+  grid-template-rows: 1fr auto;
+}
+.rz-community-xhs-time input {
+  height: 32px;
+}
+.rz-community-xhs-form button {
+  justify-self: start;
+}

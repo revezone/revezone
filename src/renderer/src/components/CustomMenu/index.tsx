@@ -10,7 +10,6 @@ import {
 import { useAtom } from 'jotai';
 import { currentFileAtom, currentFolderIdAtom } from '@renderer/store/jotai';
 import EditableText from '../EditableText';
-import { blocksuiteStorage } from '@renderer/store/blocksuite';
 // import useBlocksuitePageTitle from '@renderer/hooks/useBlocksuitePageTitle';
 import OperationBar from '../OperationBar';
 import moment from 'moment';
@@ -118,9 +117,6 @@ export default function CustomMenu({ collapsed }: Props) {
       switch (file.type) {
         case 'board':
           await boardIndexeddbStorage.deleteBoard(file.id);
-          break;
-        case 'note':
-          await blocksuiteStorage.deletePage(file.id);
           break;
       }
 

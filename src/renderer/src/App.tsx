@@ -1,14 +1,16 @@
-import { lazy, useCallback, useEffect } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect } from 'react';
 import { useAtom } from 'jotai';
 import { langCodeAtom } from './store/jotai';
-import WorkspaceLoaded from './components/WorkspaceLoaded';
 import zhCN from 'antd/locale/zh_CN';
 import zhTW from 'antd/locale/zh_TW';
 import enUS from 'antd/locale/en_US';
 import { ConfigProvider, message } from 'antd';
-import { theme } from './utils/theme';
+import { darkTheme, theme } from './utils/theme';
+import { useCanvasDisplay } from './store/canvasDisplay';
+import { useWindowColor } from './store/windowColor';
 import { getOSName, isInRevezoneApp } from './utils/navigator';
 import ResizableLayout from './components/ResizableLayout/index';
+import AiWorkspace from './components/AiSidebar';
 import useAddFile from '@renderer/hooks/useAddFile';
 import useTabJsonModel from '@renderer/hooks/useTabJsonModel';
 
@@ -34,10 +36,20 @@ const OS_NAME = getOSName();
 
 function App(): JSX.Element {
   const [langCode] = useAtom(langCodeAtom);
+  const { color } = useWindowColor();
+  const { display: canvasDisplay } = useCanvasDisplay();
   const { addFile } = useAddFile();
   const { model: tabModel, updateTabJsonModelWhenCurrentFileChanged } = useTabJsonModel();
   const { updateCurrentFile } = useCurrentFile();
   const { fileTree } = useFileTree();
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.revezoneColor = color;
+  }, [color]);
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.revezoneCanvasDisplay = canvasDisplay;
+  }, [canvasDisplay]);
 
   const doOpenFile = useCallback((path: string, fileData: string, tabModel: Model) => {
     const fileNameWithSuffix = getFilenameFromPath(path);
@@ -120,16 +132,18 @@ function App(): JSX.Element {
   }, [langCode]);
 
   return (
-    <ConfigProvider locale={getLocale()} theme={theme}>
+    <ConfigProvider locale={getLocale()} theme={color === 'dark' ? darkTheme : theme}>
       <div
         className={`revezone-app-container os-is-${OS_NAME.toLowerCase()} ${
           isInRevezoneApp ? 'is-in-revezone-native-app' : 'is-in-browser'
         }`}
       >
         <ResizableLayout>
-          <WorkspaceLoaded>
-            <MultiTabs />
-          </WorkspaceLoaded>
+          <AiWorkspace>
+            <Suspense fallback={null}>
+              <MultiTabs />
+            </Suspense>
+          </AiWorkspace>
         </ResizableLayout>
       </div>
     </ConfigProvider>

@@ -3,21 +3,26 @@ import { RevezoneFileTree } from '../types/file';
 import { sendFileDataChangeToMainDebounceFn } from '../utils/file';
 import { ExcalidrawDataSource } from 'revemate/es/Revedraw/types';
 
+export type StoredBoard = Partial<Omit<ExcalidrawDataSource, 'appState'>> & {
+  appState?: Partial<ExcalidrawDataSource['appState']>;
+};
+
 export interface RevezoneBoardDBSchema extends DBSchema {
   board: {
     key: string;
-    value: ExcalidrawDataSource;
+    value: StoredBoard;
   };
 }
 
 export const INDEXEDDB_BOARD_FILE_KEY = 'board';
 export const INDEXEDDB_REVEZONE_BOARD = 'revezone_board';
 
-const EXCALIDRAW_INITIAL_DATA: ExcalidrawDataSource = {
+const EXCALIDRAW_INITIAL_DATA: StoredBoard = {
   elements: []
 };
 
 class BoardIndexeddbStorage {
+  private writes = new Map<string, Promise<void>>();
   constructor() {
     if (BoardIndexeddbStorage.instance) {
       return BoardIndexeddbStorage.instance;
@@ -57,22 +62,29 @@ class BoardIndexeddbStorage {
     return boardStore;
   }
 
-  async updateBoard(id: string, boardData: ExcalidrawDataSource, fileTree: RevezoneFileTree) {
-    await this.initDB();
-
-    const isExisted = !!(await this.db?.get(INDEXEDDB_BOARD_FILE_KEY, id));
-
-    if (!isExisted) {
-      console.warn(`Board ${id} not existed, cannot update!`);
-      return;
-    }
-
-    await this.db?.put(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
-
-    sendFileDataChangeToMainDebounceFn(id, JSON.stringify(boardData), fileTree);
+  updateBoard(id: string, boardData: StoredBoard, fileTree: RevezoneFileTree) {
+    const operation = (this.writes.get(id) ?? Promise.resolve())
+      .catch(() => undefined)
+      .then(async () => {
+        const db = await this.initDB();
+        const tx = db.transaction(INDEXEDDB_BOARD_FILE_KEY, 'readwrite');
+        if (!(await tx.store.get(id))) {
+          await tx.done;
+          throw new Error('This board is no longer in the workspace.');
+        }
+        await tx.store.put(boardData, id);
+        await tx.done;
+        sendFileDataChangeToMainDebounceFn(id, JSON.stringify(boardData), fileTree);
+      });
+    this.writes.set(id, operation);
+    const clear = () => {
+      if (this.writes.get(id) === operation) this.writes.delete(id);
+    };
+    operation.then(clear, clear);
+    return operation;
   }
 
-  async addBoard(id: string, boardData: ExcalidrawDataSource = EXCALIDRAW_INITIAL_DATA) {
+  async addBoard(id: string, boardData: StoredBoard = EXCALIDRAW_INITIAL_DATA) {
     await this.initDB();
     await this.db?.add(INDEXEDDB_BOARD_FILE_KEY, boardData, id);
   }

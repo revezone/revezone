@@ -3,12 +3,10 @@ productName: Revezone
 directories:
   buildResources: build
 files:
-  - '!**/.vscode/*'
-  - '!src/*'
-  - '!electron.vite.config.{js,ts,mjs,cjs}'
-  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
-  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
-  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  - LICENSE
+  - out/**
+  - resources/**
+  - '!out/**/stats.html'
 asarUnpack:
   - resources/**
 afterSign: build/notarize.js
@@ -19,11 +17,10 @@ fileAssociations:
     ext: tldr
 win:
   executableName: Revezone
-  protocols: 
+  protocols:
     - name: revezone
       schemes:
-        - excalidraw
-        - tldr
+        - revezone
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -36,16 +33,16 @@ mac:
         - x64
         - arm64
   entitlementsInherit: build/entitlements.mac.plist
+  notarize: false
   extendInfo:
-    - NSCameraUsageDescription: Application requests access to the device's camera.
-    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
-    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
-  protocols: 
+    NSCameraUsageDescription: Application requests access to the device's camera.
+    NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  protocols:
     - name: revezone
       schemes:
-        - excalidraw
-        - tldr
+        - revezone
 dmg:
   artifactName: ${name}-${version}-${arch}.${ext}
 linux:

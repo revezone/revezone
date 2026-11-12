@@ -14,3 +14,61 @@
   }
  
 }
+
+.revezone-menu-container .rct-tree-item-button {
+  transition: none;
+}
+
+:root[data-revezone-color='dark'] .revezone-menu-container {
+  --rct-bar-color: var(--rz-app-accent);
+  --rct-focus-outline: var(--rz-app-focus);
+  --rct-color-arrow: var(--rz-app-muted);
+  --rct-color-drag-between-line-bg: var(--rz-app-accent);
+  --rct-color-search-highlight-bg: var(--rz-app-hover);
+  --rct-color-focustree-item-selected-bg: var(--rz-app-selected);
+  --rct-color-focustree-item-selected-text: var(--rz-app-text);
+  --rct-color-focustree-item-hover-bg: var(--rz-app-hover);
+  --rct-color-focustree-item-hover-text: var(--rz-app-text);
+  --rct-color-focustree-item-active-bg: var(--rz-app-selected);
+  --rct-color-focustree-item-active-text: var(--rz-app-text);
+  --rct-color-focustree-item-draggingover-bg: var(--rz-app-selected);
+  --rct-color-focustree-item-draggingover-color: var(--rz-app-text);
+  --rct-color-nonfocustree-item-selected-bg: var(--rz-app-selected);
+  --rct-color-nonfocustree-item-selected-text: var(--rz-app-text);
+  --rct-search-border: var(--rz-app-border);
+  --rct-search-border-bottom: var(--rz-app-focus);
+  --rct-search-bg: var(--rz-app-raised);
+  --rct-search-text: var(--rz-app-text);
+
+  color: var(--rz-app-text);
+}
+
+:root[data-revezone-color='dark'] .revezone-menu-container .menu-list {
+  border-color: var(--rz-app-border);
+  scrollbar-color: var(--rz-app-muted) transparent;
+}
+
+:root[data-revezone-color='dark'] .revezone-menu-container .rct-tree-item-button .text-gray-500 {
+  color: var(--rz-app-muted);
+}
+
+:root[data-revezone-color='dark'] .revezone-menu-container .rct-tree-item-button .text-gray-500:hover {
+  color: var(--rz-app-accent);
+}
+
+:root[data-revezone-color='dark'] .revezone-menu-container .rct-tree-item-title-container-search-match .menu-tree-item-child {
+  color: var(--rz-app-accent);
+}
+
+:root[data-revezone-color='dark'] .revezone-menu-container .rct-tree-input-icon {
+  filter: invert(85%);
+}
+
+:root[data-revezone-color='dark'] .revezone-menu-container :is(.rct-tree-search-input, .rct-tree-item-renaming-input)::placeholder {
+  color: var(--rz-app-muted);
+}
+
+:root[data-revezone-color='dark'] .revezone-menu-container :is(.rct-tree-item-button, .rct-tree-search-input, .rct-tree-item-renaming-input):focus-visible {
+  outline: 2px solid var(--rz-app-focus);
+  outline-offset: -2px;
+}

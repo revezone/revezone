@@ -143,7 +143,13 @@ export const getFontNamesWithSuffixFromIO = () => {
 export const getActiveFonts = () => {
   ensureDir(CUSTOM_FONTS_DIR);
 
-  const manifestStr = fs.readFileSync(join(CUSTOM_FONTS_DIR, 'manifest.json'))?.toString();
+  let manifestStr: string;
+  try {
+    manifestStr = fs.readFileSync(join(CUSTOM_FONTS_DIR, 'manifest.json'), 'utf8');
+  } catch (error) {
+    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') return [];
+    throw error;
+  }
 
   const manifest: Manifest = manifestStr && JSON.parse(manifestStr);
 
